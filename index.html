@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1B2A38">
+<link rel="manifest" href="manifest.json">
+<title>KinéScope — Yasser Ladraa</title>
+<style>
+:root{
+  --bg:#F3F1ED;--surf:#FFF;--surf2:#EDEAE3;--brd:#DDD9CF;
+  --tx:#1A1714;--tx2:#56524C;--tx3:#98948A;
+  --nvy:#1B2A38;--r:12px;--rl:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+
+/* PASSWORD GATE */
+#gate{position:fixed;inset:0;z-index:9999;background:var(--nvy);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:16px}
+#gate.hidden{display:none}
+.gate-logo{font-size:28px;font-weight:800;color:#fff;letter-spacing:-.5px}
+.gate-logo span{color:rgba(255,255,255,.4)}
+.gate-sub{font-size:13px;color:rgba(255,255,255,.5);text-align:center;line-height:1.5}
+.gate-input{width:100%;max-width:280px;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:16px;font-family:inherit;text-align:center;letter-spacing:.1em;outline:none;-webkit-appearance:none}
+.gate-input::placeholder{color:rgba(255,255,255,.3);letter-spacing:0}
+.gate-btn{width:100%;max-width:280px;padding:14px;border-radius:12px;border:none;background:#5C9EE8;color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;touch-action:manipulation;min-height:48px}
+.gate-btn:active{opacity:.85}
+.gate-err{font-size:12px;color:#FF6B6B;text-align:center;min-height:16px}
+.gate-badge{font-size:10px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.12em;text-transform:uppercase}
+/* HEADER */
+.hdr{background:var(--nvy);padding:calc(env(safe-area-inset-top) + 20px) 20px 20px;text-align:center}
+.logo{font-size:24px;font-weight:800;color:#fff;letter-spacing:-.5px}
+.logo span{color:rgba(255,255,255,.45)}
+.sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+
+/* BODY */
+.body{max-width:600px;margin:0 auto;padding:20px 16px}
+.section-title{font-size:11px;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.1em;margin:20px 0 10px}
+
+/* BILAN CARDS */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);padding:16px 14px;text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:transform .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
+.card:active{transform:scale(.97)}
+.card-accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--rl) var(--rl) 0 0}
+.card-icon{font-size:22px;margin-bottom:2px}
+.card-name{font-size:14px;font-weight:700;color:var(--tx)}
+.card-sub{font-size:11px;color:var(--tx3);line-height:1.4}
+.card-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-top:2px;width:fit-content}
+
+/* FOOTER */
+.footer{text-align:center;padding:24px 16px;font-size:11px;color:var(--tx3);border-top:1px solid var(--brd);margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo">Kiné<span>Scope</span></div>
+  <div class="sub">Yasser Ladraa · Kinésithérapeute · Bilans EBP</div>
+</div>
+
+<div class="body">
+  <div class="section-title">Rachis</div>
+  <div class="grid">
+    <a class="card" href="bilan-lombaire-v2.html">
+      <div class="card-accent" style="background:#177A5A"></div>
+      <div class="card-icon">🦴</div>
+      <div class="card-name">Lombaire</div>
+      <div class="card-sub">Discopathie · Sténose · ASI · MDT</div>
+      <div class="card-badge" style="background:#DAF0E6;color:#177A5A">V2 · EBP</div>
+    </a>
+    <a class="card" href="bilan-cervical-v2.html">
+      <div class="card-accent" style="background:#5C7A9E"></div>
+      <div class="card-icon">🔵</div>
+      <div class="card-name">Cervical</div>
+      <div class="card-sub">Radiculopathie · Myélopathie · IVB · WAD</div>
+      <div class="card-badge" style="background:#E8EEF6;color:#2E4A6E">V2 · EBP</div>
+    </a>
+  </div>
+
+  <div class="section-title">Membre supérieur</div>
+  <div class="grid">
+    <a class="card" href="bilan-epaule-v3.html">
+      <div class="card-accent" style="background:#1A6FA8"></div>
+      <div class="card-icon">💪</div>
+      <div class="card-name">Épaule</div>
+      <div class="card-sub">Coiffe · SIS · Instabilité · Capsulite</div>
+      <div class="card-badge" style="background:#E3EEF9;color:#1550A0">V3 · EBP</div>
+    </a>
+    <a class="card" href="bilan-coude-v2.html">
+      <div class="card-accent" style="background:#8B5E3C"></div>
+      <div class="card-icon">🦾</div>
+      <div class="card-name">Coude</div>
+      <div class="card-sub">Épicondylalgie · Ulnaire · LCU · Biceps</div>
+      <div class="card-badge" style="background:#F5EDE4;color:#8B5E3C">V2 · EBP</div>
+    </a>
+    <a class="card" href="bilan-poignet-v2.html">
+      <div class="card-accent" style="background:#6B3FA0"></div>
+      <div class="card-icon">✋</div>
+      <div class="card-name">Poignet / Main</div>
+      <div class="card-sub">SCC · De Quervain · TFCC · Rhizarthrose</div>
+      <div class="card-badge" style="background:#EDE8F8;color:#5A3898">V2 · EBP</div>
+    </a>
+  </div>
+
+  <div class="section-title">Membre inférieur</div>
+  <div class="grid">
+    <a class="card" href="bilan-hanche-v2.html">
+      <div class="card-accent" style="background:#1A6FA8"></div>
+      <div class="card-icon">🦵</div>
+      <div class="card-name">Hanche</div>
+      <div class="card-sub">Coxarthrose · GTPS · Conflit · ASI</div>
+      <div class="card-badge" style="background:#E3EEF9;color:#1550A0">V2 · EBP</div>
+    </a>
+    <a class="card" href="bilan-genou-v3.html">
+      <div class="card-accent" style="background:#C4621D"></div>
+      <div class="card-icon">🦿</div>
+      <div class="card-name">Genou</div>
+      <div class="card-sub">LCA · Ménisque · Gonarthrose · SFP</div>
+      <div class="card-badge" style="background:#FDEEE4;color:#7A3610">V3 · EBP</div>
+    </a>
+    <a class="card" href="bilan-cheville-v1.html">
+      <div class="card-accent" style="background:#8B2635"></div>
+      <div class="card-icon">🦶</div>
+      <div class="card-name">Cheville / Pied</div>
+      <div class="card-sub">Entorse · Fasciite · Tendinopathie · OFP</div>
+      <div class="card-badge" style="background:#FAEAEA;color:#9C2B2B">V1 · EBP</div>
+    </a>
+  </div>
+
+  <div class="footer">
+    KinéScope · Prototype v1.0<br>
+    Yasser Ladraa · Kinésithérapeute · Belgique / France
+  </div>
+</div>
+
+<div id="gate">
+  <div class="gate-logo">Kiné<span>Scope</span></div>
+  <div class="gate-sub">Accès bêta privée<br>Entrez le code d'accès</div>
+  <input class="gate-input" id="gate-input" type="password" placeholder="Code d'accès" autocomplete="off" autocorrect="off" spellcheck="false">
+  <button class="gate-btn" onclick="checkPass()">Accéder →</button>
+  <div class="gate-err" id="gate-err"></div>
+  <div class="gate-badge">Prototype v1.0 · Yasser Ladraa</div>
+</div>
+
+<script>
+var PASS = 'Kine59100';
+var KEY = 'ks_auth';
+function checkPass(){
+  var v = document.getElementById('gate-input').value;
+  if(v === PASS){
+    sessionStorage.setItem(KEY,'1');
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('gate-err').textContent='';
+  } else {
+    document.getElementById('gate-err').textContent='Code incorrect — réessayez.';
+    document.getElementById('gate-input').value='';
+  }
+}
+document.getElementById('gate-input').addEventListener('keydown', function(e){
+  if(e.key==='Enter') checkPass();
+});
+if(sessionStorage.getItem(KEY)==='1'){
+  document.getElementById('gate').classList.add('hidden');
+}
+</script>
+</body>
+</html>
