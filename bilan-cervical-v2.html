@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1B2A38">
+<title>Bilan Cervical — Yasser Ladraa</title>
+<style>
+:root{
+  --bg:#F3F1ED;--surf:#FFF;--surf2:#EDEAE3;--brd:#DDD9CF;--brd2:#C2BCB0;
+  --tx:#1A1714;--tx2:#56524C;--tx3:#98948A;
+  --z:#5C7A9E;--zl:#E8EEF6;--zd:#2E4A6E;--zm:#4A6A8E;
+  --red:#9C2B2B;--redl:#FAEAEA;--amb:#B56E10;--ambl:#FAF0DC;
+  --blu:#1550A0;--blul:#E3EEF9;--pur:#5A3898;--purl:#EDE8F8;
+  --grn:#177A5A;--grnl:#DAF0E6;--nvy:#1B2A38;
+  --r:10px;--rl:16px;--nh:64px;--hh:72px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;min-height:100vh;padding-bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 32px);padding-top:var(--hh)}
+.hdr{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nvy);height:var(--hh);display:flex;flex-direction:column;justify-content:center;padding:0 16px}
+.hr1{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hn{font-size:13px;font-weight:700;color:#fff}.hs{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
+.hbadge{background:var(--zm);color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.hprog{margin-top:8px}.hpbar{height:3px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+.hpfill{height:100%;background:var(--zm);border-radius:99px;transition:width .4s ease}
+.hplbls{display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:rgba(255,255,255,.4)}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:#fff;border-top:1px solid var(--brd);height:calc(var(--nh) + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;padding:0 12px;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 24px rgba(0,0,0,.08);gap:8px}
+.bni{font-size:11px;color:var(--tx3);text-align:center;flex:1;line-height:1.3;min-width:0}
+.bbt{display:flex;align-items:center;gap:5px;padding:12px 20px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;min-width:96px;min-height:48px;justify-content:center;flex-shrink:0}
+.bbt:active{opacity:.8}.bbk{background:var(--surf2);color:var(--tx2)}.bbn{background:var(--zm);color:#fff}.bbt:disabled{opacity:.3;pointer-events:none}
+.tb{font-size:13px;font-weight:700;padding:9px 14px;border-radius:99px;border:1.5px solid var(--brd);cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;white-space:nowrap;touch-action:manipulation;font-family:inherit;min-height:44px;display:inline-flex;align-items:center}
+.tb:active{transform:scale(.95)}.tb.pos{background:var(--redl);border-color:var(--red);color:var(--red)}.tb.neg{background:var(--zl);border-color:var(--z);color:var(--zd)}
+.app{max-width:680px;margin:0 auto;padding:16px 14px 0}
+.step{display:none}.step.active{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sc{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.sch{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;touch-action:manipulation;transition:background .15s;user-select:none;-webkit-user-select:none}
+.sch:active{background:var(--surf2)}.schl{display:flex;align-items:center;gap:10px}
+.sci{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.iz{background:var(--zl)}.ia{background:var(--ambl)}.ib{background:var(--blul)}.ir{background:var(--redl)}.ip{background:var(--purl)}.ig{background:var(--grnl)}
+.sct{font-size:13px;font-weight:600;color:var(--tx)}.scs{font-size:11px;color:var(--tx3);margin-top:1px}
+.scch{color:var(--tx3);font-size:11px;transition:transform .2s;flex-shrink:0}.scch.o{transform:rotate(180deg)}
+.scb{padding:14px 15px;border-top:1.5px solid var(--brd);display:none}.scb.o{display:block}
+.sa .sch{cursor:default}.sa .scch{display:none}.sa .scb{display:block}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+.fl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fh{font-size:11px;color:var(--tx3);font-weight:400;text-transform:none;letter-spacing:0}
+input[type=text],input[type=date],select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--tx);background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 13px;outline:none;transition:border .15s,background .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--zm);background:#fff}
+textarea{resize:vertical;min-height:60px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:380px){.g2{grid-template-columns:1fr}}
+.ssep{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin:16px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--brd)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1.5px solid var(--brd);border-radius:99px;padding:8px 14px;font-size:13px;cursor:pointer;color:var(--tx2);background:var(--surf2);transition:all .15s;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:40px;display:inline-flex;align-items:center}
+.chip:active{transform:scale(.97)}.chip.on{background:var(--zm);border-color:var(--zm);color:#fff;font-weight:600}
+.checks{display:flex;flex-direction:column;gap:7px}
+.crow{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1.5px solid var(--brd);border-radius:var(--r);cursor:pointer;transition:all .15s;background:var(--surf2);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.crow:active{transform:scale(.99)}.crow.on{background:var(--zl);border-color:#A0BEDC}.crow.or{background:var(--redl);border-color:#ECAAAA}
+.cbox{width:22px;height:22px;border:1.5px solid var(--brd2);border-radius:6px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .15s}
+.crow.on .cbox{background:var(--zm);border-color:var(--zm)}.crow.or .cbox{background:var(--red);border-color:var(--red)}
+.cmk{display:none;color:#fff;font-size:12px;font-weight:800}.crow.on .cmk,.crow.or .cmk{display:block}
+.ctx2{font-size:13px;color:var(--tx);flex:1;line-height:1.4}.csb{font-size:11px;color:var(--tx3);margin-top:2px}
+.evaw{display:flex;gap:5px;flex-wrap:wrap}
+.evab{width:42px;height:48px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:14px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.evab:active{transform:scale(.93)}.evab.on{color:#fff;border-color:transparent}
+.e0.on,.e1.on,.e2.on,.e3.on{background:#177A5A}.e4.on,.e5.on,.e6.on{background:#B56E10}
+.e7.on,.e8.on{background:#C04A15}.e9.on,.e10.on{background:#9C2B2B}
+.egal{display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:var(--tx3)}
+.ti{border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.th{display:flex;align-items:center;padding:12px 13px;background:var(--surf2);cursor:pointer;touch-action:manipulation;gap:10px}
+.th:active{background:#E5E0D8}.tl{flex:1;min-width:0}
+.tn{font-size:13px;font-weight:600;color:var(--tx)}.tsb{font-size:11px;color:var(--tx3);margin-top:1px}
+.tbs{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.tbody{display:none;padding:12px 13px;background:#fff;border-top:1.5px solid var(--brd)}.tbody.o{display:block}
+.tstps{list-style:none;padding:0;counter-reset:s}
+.tstps li{counter-increment:s;padding:5px 0 5px 26px;position:relative;font-size:12px;color:var(--tx2);border-bottom:1px dashed var(--brd);line-height:1.4}
+.tstps li:last-child{border-bottom:none;padding-bottom:0}
+.tstps li::before{content:counter(s);position:absolute;left:0;top:5px;width:18px;height:18px;background:var(--zl);color:var(--zd);border-radius:50%;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.tint{font-size:12px;color:var(--tx2);margin-top:8px;padding:8px 10px;background:var(--surf2);border-radius:8px;border-left:3px solid var(--zm);line-height:1.5}
+.al{padding:11px 13px;border-radius:var(--r);margin-bottom:10px;font-size:13px;line-height:1.5;display:flex;gap:9px;align-items:flex-start}
+.alr{background:var(--redl);border:1.5px solid #ECAAAA;color:#5A1515}
+.ala{background:var(--ambl);border:1.5px solid #ECC878;color:#4A2800}
+.alb{background:var(--blul);border:1.5px solid #B0C8F0;color:#0C3060}
+.alg{background:var(--grnl);border:1.5px solid #7DCEB0;color:#065038}
+.alz{background:var(--zl);border:1.5px solid #A0BEDC;color:var(--zd)}
+.rcb{background:var(--nvy);border-radius:var(--rl);padding:16px;margin-bottom:14px}
+.rct{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
+.rcs{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.rcs:last-of-type{border-bottom:none;padding-bottom:0}
+.rcn{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px}
+.rcq{font-size:12px;color:rgba(255,255,255,.65);flex:1;line-height:1.4}
+.rcr{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;flex-shrink:0;white-space:nowrap;margin-top:2px}
+.ay{background:rgba(156,43,43,.35);color:#FF9999}.an{background:rgba(23,122,90,.2);color:#7FD4A8}
+.rcc{margin-top:10px;padding:10px 12px;border-radius:8px;font-size:12px;font-weight:700;line-height:1.5}
+.rcca{background:rgba(23,122,90,.15);border:1px solid rgba(23,122,90,.3);color:#7FD4A8}
+.rccb{background:rgba(156,43,43,.2);border:1px solid rgba(156,43,43,.4);color:#FF9999}
+.rccw{background:rgba(181,110,16,.2);border:1px solid rgba(181,110,16,.4);color:#FFCC66;margin-top:6px;padding:8px 10px;border-radius:7px;font-size:11px;line-height:1.4}
+.dbar{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);padding:14px 15px;margin-bottom:10px}
+.dbrt{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:8px}
+.dbn{font-size:13px;font-weight:700;color:var(--tx);flex:1;line-height:1.3}.dbp{font-size:22px;font-weight:800;flex-shrink:0}
+.ph{color:var(--red)}.pm{color:var(--amb)}.pl{color:var(--z)}
+.dbt{height:10px;background:var(--surf2);border-radius:99px;overflow:hidden;margin-bottom:8px;border:1px solid var(--brd)}
+.dbf{height:100%;border-radius:99px;width:0;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.fh2{background:linear-gradient(90deg,#9C2B2B,#D44)}.fm{background:linear-gradient(90deg,#B56E10,#E09000)}.fl2{background:linear-gradient(90deg,#5C7A9E,#7BA0C8)}
+.dc{display:inline-block;font-size:10px;font-weight:800;padding:2px 9px;border-radius:99px;margin-bottom:8px;letter-spacing:.04em}
+.ctp{background:var(--redl);color:var(--red)}.cp{background:var(--ambl);color:var(--amb)}.cpo{background:var(--zl);color:var(--zd)}.cpp{background:#f0f0f0;color:#888}
+.dw{font-size:12px;color:var(--tx2);line-height:1.5;background:var(--surf2);padding:8px 10px;border-radius:8px;border-left:3px solid var(--zm)}
+.wh{border-left-color:var(--red)}.wm{border-left-color:var(--amb)}
+.dtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.dtag{font-size:10px;font-weight:700;padding:2px 9px;border-radius:99px}
+.dtz{background:var(--zl);color:var(--zd)}.dtr{background:var(--redl);color:#5A1515}.dtb{background:var(--blul);color:#0C3060}.dtp{background:var(--purl);color:var(--pur)}.dtg{background:var(--grnl);color:#065038}
+.mrc-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.mrc-btn{width:40px;height:44px;border-radius:8px;border:1.5px solid var(--brd);font-size:13px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.mrc-btn:active{transform:scale(.93)}.mrc-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.refl-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.refl-btn{padding:9px 14px;border-radius:8px;border:1.5px solid var(--brd);font-size:12px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;touch-action:manipulation;font-family:inherit;min-height:44px}
+.refl-btn:active{transform:scale(.93)}.refl-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:flex-end;justify-content:center}
+.mov.o{display:flex;animation:fi .15s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surf);border-radius:20px 20px 0 0;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mhnd{width:40px;height:4px;background:var(--brd);border-radius:99px;margin:12px auto 0}
+.mhd{padding:12px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surf);z-index:1;border-bottom:1px solid var(--brd)}
+.mhd h2{font-size:16px;font-weight:800}
+.mcl{width:36px;height:36px;border-radius:50%;border:1px solid var(--brd);background:var(--surf2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tx2);font-family:inherit;touch-action:manipulation}
+.mbd{padding:16px 18px}
+.qdi{margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--brd)}.qdi:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.qdq{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:7px}
+.qdos{display:flex;gap:5px;flex-wrap:wrap}
+.qdo{flex:1;min-width:55px;padding:9px 5px;border:1.5px solid var(--brd);border-radius:8px;background:var(--surf2);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;touch-action:manipulation;text-align:center;color:var(--tx2);transition:all .15s;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+.qdo.on{background:var(--zl);border-color:#A0BEDC;color:var(--zd)}
+.qdsb{background:var(--zl);border:1.5px solid #A0BEDC;border-radius:var(--r);padding:12px 15px;margin-top:13px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ebp-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--brd2);background:#fff;color:var(--tx3);font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.ebp-btn:active{background:var(--blul);border-color:var(--blu);color:var(--blu)}
+.ebp-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.ebp-overlay.o{opacity:1;pointer-events:auto}
+.ebp-sheet{background:#fff;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-width:540px;width:100%;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.ebp-overlay.o .ebp-sheet{transform:translateY(0)}
+.ebp-drag{width:36px;height:4px;background:var(--brd2);border-radius:99px;margin:0 auto 16px}
+.ebp-title{font-size:15px;font-weight:800;color:var(--nvy);margin-bottom:4px}
+.ebp-ref{font-size:11px;color:var(--tx3);margin-bottom:14px;font-style:italic}
+.ebp-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.ebp-stat{background:var(--surf2);border-radius:10px;padding:10px 12px;border:1.5px solid var(--brd)}
+.ebp-stat-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.ebp-stat-val{font-size:18px;font-weight:800;color:var(--nvy)}
+.ebp-stat-sub{font-size:10px;color:var(--tx3);margin-top:2px}
+.ebp-note{font-size:12px;color:var(--tx2);background:var(--blul);border:1.5px solid #B0C8F0;border-radius:8px;padding:10px 12px;line-height:1.5;margin-bottom:14px}
+.ebp-close{width:100%;padding:13px;border-radius:var(--r);border:none;background:var(--nvy);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.btf{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:var(--rl);border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;margin-top:10px}
+.btf:active{opacity:.85}.btz{background:var(--zm);color:#fff}.btn2{background:var(--nvy);color:#fff}.btg{background:var(--surf2);color:var(--tx2);border:1.5px solid var(--brd)!important}
+.pov{position:fixed;inset:0;z-index:400;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
+.pov.o{display:flex}
+.phdr{background:var(--nvy);padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px}
+.pclose{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;touch-action:manipulation;flex-shrink:0}
+.phinfo{flex:1}.phtitle{font-size:14px;font-weight:700;color:#fff}.phsub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.ppbtn{background:var(--zm);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;touch-action:manipulation;flex-shrink:0;min-height:44px}
+.pcont{padding:14px;flex:1;max-width:680px;margin:0 auto;width:100%}
+.eplbl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:5px;margin:10px 0 8px}
+.epa{background:var(--redl);color:var(--red)}.epm{background:var(--ambl);color:var(--amb)}.epv{background:var(--grnl);color:var(--grn)}.epr{background:var(--zl);color:var(--zd)}
+.exc{border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:9px;overflow:hidden;background:var(--surf)}
+.exh{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 13px;background:var(--surf2);cursor:pointer;touch-action:manipulation;min-height:52px}
+.exh:active{background:#E5E0D8}.exn{font-size:13px;font-weight:600;color:var(--tx);flex:1;line-height:1.3}
+.exm{font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.mn{background:var(--zl);color:var(--zd)}.me{background:var(--ambl);color:var(--amb)}
+.exch{font-size:11px;color:var(--tx3);transition:transform .2s;flex-shrink:0;margin-top:2px}.exch.o{transform:rotate(180deg)}
+.exbd{display:none;padding:12px 13px;border-top:1.5px solid var(--brd)}.exbd.o{display:block}
+.exdc{font-size:12px;color:var(--tx2);line-height:1.5;margin-bottom:7px}
+.expg{font-size:11px;color:var(--pur);background:var(--purl);padding:5px 8px;border-radius:6px;margin-top:6px;line-height:1.4}
+.expo{display:flex;align-items:center;gap:8px;padding:6px 9px;background:var(--surf2);border-radius:7px;margin-bottom:8px}
+.expol{font-size:11px;color:var(--tx3);font-weight:600}
+.crtabs{display:flex;gap:6px;margin-bottom:14px}
+.crtab{flex:1;padding:11px;border-radius:var(--r);border:1.5px solid var(--brd);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;touch-action:manipulation;text-align:center;min-height:48px}
+.crtab.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.crv{display:none}.crv.on{display:block}
+.crsh{background:var(--nvy);border-radius:var(--rl);padding:16px;margin-bottom:12px;color:#fff}
+.crsn{font-size:15px;font-weight:800}.crss{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.crsp{margin-top:10px;background:rgba(255,255,255,.08);border-radius:8px;padding:9px 12px;display:flex;flex-wrap:wrap;gap:10px}
+.crspi{font-size:12px;color:rgba(255,255,255,.75)}.crspi strong{color:#fff}
+.crbl{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:12px 14px;margin-bottom:10px}
+.crbt{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--brd)}
+.crrow{display:flex;justify-content:space-between;padding:3px 0;flex-wrap:wrap;gap:4px}
+.crk{font-size:12px;color:var(--tx2)}.crval{font-size:12px;color:var(--tx);font-weight:500;text-align:right;max-width:60%}
+.crdi{padding:8px 11px;border-radius:8px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:700}
+.cdh{background:var(--redl);color:var(--red)}.cdm{background:var(--ambl);color:var(--amb)}.cdl{background:var(--zl);color:var(--zd)}
+.crsig{display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--brd);flex-wrap:wrap;gap:8px}
+.crsigl{border-bottom:1px solid var(--brd2);padding-bottom:2px;font-size:11px;color:var(--tx3);min-width:180px}
+.disc{background:rgba(90,56,152,.07);border:1.5px solid rgba(90,56,152,.18);border-radius:var(--r);padding:10px 13px;font-size:11px;color:var(--pur);line-height:1.5;margin-bottom:12px}
+.ivb-alert{background:var(--redl);border:2px solid var(--red);border-radius:var(--r);padding:13px 15px;margin-bottom:12px;display:none}
+.ivb-alert-title{font-size:12px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.ivb-alert-body{font-size:12px;color:#5A1515;line-height:1.5}
+.toast{position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 12px);left:50%;transform:translateX(-50%);background:var(--nvy);color:#fff;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:600;z-index:600;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+@media print{.bnav,.hdr,.ebp-overlay,.pov,.toast{display:none!important}body{padding:0}.step{display:block!important}}
+.hbtn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.12);border:none;color:#fff;cursor:pointer;touch-action:manipulation;flex-shrink:0;text-decoration:none;font-size:16px;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hr1">
+    <div><div class="hn" id="hnom">Bilan Cervical</div><div class="hs" id="hstep">Étape 1 / 6</div></div>
+    <a class="hbtn" href="index.html" title="Accueil">&#8962;</a>
+    <div class="hbadge" id="hbadge">Identité</div>
+  </div>
+  <div class="hprog"><div class="hpbar"><div class="hpfill" id="hpfill" style="width:16%"></div></div>
+  <div class="hplbls"><span>Début</span><span>Fin</span></div></div>
+</div>
+
+<div class="app">
+
+<!-- S1 IDENTITE -->
+<div class="step active" id="s1">
+  <div class="sc sa">
+    <div class="sch"><div class="schl">
+      <div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="#5C7A9E" stroke-width="1.5"/><path d="M3 15c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#5C7A9E" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="sct">Identité du patient</div></div>
+    </div></div>
+    <div class="scb">
+      <div class="g2">
+        <div class="field"><label class="fl">Nom</label><input type="text" id="nom" placeholder="Dupont"></div>
+        <div class="field"><label class="fl">Prénom</label><input type="text" id="prenom" placeholder="Jean"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Date de naissance</label><input type="date" id="ddn"></div>
+        <div class="field"><label class="fl">Côté dominant</label>
+          <select id="dominant"><option value="">—</option><option>Droitier</option><option>Gaucher</option><option>Ambidextre</option></select>
+        </div>
+      </div>
+      <div class="field"><label class="fl">Date du bilan</label><input type="date" id="dbilan"></div>
+      <div class="field"><label class="fl">Profession <span class="fh">— utile pour l’évaluation posturale</span></label><input type="text" id="profession" placeholder="Ex : secrétaire, chirurgien, chauffeur…"></div>
+    </div>
+  </div>
+</div>
+
+<!-- S2 ANAMNÈSE -->
+<div class="step" id="s2">
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ir"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v6l3 3" stroke="#9C2B2B" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="7" stroke="#9C2B2B" stroke-width="1.5"/></svg></div>
+      <div><div class="sct">Red flags cervicaux</div><div class="scs">Drapeaux rouges — exclusion prioritaire</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alr" style="margin-bottom:12px"><span>⚠</span><div>Tout red flag positif nécessite un avis médical avant poursuite de la prise en charge.</div></div>
+      <div class="checks">
+        <div class="crow" onclick="toggleRF(this,'rf_trauma')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Traumatisme haute énergie récent</div><div class="csb">AVP, chute de hauteur, plongeon — risque fracture instable</div></div></div>
+        <div class="crow" onclick="toggleRF(this,'rf_nocturne')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur nocturne inexpliquée + altération état général</div><div class="csb">Amaigrissement, fièvre, sueurs nocturnes — suspicion tumorale</div></div></div>
+        <div class="crow" onclick="toggleRF(this,'rf_neuro')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Déficit neurologique progressif</div><div class="csb">Faiblesse motrice en progression — myélopathie</div></div></div>
+        <div class="crow" onclick="toggleRF(this,'rf_instab')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Suspicion instabilité atlantoaxiale</div><div class="csb">Polyarthrite rhumatoïde, trisomie 21, traumatisme C1-C2</div></div></div>
+        <div class="crow" onclick="toggleRF(this,'rf_cancer')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Antécédent néoplasique</div><div class="csb">Cancer connu ou suspecté avec douleur cervicale nouvelle</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C6.79 2 5 3.79 5 6c0 3.5 4 9 4 9s4-5.5 4-9c0-2.21-1.79-4-4-4z" stroke="#5C7A9E" stroke-width="1.5" fill="none"/><circle cx="9" cy="6" r="1.5" fill="#5C7A9E"/></svg></div>
+      <div><div class="sct">Motif et contexte</div><div class="scs">Circonstances, ancienneté, installation</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ssep">Contexte</div>
+      <div class="chips">
+        <div class="chip" onclick="tC(this,'ctx','traumatique')">Traumatique</div>
+        <div class="chip" onclick="tC(this,'ctx','postural')">Postural / professionnel</div>
+        <div class="chip" onclick="tC(this,'ctx','spontane')">Spontané</div>
+        <div class="chip" onclick="tC(this,'ctx','effort')">Effort</div>
+        <div class="chip" onclick="tC(this,'ctx','postop')">Post-opératoire</div>
+        <div class="chip" onclick="tC(this,'ctx','stress')">Stress / tension</div>
+      </div>
+      <div class="ssep">Ancienneté</div>
+      <div class="chips">
+        <div class="chip" onclick="tC(this,'anc','aigu')">Aigu &lt; 6 sem.</div>
+        <div class="chip" onclick="tC(this,'anc','subaigu')">Subaigu 6-12 sem.</div>
+        <div class="chip" onclick="tC(this,'anc','chronique')">Chronique &gt; 3 mois</div>
+      </div>
+      <div class="ssep">Mode d’installation</div>
+      <div class="chips">
+        <div class="chip" onclick="tC(this,'install','brutal')">Brutal</div>
+        <div class="chip" onclick="tC(this,'install','progressif')">Progressif</div>
+        <div class="chip" onclick="tC(this,'install','recidivant')">Récidivant</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M6 9h6" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="sct">Localisation et irradiation</div><div class="scs">Topographie douloureuse</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ssep">Localisation principale</div>
+      <div class="chips">
+        <div class="chip" onclick="tC(this,'loc','cerv_haut')">Cervical haut C1-C3</div>
+        <div class="chip" onclick="tC(this,'loc','cerv_bas')">Cervical bas C4-C7</div>
+        <div class="chip" onclick="tC(this,'loc','cervicodorsal')">Cervico-dorsal</div>
+        <div class="chip" onclick="tC(this,'loc','occipital')">Occipital</div>
+      </div>
+      <div class="ssep">Irradiation</div>
+      <div class="chips">
+        <div class="chip" onclick="tC(this,'irr','aucune')">Aucune</div>
+        <div class="chip" onclick="tC(this,'irr','cephalee')">Céphalées</div>
+        <div class="chip" onclick="tC(this,'irr','epaule')">Épaule</div>
+        <div class="chip" onclick="tC(this,'irr','bras')">Bras</div>
+        <div class="chip" onclick="tC(this,'irr','avbras')">Avant-bras</div>
+        <div class="chip" onclick="tC(this,'irr','main')">Main / doigts</div>
+        <div class="chip" onclick="tC(this,'irr','interscap')">Interscapulaire</div>
+      </div>
+      <div class="ssep">Rythme</div>
+      <div class="chips">
+        <div class="chip" onclick="tC(this,'rythme','mecanique')">Mécanique</div>
+        <div class="chip" onclick="tC(this,'rythme','mixte')">Mixte</div>
+        <div class="chip" onclick="tC(this,'rythme','inflammatoire')">Inflammatoire</div>
+        <div class="chip" onclick="tC(this,'rythme','permanent')">Permanent</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M9 3v12" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="sct">Facteurs et antécédents</div><div class="scs">Aggravants, soulageants, ATCD</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ssep">Facteurs aggravants</div>
+      <div class="chips">
+        <div class="chip" onclick="tC(this,'agr','ecran')">Écran / position assise</div>
+        <div class="chip" onclick="tC(this,'agr','rotation')">Rotations</div>
+        <div class="chip" onclick="tC(this,'agr','extension')">Extension</div>
+        <div class="chip" onclick="tC(this,'agr','flexion')">Flexion</div>
+        <div class="chip" onclick="tC(this,'agr','conduite')">Conduite</div>
+        <div class="chip" onclick="tC(this,'agr','stress')">Stress</div>
+      </div>
+      <div class="ssep">Facteurs soulageants</div>
+      <div class="chips">
+        <div class="chip" onclick="tC(this,'soul','repos')">Repos</div>
+        <div class="chip" onclick="tC(this,'soul','chaleur')">Chaleur</div>
+        <div class="chip" onclick="tC(this,'soul','antalgiques')">Antalgiques</div>
+        <div class="chip" onclick="tC(this,'soul','mouvement')">Mouvement léger</div>
+      </div>
+      <div class="ssep">Antécédents</div>
+      <div class="chips">
+        <div class="chip" onclick="tC(this,'atcd','chir_cerv')">Chirurgie cervicale</div>
+        <div class="chip" onclick="tC(this,'atcd','whiplash')">Whiplash</div>
+        <div class="chip" onclick="tC(this,'atcd','pr')">Polyarthrite rhumatoïde</div>
+        <div class="chip" onclick="tC(this,'atcd','spondylo')">Spondylarthropathie</div>
+        <div class="chip" onclick="tC(this,'atcd','hernie')">Hernie discale cervicale</div>
+      </div>
+      <div class="ssep">Symptômes IVB — Insuffisance Vertébro-Basilaire</div>
+      <div class="al alb" style="margin-bottom:10px"><span>ℹ</span><div>Cocher si présents de façon répétée, notamment lors des mouvements cervicaux.</div></div>
+      <div class="checks">
+        <div class="crow" onclick="toggleIVB(this,'ivb_dizziness')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Dizziness / vertiges positionnels</div></div></div>
+        <div class="crow" onclick="toggleIVB(this,'ivb_diplopie')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Diplopie (vision double)</div></div></div>
+        <div class="crow" onclick="toggleIVB(this,'ivb_dysarthrie')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Dysarthrie (trouble de la parole)</div></div></div>
+        <div class="crow" onclick="toggleIVB(this,'ivb_dysphagie')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Dysphagie (trouble de la déglutition)</div></div></div>
+        <div class="crow" onclick="toggleIVB(this,'ivb_drop')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Drop attacks (chutes soudaines sans perte de conscience)</div></div></div>
+        <div class="crow" onclick="toggleIVB(this,'ivb_nausee')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Nausées / vomissements</div></div></div>
+        <div class="crow" onclick="toggleIVB(this,'ivb_numbness')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Engourdissements péribuccaux ou visage</div></div></div>
+        <div class="crow" onclick="toggleIVB(this,'ivb_nystagmus')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Nystagmus observé</div></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- S3 EXAMEN PHYSIQUE -->
+<div class="step" id="s3">
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="#5C7A9E" stroke-width="1.5"/><path d="M6 9h6M9 6v6" stroke="#5C7A9E" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="sct">Amplitudes cervicales</div><div class="scs">ROM — valeurs normatives AAOS</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alb" style="margin-bottom:12px"><span>ℹ</span><div>La rotation ipsilatérale &lt;60° est un critère du cluster Wainner. Saisir en degrés.</div></div>
+      <div class="g2">
+        <div class="field"><label class="fl">Flexion <span class="fh">norme ≥50°</span></label><input type="text" id="rom-flex" placeholder="50"></div>
+        <div class="field"><label class="fl">Extension <span class="fh">norme ≥60°</span></label><input type="text" id="rom-ext" placeholder="60"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Rotation droite <span class="fh">norme ≥80°</span></label><input type="text" id="rom-rot-d" placeholder="80" oninput="checkWainner()"></div>
+        <div class="field"><label class="fl">Rotation gauche <span class="fh">norme ≥80°</span></label><input type="text" id="rom-rot-g" placeholder="80" oninput="checkWainner()"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Inclinaison droite <span class="fh">norme ≥45°</span></label><input type="text" id="rom-inc-d" placeholder="45"></div>
+        <div class="field"><label class="fl">Inclinaison gauche <span class="fh">norme ≥45°</span></label><input type="text" id="rom-inc-g" placeholder="45"></div>
+      </div>
+      <div class="field"><label class="fl">Côté symptomatique</label>
+        <select id="cote-symp" onchange="checkWainner()"><option value="">— sélectionner —</option><option value="D">Droit</option><option value="G">Gauche</option><option value="B">Bilatéral</option></select>
+      </div>
+      <div id="wainner-rot-alert" class="al alr" style="display:none;margin-top:8px"><span>⚠</span><div>Rotation ipsilatérale &lt;60° — critère Wainner positif. Calculé automatiquement à l’étape 4.</div></div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 9h8M9 5v8" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="sct">EVA — Douleur</div><div class="scs">Échelle visuelle analogique 0-10</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="evaw"><button class="evab e0" onclick="setEVA(0)" type="button">0</button><button class="evab e1" onclick="setEVA(1)" type="button">1</button><button class="evab e2" onclick="setEVA(2)" type="button">2</button><button class="evab e3" onclick="setEVA(3)" type="button">3</button><button class="evab e4" onclick="setEVA(4)" type="button">4</button><button class="evab e5" onclick="setEVA(5)" type="button">5</button><button class="evab e6" onclick="setEVA(6)" type="button">6</button><button class="evab e7" onclick="setEVA(7)" type="button">7</button><button class="evab e8" onclick="setEVA(8)" type="button">8</button><button class="evab e9" onclick="setEVA(9)" type="button">9</button><button class="evab e10" onclick="setEVA(10)" type="button">10</button></div>
+      <div class="egal"><span>Aucune douleur</span><span>Douleur maximale</span></div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 9l2 2 4-4" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="6.5" stroke="#1550A0" stroke-width="1.5"/></svg></div>
+      <div><div class="sct">Examen neurologique</div><div class="scs">Dermatomes C5-T1 · Myotomes · Réflexes</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+
+      <div class="ssep">C5 — Épaule / face lat. bras</div>
+      <div class="g2">
+        <div class="field"><label class="fl">Sensibilité C5</label><div class="refl-wrap"><button class="refl-btn" onclick="setNeuro('sens_c5','N',this)" type="button">Normal</button><button class="refl-btn" onclick="setNeuro('sens_c5','D',this)" type="button">Déficit</button></div></div><div class="field"><label class="fl">Myotome C5 <span class="fh">Abduction épaule</span></label><div class="mrc-wrap"><button class="mrc-btn" onclick="setMRC('mrc_c5',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('mrc_c5',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('mrc_c5',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('mrc_c5',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('mrc_c5',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('mrc_c5',5,this)" type="button">5</button></div></div>
+      </div>
+      <div class="field"><label class="fl">Réflexe bicipital C5</label><div class="refl-wrap"><button class="refl-btn" onclick="setNeuro('refl_c5','N',this)" type="button">Normal</button><button class="refl-btn" onclick="setNeuro('refl_c5','D',this)" type="button">Diminué</button><button class="refl-btn" onclick="setNeuro('refl_c5','A',this)" type="button">Aboli</button></div></div>
+
+      <div class="ssep">C6 — Pouce + index / avant-bras lat.</div>
+      <div class="g2">
+        <div class="field"><label class="fl">Sensibilité C6</label><div class="refl-wrap"><button class="refl-btn" onclick="setNeuro('sens_c6','N',this)" type="button">Normal</button><button class="refl-btn" onclick="setNeuro('sens_c6','D',this)" type="button">Déficit</button></div></div><div class="field"><label class="fl">Myotome C6 <span class="fh">Flex. coude / ext. poignet</span></label><div class="mrc-wrap"><button class="mrc-btn" onclick="setMRC('mrc_c6',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('mrc_c6',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('mrc_c6',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('mrc_c6',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('mrc_c6',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('mrc_c6',5,this)" type="button">5</button></div></div>
+      </div>
+      <div class="field"><label class="fl">Réflexe stylo-radial C6</label><div class="refl-wrap"><button class="refl-btn" onclick="setNeuro('refl_c6','N',this)" type="button">Normal</button><button class="refl-btn" onclick="setNeuro('refl_c6','D',this)" type="button">Diminué</button><button class="refl-btn" onclick="setNeuro('refl_c6','A',this)" type="button">Aboli</button></div></div>
+
+      <div class="ssep">C7 — Majeur / face post. avant-bras</div>
+      <div class="g2">
+        <div class="field"><label class="fl">Sensibilité C7</label><div class="refl-wrap"><button class="refl-btn" onclick="setNeuro('sens_c7','N',this)" type="button">Normal</button><button class="refl-btn" onclick="setNeuro('sens_c7','D',this)" type="button">Déficit</button></div></div><div class="field"><label class="fl">Myotome C7 <span class="fh">Ext. coude / flex. poignet</span></label><div class="mrc-wrap"><button class="mrc-btn" onclick="setMRC('mrc_c7',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('mrc_c7',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('mrc_c7',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('mrc_c7',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('mrc_c7',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('mrc_c7',5,this)" type="button">5</button></div></div>
+      </div>
+      <div class="field"><label class="fl">Réflexe tricipital C7</label><div class="refl-wrap"><button class="refl-btn" onclick="setNeuro('refl_c7','N',this)" type="button">Normal</button><button class="refl-btn" onclick="setNeuro('refl_c7','D',this)" type="button">Diminué</button><button class="refl-btn" onclick="setNeuro('refl_c7','A',this)" type="button">Aboli</button></div></div>
+
+      <div class="ssep">C8 — Annulaire + auriculaire</div>
+      <div class="g2">
+        <div class="field"><label class="fl">Sensibilité C8</label><div class="refl-wrap"><button class="refl-btn" onclick="setNeuro('sens_c8','N',this)" type="button">Normal</button><button class="refl-btn" onclick="setNeuro('sens_c8','D',this)" type="button">Déficit</button></div></div><div class="field"><label class="fl">Myotome C8 <span class="fh">Flexion doigts</span></label><div class="mrc-wrap"><button class="mrc-btn" onclick="setMRC('mrc_c8',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('mrc_c8',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('mrc_c8',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('mrc_c8',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('mrc_c8',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('mrc_c8',5,this)" type="button">5</button></div></div>
+      </div>
+
+      <div class="ssep">T1 — Face méd. avant-bras</div>
+      <div class="g2">
+        <div class="field"><label class="fl">Sensibilité T1</label><div class="refl-wrap"><button class="refl-btn" onclick="setNeuro('sens_t1','N',this)" type="button">Normal</button><button class="refl-btn" onclick="setNeuro('sens_t1','D',this)" type="button">Déficit</button></div></div><div class="field"><label class="fl">Myotome T1 <span class="fh">Interosseux</span></label><div class="mrc-wrap"><button class="mrc-btn" onclick="setMRC('mrc_t1',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('mrc_t1',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('mrc_t1',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('mrc_t1',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('mrc_t1',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('mrc_t1',5,this)" type="button">5</button></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- S4 TESTS EBP -->
+<div class="step" id="s4">
+
+  <div class="ivb-alert" id="ivb-context-alert">
+    <div class="ivb-alert-title">⚠ Symptômes IVB signalés en anamnèse</div>
+    <div class="ivb-alert-body">Des symptômes IVB ont été cochés. Réaliser le test vasculaire avec précaution. En cas de reproduction des symptômes, STOP — contre-indication aux manipulations cervicales.</div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ir"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l6 12H3L9 3z" stroke="#9C2B2B" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M9 8v4M9 13.5v.5" stroke="#9C2B2B" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="sct">Cluster radiculopathie cervicale</div><div class="scs">Wainner 2003 — seuil ≥3/4 · LR+ 30.3</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alb" style="margin-bottom:12px"><span>ℹ</span><div>4 tests requis. Seuil ≥3/4 positifs : LR+ = 30,3 — haute probabilité de radiculopathie cervicale (Wainner et al. 2003).</div></div>
+      <div id="wainner-score-bar" style="display:none;margin-bottom:12px;padding:10px 12px;background:var(--surf2);border-radius:var(--r);border:1.5px solid var(--brd)">
+        <div style="font-size:11px;font-weight:700;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em">Cluster Wainner</div>
+        <div style="font-size:24px;font-weight:800;color:var(--zm)" id="wainner-count">0/4</div>
+        <div style="font-size:11px;color:var(--tx3);margin-top:2px" id="wainner-interp">Seuil non atteint</div>
+      </div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-spurling')">
+          <div class="tl"><div class="tn">Test de Spurling</div><div class="tsb">Se 50%·Sp 86%·LR+ 3.5</div></div>
+          <button class="ebp-btn" onclick="showEBP('spurling',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'spurling','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'spurling','neg')" type="button">− Négatif</button></div>
+        </div>
+        <div class="tbody" id="tb-spurling">
+          <ol class="tstps"><li>Patient assis, tête en légère extension et rotation ipsilatérale au côté symptomatique</li><li>Appliquer une pression verticale douce sur le sommet du crâne</li><li>Positif si reproduction de la douleur irradiante dans le membre supérieur</li></ol>
+          <div class="tint">Ne pas confondre douleur locale cervicale (négatif) avec irradiation reproduite (positif). Contre-indiqué si instabilité suspectée.</div>
+        </div>
+      </div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-distraction')">
+          <div class="tl"><div class="tn">Test de distraction cervicale</div><div class="tsb">Se 44%·Sp 90%·LR+ 4.4</div></div>
+          <button class="ebp-btn" onclick="showEBP('distraction',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'distraction','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'distraction','neg')" type="button">− Négatif</button></div>
+        </div>
+        <div class="tbody" id="tb-distraction">
+          <ol class="tstps"><li>Patient en décubitus dorsal ou assis</li><li>Placer une main sous l’occiput et l’autre sous le menton</li><li>Tractionner doucement la tête en axe crânial (10-15 kg)</li><li>Positif si diminution ou disparition de la douleur irradiante</li></ol>
+          <div class="tint">La diminution de la douleur à la distraction traduit une compression foraminale mécanique — logique inverse au test de Spurling.</div>
+        </div>
+      </div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-rotation')">
+          <div class="tl"><div class="tn">Rotation ipsilatérale &lt;60°</div><div class="tsb">Se 56%·Sp 90%·LR+ 5.6</div></div>
+          <button class="ebp-btn" onclick="showEBP('rotation60',event)" type="button">ℹ</button>
+          <div class="tbs">
+            <button class="tb" id="tb-rot-pos" onclick="event.stopPropagation();ST(this,'rotation60','pos')" type="button">+ Positif</button>
+            <button class="tb" id="tb-rot-neg" onclick="event.stopPropagation();ST(this,'rotation60','neg')" type="button">− Négatif</button>
+          </div>
+        </div>
+        <div class="tbody" id="tb-rotation">
+          <ol class="tstps"><li>Mesurer la rotation active du côté symptomatique (goniomètre)</li><li>Seuil pathologique : rotation &lt;60° du côté des symptômes</li></ol>
+          <div class="tint">Résultat importé automatiquement depuis les amplitudes (étape 3).</div>
+        </div>
+      </div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-ultt')">
+          <div class="tl"><div class="tn">ULTT A — Upper Limb Tension Test (médian)</div><div class="tsb">Se 72%·Sp 33%·LR+ 1.1</div></div>
+          <button class="ebp-btn" onclick="showEBP('ultt',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'ultt','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'ultt','neg')" type="button">− Négatif</button></div>
+        </div>
+        <div class="tbody" id="tb-ultt">
+          <ol class="tstps"><li>Patient en décubitus dorsal, épaule en abduction 110°, dépression scapulaire</li><li>Coude en extension, avant-bras en supination, poignet et doigts en extension</li><li>Rotation externe d’épaule et inclinaison cervicale controlatérale</li><li>Positif si reproduction des symptômes du patient dans le membre testé</li></ol>
+          <div class="tint">Haute sensibilité mais faible spécificité. Sa valeur principale est dans le cluster Wainner. Sa négativité aide à éliminer la radiculopathie.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ip"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M5 7l4-4 4 4M5 11l4 4 4-4" stroke="#5A3898" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div><div class="sct">Cluster myélopathie cervicale</div><div class="scs">Cook 2009 — seuil ≥3/4 signes</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al ala" style="margin-bottom:12px"><span>⚠</span><div>La myélopathie cervicale est une compression médullaire. ≥3/4 signes positifs : orienter vers neurologie / neurochirurgie en urgence relative.</div></div>
+      <div id="myelopathie-score-bar" style="display:none;margin-bottom:12px;padding:10px 12px;background:var(--surf2);border-radius:var(--r);border:1.5px solid var(--brd)">
+        <div style="font-size:11px;font-weight:700;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em">Cluster myélopathie</div>
+        <div style="font-size:24px;font-weight:800;color:var(--pur)" id="myelo-count">0/4</div>
+        <div style="font-size:11px;color:var(--tx3);margin-top:2px" id="myelo-interp">Seuil non atteint</div>
+      </div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-hoffman')">
+          <div class="tl"><div class="tn">Signe de Hoffmann</div><div class="tsb">Se 58%·Sp 78% — signe pyramidal</div></div>
+          <button class="ebp-btn" onclick="showEBP('hoffman',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'hoffman','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'hoffman','neg')" type="button">− Négatif</button></div>
+        </div>
+        <div class="tbody" id="tb-hoffman">
+          <ol class="tstps"><li>Saisir la phalange distale du majeur entre index et pouce</li><li>Effectuer un pincement brusque vers l’avant (flicker)</li><li>Positif si flexion réflexe du pouce et/ou des autres doigts</li></ol>
+          <div class="tint">Équivalent du signe de Babinski au membre supérieur. Traduit une libération des voies pyramidales.</div>
+        </div>
+      </div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-babinski')">
+          <div class="tl"><div class="tn">Signe de Babinski</div><div class="tsb">Se 13%·Sp 99% — très spécifique</div></div>
+          <button class="ebp-btn" onclick="showEBP('babinski',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'babinski','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'babinski','neg')" type="button">− Négatif</button></div>
+        </div>
+        <div class="tbody" id="tb-babinski">
+          <ol class="tstps"><li>Patient en décubitus dorsal, membre inférieur détendu</li><li>Stimuler la plante du pied du talon vers les orteils</li><li>Positif si extension du gros orteil ± écartement des autres orteils</li></ol>
+          <div class="tint">Faible sensibilité mais très haute spécificité. Un Babinski positif est très évocateur de myélopathie cervicale.</div>
+        </div>
+      </div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-tandem')">
+          <div class="tl"><div class="tn">Marche en tandem</div><div class="tsb">Se 39%·Sp 91% — trouble de la marche</div></div>
+          <button class="ebp-btn" onclick="showEBP('tandem',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'tandem','pos')" type="button">+ Perturbée</button><button class="tb" onclick="event.stopPropagation();ST(this,'tandem','neg')" type="button">− Normale</button></div>
+        </div>
+        <div class="tbody" id="tb-tandem">
+          <ol class="tstps"><li>Demander au patient de marcher en tandem (talon-pointe) sur 3 mètres</li><li>Positif si déviation, trébuchements, impossible maintenir la ligne droite</li></ol>
+          <div class="tint">Traduit une ataxie spinale par compression des cordons postérieurs — signe précoce de myélopathie.</div>
+        </div>
+      </div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-inverted')">
+          <div class="tl"><div class="tn">Inverted supinator sign</div><div class="tsb">Se 31%·Sp 87% — Cook 2009</div></div>
+          <button class="ebp-btn" onclick="showEBP('inverted',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'inverted','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'inverted','neg')" type="button">− Négatif</button></div>
+        </div>
+        <div class="tbody" id="tb-inverted">
+          <ol class="tstps"><li>Tester le réflexe stylo-radial avec le marteau réflexe (radius distal)</li><li>Positif si flexion des doigts à la place de la supination normale</li><li>Ou si réflexe absent avec hyperréflexie des doigts</li></ol>
+          <div class="tint">Signe de myélopathie C5-C6 : la réponse normale (supination) est remplacée par une flexion digitale pyramidale.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5z" stroke="#B56E10" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg></div>
+      <div><div class="sct">Instabilité ligamentaire haute C0-C2</div><div class="scs">Sharp-Purser · Alar ligament</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alr" style="margin-bottom:12px"><span>⚠</span><div>Contre-indiqués en cas de traumatisme haute énergie récent ou fracture suspectée. Réaliser avec extrême précaution.</div></div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-sharp')">
+          <div class="tl"><div class="tn">Test de Sharp-Purser</div><div class="tsb">Se 69%·Sp 96% — Uitvlugt 1988</div></div>
+          <button class="ebp-btn" onclick="showEBP('sharp',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'sharp','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'sharp','neg')" type="button">− Négatif</button></div>
+        </div>
+        <div class="tbody" id="tb-sharp">
+          <ol class="tstps"><li>Patient assis, tête en légère flexion (position de repos atlantoaxiale)</li><li>Une main stabilise le front, l’autre exerce une pression postérieure sur C2</li><li>Demander un hochement de tête</li><li>Positif si glissement antérieur de l’atlas perceptible ou diminution des symptômes</li></ol>
+          <div class="tint">Haute spécificité — un test positif est très évocateur d’instabilité atlantoaxiale. Référer avant toute mobilisation.</div>
+        </div>
+      </div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-alar')">
+          <div class="tl"><div class="tn">Alar ligament stress test</div><div class="tsb">Fiabilité limitée — Cattrysse 2013</div></div>
+          <button class="ebp-btn" onclick="showEBP('alar',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'alar','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'alar','neg')" type="button">− Négatif</button></div>
+        </div>
+        <div class="tbody" id="tb-alar">
+          <div class="al ala" style="margin-bottom:10px"><span>⚠</span><div><strong>Fiabilité inter-examinateur faible (Cattrysse et al. 2013).</strong> Ne pas utiliser seul pour une décision clinique.</div></div>
+          <ol class="tstps"><li>Patient assis, stabiliser C2 par les apophyses articulaires</li><li>Effectuer une inclinaison latérale de la tête</li><li>Normalement C2 doit partir du côté opposé à l’inclinaison (couplage)</li><li>Positif si C2 reste fixe (rupture du ligament alar opposé)</li></ol>
+          <div class="tint">Interprétation clinique limitée. À ne réaliser qu’en contexte fort (PR, traumatisme, Down syndrome).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ir"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3a6 6 0 100 12A6 6 0 009 3z" stroke="#9C2B2B" stroke-width="1.5"/><path d="M9 7v3l2 1" stroke="#9C2B2B" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="sct">Test artère vertébrale (IVB)</div><div class="scs">IFOMPT 2012 — screening vasculaire</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alr" style="margin-bottom:12px"><span>⚠</span><div><strong>Limites :</strong> sensibilité très faible pour prédire un AVC (Thiel &amp; Rix 2005). Guidelines IFOMPT 2012 : baser le screening sur les facteurs de risque CV et les symptômes 5D+3N.</div></div>
+      <div class="ssep">Checklist 5D+3N — Symptômes IVB</div>
+      <div id="ivb-checklist-summary" style="padding:8px 10px;background:var(--surf2);border-radius:8px;margin-bottom:10px;font-size:12px;color:var(--tx2)">Vérifiez les symptômes cochés en anamnèse (étape 2).</div>
+      <div class="ti">
+        <div class="th" onclick="tg('tb-ivb')">
+          <div class="tl"><div class="tn">Test de rotation-extension</div><div class="tsb">Sensibilité très faible — Thiel &amp; Rix 2005</div></div>
+          <button class="ebp-btn" onclick="showEBP('ivb_test',event)" type="button">ℹ</button>
+          <div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'ivb_test','pos')" type="button">+ Symptômes</button><button class="tb" onclick="event.stopPropagation();ST(this,'ivb_test','neg')" type="button">− Négatif</button></div>
+        </div>
+        <div class="tbody" id="tb-ivb">
+          <ol class="tstps"><li>Patient en décubitus dorsal, tête dépassant la table</li><li>Amener lentement en extension + rotation maximale d’un côté</li><li>Maintenir 10 secondes — interroger sur les symptômes</li><li>Répéter de l’autre côté</li><li>STOP immédiat si reproduction des symptômes IVB</li></ol>
+          <div class="tint">Positif si reproduction des 5D+3N : Dizziness, Diplopia, Dysarthria, Dysphagia, Drop attacks + Nausea, Numbness, Nystagmus. Contre-indication absolue aux manipulations si positif.</div>
+        </div>
+      </div>
+      <div id="ivb-pos-alert" style="display:none" class="al alr"><span>🚨</span><div><strong>Test IVB positif — Contre-indication aux manipulations cervicales.</strong> Orienter vers le médecin traitant.</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- S5 SCORES -->
+<div class="step" id="s5">
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#5C7A9E" stroke-width="1.5"/><path d="M6 9h6M6 6h6M6 12h4" stroke="#5C7A9E" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="sct">NDI — Neck Disability Index</div><div class="scs">Vernon &amp; Mior 1991 · MCID = 7 pts (14%)</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alb" style="margin-bottom:12px"><span>ℹ</span><div>10 items, 6 niveaux (0-5) chacun. Score /50 converti en %. Validé en français (Wlodyka-Demaille 2002).</div></div>
+      <button class="btf btg" onclick="openNDI()" type="button" style="margin-top:0;margin-bottom:10px">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8h6M5 5.5h6M5 10.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Ouvrir le questionnaire NDI
+      </button>
+      <div id="ndi-result" style="display:none" class="dbar">
+        <div class="dbrt"><div class="dbn">NDI</div><div class="dbp" id="ndi-pct">—</div></div>
+        <div class="dbt"><div class="dbf" id="ndi-bar"></div></div>
+        <div id="ndi-grade" class="dc">—</div>
+        <div class="dw" id="ndi-interp">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+      <div class="sci ig"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15V6M5 15v-4M13 15V3" stroke="#177A5A" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="sct">PSFS — Patient Specific Functional Scale</div><div class="scs">Stratford 1995 · MCID = 2 points</div></div>
+    </div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alg" style="margin-bottom:12px"><span>ℹ</span><div>3 activités choisies par le patient. Note 0 (impossible) à 10 (normal). Moyenne = score PSFS.</div></div>
+      <div class="field"><label class="fl">Activité 1</label><input type="text" id="psfs-act1" placeholder="Ex : conduire 30 min" oninput="calcPSFS()"></div>
+      <div class="g2"><div class="field"><label class="fl">Score 1 (0-10)</label><input type="text" id="psfs-s1" placeholder="0-10" oninput="calcPSFS()"></div></div>
+      <div class="field"><label class="fl">Activité 2</label><input type="text" id="psfs-act2" placeholder="Ex : regarder par-dessus l’épaule" oninput="calcPSFS()"></div>
+      <div class="g2"><div class="field"><label class="fl">Score 2 (0-10)</label><input type="text" id="psfs-s2" placeholder="0-10" oninput="calcPSFS()"></div></div>
+      <div class="field"><label class="fl">Activité 3</label><input type="text" id="psfs-act3" placeholder="Ex : travail sur écran" oninput="calcPSFS()"></div>
+      <div class="g2"><div class="field"><label class="fl">Score 3 (0-10)</label><input type="text" id="psfs-s3" placeholder="0-10" oninput="calcPSFS()"></div></div>
+      <div id="psfs-result" style="display:none" class="dbar">
+        <div class="dbrt"><div class="dbn">PSFS</div><div class="dbp" id="psfs-score-display">—</div></div>
+        <div class="dbt"><div class="dbf fl2" id="psfs-bar"></div></div>
+        <div class="dw" id="psfs-interp">—</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- S6 ANALYSE & CR -->
+<div class="step" id="s6">
+  <div class="disc">Outil d’aide à la décision clinique — ne remplace pas le jugement du professionnel de santé.</div>
+  <div id="rf-alert-cr" style="display:none" class="al alr"><span>⚠</span><div id="rf-alert-cr-txt"></div></div>
+  <div id="ivb-alert-cr" style="display:none" class="al alr"><span>🚨</span><div>Test IVB positif ou symptômes IVB présents — contre-indication aux manipulations.</div></div>
+  <div class="rcb" id="analyse-block"></div>
+  <div id="diag-block"></div>
+  <div class="crtabs">
+    <button class="crtab on" onclick="switchCR('court',this)" type="button">Synthèse</button>
+    <button class="crtab" onclick="switchCR('complet',this)" type="button">Compte-rendu</button>
+  </div>
+  <div id="cr-court" class="crv on"></div>
+  <div id="cr-complet" class="crv"></div>
+  <button class="btf btn2" onclick="copyCR()" type="button" style="margin-top:6px">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="#fff" stroke-width="1.3"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="#fff" stroke-width="1.3"/></svg>
+    Copier le compte-rendu
+  </button>
+  <button class="btf btg" onclick="resetBilan()" type="button">Nouveau bilan</button>
+</div>
+
+</div><!-- /app -->
+
+<div class="bnav">
+  <button class="bbt bbk" id="btn-back" onclick="goStep(-1)" type="button" disabled>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Retour
+  </button>
+  <div class="bni" id="bni-label">Identité patient</div>
+  <button class="bbt bbn" id="btn-next" onclick="goStep(1)" type="button">
+    Suivant
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<div class="ebp-overlay" id="ebp-overlay" onclick="closeEBP(event)">
+  <div class="ebp-sheet">
+    <div class="ebp-drag"></div>
+    <div class="ebp-title" id="ebp-title"></div>
+    <div class="ebp-ref" id="ebp-ref"></div>
+    <div class="ebp-stats" id="ebp-stats"></div>
+    <div class="ebp-note" id="ebp-note"></div>
+    <button class="ebp-close" onclick="document.getElementById('ebp-overlay').classList.remove('o')" type="button">Fermer</button>
+  </div>
+</div>
+
+<div class="mov" id="ndi-modal">
+  <div class="modal">
+    <div class="mhnd"></div>
+    <div class="mhd"><h2>NDI — Neck Disability Index</h2><button class="mcl" onclick="closeNDI()" type="button">✕</button></div>
+    <div class="mbd" id="ndi-questions"></div>
+  </div>
+</div>
+
+<div class="pov" id="prog-overlay">
+  <div class="phdr">
+    <button class="pclose" onclick="closeProg()" type="button">✕</button>
+    <div class="phinfo"><div class="phtitle">Programme de rééducation cervicale</div><div class="phsub">EBP — 3 phases progressives</div></div>
+    <button class="ppbtn" onclick="copyProg()" type="button">Copier</button>
+  </div>
+  <div class="pcont" id="prog-content"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var CUR=1,TOTAL=6;
+var LABELS=['Identit\u00e9','Anamn\u00e8se','Examen physique','Tests EBP','Scores','Analyse & CR'];
+var BADGES=['Identit\u00e9','Anamn\u00e8se','Exam. physique','Tests EBP','Scores','Analyse'];
+var D={eva:null,tests:{},neuro:{},ndi:null,psfs:null};
+var CHIPS={};
+var RF=[];
+var IVB_SX=[];
+
+function goStep(dir){
+  var ns=CUR+dir;
+  if(ns<1||ns>TOTAL)return;
+  document.getElementById('s'+CUR).classList.remove('active');
+  CUR=ns;
+  document.getElementById('s'+CUR).classList.add('active');
+  document.getElementById('hstep').textContent='\u00c9tape '+CUR+' / '+TOTAL;
+  document.getElementById('hbadge').textContent=BADGES[CUR-1];
+  document.getElementById('bni-label').textContent=LABELS[CUR-1];
+  document.getElementById('hpfill').style.width=Math.round((CUR/TOTAL)*100)+'%';
+  document.getElementById('btn-back').disabled=(CUR===1);
+  document.getElementById('btn-next').textContent=(CUR===TOTAL)?'Terminer':'Suivant';
+  if(CUR===4){showIVBAlert();checkWainnerBar();checkMyeloBar();updateIVBSummary();}
+  if(CUR===6){buildCR();}
+  window.scrollTo(0,0);
+  save();
+}
+
+function toggleSC(h){
+  var b=h.nextElementSibling,ch=h.querySelector('.scch');
+  b.classList.toggle('o');if(ch)ch.classList.toggle('o');
+}
+function tg(id){var b=document.getElementById(id);if(b)b.classList.toggle('o');}
+
+function tC(el,grp,val){
+  if(!CHIPS[grp])CHIPS[grp]=[];
+  var idx=CHIPS[grp].indexOf(val);
+  if(el.classList.contains('on')){el.classList.remove('on');if(idx>-1)CHIPS[grp].splice(idx,1);}
+  else{el.classList.add('on');if(idx===-1)CHIPS[grp].push(val);}
+  save();
+}
+function getC(grp){return CHIPS[grp]||[];}
+
+function toggleRF(el,key){
+  el.classList.toggle('on');el.classList.toggle('or');
+  var idx=RF.indexOf(key);
+  if(idx===-1)RF.push(key);else RF.splice(idx,1);
+  save();
+}
+function toggleIVB(el,key){
+  el.classList.toggle('on');
+  var idx=IVB_SX.indexOf(key);
+  if(idx===-1)IVB_SX.push(key);else IVB_SX.splice(idx,1);
+  save();
+}
+function setEVA(v){
+  D.eva=v;
+  document.querySelectorAll('.evab').forEach(function(b){b.classList.remove('on');});
+  document.querySelector('.e'+v).classList.add('on');
+  save();
+}
+function ST(btn,key,val){
+  D.tests[key]=val;
+  btn.closest('.tbs').querySelectorAll('.tb').forEach(function(b){b.classList.remove('pos','neg');});
+  btn.classList.add(val==='pos'?'pos':'neg');
+  if(key==='ivb_test'){document.getElementById('ivb-pos-alert').style.display=(val==='pos'?'flex':'none');}
+  checkWainnerBar();checkMyeloBar();
+  save();
+}
+function setNeuro(key,val,btn){
+  D.neuro[key]=val;
+  btn.closest('.refl-wrap').querySelectorAll('.refl-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  save();
+}
+function setMRC(key,val,btn){
+  D.neuro[key]=val;
+  btn.closest('.mrc-wrap').querySelectorAll('.mrc-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  save();
+}
+
+function checkWainner(){
+  var cote=document.getElementById('cote-symp').value;
+  var rotD=parseFloat(document.getElementById('rom-rot-d').value)||null;
+  var rotG=parseFloat(document.getElementById('rom-rot-g').value)||null;
+  var rotIpsi=null;
+  if(cote==='D'&&rotD!==null)rotIpsi=rotD;
+  else if(cote==='G'&&rotG!==null)rotIpsi=rotG;
+  var al=document.getElementById('wainner-rot-alert');
+  var posBtn=document.getElementById('tb-rot-pos');
+  var negBtn=document.getElementById('tb-rot-neg');
+  if(rotIpsi!==null&&rotIpsi<60){
+    D.tests['rotation60']='pos';al.style.display='flex';
+    if(posBtn){posBtn.classList.add('pos');posBtn.classList.remove('neg');}
+    if(negBtn)negBtn.classList.remove('pos','neg');
+  } else if(rotIpsi!==null&&rotIpsi>=60){
+    D.tests['rotation60']='neg';al.style.display='none';
+    if(negBtn){negBtn.classList.add('neg');negBtn.classList.remove('pos');}
+    if(posBtn)posBtn.classList.remove('pos','neg');
+  } else{al.style.display='none';}
+  checkWainnerBar();save();
+}
+
+function getWainnerScore(){
+  return ['spurling','distraction','rotation60','ultt'].filter(function(k){return D.tests[k]==='pos';}).length;
+}
+function getMyeloScore(){
+  return ['hoffman','babinski','tandem','inverted'].filter(function(k){return D.tests[k]==='pos';}).length;
+}
+
+function checkWainnerBar(){
+  var sc=getWainnerScore();
+  var wkeys=['spurling','distraction','rotation60','ultt'];
+  var anySet=wkeys.some(function(k){return D.tests[k];});
+  var bar=document.getElementById('wainner-score-bar');
+  if(anySet&&bar)bar.style.display='block';
+  var cnt=document.getElementById('wainner-count');
+  var interp=document.getElementById('wainner-interp');
+  if(cnt)cnt.textContent=sc+'/4';
+  if(interp){
+    if(sc>=3){interp.textContent='Seuil atteint \u2014 LR+ 30.3 \u2014 Radiculopathie probable';cnt.style.color='var(--red)';}
+    else if(sc===2){interp.textContent='2/4 \u2014 Probabilit\u00e9 interm\u00e9diaire';cnt.style.color='var(--amb)';}
+    else{interp.textContent='Seuil non atteint';cnt.style.color='var(--zm)';}
+  }
+}
+function checkMyeloBar(){
+  var sc=getMyeloScore();
+  var bar=document.getElementById('myelopathie-score-bar');
+  if(sc>0&&bar)bar.style.display='block';
+  var cnt=document.getElementById('myelo-count');
+  var interp=document.getElementById('myelo-interp');
+  if(cnt)cnt.textContent=sc+'/4';
+  if(interp){
+    if(sc>=3){interp.textContent='Seuil atteint \u2014 My\u00e9lopathie probable \u2014 orienter neurologie';cnt.style.color='#FF9999';}
+    else if(sc===2){interp.textContent='2/4 \u2014 Surveiller';cnt.style.color='var(--amb)';}
+    else{interp.textContent='Seuil non atteint';cnt.style.color='var(--pur)';}
+  }
+}
+function showIVBAlert(){
+  var el=document.getElementById('ivb-context-alert');
+  if(el)el.style.display=(IVB_SX.length>0?'block':'none');
+}
+function updateIVBSummary(){
+  var el=document.getElementById('ivb-checklist-summary');
+  if(!el)return;
+  if(IVB_SX.length===0){el.textContent='Aucun sympt\u00f4me IVB signal\u00e9 en anamn\u00e8se.';}
+  else{
+    var lb={'ivb_dizziness':'Dizziness','ivb_diplopie':'Diplopie','ivb_dysarthrie':'Dysarthrie','ivb_dysphagie':'Dysphagie','ivb_drop':'Drop attacks','ivb_nausee':'Naus\u00e9es','ivb_numbness':'Engourdissements','ivb_nystagmus':'Nystagmus'};
+    el.innerHTML='<strong style="color:var(--red)">\u26a0 Sympt\u00f4mes pr\u00e9sents\u00a0: </strong>'+IVB_SX.map(function(k){return lb[k]||k;}).join(', ');
+  }
+}
+
+var NDI_Q=[
+  {q:'Intensit\u00e9 de la douleur',opts:['Pas de douleur','Douleur tr\u00e8s l\u00e9g\u00e8re','Douleur mod\u00e9r\u00e9e','Douleur assez forte','Douleur tr\u00e8s forte','Pire douleur imaginable']},
+  {q:'Soins personnels (se laver, s\u2019habiller\u2026)',opts:['Je peux me soigner normalement sans douleur','Je peux me soigner normalement avec un peu de douleur','Me soigner est douloureux et je dois \u00eatre lent','J\u2019ai besoin d\u2019aide mais je g\u00e8re la plupart de mes soins','J\u2019ai besoin d\u2019aide chaque jour pour la plupart de mes soins','Je ne peux pas m\u2019habiller, me laver avec difficult\u00e9']},
+  {q:'Soulever des charges',opts:['Je peux soulever des charges sans douleur','Je peux soulever de lourdes charges avec un peu de douleur','La douleur m\u2019emp\u00eache de soulever de lourdes charges au sol','La douleur m\u2019emp\u00eache de soulever de lourdes charges \u2014 charges l\u00e9g\u00e8res sur table OK','Je ne peux soulever que de tr\u00e8s l\u00e9g\u00e8res charges','Je ne peux rien soulever du tout']},
+  {q:'Lecture',opts:['Je peux lire autant que je veux sans douleur','Je peux lire autant que je veux avec une l\u00e9g\u00e8re douleur','Je peux lire autant que je veux avec une douleur mod\u00e9r\u00e9e','Je ne peux pas lire autant que je veux \u2014 douleur mod\u00e9r\u00e9e','Je ne peux pratiquement pas lire \u2014 douleur intense','Je ne peux pas lire du tout']},
+  {q:'Maux de t\u00eate',opts:['Pas de maux de t\u00eate','L\u00e9g\u00e8res c\u00e9phal\u00e9es peu fr\u00e9quentes','C\u00e9phal\u00e9es mod\u00e9r\u00e9es peu fr\u00e9quentes','C\u00e9phal\u00e9es mod\u00e9r\u00e9es fr\u00e9quentes','C\u00e9phal\u00e9es intenses fr\u00e9quentes','Maux de t\u00eate quasi-permanents']},
+  {q:'Concentration',opts:['Je peux me concentrer pleinement sans difficult\u00e9','Je peux me concentrer pleinement avec une l\u00e9g\u00e8re difficult\u00e9','J\u2019ai des difficult\u00e9s mod\u00e9r\u00e9es \u00e0 me concentrer','J\u2019ai de grandes difficult\u00e9s \u00e0 me concentrer','J\u2019ai de tr\u00e8s grandes difficult\u00e9s \u00e0 me concentrer','Je ne peux pas me concentrer du tout']},
+  {q:'Travail',opts:['Je peux travailler autant que je veux','Je peux faire seulement mon travail habituel','Je peux faire la plupart de mon travail habituel','Je ne peux pas faire mon travail habituel','Je peux \u00e0 peine travailler','Je ne peux pas travailler du tout']},
+  {q:'Conduite automobile',opts:['Je peux conduire sans douleur cervicale','Je peux conduire aussi longtemps que je veux \u2014 l\u00e9g\u00e8re douleur','Je peux conduire aussi longtemps que je veux \u2014 douleur mod\u00e9r\u00e9e','Je ne peux pas conduire aussi longtemps que je le voudrais','Je ne peux \u00e0 peine conduire','Je ne peux pas du tout conduire']},
+  {q:'Sommeil',opts:['Mon sommeil n\u2019est pas perturb\u00e9','Mon sommeil est l\u00e9g\u00e8rement perturb\u00e9 (<1h insomnie)','Mon sommeil est mod\u00e9r\u00e9ment perturb\u00e9 (1-2h insomnie)','Mon sommeil est tr\u00e8s perturb\u00e9 (2-3h insomnie)','Mon sommeil est tr\u00e8s perturb\u00e9 (3-5h insomnie)','Mon sommeil est totalement perturb\u00e9 (5-7h insomnie)']},
+  {q:'Loisirs',opts:['Je peux prendre part \u00e0 tous mes loisirs sans douleur','Je peux prendre part \u00e0 tous mes loisirs avec l\u00e9g\u00e8re douleur','Je peux prendre part \u00e0 la plupart de mes loisirs','Je ne peux pas prendre part \u00e0 certains de mes loisirs','Je ne peux prendre part qu\u2019\u00e0 peu de mes loisirs','Je ne peux prendre part \u00e0 aucun loisir']}
+];
+var NDI_SCORES=new Array(10).fill(null);
+
+function openNDI(){
+  var qc=document.getElementById('ndi-questions');qc.innerHTML='';
+  NDI_Q.forEach(function(q,i){
+    var d=document.createElement('div');d.className='qdi';
+    var qt=document.createElement('div');qt.className='qdq';qt.textContent=(i+1)+'. '+q.q;
+    var os=document.createElement('div');os.className='qdos';
+    q.opts.forEach(function(opt,j){
+      var b=document.createElement('button');b.className='qdo'+(NDI_SCORES[i]===j?' on':'');
+      b.textContent=j;b.title=opt;b.type='button';
+      b.onclick=function(){
+        NDI_SCORES[i]=j;
+        os.querySelectorAll('.qdo').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+        var sb=d.querySelector('.qdsb span');if(sb)sb.textContent=opt;
+        calcNDI();
+      };
+      os.appendChild(b);
+    });
+    var sb=document.createElement('div');sb.className='qdsb';
+    sb.innerHTML='<span style="font-size:11px;color:var(--tx2)">'+(NDI_SCORES[i]!==null?q.opts[NDI_SCORES[i]]:'Choisir un niveau')+'</span>';
+    d.appendChild(qt);d.appendChild(os);d.appendChild(sb);
+    qc.appendChild(d);
+  });
+  document.getElementById('ndi-modal').classList.add('o');
+}
+function closeNDI(){document.getElementById('ndi-modal').classList.remove('o');calcNDI();}
+function calcNDI(){
+  var filled=NDI_SCORES.filter(function(v){return v!==null;});
+  if(filled.length<10)return;
+  var total=NDI_SCORES.reduce(function(a,b){return a+b;},0);
+  var pct=Math.round((total/50)*100);
+  D.ndi={total:total,pct:pct};
+  var g,interp,cls;
+  if(pct<=8){g='Pas d\u2019incapacit\u00e9';interp='Incapacit\u00e9 minimale';cls='cpo';}
+  else if(pct<=28){g='Incapacit\u00e9 l\u00e9g\u00e8re';interp='G\u00eane l\u00e9g\u00e8re \u2014 r\u00e9\u00e9ducation ambulatoire';cls='cpo';}
+  else if(pct<=48){g='Incapacit\u00e9 mod\u00e9r\u00e9e';interp='G\u00eane significative \u2014 prise en charge active n\u00e9cessaire';cls='cp';}
+  else if(pct<=64){g='Incapacit\u00e9 s\u00e9v\u00e8re';interp='Incapacit\u00e9 s\u00e9v\u00e8re \u2014 pluridisciplinaire';cls='ctp';}
+  else{g='Incapacit\u00e9 compl\u00e8te';interp='\u00c9valuation sp\u00e9cialis\u00e9e n\u00e9cessaire';cls='ctp';}
+  document.getElementById('ndi-result').style.display='block';
+  document.getElementById('ndi-pct').textContent=pct+'%';
+  document.getElementById('ndi-pct').className='dbp '+(pct>=50?'ph':pct>=30?'pm':'pl');
+  var bar=document.getElementById('ndi-bar');bar.style.width=pct+'%';
+  bar.className='dbf '+(pct>=50?'fh2':pct>=30?'fm':'fl2');
+  document.getElementById('ndi-grade').textContent=g;document.getElementById('ndi-grade').className='dc '+cls;
+  document.getElementById('ndi-interp').textContent=interp;
+  save();
+}
+function getNDIGrade(pct){
+  if(pct<=8)return'Pas d\u2019incapacit\u00e9';if(pct<=28)return'Incapacit\u00e9 l\u00e9g\u00e8re';
+  if(pct<=48)return'Incapacit\u00e9 mod\u00e9r\u00e9e';if(pct<=64)return'Incapacit\u00e9 s\u00e9v\u00e8re';return'Incapacit\u00e9 compl\u00e8te';
+}
+
+function calcPSFS(){
+  var s1=parseFloat(document.getElementById('psfs-s1').value);
+  var s2=parseFloat(document.getElementById('psfs-s2').value);
+  var s3=parseFloat(document.getElementById('psfs-s3').value);
+  var vals=[s1,s2,s3].filter(function(v){return !isNaN(v)&&v>=0&&v<=10;});
+  if(!vals.length)return;
+  var avg=Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length*10)/10;
+  D.psfs=avg;
+  document.getElementById('psfs-result').style.display='block';
+  document.getElementById('psfs-score-display').textContent=avg+'/10';
+  document.getElementById('psfs-bar').style.width=(avg/10*100)+'%';
+  var interp=avg>=8?'Fonction quasi-normale':avg>=5?'Limitation mod\u00e9r\u00e9e \u2014 MCID=2 pts':'Limitation importante \u2014 prise en charge active n\u00e9cessaire';
+  document.getElementById('psfs-interp').textContent=interp;
+  save();
+}
+
+var EBP={
+  spurling:{title:'Test de Spurling',ref:'Wainner RS et al. Spine. 2003',stats:[{l:'Sensibilit\u00e9',v:'50%',s:'radiculopathie'},{l:'Sp\u00e9cificit\u00e9',v:'86%',s:''},{l:'LR+',v:'3.5',s:''},{l:'Cluster \u22653/4',v:'LR+ 30.3',s:''}],note:'Test de compression foraminale. La reproduction d\u2019une douleur irradiante dans le dermatome correspond est pathognomonique. Fait partie du cluster Wainner 2003.'},
+  distraction:{title:'Test de distraction cervicale',ref:'Wainner RS et al. Spine. 2003',stats:[{l:'Sensibilit\u00e9',v:'44%',s:'radiculopathie'},{l:'Sp\u00e9cificit\u00e9',v:'90%',s:''},{l:'LR+',v:'4.4',s:''}],note:'La diminution de la douleur \u00e0 la distraction traduit une compression foraminale m\u00e9canique. Test compl\u00e9mentaire au Spurling.'},
+  rotation60:{title:'Rotation ipsilat\u00e9rale < 60\u00b0',ref:'Wainner RS et al. Spine. 2003',stats:[{l:'Sensibilit\u00e9',v:'56%',s:'radiculopathie'},{l:'Sp\u00e9cificit\u00e9',v:'90%',s:''},{l:'LR+',v:'5.6',s:''}],note:'Le crit\u00e8re le plus sp\u00e9cifique du cluster Wainner. Import\u00e9 automatiquement depuis les amplitudes mesur\u00e9es.'},
+  ultt:{title:'ULTT A \u2014 Upper Limb Tension Test',ref:'Wainner RS et al. Spine. 2003',stats:[{l:'Sensibilit\u00e9',v:'72%',s:'radiculopathie'},{l:'Sp\u00e9cificit\u00e9',v:'33%',s:''},{l:'LR+',v:'1.1',s:''}],note:'Haute sensibilit\u00e9 mais faible sp\u00e9cificit\u00e9 seul. Sa n\u00e9gativit\u00e9 aide \u00e0 \u00e9liminer la radiculopathie. Sa contribution est dans le cluster Wainner.'},
+  hoffman:{title:'Signe de Hoffmann',ref:'Cook C et al. J Orthop Sports Phys Ther. 2009',stats:[{l:'Sensibilit\u00e9',v:'58%',s:'my\u00e9lopathie'},{l:'Sp\u00e9cificit\u00e9',v:'78%',s:''},{l:'Cluster \u22653/4',v:'LR+ \u00e9lev\u00e9',s:''}],note:'\u00c9quivalent du Babinski au membre sup\u00e9rieur. Traduit une lib\u00e9ration des voies pyramidales.'},
+  babinski:{title:'Signe de Babinski',ref:'Cook C et al. J Orthop Sports Phys Ther. 2009',stats:[{l:'Sensibilit\u00e9',v:'13%',s:'my\u00e9lopathie'},{l:'Sp\u00e9cificit\u00e9',v:'99%',s:''}],note:'Tr\u00e8s faible sensibilit\u00e9 mais quasi-pathognomonique. Un Babinski positif isol\u00e9 suffit \u00e0 suspecter une l\u00e9sion du motoneurone central.'},
+  tandem:{title:'Marche en tandem',ref:'Rhee JM et al. J Bone Joint Surg Am. 2009',stats:[{l:'Sensibilit\u00e9',v:'39%',s:'my\u00e9lopathie'},{l:'Sp\u00e9cificit\u00e9',v:'91%',s:''}],note:'Test simple d\u2019ataxie spinale. La difficult\u00e9 \u00e0 marcher talon-pointe r\u00e9v\u00e8le une atteinte des cordons post\u00e9rieurs.'},
+  inverted:{title:'Inverted supinator sign',ref:'Cook C et al. J Orthop Sports Phys Ther. 2009',stats:[{l:'Sensibilit\u00e9',v:'31%',s:'my\u00e9lopathie'},{l:'Sp\u00e9cificit\u00e9',v:'87%',s:''}],note:'Signe de my\u00e9lopathie C5-C6. La r\u00e9ponse normale (supination) est remplac\u00e9e par une flexion digitale pyramidale.'},
+  sharp:{title:'Test de Sharp-Purser',ref:'Uitvlugt G & Indenbaum S. Spine. 1988',stats:[{l:'Sensibilit\u00e9',v:'69%',s:'instabilit\u00e9 C1-C2'},{l:'Sp\u00e9cificit\u00e9',v:'96%',s:''}],note:'Haute sp\u00e9cificit\u00e9 pour l\u2019instabilit\u00e9 atlantoaxiale. Contre-indique toute mobilisation et impose un r\u00e9f\u00e9rencement m\u00e9dical imm\u00e9diat.'},
+  alar:{title:'Alar ligament stress test',ref:'Cattrysse E et al. Man Ther. 2013',stats:[{l:'Fiabilit\u00e9',v:'Faible',s:'inter-examinateur'},{l:'ICC',v:'< 0.4',s:''}],note:'Fiabilit\u00e9 inter-examinateur insuffisante (Cattrysse 2013). Ne pas utiliser seul. Interpr\u00e9ter uniquement dans un contexte clinique fort (PR, traumatisme C1-C2, Down syndrome).'},
+  ivb_test:{title:'Test art\u00e8re vert\u00e9brale',ref:'Thiel H & Rix G. Man Ther. 2005 \u2014 IFOMPT 2012',stats:[{l:'Sensibilit\u00e9',v:'Tr\u00e8s faible',s:'AVC vert\u00e9bro-basilaire'},{l:'Recommandation',v:'IFOMPT 2012',s:'screening sympt\u00f4mes'}],note:'Sensibilit\u00e9 insuffisante pour pr\u00e9dire un AVC (Thiel & Rix 2005). Guidelines IFOMPT 2012\u00a0: baser le screening sur les facteurs de risque CV et les sympt\u00f4mes 5D+3N.'}
+};
+
+function showEBP(key,e){
+  e.stopPropagation();
+  var d=EBP[key];if(!d)return;
+  document.getElementById('ebp-title').textContent=d.title;
+  document.getElementById('ebp-ref').textContent=d.ref;
+  var st=document.getElementById('ebp-stats');st.innerHTML='';
+  d.stats.forEach(function(s){st.innerHTML+='<div class="ebp-stat"><div class="ebp-stat-lbl">'+s.l+'</div><div class="ebp-stat-val">'+s.v+'</div><div class="ebp-stat-sub">'+s.s+'</div></div>';});
+  document.getElementById('ebp-note').textContent=d.note;
+  document.getElementById('ebp-overlay').classList.add('o');
+}
+function closeEBP(e){if(e.target===document.getElementById('ebp-overlay'))document.getElementById('ebp-overlay').classList.remove('o');}
+
+function buildCR(){
+  var nom=document.getElementById('nom').value||'\u2014';
+  var prenom=document.getElementById('prenom').value||'';
+  var ddn=document.getElementById('ddn').value;
+  var age='';if(ddn){var y=new Date().getFullYear()-parseInt(ddn.split('-')[0]);age=y+'\u00a0ans';}
+  var dbilan=document.getElementById('dbilan').value||new Date().toLocaleDateString('fr-FR');
+  var wSc=getWainnerScore(),mSc=getMyeloScore();
+  var tPos=Object.entries(D.tests).filter(function(e){return e[1]==='pos';}).map(function(e){return e[0];});
+  var ivbPos=IVB_SX.length>0||D.tests['ivb_test']==='pos';
+  var sharpPos=D.tests['sharp']==='pos';
+
+  document.getElementById('rf-alert-cr').style.display=RF.length>0?'flex':'none';
+  if(RF.length>0)document.getElementById('rf-alert-cr-txt').textContent=RF.length+' red flag(s) d\u00e9tect\u00e9(s) \u2014 avis m\u00e9dical requis.';
+  document.getElementById('ivb-alert-cr').style.display=ivbPos?'flex':'none';
+
+  var diags=[];
+  if(wSc>=3)diags.push({n:'Radiculopathie cervicale',pct:Math.min(95,60+wSc*10),cls:'cdh',tags:['Wainner \u22653/4','LR+ 30.3'],w:'Bilan neurologique complet, imagerie si d\u00e9ficit moteur.'});
+  if(mSc>=3)diags.push({n:'My\u00e9lopathie cervicale',pct:Math.min(92,55+mSc*10),cls:'cdh',tags:['Cook \u22653/4','Urgence relative'],w:'Orienter neurologie/neurochirurgie.'});
+  if(sharpPos)diags.push({n:'Instabilit\u00e9 atlantoaxiale suspect\u00e9e',pct:75,cls:'cdh',tags:['Sharp-Purser positif'],w:'Contre-indication aux manipulations \u2014 r\u00e9f\u00e9rer.'});
+  if(wSc===1||wSc===2)diags.push({n:'Cervicalgie avec composante radiculaire possible',pct:40+wSc*8,cls:'cp',tags:['Wainner insuffisant'],w:'Surveillance \u2014 r\u00e9\u00e9valuation \u00e0 4 semaines.'});
+  if(!diags.length)diags.push({n:'Cervicalgie m\u00e9canique non sp\u00e9cifique',pct:65,cls:'cdl',tags:['Tests n\u00e9gatifs'],w:'Prise en charge kin\u00e9sith\u00e9rapique standard.'});
+  diags.sort(function(a,b){return b.pct-a.pct;});
+
+  var ab=document.getElementById('analyse-block');
+  ab.innerHTML='<div class="rct">Raisonnement clinique</div>';
+  [{q:'Red flags',y:RF.length>0,t:RF.length>0?RF.length+' flag(s)':'Aucun'},
+   {q:'Cluster Wainner (radiculopathie)',y:wSc>=3,t:wSc+'/4'+(wSc>=3?' \u2014 seuil atteint LR+ 30.3':wSc===2?' \u2014 interm\u00e9diaire':' \u2014 n\u00e9gatif')},
+   {q:'Cluster my\u00e9lopathie (Cook)',y:mSc>=3,t:mSc+'/4'+(mSc>=3?' \u2014 orienter neurologie':' \u2014 n\u00e9gatif')},
+   {q:'Instabilit\u00e9 haute (Sharp-Purser)',y:sharpPos,t:sharpPos?'Positif \u2014 contre-indication':'N\u00e9gatif'},
+   {q:'Risque IVB',y:ivbPos,t:ivbPos?'Signal IVB pr\u00e9sent \u2014 contre-indication':'Pas de signal IVB'}
+  ].forEach(function(it){
+    ab.innerHTML+='<div class="rcs"><div class="rcn '+(it.y?'ay':'an')+'">'+(it.y?'!':'\u2713')+'</div><div class="rcq">'+it.q+'</div><div class="rcr '+(it.y?'ay':'an')+'">'+it.t+'</div></div>';
+  });
+  var mainD=diags[0];
+  ab.innerHTML+='<div class="rcc '+(mainD.pct>=70?'rcca':'rccb')+'">Diagnostic principal\u00a0: '+mainD.n+' ('+mainD.pct+'%)</div>';
+  if(ivbPos)ab.innerHTML+='<div class="rccw">\u26a0 Risque IVB \u2014 pas de manipulation en rotation ou extension</div>';
+
+  var db=document.getElementById('diag-block');
+  db.innerHTML='<div class="ssep" style="margin-top:0">Diagnostics kin\u00e9sith\u00e9rapiques</div>';
+  diags.slice(0,3).forEach(function(d,i){
+    var bar=d.pct>=70?'fh2':d.pct>=45?'fm':'fl2';
+    var pc=d.pct>=70?'ph':d.pct>=45?'pm':'pl';
+    db.innerHTML+='<div class="dbar"><div class="dbrt"><div class="dbn">'+(i===0?'<span class="dc ctp" style="margin-bottom:4px">Principal</span><br>':'')+d.n+'</div><div class="dbp '+pc+'">'+d.pct+'%</div></div><div class="dbt"><div class="dbf '+bar+'" style="width:'+d.pct+'%"></div></div>'+(d.w?'<div class="dw wh">'+d.w+'</div>':'')+'<div class="dtags">'+d.tags.map(function(t){return'<span class="dtag dtr">'+t+'</span>';}).join('')+'</div></div>';
+  });
+  setTimeout(function(){document.querySelectorAll('.dbf').forEach(function(b){var w=b.style.width;b.style.width='0';setTimeout(function(){b.style.width=w;},50);});},100);
+
+  var ndi=D.ndi?D.ndi.pct+'% \u2014 '+getNDIGrade(D.ndi.pct):'Non renseign\u00e9';
+  var psfs=D.psfs!==null?D.psfs+'/10':'Non renseign\u00e9';
+
+  function hdr(type){
+    return '<div class="crsh"><div class="crsn">Bilan Cervical \u2014 '+(type==='court'?'Synth\u00e8se':'Compte-rendu complet')+'</div>'
+      +'<div class="crss">'+prenom+' '+nom+(age?' \u00b7 '+age:'')+'</div>'
+      +'<div class="crsp"><span class="crspi"><strong>Date</strong> '+dbilan+'</span>'
+      +(D.eva!==null?'<span class="crspi"><strong>EVA</strong> '+D.eva+'/10</span>':'')
+      +'<span class="crspi"><strong>NDI</strong> '+ndi+'</span>'
+      +(D.psfs!==null?'<span class="crspi"><strong>PSFS</strong> '+psfs+'</span>':'')
+      +'</div></div>';
+  }
+  function sig(){return '<div class="crsig"><div class="crsigl">Signature du th\u00e9rapeute</div><div style="font-size:11px;color:var(--tx3)">Yasser Ladraa \u00b7 Kin\u00e9sith\u00e9rapeute</div></div>';}
+  function progBtn(){return '<button class="btf btz" onclick="openProg()" type="button" style="margin-top:4px">Voir le programme de r\u00e9\u00e9ducation</button>';}
+
+  var short=hdr('court');
+  short+='<div class="crbl"><div class="crbt">Donn\u00e9es cl\u00e9s</div>';
+  if(D.eva!==null)short+='<div class="crrow"><span class="crk">EVA</span><span class="crval">'+D.eva+'/10</span></div>';
+  short+='<div class="crrow"><span class="crk">Wainner</span><span class="crval">'+wSc+'/4'+(wSc>=3?' \u2014 seuil atteint':wSc>=2?' \u2014 interm\u00e9diaire':'')+'</span></div>';
+  short+='<div class="crrow"><span class="crk">My\u00e9lopathie</span><span class="crval">'+mSc+'/4'+(mSc>=3?' \u2014 orienter':'')+'</span></div>';
+  short+='<div class="crrow"><span class="crk">NDI</span><span class="crval">'+ndi+'</span></div>';
+  if(D.psfs!==null)short+='<div class="crrow"><span class="crk">PSFS</span><span class="crval">'+psfs+'</span></div>';
+  if(RF.length>0)short+='<div class="crrow"><span class="crk" style="color:var(--red)">Red flags</span><span class="crval" style="color:var(--red)">'+RF.length+' \u2014 avis m\u00e9dical</span></div>';
+  short+='</div><div class="crbl"><div class="crbt">Diagnostic kin\u00e9sith\u00e9rapique</div>';
+  diags.slice(0,2).forEach(function(d){short+='<div class="crdi '+d.cls+'">'+d.n+'<span>'+d.pct+'%</span></div>';});
+  short+='</div>'+progBtn()+sig();
+
+  var full=hdr('full');
+  full+='<div class="crbl"><div class="crbt">Anamn\u00e8se</div>';
+  [['ctx','Contexte'],['anc','Anciennet\u00e9'],['install','Installation'],['loc','Localisation'],['irr','Irradiation'],['rythme','Rythme'],['agr','Aggravants'],['soul','Soulageants'],['atcd','Ant\u00e9c\u00e9dents']].forEach(function(f){var v=getC(f[0]);if(v.length)full+='<div class="crrow"><span class="crk">'+f[1]+'</span><span class="crval">'+v.join(', ')+'</span></div>';});
+  if(IVB_SX.length>0){var il={'ivb_dizziness':'Dizziness','ivb_diplopie':'Diplopie','ivb_dysarthrie':'Dysarthrie','ivb_dysphagie':'Dysphagie','ivb_drop':'Drop attacks','ivb_nausee':'Naus\u00e9es','ivb_numbness':'Engourdissements','ivb_nystagmus':'Nystagmus'};full+='<div class="crrow"><span class="crk" style="color:var(--red)">Sympt\u00f4mes IVB</span><span class="crval" style="color:var(--red)">'+IVB_SX.map(function(k){return il[k]||k;}).join(', ')+'</span></div>';}
+  full+='</div>';
+  full+='<div class="crbl"><div class="crbt">Donn\u00e9es objectives</div>';
+  if(D.eva!==null)full+='<div class="crrow"><span class="crk">EVA</span><span class="crval">'+D.eva+'/10</span></div>';
+  ['flex','ext'].concat(['rot-d','rot-g','inc-d','inc-g']).forEach(function(k){
+    var v=document.getElementById('rom-'+k)?document.getElementById('rom-'+k).value:'';
+    var labels={'flex':'Flexion','ext':'Extension','rot-d':'Rotation droite','rot-g':'Rotation gauche','inc-d':'Inclinaison droite','inc-g':'Inclinaison gauche'};
+    if(v)full+='<div class="crrow"><span class="crk">'+labels[k]+'</span><span class="crval">'+v+'\u00b0</span></div>';
+  });
+  full+='</div>';
+  var neuroLbls={sens_c5:'Sensibilit\u00e9 C5',mrc_c5:'Force C5',refl_c5:'R\u00e9flexe C5',sens_c6:'Sensibilit\u00e9 C6',mrc_c6:'Force C6',refl_c6:'R\u00e9flexe C6',sens_c7:'Sensibilit\u00e9 C7',mrc_c7:'Force C7',refl_c7:'R\u00e9flexe C7',sens_c8:'Sensibilit\u00e9 C8',mrc_c8:'Force C8',sens_t1:'Sensibilit\u00e9 T1',mrc_t1:'Force T1'};
+  var nRows=[];
+  Object.entries(D.neuro).forEach(function(e){if(e[1]!==null&&e[1]!=='N'&&e[1]!==5&&e[1]!==undefined)nRows.push({k:neuroLbls[e[0]]||e[0],v:typeof e[1]==='number'?'MRC '+e[1]:e[1]==='D'?'D\u00e9ficit':e[1]==='A'?'Aboli':e[1]});});
+  if(nRows.length){full+='<div class="crbl"><div class="crbt">D\u00e9ficits neurologiques</div>';nRows.forEach(function(r){full+='<div class="crrow"><span class="crk">'+r.k+'</span><span class="crval" style="color:var(--red)">'+r.v+'</span></div>';});full+='</div>';}
+  full+='<div class="crbl"><div class="crbt">Tests EBP</div>';
+  full+='<div class="crrow"><span class="crk">Cluster Wainner</span><span class="crval">'+wSc+'/4'+(wSc>=3?' \u2713 LR+ 30.3':'')+'</span></div>';
+  full+='<div class="crrow"><span class="crk">Cluster my\u00e9lopathie</span><span class="crval">'+mSc+'/4'+(mSc>=3?' \u26a0 Orienter':'')+'</span></div>';
+  if(tPos.length)full+='<div class="crrow"><span class="crk">Tests positifs</span><span class="crval">'+tPos.join(', ')+'</span></div>';
+  full+='</div>';
+  full+='<div class="crbl"><div class="crbt">Scores fonctionnels</div>';
+  full+='<div class="crrow"><span class="crk">NDI</span><span class="crval">'+ndi+'</span></div>';
+  full+='<div class="crrow"><span class="crk">PSFS</span><span class="crval">'+psfs+'</span></div>';
+  full+='</div>';
+  full+='<div class="crbl"><div class="crbt">Diagnostic kin\u00e9sith\u00e9rapique</div>';
+  diags.forEach(function(d){full+='<div class="crdi '+d.cls+'">'+d.n+'<span>'+d.pct+'%</span></div>';});
+  full+='</div>'+progBtn()+sig();
+
+  document.getElementById('cr-court').innerHTML=short;
+  document.getElementById('cr-complet').innerHTML=full;
+}
+
+function switchCR(type,btn){
+  document.querySelectorAll('.crtab').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  document.getElementById('cr-court').classList.toggle('on',type==='court');
+  document.getElementById('cr-complet').classList.toggle('on',type==='complet');
+}
+function copyCR(){
+  var a=document.querySelector('.crv.on');
+  if(!a)return;
+  var txt=a.innerText||a.textContent;
+  if(navigator.clipboard)navigator.clipboard.writeText(txt).then(function(){showToast('Compte-rendu copi\u00e9 \u2713');});
+  else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copi\u00e9 \u2713');}
+}
+
+function buildProg(){
+  var wSc=getWainnerScore(),mSc=getMyeloScore();
+  var isRadiculo=wSc>=3;
+  var isMyeloSusp=mSc>=2;
+  var isAigu=getC('anc').indexOf('aigu')>-1;
+  var isChronic=getC('anc').indexOf('chronique')>-1||getC('anc').indexOf('subaigu')>-1;
+  var isPostural=getC('ctx').indexOf('postural')>-1||getC('ctx').indexOf('stress')>-1;
+  var isTrauma=getC('ctx').indexOf('traumatique')>-1;
+  var hasIrr=getC('irr').length>0&&getC('irr').indexOf('Aucune')===- 1;
+  var ivbPresent=IVB_SX.length>0;
+
+  var p1=[],p2=[],p3=[],p4=[];
+
+  // ── PHASE 1 — Antalgique / Neuro-protection ─────────────────────────────
+  p1.push({
+    n:'Rétraction cervicale — Chin Tuck',
+    dur:'3 \u00d7 10 rép. — 2\u00d7/jour',
+    meta:'Correction posturale — McKenzie',
+    proto:'Assis, dos droit. Rentrer le menton sans fléchir la tête : glissement horizontal postérieur pur. Tenir 5 sec, relâcher. Sensation de « double menton ».',
+    just:'Correction de la translation antérieure de tête. Mobilise C5-C7 en décompression. Geste de base du protocole McKenzie cervical — indiqué dès la phase aiguë.'
+  });
+  p1.push({
+    n:'Mobilisations actives cervicales en amplitude libre',
+    dur:'5 mouvements \u00d7 10 rép. — 2\u00d7/jour',
+    meta:'Entretien mobilité — phase aiguë',
+    proto:'Flexion, extension, rotations G/D, inclinaisons G/D. Amplitude indolore uniquement. Vitesse lente, contrôlée. Arrêt si douleur irradiante.',
+    just:'Maintien des amplitudes articulaires et réduction de la raideur réflexe. Evidence grade A pour la mobilisation précoce (Blanpied 2017 — CPG Cervical).'
+  });
+  if(isRadiculo||hasIrr){
+    p1.push({
+      n:'Automobilisation en distraction axiale',
+      dur:'3 \u00d7 30 sec — 2\u00d7/jour',
+      meta:'Décompression foraminale — radiculopathie',
+      proto:'Assis, mains croisées sur le sommet du crâne. Pousser doucement vers le haut, nuque décontractée. Tenir 30 sec. Si soulagement irradiation : poursuivre.',
+      just:'Reproduit l\u2019effet antalgique du test de distraction (Wainner 2003). Réduit la pression intra-discale et foraminale. Prioritaire si Wainner \u22653/4.'
+    });
+    p1.push({
+      n:'Direction préférentielle en extension (si centralisation)',
+      dur:'3 \u00d7 10 rép. — 3\u00d7/jour',
+      meta:'MDT — centralisation radiculaire',
+      proto:'Extension cervicale douce depuis le chin tuck. Si la douleur se centralise (irradiation diminue), continuer la direction. Si aggravation, stopper immédiatement.',
+      just:'Centralisation = facteur pronostique favorable (McKenzie — Donelson 2012). La centralisation en extension est le pattern le plus fréquent en cervicalgie discogène.'
+    });
+  }
+  p1.push({
+    n:'Thermothérapie / cryothérapie cervicale',
+    dur:'15-20 min — selon tolérance',
+    meta:'Antalgique adjuvant',
+    proto:'Chaleur humide sur nuque et trapèzes si douleur chronique/raideur. Froid si phase aiguë inflammatoire ou post-traumatique. Jamais directement sur la peau.',
+    just:'Chaleur : réduction du spasme musculaire et amélioration de l\u2019extensibilité. Froid : réduction de l\u2019inflammation locale. Adjuvant, non suffisant seul.'
+  });
+  if(isTrauma){
+    p1.push({
+      n:'Éducation post-traumatique (WAD)',
+      dur:'1 session de 20 min + fiche écrite',
+      meta:'WAD — prévention chronicisation',
+      proto:'Expliquer le pronostic favorable du WAD I-II (85% récupération). Dédramatiser. Encourager la mobilisation précoce. Décourager le port prolongé de minerve.',
+      just:'Le modèle biopsychosocial est central dans le WAD. La peur-évitement est le principal facteur de chronicisation (Sterling 2010). L\u2019éducation réduit ce risque.'
+    });
+  }
+
+  // ── PHASE 2 — Stabilisation neuro-musculaire ────────────────────────────
+  p2.push({
+    n:'Craniocervical Flexion Test — activation DNF',
+    dur:'5 niveaux \u00d7 10 rép. — Jull 2008',
+    meta:'Fléchisseurs profonds — longus capitis/colli',
+    proto:'Décubitus dorsal, nuque sur rouleau souple (ou biofeedback 22 mmHg). Progresser de 22 à 30 mmHg par paliers de 2 mmHg. Tenir 10 sec. NE PAS activer SCM ni scalènes (palpation de contrôle).',
+    just:'Jull 2008 : les fléchisseurs profonds cervicaux sont systématiquement déficitaires dans toutes les cervicalgies chroniques. Activation sélective = prérequis à tout renforcement.'
+  });
+  p2.push({
+    n:'Renforcement isométrique cervical multidirectionnel',
+    dur:'6 directions \u00d7 10 sec \u00d7 5 rép. — 3\u00d7/semaine',
+    meta:'Force isométrique — sans douleur',
+    proto:'Assis, position neutre. Main sur front : résistance à la flexion. Main sur occiput : extension. Mains sur tempes : inclinaisons. Pousser contre résistance fixe (pas de mouvement). Intensité sous-maximale.',
+    just:'Renforcement sans contrainte articulaire dynamique. Adapté dès la phase subaiguë. Améliore l\u2019endurance cervicale — facteur protecteur démontré (O\u2019Leary 2007).'
+  });
+  p2.push({
+    n:'Renforcement scapulaire — Prone Y et Prone T',
+    dur:'3 \u00d7 15 rép. — 3\u00d7/semaine',
+    meta:'Trapèze inférieur — lien cervico-scapulaire',
+    proto:'Décubitus ventral sur table, bras le long du corps. Prone Y : bras en élévation à 135° (Y), pouces vers le haut. Prone T : bras en abduction à 90° (T). Rétraction scapulaire avant le mouvement.',
+    just:'La faiblesse du trapèze inférieur et du serratus augmente la charge sur les muscles cervicaux superficiels. Lien biomécanique cervico-scapulaire démontré (Cools 2014).'
+  });
+  p2.push({
+    n:'Exercices de stabilisation du regard — VOR',
+    dur:'3 \u00d7 1 min — 2\u00d7/jour',
+    meta:'Proprioception cervicale — VOR',
+    proto:'Fixer une cible à 1 m. Bouger la tête en rotation puis flexion-extension, la cible restant parfaitement nette. Progresser en vitesse (lent → rapide). Variante : cible en mouvement.',
+    just:'Réentraîne le réflexe vestibulo-oculaire et la coordination oculo-cervicale. Indiqué en WAD, vertiges cervicogènes, et cervicalgie chronique (Treleaven 2011).'
+  });
+  p2.push({
+    n:'Proprioception cervicale — retour à la position neutre',
+    dur:'3 séries \u00d7 10 rép. — 2\u00d7/jour',
+    meta:'Repositionnement — schéma moteur',
+    proto:'Yeux fermés. Mémoriser la position neutre (marque frontale au laser ou simple ressenti). Bouger dans différentes directions, revenir exactement à la position initiale. Évaluer l\u2019erreur.',
+    just:'Rééduque le schéma de repositionnement cervical (Joint Position Error). Déficit démontré dans toutes les cervicalgies chroniques (Revel 1994 — Treleaven 2006).'
+  });
+  if(isRadiculo){
+    p2.push({
+      n:'Neurodynamique — ULTT A progressif',
+      dur:'3 \u00d7 10 rép. — 2\u00d7/semaine',
+      meta:'Mobilisation nerveuse — nerf médian',
+      proto:'Décubitus. Dépression scapulaire + abduction épaule 90° + supination + extension coude + extension poignet + inclinaison cervicale controlatérale. Mobilisation oscillatoire douce en fin de course indolore. NE PAS dépasser le seuil P1.',
+      just:'Mobilisation du nerf médian et des racines C6-C7. Réduit la sensibilisation centrale et la mécano-sensibilité nerveuse (Nee 2012). Uniquement si Wainner positif sans déficit moteur sévère.'
+    });
+  }
+  p2.push({
+    n:'Mobilisations passives thoraciques (manipulation/SNAG)',
+    dur:'3-5 séries — en séance',
+    meta:'Thérapie manuelle — jonction cervico-thoracique',
+    proto:'Mobilisation en flexion/extension des segments T1-T4 (technique de choix du thérapeute : PPIVMS, thrust doux, SNAG selon Mulligan). Réévaluation immédiate de la rotation cervicale.',
+    just:'La mobilisation thoracique améliore significativement les ROM cervicaux et réduit la douleur — CPG Cervical (Cleland 2007 — Blanpied 2017). Effet immédiat mesurable.'
+  });
+
+  // ── PHASE 3 — Renforcement global et endurance ──────────────────────────
+  p3.push({
+    n:'Renforcement cervical en chaîne cinétique — exercices cervicaux progressifs',
+    dur:'3 \u00d7 12 rép. — 3\u00d7/semaine',
+    meta:'Endurance cervicale — charge progressive',
+    proto:'Partir de la position isométrique (phase 2), progresser vers des mouvements contre résistance élastique (Theraband). Flexion, extension, rotations. Amplitude complète indolore. Augmenter la résistance toutes les 2 semaines.',
+    just:'La progression de la charge est le stimulus principal de l\u2019hypertrophie et de l\u2019endurance musculaire. Reduce les récidives à long terme (Griffiths 2009).'
+  });
+  p3.push({
+    n:'Gainage cervico-thoracique — Planche et variantes',
+    dur:'3 \u00d7 30-60 sec — 3\u00d7/semaine',
+    meta:'Chaîne postérieure — endurance globale',
+    proto:'Planche avant sur les coudes, maintien de la position neutre rachidienne. Progresser : planche latérale, bird-dog (quadrupédie bras/jambe opposés), superman. Nuque en position neutre (ni en flexion ni en hyperextension).',
+    just:'Renforcement global de la chaîne postérieure sans contrainte cervicale spécifique. Réduit la charge répétitive sur les segments cervicaux (O\u2019Leary 2007).'
+  });
+  p3.push({
+    n:'Exercices de résistance aérobie — marche nordique ou vélo',
+    dur:'30 min — 3\u00d7/semaine',
+    meta:'Activité physique générale — antalgie centrale',
+    proto:'Marche nordique (bâtons) : maintien postural naturel, décharge relative du rachis cervical. Ou vélo stationnaire en position droite (pas de vélo courbé). Intensité modérée (conversation possible).',
+    just:'L\u2019activité aérobie modérée est un antalgique central démontré (Naugle 2012). Réduit la sensibilisation centrale dans les douleurs cervicales chroniques. Recommandé en first-line (Blanpied 2017).'
+  });
+  if(isPostural||getC('ctx').indexOf('stress')>-1){
+    p3.push({
+      n:'Renforcement des rétracteurs de nuque — capital extensors',
+      dur:'3 \u00d7 15 rép. — 3\u00d7/semaine',
+      meta:'Anti-posture projetée — travail sur écran',
+      proto:'Décubitus dorsal, genoux fléchis. Chin tuck puis appui de la nuque sur la table (rétraction + légère extension haute). Tenir 10 sec. Progresser avec une légère élévation de la tête (lift). Ne pas décoller complètement la tête.',
+      just:'Contre-programme à la posture en flexion antérieure chronique. Renforce les extenseurs occipitaux et les muscles sous-occipitaux. Spécifique au travailleur sur écran (Côté 2009).'
+    });
+  }
+  p3.push({
+    n:'Coordination cervico-scapulaire — W exercise',
+    dur:'3 \u00d7 15 rép. — 3\u00d7/semaine',
+    meta:'Intégration cervico-scapulaire',
+    proto:'Debout, dos contre mur. Coudes à 90°, avant-bras verticaux, poignets plaqués au mur. Faire glisser les bras vers le haut (W → Y). Maintenir la nuque neutre et les omoplates rétractées. Sans décoller lombaires ni nuque.',
+    just:'Active simultanément les rotateurs externes d\u2019épaule, le trapèze moyen/inférieur et les stabilisateurs cervicaux profonds. Exercice d\u2019intégration cervico-scapulaire (Cagnie 2014).'
+  });
+
+  // ── PHASE 4 — Fonctionnel et prévention ─────────────────────────────────
+  if(isPostural||getC('ctx').indexOf('postural')>-1){
+    p4.push({
+      n:'Éducation ergonomique au poste de travail',
+      dur:'1 session de 30 min + fiche écrite',
+      meta:'Prévention — poste de travail',
+      proto:'Réglage écran : hauteur des yeux au tiers supérieur de l\u2019écran, distance bras tendu. Siège : pieds à plat, hanches à 90°, lombaires soutenus. Micro-pauses actives toutes les 45 min (chin tuck + rotations).',
+      just:'Le travail sur écran est le principal facteur de risque de cervicalgie professionnelle (Côté 2009). L\u2019ergonomie réduit l\u2019incidence et les récidives.'
+    });
+  }
+  p4.push({
+    n:'Gestion du stress et relaxation musculaire progressive',
+    dur:'15 min/jour',
+    meta:'Facteurs psychosociaux — peur-évitement',
+    proto:'Relaxation de Jacobson : contracter/relâcher groupes musculaires progressivement (pieds → nuque). Ou cohérence cardiaque 5 min 3\u00d7/jour. Intégrer dans la routine quotidienne.',
+    just:'Les facteurs psychosociaux (catastrophisme, kinésiophobie) sont les principaux prédicteurs de chronicisation cervicale (Linton 2000). La relaxation réduit le tonus sympathique et la tension musculaire réflexe.'
+  });
+  p4.push({
+    n:'Programme de maintien à domicile — autonomisation',
+    dur:'10-15 min/jour — à vie',
+    meta:'Maintien des acquis — prévention récidive',
+    proto:'Routine quotidienne : chin tuck 2\u00d7/jour (2 min), mobilisations actives 5 directions (3 min), VOR 2 min, renforcement isométrique 3 min. Fiche patient illustrée remise.',
+    just:'L\u2019autonomisation est le facteur pronostique le plus robuste dans la cervicalgie chronique. Les patients qui maintiennent un programme domicile ont 60% moins de récidives à 1 an (Griffiths 2009).'
+  });
+  if(isMyeloSusp){
+    p4.push({
+      n:'ATTENTION — Myélopathie suspectée',
+      dur:'Avis neurologique avant tout renforcement intensif',
+      meta:'Précaution — cluster Cook \u22652/4',
+      proto:'En cas de myélopathie confirmée : éviter toute manipulation cervicale, éviter les exercices en extension forcée, prioriser la stabilisation douce et l\u2019éducation. Orienter neurochirurgie si signes de compression médullaire.',
+      just:'La myélopathie cervicale est une contre-indication relative au renforcement cervical intensif. La kinésithérapie reste indiquée pour le maintien fonctionnel et la prévention des chutes.'
+    });
+  }
+
+  return [
+    {phase:'Phase 1 \u2014 Antalgique & mobilisation précoce',cls:'epa',dur:'Semaines 1-3',exos:p1},
+    {phase:'Phase 2 \u2014 Stabilisation neuro-musculaire',cls:'epm',dur:'Semaines 3-8',exos:p2},
+    {phase:'Phase 3 \u2014 Renforcement & endurance',cls:'epv',dur:'Semaines 6-12',exos:p3},
+    {phase:'Phase 4 \u2014 Fonctionnel & prévention',cls:'epr',dur:'Semaines 10+',exos:p4}
+  ];
+}
+
+function openProg(){
+  var pc=document.getElementById('prog-content');pc.innerHTML='';
+  var phases=buildProg();
+  phases.forEach(function(ph){
+    pc.innerHTML+='<div class="eplbl '+ph.cls+'">'+ph.phase+' \u2014 '+ph.dur+'</div>';
+    ph.exos.forEach(function(ex){
+      pc.innerHTML+='<div class="exc"><div class="exh" onclick="toggleEx(this)"><div class="exn">'+ex.n+'</div><span class="exm mn">'+ex.meta+'</span><span class="exch">\u25bc</span></div><div class="exbd"><div class="expo"><span class="expol">Dose</span><span style="font-size:12px;color:var(--tx)">'+ex.dur+'</span></div><div class="exdc">'+ex.proto+'</div><div class="expg">'+ex.just+'</div></div></div>';
+    });
+  });
+  document.getElementById('prog-overlay').classList.add('o');
+}
+function closeProg(){document.getElementById('prog-overlay').classList.remove('o');}
+function toggleEx(h){h.nextElementSibling.classList.toggle('o');h.querySelector('.exch').classList.toggle('o');}
+function copyProg(){
+  var txt=document.getElementById('prog-content').innerText;
+  if(navigator.clipboard)navigator.clipboard.writeText(txt).then(function(){showToast('Programme copi\u00e9 \u2713');});
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2200);
+}
+function resetBilan(){
+  if(!confirm('Effacer ce bilan et en commencer un nouveau\u00a0?'))return;
+  try{localStorage.removeItem('cervical_v1');}catch(e){}
+  location.reload();
+}
+
+function save(){
+  var state={
+    nom:document.getElementById('nom').value,prenom:document.getElementById('prenom').value,
+    ddn:document.getElementById('ddn').value,dominant:document.getElementById('dominant').value,
+    dbilan:document.getElementById('dbilan').value,profession:document.getElementById('profession').value,
+    rom:{flex:document.getElementById('rom-flex').value,ext:document.getElementById('rom-ext').value,
+         rotD:document.getElementById('rom-rot-d').value,rotG:document.getElementById('rom-rot-g').value,
+         incD:document.getElementById('rom-inc-d').value,incG:document.getElementById('rom-inc-g').value},
+    cote:document.getElementById('cote-symp').value,
+    chips:CHIPS,rf:RF,ivb_sx:IVB_SX,D:D,cur:CUR,NDI_SCORES:NDI_SCORES,
+    psfs:{a1:document.getElementById('psfs-act1').value,s1:document.getElementById('psfs-s1').value,
+          a2:document.getElementById('psfs-act2').value,s2:document.getElementById('psfs-s2').value,
+          a3:document.getElementById('psfs-act3').value,s3:document.getElementById('psfs-s3').value}
+  };
+  try{localStorage.setItem('cervical_v1',JSON.stringify(state));}catch(e){}
+}
+
+function load(){
+  var raw;try{raw=localStorage.getItem('cervical_v1');}catch(e){}
+  if(!raw)return;
+  var s;try{s=JSON.parse(raw);}catch(e){}
+  if(!s)return;
+  ['nom','prenom','ddn','dominant','dbilan','profession'].forEach(function(f){var el=document.getElementById(f);if(el&&s[f]!==undefined)el.value=s[f];});
+  if(s.rom){
+    var rm=s.rom;
+    if(rm.flex)document.getElementById('rom-flex').value=rm.flex;
+    if(rm.ext)document.getElementById('rom-ext').value=rm.ext;
+    if(rm.rotD)document.getElementById('rom-rot-d').value=rm.rotD;
+    if(rm.rotG)document.getElementById('rom-rot-g').value=rm.rotG;
+    if(rm.incD)document.getElementById('rom-inc-d').value=rm.incD;
+    if(rm.incG)document.getElementById('rom-inc-g').value=rm.incG;
+  }
+  if(s.cote)document.getElementById('cote-symp').value=s.cote;
+  if(s.chips)CHIPS=s.chips;
+  if(s.rf)RF=s.rf;
+  if(s.ivb_sx)IVB_SX=s.ivb_sx;
+  if(s.D)D=s.D;
+  if(s.NDI_SCORES&&s.NDI_SCORES.length===10)NDI_SCORES.splice(0,10,...s.NDI_SCORES);
+  if(s.psfs){var p=s.psfs;['a1','s1','a2','s2','a3','s3'].forEach(function(k){var el=document.getElementById('psfs-'+k);if(el&&p[k]!==undefined)el.value=p[k];});calcPSFS();}
+  Object.entries(CHIPS).forEach(function(e){var g=e[0],vs=e[1];vs.forEach(function(v){document.querySelectorAll('.chip').forEach(function(c){var o=c.getAttribute('onclick');if(o&&o.includes("'"+g+"'")&&o.includes("'"+v+"'"))c.classList.add('on');});});});
+  if(D.eva!==null){document.querySelectorAll('.evab').forEach(function(b){b.classList.remove('on');});var eb=document.querySelector('.e'+D.eva);if(eb)eb.classList.add('on');}
+  Object.entries(D.tests).forEach(function(e){var k=e[0],v=e[1];document.querySelectorAll('[onclick*="ST(this"]').forEach(function(btn){var o=btn.getAttribute('onclick');if(o&&o.includes("'"+k+"'")&&o.includes("'"+v+"'"))btn.classList.add(v==='pos'?'pos':'neg');});});
+  if(D.ndi)calcNDI();
+  checkWainnerBar();checkMyeloBar();
+}
+
+document.getElementById('dbilan').value=new Date().toISOString().split('T')[0];
+load();
+</script>
+</body>
+</html>

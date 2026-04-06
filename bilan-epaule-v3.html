@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1B2A38">
+<title>Bilan Épaule V3 — Yasser Ladraa</title>
+<style>
+:root{
+  --bg:#F3F1ED;--surf:#FFF;--surf2:#EDEAE3;--brd:#DDD9CF;--brd2:#C2BCB0;
+  --tx:#1A1714;--tx2:#56524C;--tx3:#98948A;
+  --z:#1A6FA8;--zl:#DCF0FF;--zd:#0A3D6B;--zm:#2186C8;
+  --red:#9C2B2B;--redl:#FAEAEA;--amb:#B56E10;--ambl:#FAF0DC;
+  --blu:#1550A0;--blul:#E3EEF9;--pur:#5A3898;--purl:#EDE8F8;
+  --grn:#177A5A;--grnl:#DAF0E6;--nvy:#1B2A38;
+  --r:10px;--rl:16px;--nh:64px;--hh:72px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;min-height:100vh;padding-bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 32px);padding-top:var(--hh)}
+.hdr{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nvy);height:var(--hh);display:flex;flex-direction:column;justify-content:center;padding:0 16px}
+.hr1{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hn{font-size:13px;font-weight:700;color:#fff}.hs{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
+.hbadge{background:var(--zm);color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.hprog{margin-top:8px}.hpbar{height:3px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+.hpfill{height:100%;background:var(--zm);border-radius:99px;transition:width .4s ease}
+.hplbls{display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:rgba(255,255,255,.4)}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:#fff;border-top:1px solid var(--brd);height:calc(var(--nh) + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;padding:0 12px;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 24px rgba(0,0,0,.08);gap:8px}
+.bni{font-size:11px;color:var(--tx3);text-align:center;flex:1;line-height:1.3;min-width:0}
+.bbt{display:flex;align-items:center;gap:5px;padding:12px 20px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;min-width:96px;min-height:48px;justify-content:center;flex-shrink:0}
+.bbt:active{opacity:.8}.bbk{background:var(--surf2);color:var(--tx2)}.bbn{background:var(--zm);color:#fff}.bbt:disabled{opacity:.3;pointer-events:none}
+.tb{font-size:13px;font-weight:700;padding:9px 14px;border-radius:99px;border:1.5px solid var(--brd);cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;white-space:nowrap;touch-action:manipulation;font-family:inherit;min-height:44px;display:inline-flex;align-items:center}
+.tb:active{transform:scale(.95)}.tb.pos{background:var(--redl);border-color:var(--red);color:var(--red)}.tb.neg{background:var(--zl);border-color:var(--z);color:var(--zd)}
+.app{max-width:680px;margin:0 auto;padding:16px 14px 0}
+.step{display:none}.step.active{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sc{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.sch{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;touch-action:manipulation;transition:background .15s;user-select:none;-webkit-user-select:none}
+.sch:active{background:var(--surf2)}.schl{display:flex;align-items:center;gap:10px}
+.sci{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.iz{background:var(--zl)}.ia{background:var(--ambl)}.ib{background:var(--blul)}.ir{background:var(--redl)}.ip{background:var(--purl)}.ig{background:var(--grnl)}
+.sct{font-size:13px;font-weight:600;color:var(--tx)}.scs{font-size:11px;color:var(--tx3);margin-top:1px}
+.scch{color:var(--tx3);font-size:11px;transition:transform .2s;flex-shrink:0}.scch.o{transform:rotate(180deg)}
+.scb{padding:14px 15px;border-top:1.5px solid var(--brd);display:none}.scb.o{display:block}
+.sa .sch{cursor:default}.sa .scch{display:none}.sa .scb{display:block}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+.fl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fh{font-size:11px;color:var(--tx3);font-weight:400;text-transform:none;letter-spacing:0}
+input[type=text],input[type=date],select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--tx);background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 13px;outline:none;transition:border .15s,background .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--zm);background:#fff}
+textarea{resize:vertical;min-height:60px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:380px){.g2{grid-template-columns:1fr}}
+.ssep{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin:16px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--brd)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1.5px solid var(--brd);border-radius:99px;padding:8px 14px;font-size:13px;cursor:pointer;color:var(--tx2);background:var(--surf2);transition:all .15s;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:40px;display:inline-flex;align-items:center}
+.chip:active{transform:scale(.97)}.chip.on{background:var(--zm);border-color:var(--zm);color:#fff;font-weight:600}
+.checks{display:flex;flex-direction:column;gap:7px}
+.crow{display:flex;align-items:flex-start;gap:10px;padding:12px 12px;border:1.5px solid var(--brd);border-radius:var(--r);cursor:pointer;transition:all .15s;background:var(--surf2);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.crow:active{transform:scale(.99)}.crow.on{background:var(--zl);border-color:#7BBCE0}.crow.or{background:var(--redl);border-color:#ECAAAA}
+.cbox{width:22px;height:22px;border:1.5px solid var(--brd2);border-radius:6px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .15s}
+.crow.on .cbox{background:var(--zm);border-color:var(--zm)}.crow.or .cbox{background:var(--red);border-color:var(--red)}
+.cmk{display:none;color:#fff;font-size:12px;font-weight:800}.crow.on .cmk,.crow.or .cmk{display:block}
+.ctx2{font-size:13px;color:var(--tx);flex:1;line-height:1.4}.csb{font-size:11px;color:var(--tx3);margin-top:2px}
+.evaw{display:flex;gap:4px;flex-wrap:wrap}
+.evab{width:42px;height:48px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:14px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.evab:active{transform:scale(.93)}.evab.on{color:#fff;border-color:transparent}
+.e0.on,.e1.on,.e2.on,.e3.on{background:#177A5A}.e4.on,.e5.on,.e6.on{background:#B56E10}
+.e7.on,.e8.on{background:#C04A15}.e9.on,.e10.on{background:#9C2B2B}
+.egal{display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:var(--tx3)}
+.ti{border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.th{display:flex;align-items:center;padding:12px 13px;background:var(--surf2);cursor:pointer;touch-action:manipulation;gap:10px}
+.th:active{background:#E5E0D8}.tl{flex:1;min-width:0}
+.tn{font-size:13px;font-weight:600;color:var(--tx)}.tsb{font-size:11px;color:var(--tx3);margin-top:1px}
+.tbs{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.tbody{display:none;padding:12px 13px;background:#fff;border-top:1.5px solid var(--brd)}.tbody.o{display:block}
+.prow{display:flex;align-items:center;gap:9px;padding:7px 10px;background:var(--surf2);border-radius:8px;margin-bottom:10px}
+.plbl{font-size:11px;color:var(--tx3);font-weight:600}
+.tstps{list-style:none;padding:0;counter-reset:s}
+.tstps li{counter-increment:s;padding:5px 0 5px 26px;position:relative;font-size:12px;color:var(--tx2);border-bottom:1px dashed var(--brd);line-height:1.4}
+.tstps li:last-child{border-bottom:none;padding-bottom:0}
+.tstps li::before{content:counter(s);position:absolute;left:0;top:5px;width:18px;height:18px;background:var(--zl);color:var(--zd);border-radius:50%;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.tint{font-size:12px;color:var(--tx2);margin-top:8px;padding:8px 10px;background:var(--surf2);border-radius:8px;border-left:3px solid var(--zm);line-height:1.5}
+.mrc-lbl{font-size:10px;font-weight:700;color:var(--tx3);margin:10px 0 5px;text-transform:uppercase;letter-spacing:.07em}
+.mrc-wrap{display:flex;gap:5px;flex-wrap:wrap}
+.mrc-btn{width:38px;height:44px;border-radius:8px;border:1.5px solid var(--brd);font-size:13px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.mrc-btn:active{transform:scale(.93)}.mrc-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+/* Cluster Park */
+.park-counter{background:var(--blul);border:1.5px solid #B0C8F0;border-radius:var(--r);padding:10px 13px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.park-num{font-size:24px;font-weight:800;color:var(--blu)}.park-lbl{font-size:11px;color:#0C3060;font-weight:600}
+.park-badge{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:700}
+.park-ok{background:var(--grnl);color:var(--grn)}.park-warn{background:var(--ambl);color:var(--amb)}.park-no{background:var(--surf2);color:var(--tx3)}
+/* Sulcus grade */
+.grade-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.grade-btn{padding:9px 14px;border-radius:8px;border:1.5px solid var(--brd);font-size:12px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;touch-action:manipulation;font-family:inherit;min-height:44px}
+.grade-btn:active{transform:scale(.93)}.grade-btn.on{background:var(--red);border-color:var(--red);color:#fff}
+.grade-lbl{font-size:10px;color:var(--tx3);margin-top:6px;font-style:italic}
+.al{padding:11px 13px;border-radius:var(--r);margin-bottom:10px;font-size:13px;line-height:1.5;display:flex;gap:9px;align-items:flex-start}
+.alr{background:var(--redl);border:1.5px solid #ECAAAA;color:#5A1515}
+.ala{background:var(--ambl);border:1.5px solid #ECC878;color:#4A2800}
+.alb{background:var(--blul);border:1.5px solid #B0C8F0;color:#0C3060}
+.alg{background:var(--grnl);border:1.5px solid #7DCEB0;color:#065038}
+.alp{background:var(--purl);border:1.5px solid #BBA8E0;color:#3A1880}
+.alz{background:var(--zl);border:1.5px solid #7BBCE0;color:var(--zd)}
+/* Raisonnement Ann Cools */
+.acb{background:var(--nvy);border-radius:var(--rl);padding:16px;margin-bottom:14px}
+.act{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
+.acs{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.acs:last-of-type{border-bottom:none;padding-bottom:0}
+.acn{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)}
+.acq{font-size:12px;color:rgba(255,255,255,.65);flex:1;line-height:1.4}
+.acr{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;flex-shrink:0;white-space:nowrap;margin-top:2px}
+.ay{background:rgba(156,43,43,.35);color:#FF9999}.an{background:rgba(23,122,90,.2);color:#7FD4A8}.aN{background:rgba(255,255,255,.08);color:rgba(255,255,255,.35)}
+.acc{margin-top:10px;padding:10px 12px;border-radius:8px;font-size:12px;font-weight:700;line-height:1.5}
+.acca{background:rgba(23,122,90,.15);border:1px solid rgba(23,122,90,.3);color:#7FD4A8}
+.accb{background:rgba(156,43,43,.2);border:1px solid rgba(156,43,43,.4);color:#FF9999}
+.accw{background:rgba(181,110,16,.2);border:1px solid rgba(181,110,16,.4);color:#FFCC66;margin-top:6px;padding:8px 10px;border-radius:7px;font-size:11px;line-height:1.4}
+.dbar{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);padding:14px 15px;margin-bottom:10px}
+.dbrt{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:8px}
+.dbn{font-size:13px;font-weight:700;color:var(--tx);flex:1;line-height:1.3}.dbp{font-size:22px;font-weight:800;flex-shrink:0}
+.ph{color:var(--red)}.pm{color:var(--amb)}.pl{color:var(--z)}
+.dbt{height:10px;background:var(--surf2);border-radius:99px;overflow:hidden;margin-bottom:8px;border:1px solid var(--brd)}
+.dbf{height:100%;border-radius:99px;width:0;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.fh2{background:linear-gradient(90deg,#9C2B2B,#D44)}.fm{background:linear-gradient(90deg,#B56E10,#E09000)}.fl2{background:linear-gradient(90deg,#1A6FA8,#2186C8)}.fv{background:linear-gradient(90deg,#bbb,#ddd)}
+.dc{display:inline-block;font-size:10px;font-weight:800;padding:2px 9px;border-radius:99px;margin-bottom:8px;letter-spacing:.04em}
+.ctp{background:var(--redl);color:var(--red)}.cp{background:var(--ambl);color:var(--amb)}.cpo{background:var(--zl);color:var(--zd)}.cpp{background:#f0f0f0;color:#888}
+.dw{font-size:12px;color:var(--tx2);line-height:1.5;background:var(--surf2);padding:8px 10px;border-radius:8px;border-left:3px solid var(--zm)}
+.wh{border-left-color:var(--red)}.wm{border-left-color:var(--amb)}
+.dtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.dtag{font-size:10px;font-weight:700;padding:2px 9px;border-radius:99px}
+.dtz{background:var(--zl);color:var(--zd)}.dta{background:var(--ambl);color:#5A3200}.dtr{background:var(--redl);color:#5A1515}.dtb{background:var(--blul);color:#0C3060}.dtp{background:var(--purl);color:var(--pur)}.dtg{background:var(--grnl);color:#065038}
+.disc{background:rgba(90,56,152,.07);border:1.5px solid rgba(90,56,152,.18);border-radius:var(--r);padding:10px 13px;font-size:11px;color:var(--pur);line-height:1.5;margin-bottom:12px}
+.btf{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:var(--rl);border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;margin-top:10px}
+.btf:active{opacity:.85}.btz{background:var(--zm);color:#fff}.btn2{background:var(--nvy);color:#fff}.btg{background:var(--surf2);color:var(--tx2);border:1.5px solid var(--brd)}
+/* ISIS */
+.isb{background:var(--nvy);border-radius:var(--r);padding:14px}
+.ist{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
+.isr{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.07);gap:10px}
+.isr:last-of-type{border-bottom:none;padding-bottom:0}
+.isl{font-size:12px;color:rgba(255,255,255,.75);flex:1;line-height:1.4}
+.isbtn{font-size:11px;font-weight:700;padding:5px 11px;border-radius:99px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;touch-action:manipulation;font-family:inherit;transition:all .15s;flex-shrink:0;min-height:40px}
+.isbtn:active{transform:scale(.93)}.isbtn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.issd{border-radius:var(--r);padding:12px 14px;margin-top:12px;display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.ishi{background:rgba(156,43,43,.25);border:1px solid rgba(156,43,43,.5)}.islo{background:rgba(23,122,90,.2);border:1px solid rgba(23,122,90,.4)}
+.isnum{font-size:32px;font-weight:800;color:#fff;line-height:1}
+.isinfo{font-size:12px;color:rgba(255,255,255,.85);line-height:1.6;flex:1}
+/* Programme */
+.pov{position:fixed;inset:0;z-index:400;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
+.pov.o{display:flex}
+.phdr{background:var(--nvy);padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px}
+.pclose{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;touch-action:manipulation;flex-shrink:0}
+.phinfo{flex:1}.phtitle{font-size:14px;font-weight:700;color:#fff}.phsub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.ppbtn{background:var(--zm);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;touch-action:manipulation;flex-shrink:0;min-height:44px}
+.pcont{padding:14px;flex:1;max-width:680px;margin:0 auto;width:100%}
+.eplbl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:5px;margin:10px 0 8px}
+.epa{background:var(--redl);color:var(--red)}.epm{background:var(--ambl);color:var(--amb)}.epr{background:var(--zl);color:var(--zd)}.epf{background:var(--blul);color:var(--blu)}
+.exc{border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:9px;overflow:hidden;background:var(--surf)}
+.exh{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 13px;background:var(--surf2);cursor:pointer;touch-action:manipulation;min-height:52px}
+.exh:active{background:#E5E0D8}.exn{font-size:13px;font-weight:600;color:var(--tx);flex:1;line-height:1.3}
+.exm{font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.mn{background:var(--zl);color:var(--zd)}.me{background:var(--ambl);color:var(--amb)}
+.exch{font-size:11px;color:var(--tx3);transition:transform .2s;flex-shrink:0;margin-top:2px}.exch.o{transform:rotate(180deg)}
+.exbd{display:none;padding:12px 13px;border-top:1.5px solid var(--brd)}.exbd.o{display:block}
+.exw{font-size:12px;color:var(--zd);background:var(--zl);padding:7px 9px;border-radius:7px;margin-bottom:8px;line-height:1.4}
+.expo{display:flex;align-items:center;gap:8px;padding:6px 9px;background:var(--surf2);border-radius:7px;margin-bottom:8px}
+.expol{font-size:11px;color:var(--tx3);font-weight:600}
+.exdc{font-size:12px;color:var(--tx2);line-height:1.5;margin-bottom:7px}
+.expr{font-size:12px;color:var(--tx);background:var(--surf2);border:1px solid var(--brd);padding:7px 10px;border-radius:7px;margin-bottom:7px;line-height:1.4}
+.exdt{font-size:12px;color:var(--tx3);line-height:1.5}
+.expg{font-size:11px;color:var(--pur);background:var(--purl);padding:5px 8px;border-radius:6px;margin-top:6px;line-height:1.4}
+.phase{border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.phh{padding:8px 13px;font-size:12px;font-weight:800}.phb{padding:10px 13px;background:var(--surf)}
+.tl2{list-style:none;padding:0}
+.tl2 li{padding:6px 0;border-bottom:1px solid var(--brd);font-size:13px;color:var(--tx2);display:flex;gap:8px;line-height:1.4}
+.tl2 li:last-child{border-bottom:none;padding-bottom:0}
+.tl2 li::before{content:"→";color:var(--zm);font-weight:800;flex-shrink:0}
+/* CR */
+.crtabs{display:flex;gap:6px;margin-bottom:14px}
+.crtab{flex:1;padding:11px;border-radius:var(--r);border:1.5px solid var(--brd);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;touch-action:manipulation;text-align:center;min-height:48px}
+.crtab.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.crv{display:none}.crv.on{display:block}
+.crsh{background:var(--nvy);border-radius:var(--rl);padding:16px;margin-bottom:12px;color:#fff}
+.crsn{font-size:15px;font-weight:800}.crss{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.crsp{margin-top:10px;background:rgba(255,255,255,.08);border-radius:8px;padding:9px 12px;display:flex;flex-wrap:wrap;gap:10px}
+.crspi{font-size:12px;color:rgba(255,255,255,.75)}.crspi strong{color:#fff}
+.crbl{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:12px 14px;margin-bottom:10px}
+.crbt{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--brd)}
+.crrow{display:flex;justify-content:space-between;padding:3px 0;flex-wrap:wrap;gap:4px}
+.crk{font-size:12px;color:var(--tx2)}.crval{font-size:12px;color:var(--tx);font-weight:500;text-align:right;max-width:60%}
+.crdi{padding:8px 11px;border-radius:8px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:700}
+.cdh{background:var(--redl);color:var(--red)}.cdm{background:var(--ambl);color:var(--amb)}.cdl{background:var(--zl);color:var(--zd)}
+.crsig{display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--brd);flex-wrap:wrap;gap:8px}
+.crsigl{border-bottom:1px solid var(--brd2);padding-bottom:2px;font-size:11px;color:var(--tx3);min-width:180px}
+/* Modal QuickDASH */
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:flex-end;justify-content:center}
+.mov.o{display:flex;animation:fi .15s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surf);border-radius:20px 20px 0 0;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mhnd{width:40px;height:4px;background:var(--brd);border-radius:99px;margin:12px auto 0}
+.mhd{padding:12px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surf);z-index:1;border-bottom:1px solid var(--brd)}
+.mhd h2{font-size:16px;font-weight:800}
+.mcl{width:36px;height:36px;border-radius:50%;border:1px solid var(--brd);background:var(--surf2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tx2);font-family:inherit;touch-action:manipulation}
+.mbd{padding:16px 18px}
+.qdi{margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--brd)}.qdi:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.qdq{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:7px}
+.qdos{display:flex;gap:5px;flex-wrap:wrap}
+.qdo{flex:1;min-width:50px;padding:9px 4px;border:1.5px solid var(--brd);border-radius:8px;background:var(--surf2);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;touch-action:manipulation;text-align:center;color:var(--tx2);transition:all .15s;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.qdo.on{background:var(--blul);border-color:#6699CC;color:var(--blu)}
+.qdsb{background:var(--blul);border:1.5px solid #B0C8F0;border-radius:var(--r);padding:12px 15px;margin-top:13px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.qdnum{font-size:28px;font-weight:800;color:var(--blu)}
+/* Step progress */
+.step-progress{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap}
+.sp-item{flex:1;min-width:60px;padding:7px 8px;border-radius:8px;border:1.5px solid var(--brd);font-size:10px;font-weight:700;text-align:center;color:var(--tx3);background:var(--surf2);line-height:1.3}
+.sp-item.done{background:var(--grnl);border-color:#7DCEB0;color:#065038}
+.sp-item.warn{background:var(--ambl);border-color:#ECC878;color:#4A2800}
+/* Toast */
+.toast{position:fixed;bottom:calc(var(--nh)+env(safe-area-inset-bottom)+12px);left:50%;transform:translateX(-50%);background:var(--nvy);color:#fff;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:600;z-index:600;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+@media print{
+  body{background:#fff;padding:0}
+  .hdr,.bnav,.no-print,.btf,.crtabs,.toast{display:none!important}
+  .step{display:none!important}.crv{display:none!important}
+  .crv.pa{display:block!important}.step.print-cr{display:block!important}
+  .sc,.crbl{border:1px solid #ddd;break-inside:avoid}
+  .scb{display:block!important}
+  .crsh{background:#1B2A38!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+.ebp-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--brd2);background:#fff;color:var(--tx3);font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.ebp-btn:active{background:var(--blul);border-color:var(--blu);color:var(--blu)}
+.ebp-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.ebp-overlay.o{opacity:1;pointer-events:auto}
+.ebp-sheet{background:#fff;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-width:540px;width:100%;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.ebp-overlay.o .ebp-sheet{transform:translateY(0)}
+.ebp-drag{width:36px;height:4px;background:var(--brd2);border-radius:99px;margin:0 auto 16px}
+.ebp-title{font-size:15px;font-weight:800;color:var(--nvy);margin-bottom:4px}
+.ebp-ref{font-size:11px;color:var(--tx3);margin-bottom:14px;font-style:italic}
+.ebp-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.ebp-stat{background:var(--surf2);border-radius:10px;padding:10px 12px;border:1.5px solid var(--brd)}
+.ebp-stat-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.ebp-stat-val{font-size:18px;font-weight:800;color:var(--nvy)}
+.ebp-stat-sub{font-size:10px;color:var(--tx3);margin-top:2px}
+.ebp-note{font-size:12px;color:var(--tx2);background:var(--blul);border:1.5px solid #B0C8F0;border-radius:8px;padding:10px 12px;line-height:1.5;margin-bottom:14px}
+.ebp-close{width:100%;padding:13px;border-radius:var(--r);border:none;background:var(--nvy);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation}
+
+.psfs-item{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.psfs-btns{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
+.psfs-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--brd);font-size:11px;font-weight:700;cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;font-family:inherit;touch-action:manipulation}
+.psfs-btn:active{transform:scale(.9)}.psfs-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.cscore-sect{margin-bottom:14px}
+.cscore-lbl{font-size:12px;font-weight:700;color:var(--tx2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.cscore-btns{display:flex;gap:3px;flex-wrap:wrap}
+.cscore-btn{min-width:28px;height:28px;padding:0 5px;border-radius:6px;border:1.5px solid var(--brd);font-size:11px;font-weight:700;cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;font-family:inherit;touch-action:manipulation}
+.cscore-btn:active{transform:scale(.9)}.cscore-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.cscore-total{background:var(--zl);border:1.5px solid #7DCEB0;border-radius:var(--r);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.cscore-num{font-size:24px;font-weight:800;color:var(--zd)}
+.cscore-sub{font-size:11px;color:var(--tx3)}
+.hbtn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.12);border:none;color:#fff;cursor:pointer;touch-action:manipulation;flex-shrink:0;text-decoration:none;font-size:16px;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hr1">
+    <div><div class="hn">Yasser Ladraa · Kinésithérapeute</div><div class="hs" id="slbl">Étape 1/6 — Identité patient</div></div>
+    <a class="hbtn" href="index.html" title="Accueil">&#8962;</a>
+    <span class="hbadge">Épaule</span>
+  </div>
+  <div class="hprog"><div class="hpbar"><div class="hpfill" id="prog" style="width:16%"></div></div>
+  <div class="hplbls"><span>Identité</span><span>Anamnèse</span><span>Examen</span><span>Fonctionnel</span><span>Analyse</span><span>CR</span></div></div>
+</div>
+
+<div class="app">
+
+<!-- S1 — IDENTITÉ -->
+<div class="step active" id="s1">
+  <div class="sc sa"><div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3.5" stroke="#1A6FA8" stroke-width="1.5"/><path d="M3 16c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Informations patient</div></div></div></div>
+  <div class="scb o">
+    <div class="g2"><div class="field"><label class="fl">Nom</label><input type="text" id="nom" placeholder="Dupont" autocomplete="off"></div><div class="field"><label class="fl">Prénom</label><input type="text" id="prenom" placeholder="Marie" autocomplete="off"></div></div>
+    <div class="g2"><div class="field"><label class="fl">Date de naissance</label><input type="date" id="ddn"></div><div class="field"><label class="fl">Sexe</label><select id="sexe"><option value="">—</option><option>Homme</option><option>Femme</option></select></div></div>
+    <div class="g2"><div class="field"><label class="fl">Profession</label><input type="text" id="profession" placeholder="Ex : Nageur, maçon…" autocomplete="off"></div><div class="field"><label class="fl">Date du bilan</label><input type="date" id="datebilan"></div></div>
+    <div class="field"><label class="fl">Médecin prescripteur</label><input type="text" id="medecin" placeholder="Dr Martin" autocomplete="off"></div>
+    <div class="field"><div class="fl">Côté atteint</div><div class="chips" id="cote"><div class="chip" onclick="TC(this,'cote',1)">Épaule droite</div><div class="chip" onclick="TC(this,'cote',1)">Épaule gauche</div><div class="chip" onclick="TC(this,'cote',1)">Bilatéral</div></div></div>
+    <div class="field"><div class="fl">Côté dominant</div><div class="chips" id="dominant"><div class="chip" onclick="TC(this,'dominant',1)">Droitier</div><div class="chip" onclick="TC(this,'dominant',1)">Gaucher</div></div></div>
+  </div></div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#B56E10" stroke-width="1.5"/><path d="M6 9h6M6 6h3M6 12h4" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Contexte / Prescription</div><div class="scs">Sélection multiple</div></div></div><span class="scch">▼</span></div>
+  <div class="scb"><div class="chips" id="ctx">
+    <div class="chip" onclick="TC(this,'ctx')">Tendinopathie coiffe</div><div class="chip" onclick="TC(this,'ctx')">Post-opératoire coiffe</div>
+    <div class="chip" onclick="TC(this,'ctx')">Capsulite rétractile</div><div class="chip" onclick="TC(this,'ctx')">Instabilité / luxation</div>
+    <div class="chip" onclick="TC(this,'ctx')">Traumatique (chute, choc)</div><div class="chip" onclick="TC(this,'ctx')">Sport overhead</div>
+    <div class="chip" onclick="TC(this,'ctx')">Pathologie professionnelle</div><div class="chip" onclick="TC(this,'ctx')">Arthrose ACJ / GH</div>
+    <div class="chip" onclick="TC(this,'ctx')">Post-fracture</div>
+  </div></div></div>
+</div>
+
+<!-- S2 — ANAMNÈSE -->
+<div class="step" id="s2">
+  <div class="sc sa"><div class="sch"><div class="schl"><div class="sci ir"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l6 11H3L9 3z" stroke="#9C2B2B" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 8v3M9 13v1" stroke="#9C2B2B" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Question prioritaire — Mode d'installation</div><div class="scs">Détermine le raisonnement Ann Cools</div></div></div></div>
+  <div class="scb o">
+    <div class="al alz"><span>ℹ</span><div>La première question est la plus importante : <strong>y a-t-il eu un traumatisme aigu ?</strong> Elle conditionne tout le raisonnement clinique selon Ann Cools.</div></div>
+    <div class="field"><div class="fl">Mode d'installation</div><div class="chips" id="installation">
+      <div class="chip" onclick="TC(this,'installation',1)">Traumatique aigu (chute, choc direct)</div>
+      <div class="chip" onclick="TC(this,'installation',1)">Microtraumatique / surcharge répétitive</div>
+      <div class="chip" onclick="TC(this,'installation',1)">Insidieux / progressif sans trauma</div>
+      <div class="chip" onclick="TC(this,'installation',1)">Post-immobilisation / post-opératoire</div>
+    </div></div>
+    <div class="field"><div class="fl">Antécédent de luxation / subluxation</div><div class="chips" id="luxation">
+      <div class="chip" onclick="TC(this,'luxation',1)">Aucun</div><div class="chip" onclick="TC(this,'luxation',1)">Luxation antérieure (1 épisode)</div>
+      <div class="chip" onclick="TC(this,'luxation',1)">Luxations récidivantes (≥2)</div>
+      <div class="chip" onclick="TC(this,'luxation',1)">Subluxations récurrentes</div>
+      <div class="chip" onclick="TC(this,'luxation',1)">Hyperlaxité constitutionnelle</div>
+    </div></div>
+    <div class="field"><div class="fl">Activité <span class="fh">(sélection multiple)</span></div><div class="chips" id="activite">
+      <div class="chip" onclick="TC(this,'activite')">Sport overhead (natation, tennis, volley, handball)</div>
+      <div class="chip" onclick="TC(this,'activite')">Sport de contact / combat</div>
+      <div class="chip" onclick="TC(this,'activite')">Travail au-dessus de la tête</div>
+      <div class="chip" onclick="TC(this,'activite')">Travail de force / manutention</div>
+      <div class="chip" onclick="TC(this,'activite')">Sédentaire / bureau</div>
+    </div></div>
+  </div></div>
+
+  <div class="sc sa"><div class="sch"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v6l3 3" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="6.5" stroke="#B56E10" stroke-width="1.5"/></svg></div><div><div class="sct">EVA — Intensité douloureuse</div><div class="scs">0 = aucune · 10 = maximale</div></div></div></div>
+  <div class="scb o">
+    <div class="evaw" id="eva"><div class="evab e0" data-v="0" onclick="evaC(this)">0</div><div class="evab e1" data-v="1" onclick="evaC(this)">1</div><div class="evab e2" data-v="2" onclick="evaC(this)">2</div><div class="evab e3" data-v="3" onclick="evaC(this)">3</div><div class="evab e4" data-v="4" onclick="evaC(this)">4</div><div class="evab e5" data-v="5" onclick="evaC(this)">5</div><div class="evab e6" data-v="6" onclick="evaC(this)">6</div><div class="evab e7" data-v="7" onclick="evaC(this)">7</div><div class="evab e8" data-v="8" onclick="evaC(this)">8</div><div class="evab e9" data-v="9" onclick="evaC(this)">9</div><div class="evab e10" data-v="10" onclick="evaC(this)">10</div></div>
+    <div class="egal"><span>Pas de douleur</span><span>Modérée</span><span>Maximale</span></div>
+    <div class="field" style="margin-top:12px"><div class="fl">Ancienneté</div><div class="chips" id="anciennete">
+      <div class="chip" onclick="TC(this,'anciennete',1)">Aiguë &lt;4 sem</div><div class="chip" onclick="TC(this,'anciennete',1)">Subaiguë 4–12 sem</div><div class="chip" onclick="TC(this,'anciennete',1)">Chronique &gt;3 mois</div>
+    </div></div>
+  </div></div>
+
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.686 6-6" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/><path d="M15 3l-3 3M15 3h-3M15 3v3" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Localisation & caractère de la douleur</div><div class="scs">Sélection multiple</div></div></div><span class="scch">▼</span></div>
+  <div class="scb">
+    <div class="field"><div class="fl">Localisation</div><div class="chips" id="localisation">
+      <div class="chip" onclick="TC(this,'localisation')">Antérieure (gouttière bicipitale)</div><div class="chip" onclick="TC(this,'localisation')">Latérale (moignon épaule)</div>
+      <div class="chip" onclick="TC(this,'localisation')">Postérieure</div><div class="chip" onclick="TC(this,'localisation')">Supérieure (ACJ)</div>
+      <div class="chip" onclick="TC(this,'localisation')">Diffuse</div><div class="chip" onclick="TC(this,'localisation')">Irradiation bras / avant-bras</div>
+      <div class="chip" onclick="TC(this,'localisation')">Irradiation nuque / cou</div>
+    </div></div>
+    <div class="field"><div class="fl">Rythme <span class="fh">(sélection multiple)</span></div><div class="chips" id="rythme">
+      <div class="chip" onclick="TC(this,'rythme')">Mécanique (mouvement)</div><div class="chip" onclick="TC(this,'rythme')">Nocturne (décubitus latéral)</div>
+      <div class="chip" onclick="TC(this,'rythme')">Continue / permanente</div><div class="chip" onclick="TC(this,'rythme')">Arc douloureux 60–120°</div>
+      <div class="chip" onclick="TC(this,'rythme')">Douleur en fin d'amplitude</div><div class="chip" onclick="TC(this,'rythme')">Sensation de déboîtement</div>
+      <div class="chip" onclick="TC(this,'rythme')">Craquements / ressauts</div>
+    </div></div>
+    <div class="field"><div class="fl">Facteurs déclenchants <span class="fh">(sélection multiple)</span></div><div class="chips" id="declenchant">
+      <div class="chip" onclick="TC(this,'declenchant')">Abduction au-dessus de 90°</div><div class="chip" onclick="TC(this,'declenchant')">Rotation externe contrariée</div>
+      <div class="chip" onclick="TC(this,'declenchant')">Port de charge bras tendu</div><div class="chip" onclick="TC(this,'declenchant')">Geste d'armé (sport)</div>
+      <div class="chip" onclick="TC(this,'declenchant')">Mouvements répétitifs</div><div class="chip" onclick="TC(this,'declenchant')">Main dans le dos</div>
+      <div class="chip" onclick="TC(this,'declenchant')">Adduction horizontale (cross-body)</div><div class="chip" onclick="TC(this,'declenchant')">Décubitus côté atteint</div>
+      <div class="chip" onclick="TC(this,'declenchant')">Chute / appui sur main tendue</div>
+    </div></div>
+  </div></div>
+
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ir"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l6 11H3L9 3z" stroke="#9C2B2B" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 8v3M9 13v1" stroke="#9C2B2B" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Drapeaux rouges — Avis médical urgent si ≥1</div></div></div><span class="scch">▼</span></div>
+  <div class="scb"><div class="checks" id="rf">
+    <div class="crow" onclick="TCK(this,'rf','or')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur nocturne sévère non positionnelle + altération état général</div></div></div>
+    <div class="crow" onclick="TCK(this,'rf','or')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Masse palpable / tuméfaction suspecte</div></div></div>
+    <div class="crow" onclick="TCK(this,'rf','or')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Déficit neurologique progressif (paresthésies, déficit moteur)</div></div></div>
+    <div class="crow" onclick="TCK(this,'rf','or')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Antécédent de cancer</div></div></div>
+    <div class="crow" onclick="TCK(this,'rf','or')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Fièvre / signes infectieux (arthrite septique à éliminer)</div></div></div>
+    <div class="crow" onclick="TCK(this,'rf','or')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Traumatisme haute énergie (suspicion fracture)</div></div></div>
+    <div class="crow" onclick="TCK(this,'rf','or')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur irradiant vers mâchoire / sternum (origine cardiaque)</div></div></div>
+  </div></div></div>
+
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9a6 6 0 0 1 12 0" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/><path d="M9 15V9" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="16" r="1" fill="#1550A0"/></svg></div><div><div class="sct">Antécédents & terrain</div><div class="scs">Sélection multiple</div></div></div><span class="scch">▼</span></div>
+  <div class="scb"><div class="chips" id="atcd">
+    <div class="chip" onclick="TC(this,'atcd')">Aucun</div><div class="chip" onclick="TC(this,'atcd')">Diabète</div><div class="chip" onclick="TC(this,'atcd')">Thyroïde</div>
+    <div class="chip" onclick="TC(this,'atcd')">Chirurgie épaule</div><div class="chip" onclick="TC(this,'atcd')">Fracture épaule / humérus</div>
+    <div class="chip" onclick="TC(this,'atcd')">Épisodes récurrents</div><div class="chip" onclick="TC(this,'atcd')">Hyperlaxité ligamentaire générale</div>
+    <div class="chip" onclick="TC(this,'atcd')">Corticothérapie</div><div class="chip" onclick="TC(this,'atcd')">Cervicalgies associées</div>
+    <div class="chip" onclick="TC(this,'atcd')">Calcifications connues (radio/écho)</div>
+  </div></div></div>
+
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="8" width="3" height="7" rx="1" fill="#B56E10"/><rect x="7" y="5" width="3" height="10" rx="1" fill="#B56E10"/><rect x="12" y="2" width="3" height="13" rx="1" fill="#B56E10"/></svg></div><div><div class="sct">Imagerie disponible</div><div class="scs">Cocher si confirmé</div></div></div><span class="scch">▼</span></div>
+  <div class="scb"><div class="checks" id="imagerie">
+    <div class="crow" onclick="TCK(this,'imagerie','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Calcifications tendineuses (radio ou écho)</div><div class="csb">→ Confirme tendinopathie calcifiante</div></div></div>
+    <div class="crow" onclick="TCK(this,'imagerie','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Encoche de Hill-Sachs (radio face en rotation externe)</div><div class="csb">→ Score ISIS +2 pts</div></div></div>
+    <div class="crow" onclick="TCK(this,'imagerie','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Érosion / perte contour glénoïdien (radio)</div><div class="csb">→ Score ISIS +1 pt</div></div></div>
+    <div class="crow" onclick="TCK(this,'imagerie','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Rupture coiffe confirmée (IRM / écho)</div></div></div>
+    <div class="crow" onclick="TCK(this,'imagerie','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Arthrose gléno-humérale ou ACJ (radio)</div></div></div>
+  </div></div></div>
+</div>
+
+<!-- S3 — EXAMEN PHYSIQUE -->
+<div class="step" id="s3">
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3" stroke="#1550A0" stroke-width="1.5"/><path d="M3 16c0-2.5 2.7-4.5 6-4.5s6 2 6 4.5" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Inspection</div><div class="scs">Sélection multiple</div></div></div><span class="scch">▼</span></div>
+  <div class="scb"><div class="checks" id="inspection">
+    <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Amyotrophie supra / infra-épineuse visible</div></div>
+    <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Asymétrie de hauteur des épaules</div></div>
+    <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Dyskinésie scapulaire visible (décollement, rotation, basculement)</div></div>
+    <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Attitude antalgique (coude au corps, rotation interne)</div></div>
+    <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Tuméfaction ACJ / relief osseux anormal</div></div>
+    <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Ecchymose / hématome — signe de Popeye (rupture biceps)</div></div></div>
+  </div></div></div>
+
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M5 7l4-4 4 4M5 11l4 4 4-4" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Amplitudes articulaires</div><div class="scs">Actif puis passif — côté sain en référence</div></div></div><span class="scch">▼</span></div>
+  <div class="scb">
+    <div class="al alb" style="margin-bottom:10px"><span>ℹ</span><div>Mesurer le côté sain en référence avant le côté atteint. La comparaison bilatérale est indispensable.</div></div>
+    <div class="field"><div class="fl">Amplitudes actives <span class="fh">(sélection multiple)</span></div>
+      <div class="checks" id="amp_act">
+        <div class="crow" onclick="TCK(this,'amp_act','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Arc douloureux 60–120° en abduction</div><div class="csb">→ Signe pathognomonique du conflit sous-acromial (Park 2005)</div></div></div>
+        <div class="crow" onclick="TCK(this,'amp_act','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Flexion antérieure limitée / douloureuse</div></div>
+        <div class="crow" onclick="TCK(this,'amp_act','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Abduction limitée / douloureuse</div></div>
+        <div class="crow" onclick="TCK(this,'amp_act','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Rotation externe limitée / douloureuse</div><div class="csb">→ Première amplitude perdue dans la capsulite</div></div></div>
+        <div class="crow" onclick="TCK(this,'amp_act','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Rotation interne limitée (main dans le dos)</div></div>
+        <div class="crow" onclick="TCK(this,'amp_act','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Toutes amplitudes conservées et indolores</div></div>
+      </div>
+    </div>
+    <div class="field"><div class="fl">Amplitudes passives</div>
+      <div class="checks" id="amp_pas">
+        <div class="crow" onclick="TCK(this,'amp_pas','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Identiques à l'actif (pas de gain passif)</div></div>
+        <div class="crow" onclick="TCK(this,'amp_pas','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Gain passif sur la douleur (composante musculaire)</div></div>
+        <div class="crow" onclick="TCK(this,'amp_pas','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Limitation passive TOUTES directions (pattern capsulaire RE > ABD > RI)</div><div class="csb">→ Évoque capsulite rétractile</div></div></div>
+        <div class="crow" onclick="TCK(this,'amp_pas','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Limitation passive sélective (une direction)</div></div>
+      </div>
+    </div>
+    <div class="ssep">Mesures objectives (optionnel)</div>
+    <div class="g2">
+      <div class="field"><label class="fl">RE côté atteint (°)</label><input type="text" id="m-re-att" placeholder="Ex : 35°"></div>
+      <div class="field"><label class="fl">RE côté sain (°)</label><input type="text" id="m-re-sain" placeholder="Ex : 75°"></div>
+    </div>
+    <div class="g2">
+      <div class="field"><label class="fl">Abduction (°)</label><input type="text" id="m-abd" placeholder="Ex : 110°"></div>
+      <div class="field"><label class="fl">Flexion (°)</label><input type="text" id="m-flex" placeholder="Ex : 140°"></div>
+    </div>
+    <div id="gird-diff" style="display:none;margin-top:6px;font-size:12px;font-weight:700;padding:7px 10px;border-radius:8px"></div>
+  </div></div>
+
+  
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+<div class="sci" style="background:#1A6FA81A;border-color:#1A6FA833">
+<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#1A6FA8" stroke-width="1.5"/><path d="M6 9h6M6 6h3M6 12h4" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+<div><div class="sct">PSFS — Patient-Specific Functional Scale</div>
+<div class="scs">3 activités · Score 0–10 · MCID = 2 pts</div></div></div>
+<span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alb" style="margin-bottom:10px"><span>ℹ</span>
+<div><strong>PSFS</strong> (Stratford 1995 — validé en français). Demandez au patient d’identifier 3 activités limitées par votre épaule et de les noter de 0 (impossible) à 10 (niveau normal). MCID = 2 points.</div></div>
+      <div id="psfs-items"></div>
+      <div id="psfs-result"></div>
+    </div>
+  </div>
+
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 5c0 5 6 5 6 10M12 5c0 5-6 5-6 10" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Palpation</div><div class="scs">Sélection multiple</div></div></div><span class="scch">▼</span></div>
+  <div class="scb"><div class="chips" id="palpation">
+    <div class="chip" onclick="TC(this,'palpation')">Tendon sus-épineux douloureux</div>
+    <div class="chip" onclick="TC(this,'palpation')">Bourse sous-acromiale douloureuse</div>
+    <div class="chip" onclick="TC(this,'palpation')">Gouttière bicipitale douloureuse</div>
+    <div class="chip" onclick="TC(this,'palpation')">ACJ douloureuse</div>
+    <div class="chip" onclick="TC(this,'palpation')">Petit pectoral tendu / douloureux</div>
+    <div class="chip" onclick="TC(this,'palpation')">Aucune douleur à la palpation</div>
+  </div></div></div>
+
+  <!-- TESTS CLINIQUES S3 -->
+  <div class="sc sa"><div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l2 5h5l-4 3 1.5 5L9 13l-4.5 3L6 11 2 8h5L9 3z" stroke="#1A6FA8" stroke-width="1.5" stroke-linejoin="round"/></svg></div><div><div class="sct">Tests cliniques spécifiques</div><div class="scs">Appuyer pour voir la réalisation</div></div></div></div>
+  <div class="scb o">
+
+    <!-- CLUSTER PARK 2005 — Conflit sous-acromial -->
+    <div class="ssep" style="margin-top:0">Conflit sous-acromial — Cluster Park 2005</div>
+    <div class="park-counter">
+      <div><div class="park-num" id="park-count">0</div><div class="park-lbl">tests cluster positifs / 3</div></div>
+      <div id="park-badge" class="park-badge park-no">LR+ non atteint</div>
+    </div>
+    <div class="al alb" style="margin-bottom:10px"><span>ℹ</span><div><strong>Cluster Park 2005 ≥2/3 :</strong> Arc douloureux + Hawkins + Neer → LR+ 5.0 pour conflit sous-acromial (Park, 2005).</div></div>
+
+    <!-- ARC DOULOUREUX — coté -->
+    <div class="ti"><div class="th" onclick="tg('tb-arc')"><div class="tl"><div class="tn">Arc douloureux coté</div><div class="tsb">Conflit sous-acromial · Sn 74% Sp 81% (Park, 2005)</div></div><button class="ebp-btn" onclick="showEBP('arc',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();setPark(this,'arc','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();setPark(this,'arc','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-arc"><ol class="tstps"><li>Abduction active de 0° à 180°</li><li>Observer et noter la zone douloureuse</li><li>Positif si douleur entre 60° et 120° d'abduction</li><li>La douleur s'atténue ou disparaît en dessous de 60° et au-dessus de 120°</li></ol>
+    <div class="tint">Le plus simple et le plus rapide du cluster. <strong>Arc 60–120° = espace sous-acromial comprimé.</strong> Arc >120° = ACJ. Arc sur tout le mouvement = capsulite.</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-neer')"><div class="tl"><div class="tn">Neer</div><div class="tsb">Conflit sous-acromial · Sn 79% Sp 53%</div></div><button class="ebp-btn" onclick="showEBP('neer',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();setPark(this,'neer','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();setPark(this,'neer','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-neer"><ol class="tstps"><li>Stabiliser la scapula avec une main</li><li>Flexion antérieure passive forcée, coude en extension</li><li>Positif si douleur sous l'acromion en fin de flexion</li></ol>
+    <div class="tint"><strong>Cluster conflit :</strong> Neer + Hawkins + Arc douloureux → LR+ 5.0 si ≥2/3 positifs (Park 2005). Spécificité modérée seul.</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-hawk')"><div class="tl"><div class="tn">Hawkins-Kennedy</div><div class="tsb">Conflit sous-acromial · Sn 79% Sp 59%</div></div><button class="ebp-btn" onclick="showEBP('hawkins',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();setPark(this,'hawkins','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();setPark(this,'hawkins','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-hawk"><ol class="tstps"><li>Coude et épaule fléchis à 90°</li><li>Rotation interne forcée par le thérapeute</li><li>Positif si douleur sous l'acromion</li></ol>
+    <div class="tint">Toujours associer à Neer et à l'arc douloureux pour former le cluster Park 2005.</div></div></div>
+
+    <!-- COIFFE — Catégorie A -->
+    <div class="ssep">Coiffe des rotateurs — Catégorie A (Ann Cools)</div>
+
+    <!-- NEW V2 — Empty Can + Full Can -->
+    <div class="ti"><div class="th" onclick="tg('tb-emptycan')"><div class="tl"><div class="tn">Empty Can (Jobe) — Sus-épineux</div><div class="tsb">Sus-épineux · Sn 69% Sp 66% (Hughes, 1996)</div></div><button class="ebp-btn" onclick="showEBP('emptycan',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'emptycan','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'emptycan','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-emptycan">
+      <div class="prow"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#DCF0FF"/><circle cx="14" cy="7" r="3" fill="#1A6FA8"/><line x1="14" y1="10" x2="14" y2="17" stroke="#1A6FA8" stroke-width="2" stroke-linecap="round"/><path d="M14 17 L4 20" stroke="#1A6FA8" stroke-width="2" stroke-linecap="round"/></svg><span class="plbl">90° ABD plan scapulaire, pouce vers le bas</span></div>
+      <ol class="tstps"><li>Bras à 90° d'abduction dans le plan de la scapula (30° en avant du plan frontal)</li><li><strong>Rotation interne : pouce vers le bas</strong> (vider la canette)</li><li>Résistance vers le bas — patient maintient</li></ol>
+      <div class="tint"><strong>Douleur seule</strong> → tendinopathie. <strong>Faiblesse + douleur</strong> → rupture partielle probable. <strong>Faiblesse sans douleur</strong> → rupture massive possible.</div>
+      <div class="mrc-lbl">Cotation MRC sus-épineux (0 → 5)</div>
+      <div class="mrc-wrap" id="mrc-emptycan"><button class="mrc-btn" onclick="setMRC(this,'emptycan',0)" type="button">0</button><button class="mrc-btn" onclick="setMRC(this,'emptycan',1)" type="button">1</button><button class="mrc-btn" onclick="setMRC(this,'emptycan',2)" type="button">2</button><button class="mrc-btn" onclick="setMRC(this,'emptycan',3)" type="button">3</button><button class="mrc-btn" onclick="setMRC(this,'emptycan',4)" type="button">4</button><button class="mrc-btn" onclick="setMRC(this,'emptycan',5)" type="button">5</button></div>
+    </div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-fullcan')"><div class="tl"><div class="tn">Full Can — Sus-épineux (moins douloureux)</div><div class="tsb">Sus-épineux · Sn 66% Sp 64% — moins de faux positifs douloureux</div></div><button class="ebp-btn" onclick="showEBP('fullcan',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'fullcan','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'fullcan','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-fullcan">
+      <ol class="tstps"><li>Bras à 90° d'abduction dans le plan de la scapula (30° en avant)</li><li><strong>Rotation externe : pouce vers le haut</strong> (remplir la canette)</li><li>Résistance vers le bas</li></ol>
+      <div class="tint">Génère moins de douleur due au conflit que le Empty Can → plus spécifique pour les ruptures. Si Empty Can douloureux mais Full Can indolore → conflit sans rupture probable. Si les deux sont faibles → rupture à suspecter.</div>
+    </div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-patte')"><div class="tl"><div class="tn">Patte (Lag Sign RE)</div><div class="tsb">Infra-épineux + Petit rond · Sn 70% Sp 100%</div></div><button class="ebp-btn" onclick="showEBP('patte',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'patte','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'patte','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-patte"><ol class="tstps"><li>Patient assis, bras à 20° ABD, coude fléchi à 90°</li><li>Placer passivement le bras en rotation externe maximale</li><li>Demander au patient de maintenir (relâcher le bras)</li><li>Positif si le bras retombe en rotation interne</li></ol>
+    <div class="tint"><strong>Positif</strong> → rupture infra-épineux / petit rond. Spécificité très élevée (100%) pour les ruptures complètes.</div>
+    <div class="mrc-lbl">Cotation MRC infra-épineux / petit rond (RE contre résistance)</div>
+    <div class="mrc-wrap" id="mrc-patte"><button class="mrc-btn" onclick="setMRC(this,'patte',0)" type="button">0</button><button class="mrc-btn" onclick="setMRC(this,'patte',1)" type="button">1</button><button class="mrc-btn" onclick="setMRC(this,'patte',2)" type="button">2</button><button class="mrc-btn" onclick="setMRC(this,'patte',3)" type="button">3</button><button class="mrc-btn" onclick="setMRC(this,'patte',4)" type="button">4</button><button class="mrc-btn" onclick="setMRC(this,'patte',5)" type="button">5</button></div>
+    </div></div>
+
+    <!-- NEW V2 — Hornblower's Sign -->
+    <div class="ti"><div class="th" onclick="tg('tb-hornblower')"><div class="tl"><div class="tn">Hornblower's Sign</div><div class="tsb">Sous-épineux + Petit rond · Sn 100% rupture complète (Walch, 1998)</div></div><button class="ebp-btn" onclick="showEBP('hornblower',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'hornblower','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'hornblower','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-hornblower"><ol class="tstps"><li>Patient assis ou debout, bras à 90° d'abduction, coude fléchi à 90°</li><li>Demander au patient de faire une rotation externe active contre résistance</li><li>Positif si le patient compense en élevant le coude (position du joueur de cor)</li></ol>
+    <div class="tint"><strong>Positif = rupture complète sous-épineux / petit rond.</strong> Sn 100% pour les ruptures complètes (Walch 1998). Facteur pronostique chirurgical majeur — indicateur de perte de fonction irréversible si non réparé.</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-lift')"><div class="tl"><div class="tn">Lift-Off (Gerber)</div><div class="tsb">Sous-scapulaire · Sn 92% Sp 100% (Gerber, 1991)</div></div><button class="ebp-btn" onclick="showEBP('liftoff',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'liftoff','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'liftoff','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-lift"><ol class="tstps"><li>Main dans le dos, dos de la main au niveau L4-L5</li><li>Demander de décoller la main du dos (RI contre résistance)</li><li>Positif si incapacité ou faiblesse marquée</li></ol>
+    <div class="tint"><strong>Positif</strong> → rupture sous-scapulaire (très spécifique). Sp 100%. Si RI insuffisante → utiliser Bear Hug ou Belly Press.</div>
+    <div class="mrc-lbl">Cotation MRC sous-scapulaire (RI contre résistance)</div>
+    <div class="mrc-wrap" id="mrc-liftoff"><button class="mrc-btn" onclick="setMRC(this,'liftoff',0)" type="button">0</button><button class="mrc-btn" onclick="setMRC(this,'liftoff',1)" type="button">1</button><button class="mrc-btn" onclick="setMRC(this,'liftoff',2)" type="button">2</button><button class="mrc-btn" onclick="setMRC(this,'liftoff',3)" type="button">3</button><button class="mrc-btn" onclick="setMRC(this,'liftoff',4)" type="button">4</button><button class="mrc-btn" onclick="setMRC(this,'liftoff',5)" type="button">5</button></div>
+    </div></div>
+
+    <!-- NEW V2 — Bear Hug -->
+    <div class="ti"><div class="th" onclick="tg('tb-bearhug')"><div class="tl"><div class="tn">Bear Hug</div><div class="tsb">Sous-scapulaire supérieur · Sn 60% Sp 91% (Barth, 2006)</div></div><button class="ebp-btn" onclick="showEBP('bearhug',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'bearhug','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'bearhug','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-bearhug"><ol class="tstps"><li>Patient place la main du côté atteint sur l'épaule opposée (comme une étreinte)</li><li>Coude devant le corps, épaule en légère flexion</li><li>Résistance à la rotation interne — tenter de décoller la main de l'épaule</li><li>Positif si incapacité à maintenir ou force significativement diminuée</li></ol>
+    <div class="tint"><strong>Utile pour les déchirures sous-scapulaires supérieures</strong> quand le Lift-off est difficile à réaliser. Plus sensible que Belly Press pour les déchirures partielles supérieures (Barth 2006). Toujours comparer au côté sain.</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-belly')"><div class="tl"><div class="tn">Belly Press (Napoleon)</div><div class="tsb">Sous-scapulaire · Alternative au Lift-Off si RI insuffisante</div></div><button class="ebp-btn" onclick="showEBP('bellypress',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'bellypress','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'bellypress','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-belly"><ol class="tstps"><li>Main à plat sur le ventre, coude en avant du corps</li><li>Appuyer sur le ventre en maintenant le coude en avant</li><li>Positif si le coude recule (compensation par flexion du coude)</li></ol>
+    <div class="tint">Utiliser si Lift-Off impossible. <strong>Positif</strong> → atteinte sous-scapulaire. Le recul du coude traduit la compensation par les fléchisseurs du coude.</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-drop')"><div class="tl"><div class="tn">Drop Arm (Codman)</div><div class="tsb">Rupture massive de coiffe — urgence chirurgicale si positif</div></div><button class="ebp-btn" onclick="showEBP('droparm',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'droparm','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'droparm','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-drop"><ol class="tstps"><li>Amener le bras à 90° d'abduction passivement</li><li>Demander de maintenir et d'abaisser lentement</li><li>Positif si le bras retombe de façon incontrôlée</li></ol>
+    <div class="tint"><strong>Positif</strong> → rupture massive (sus-épineux + infra-épineux). Spécificité très élevée → orienter vers avis chirurgical sans délai.</div></div></div>
+
+    <!-- INSTABILITÉ — Catégorie B -->
+    <div class="ssep">Instabilité gléno-humérale — Catégorie B</div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-appr')"><div class="tl"><div class="tn">Appréhension + Relocation</div><div class="tsb">Instabilité antérieure structurelle · Sp ~98%</div></div><button class="ebp-btn" onclick="showEBP('apprehension',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'apprehension','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'apprehension','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-appr">
+      <div class="prow"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#FAEAEA"/><circle cx="14" cy="7" r="3" fill="#9C2B2B"/><line x1="14" y1="10" x2="14" y2="17" stroke="#9C2B2B" stroke-width="2" stroke-linecap="round"/><path d="M14 17 L22 14" stroke="#9C2B2B" stroke-width="2" stroke-linecap="round"/></svg><span class="plbl">Décubitus dorsal · 90° ABD + RE progressive</span></div>
+      <ol class="tstps"><li>Décubitus dorsal, bras à 90° d'abduction</li><li>Rotation externe progressive jusqu'à appréhension</li><li><strong>Appréhension</strong> (sensation de déboîtement) = positif instabilité structurelle</li><li>Test de relocation : pousser tête humérale vers l'arrière → disparition confirme</li></ol>
+      <div class="tint"><strong>Appréhension</strong> = instabilité traumatique structurelle (lésion de Bankart probable). Douleur seule sans appréhension → moins spécifique.</div>
+    </div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-tiroir')"><div class="tl"><div class="tn">Tiroir antérieur / postérieur</div><div class="tsb">Laxité gléno-humérale · Translation + symptômes = pathologique</div></div><button class="ebp-btn" onclick="showEBP('tiroir',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'tiroir','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'tiroir','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-tiroir"><ol class="tstps"><li>Patient assis, stabiliser la scapula avec une main</li><li>Saisir la tête humérale, appliquer force en avant puis en arrière</li><li>Évaluer l'amplitude de translation et la reproduction des symptômes</li></ol>
+    <div class="tint">Translation seule sans symptôme = laxité physiologique. <strong>Translation + symptômes</strong> = instabilité pathologique. Comparer au côté sain systématiquement.</div></div></div>
+
+    <!-- NEW V2 — Sulcus avec grade I/II/III -->
+    <div class="ti"><div class="th" onclick="tg('tb-sulcus')"><div class="tl"><div class="tn">Sulcus Sign + Grade</div><div class="tsb">Instabilité inférieure / multidirectionnelle · Grade I/II/III</div></div><button class="ebp-btn" onclick="showEBP('sulcus',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'sulcus','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'sulcus','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-sulcus">
+      <ol class="tstps"><li>Patient assis, bras pendant, muscles relâchés</li><li>Traction axiale vers le bas sur le coude ou l'avant-bras</li><li>Observer la dépression visible sous l'acromion</li><li>Mesurer ou estimer le creux sub-acromial</li></ol>
+      <div class="ssep">Grade — intégré au diagnostic</div>
+      <div class="grade-wrap" id="sulcus-grade-btns">
+        <button class="grade-btn" onclick="selSulcusGrade(this,'I')" type="button">Grade I (&lt;1 cm)</button>
+        <button class="grade-btn" onclick="selSulcusGrade(this,'II')" type="button">Grade II (1–2 cm)</button>
+        <button class="grade-btn" onclick="selSulcusGrade(this,'III')" type="button">Grade III (&gt;2 cm)</button>
+      </div>
+      <div class="grade-lbl">Grade I = laxité légère. Grade II = laxité modérée. Grade III = instabilité inférieure franche. Grade III persistant en rotation externe → instabilité multidirectionnelle vraie.</div>
+      <div class="tint">Si bilatéral et asymptomatique → laxité constitutionnelle. Si symptomatique → explorer instabilité multidirectionnelle atraumatique.</div>
+    </div></div>
+
+    <!-- DYSFONCTION SCAPULAIRE — Catégorie C -->
+    <div class="ssep">Dysfonction scapulaire — Catégorie C</div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-kibler')"><div class="tl"><div class="tn">Dyskinésie scapulaire + Test de correction (Kibler)</div><div class="tsb">Contrôle moteur scapulaire · Test thérapeutique clé</div></div><button class="ebp-btn" onclick="showEBP('kibler',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'kibler','pos')" type="button">Présente</button><button class="tb" onclick="event.stopPropagation();ST(this,'kibler','neg')" type="button">Absente</button></div></div>
+    <div class="tbody" id="tb-kibler">
+      <ol class="tstps"><li>Observer la scapula de dos pendant l'élévation active (flexion + abduction)</li><li>Rechercher : bord médial décollé, rotation asymétrique, basculement antérieur</li><li><strong>Test de correction :</strong> repositionner manuellement la scapula → la douleur diminue ?</li></ol>
+      <div class="tint"><strong>Dyskinésie présente + correction supprime la douleur</strong> = dysfonction scapulaire causale. Priorité Cat. C Ann Cools. La tendinopathie est alors secondaire à la dyskinésie.</div>
+    </div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-gird')"><div class="tl"><div class="tn">GIRD — Déficit de Rotation Interne gléno-humérale</div><div class="tsb">Sportif overhead · Contracture capsulaire postérieure · Seuil &gt;25°</div></div><button class="ebp-btn" onclick="showEBP('gird',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'gird','pos')" type="button">Présent &gt;25°</button><button class="tb" onclick="event.stopPropagation();ST(this,'gird','neg')" type="button">Absent</button></div></div>
+    <div class="tbody" id="tb-gird">
+      <ol class="tstps"><li>Décubitus dorsal, bras à 90° d'abduction, mesurer la RI passive côté atteint</li><li>Comparer au côté sain</li><li>GIRD positif si différence &gt;25° entre les deux côtés</li></ol>
+      <div class="tint"><strong>GIRD &gt;25°</strong> → contracture capsulaire postérieure. Facteur de risque majeur de conflit postéro-supérieur interne chez le sportif overhead. Traitement de référence : Sleeper Stretch.</div>
+    </div></div>
+
+    <!-- BICEPS / SLAP / ACJ -->
+    <div class="ssep">Biceps / SLAP / ACJ — Catégorie A différentiels</div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-speed')"><div class="tl"><div class="tn">Speed</div><div class="tsb">Longue portion du biceps / SLAP · Sn 54% Sp 81%</div></div><button class="ebp-btn" onclick="showEBP('speed',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'speed','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'speed','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-speed"><ol class="tstps"><li>Bras en flexion à 60–90°, coude en extension, avant-bras en supination</li><li>Résistance vers le bas</li><li>Positif si douleur à la gouttière bicipitale</li></ol>
+    <div class="tint"><strong>Positif</strong> → tendinopathie biceps (longue portion) ou SLAP. Associer à Yergason et O'Brien pour le différentiel.</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-yerg')"><div class="tl"><div class="tn">Yergason</div><div class="tsb">Longue portion du biceps · Sn 43% Sp 86% (Holtby, 2004)</div></div><button class="ebp-btn" onclick="showEBP('yergason',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'yergason','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'yergason','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-yerg"><ol class="tstps"><li>Coude fléchi à 90°, avant-bras en pronation</li><li>Résistance à la supination + rotation externe simultanée</li><li>Positif si douleur à la gouttière bicipitale</li></ol>
+    <div class="tint"><strong>Positif</strong> → tendinopathie biceps (longue portion). Spécificité élevée (~86%) — un Yergason positif est très évocateur.</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-obrien')"><div class="tl"><div class="tn">O'Brien (Active Compression)</div><div class="tsb">SLAP vs ACJ — localisation de la douleur = différentiel clé</div></div><button class="ebp-btn" onclick="showEBP('obrien',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'obrien','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'obrien','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-obrien"><ol class="tstps"><li>90° flexion, 15° adduction horizontale, coude en extension</li><li>Phase 1 : pouce vers le bas (RI) — résistance vers le bas</li><li>Phase 2 : pouce vers le haut (RE) — résistance vers le bas</li><li>Positif si douleur en phase 1 diminuant en phase 2</li></ol>
+    <div class="tint"><strong>Douleur profonde intra-articulaire</strong> → SLAP. <strong>Douleur superficielle ACJ</strong> → pathologie ACJ. Le différentiel se fait sur la localisation exacte de la douleur.</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-cross')"><div class="tl"><div class="tn">Cross-Body (adduction horizontale forcée)</div><div class="tsb">Pathologie ACJ · Sn 77% Sp 79%</div></div><button class="ebp-btn" onclick="showEBP('crossbody',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'crossbody','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'crossbody','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-cross"><ol class="tstps"><li>Bras en flexion à 90°</li><li>Adduction horizontale forcée (bras vers l'épaule opposée)</li><li>Positif si douleur localisée à l'ACJ</li></ol>
+    <div class="tint"><strong>Positif</strong> → pathologie ACJ. Associer à la palpation ACJ douloureuse et à O'Brien (douleur superficielle).</div></div></div>
+
+    <!-- DIFFÉRENTIEL CERVICAL -->
+    <div class="ssep">Différentiel cervical — À éliminer systématiquement</div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-spurling')"><div class="tl"><div class="tn">Spurling (compression foraminale cervicale)</div><div class="tsb">Origine cervicale C5-C6 · Sn 50% Sp 86% (Wainner, 2003)</div></div><button class="ebp-btn" onclick="showEBP('spurling',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'spurling','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'spurling','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-spurling"><ol class="tstps"><li>Inclinaison latérale + rotation cervicale vers le côté douloureux</li><li>Compression axiale douce sur le sommet du crâne</li><li>Positif si reproduction de la douleur irradiant vers le bras (C5-C6)</li></ol>
+    <div class="tint"><strong>Positif</strong> → composante cervicale probable. Bilan cervical complet recommandé avant de conclure à une pathologie d'épaule primitive. Peut coexister avec la coiffe (double crush syndrome).</div></div></div>
+
+  </div></div>
+</div>
+
+<!-- S4 — BILAN FONCTIONNEL -->
+<div class="step" id="s4">
+  <div class="step-progress" id="step-progress-bar"></div>
+
+  <div class="sc sa"><div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l2 5h5l-4 3 1.5 5L9 13l-4.5 3L6 11 2 8h5L9 3z" stroke="#1A6FA8" stroke-width="1.5" stroke-linejoin="round"/></svg></div><div><div class="sct">Retentissement fonctionnel</div></div></div></div>
+  <div class="scb o">
+    <div class="field"><div class="fl">Sévérité globale</div><div class="chips" id="retentissement">
+      <div class="chip" onclick="TC(this,'retentissement',1)">Minimal</div><div class="chip" onclick="TC(this,'retentissement',1)">Modéré</div>
+      <div class="chip" onclick="TC(this,'retentissement',1)">Important</div><div class="chip" onclick="TC(this,'retentissement',1)">Sévère / incapacitant</div>
+    </div></div>
+  </div></div>
+
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v6l3 3M3 9a6 6 0 1 0 12 0" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Activités limitées</div><div class="scs">Sélection multiple</div></div></div><span class="scch">▼</span></div>
+  <div class="scb"><div class="checks" id="avq">
+    <div class="crow" onclick="TCK(this,'avq','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Habillage (veste, soutien-gorge…)</div></div>
+    <div class="crow" onclick="TCK(this,'avq','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Hygiène (coiffer, laver le dos…)</div></div>
+    <div class="crow" onclick="TCK(this,'avq','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Port de charges au-dessus de la tête</div></div>
+    <div class="crow" onclick="TCK(this,'avq','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Conduite automobile</div></div>
+    <div class="crow" onclick="TCK(this,'avq','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Sommeil perturbé (décubitus côté atteint)</div></div>
+    <div class="crow" onclick="TCK(this,'avq','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Activité professionnelle impactée</div></div>
+    <div class="crow" onclick="TCK(this,'avq','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Activité sportive impossible</div></div>
+    <div class="crow" onclick="TCK(this,'avq','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Lancer / geste d'armé impossible</div></div>
+  </div></div></div>
+
+  <div class="sc sa"><div class="sch"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#1550A0" stroke-width="1.5"/><path d="M6 9h6M9 6v6" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">QuickDASH — Score fonctionnel membre supérieur</div><div class="scs">11 questions · Score 0–100</div></div></div></div>
+  <div class="scb o">
+    <div class="al alb" style="margin-bottom:10px"><span>ℹ</span><div>QuickDASH validé (Beaton, 2005 — VF Gummesson, 2006). 11 items · Score 0 = aucune limitation · 100 = limitation maximale.</div></div>
+    <button class="btf btz" type="button" style="margin-top:0" onclick="openQD()">Remplir le QuickDASH →</button>
+    <div id="qd-res" style="display:none;margin-top:8px;padding:10px 12px;background:var(--zl);border-radius:var(--r);border:1.5px solid #7BBCE0">
+      <div style="font-size:13px;font-weight:700;color:var(--zd)">QuickDASH : <span id="qd-score">—</span>/100 — <span id="qd-grade">—</span></div>
+    </div>
+  </div></div>
+
+  <!-- ISIS -->
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ir"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v8M9 13v2" stroke="#9C2B2B" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sct">Score ISIS — Risque récidive instabilité antérieure</div><div class="scs">Balg & Boileau, 2007 · Si luxation / instabilité</div></div></div><span class="scch">▼</span></div>
+  <div class="scb"><div id="isis-container"></div></div></div>
+
+  
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="#1A6FA8" stroke-width="1.5"/><path d="M9 6v3l2 2" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Constant-Murley Score</div><div class="scs">Score /100 · Douleur · AVQ · Mobilité · Force · Gold standard SECEC</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alb" style="margin-bottom:12px"><span>ℹ</span><div><strong>Constant-Murley</strong> (Constant 1987 — normalisé Boehm 2008). Score /100 — 0 = incapacité totale. MCID = 10–12 pts. Recommandé HAS/SECEC pour le suivi épaule. Interprétation : ≥80 = excellent · 65–79 = bon · 50–64 = moyen · &lt;50 = mauvais.</div></div>
+      <button class="btf btz" onclick="openConstant()" type="button">Remplir le Constant-Murley →</button>
+      <div id="constant-res" style="display:none;margin-top:10px;padding:10px 12px;background:var(--zl);border-radius:var(--r);border:1.5px solid #7DCEB0">
+        <div style="font-size:13px;font-weight:700;color:var(--zd)">Constant : <span id="constant-total">—</span>/100 — <span id="constant-grade">—</span></div>
+        <div id="constant-detail" style="font-size:11px;color:var(--tx2);margin-top:4px"></div>
+      </div>
+    </div>
+  </div>
+
+<div class="sc sa"><div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M9 3v12" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Objectifs & observations</div></div></div></div>
+  <div class="scb o">
+    <div class="field"><label class="fl">Objectifs du patient</label><textarea id="objectifs" placeholder="Ex : Reprendre la natation, lever le bras, reprendre le tennis…"></textarea></div>
+    <div class="field"><label class="fl">Examens complémentaires / observations</label><textarea id="observations" placeholder="Écho, IRM, radio, compte-rendu opératoire…"></textarea></div>
+  </div></div>
+</div>
+
+<!-- S5 — ANALYSE -->
+<div class="step" id="s5">
+  <div id="s5a" style="display:none">
+    <div id="s5c"></div>
+    <button class="btf btz no-print" onclick="openProg()" type="button" style="margin-top:10px">Programme d'exercices →</button>
+    <button class="btf btn2 no-print" onclick="goS(6)" type="button" style="margin-top:8px">Voir le compte-rendu →</button>
+  </div>
+  <div id="s5b">
+    <div id="analyse-checklist" style="margin-bottom:12px"></div>
+    <div class="al alb"><span>ℹ</span><div>Complétez les étapes 1 à 4 puis analysez.</div></div>
+    <button class="btf btz no-print" type="button" onclick="analyser()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l1.8 4.5H15l-3.6 2.7 1.4 4.8L9 12.3 5.2 15l1.4-4.8L3 7.5h4.2L9 3z" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      Lancer l'analyse clinique
+    </button>
+  </div>
+</div>
+
+<!-- S6 — COMPTE-RENDU -->
+<div class="step print-cr" id="s6">
+  <div class="crtabs no-print">
+    <button class="crtab on" onclick="switchCR('s',this)" type="button">Résumé médecin</button>
+    <button class="crtab" onclick="switchCR('f',this)" type="button">Dossier complet</button>
+  </div>
+  <div class="crv on" id="cr-s"></div>
+  <div class="crv" id="cr-f"></div>
+  <button class="btf btn2 no-print" onclick="printCR()" type="button">Imprimer / PDF</button>
+  <button class="btf btn1 no-print" onclick="copyCR()" type="button" style="margin-top:8px">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="#fff" stroke-width="1.3"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="#fff" stroke-width="1.3"/></svg>
+    Copier le compte-rendu
+  </button>
+  <button class="btf btg no-print" onclick="if(confirm('Nouveau bilan ?')){localStorage.removeItem('bilan-epaule-v3');location.reload();}" type="button" style="margin-top:8px">Nouveau bilan</button>
+</div>
+
+</div><!-- /app -->
+
+<div class="bnav no-print">
+  <button class="bbt bbk" id="btn-back" onclick="navBack()" type="button" disabled>← Retour</button>
+  <div class="bni" id="bni">Étape 1/6</div>
+  <button class="bbt bbn" id="btn-next" onclick="navNext()" type="button">Suivant →</button>
+</div>
+
+<!-- PROGRAMME -->
+<div class="pov" id="pov"><div class="phdr"><button class="pclose" onclick="closeProg()" type="button">×</button><div class="phinfo"><div class="phtitle" id="p-name">Programme d'exercices</div><div class="phsub" id="p-sub">Épaule</div></div><button class="ppbtn" onclick="printProg()" type="button">PDF</button></div><div class="pcont" id="p-cont"></div></div>
+
+<!-- QUICKDASH MODAL -->
+<div class="mov" id="qd-modal"><div class="modal"><div class="mhnd"></div><div class="mhd"><h2>QuickDASH</h2><button class="mcl" onclick="closeQD()" type="button">×</button></div><div class="mbd"><div class="al alb" style="margin-bottom:12px"><span>ℹ</span><div>Une réponse par question · Niveau de difficulté la semaine passée</div></div><div id="qd-qs"></div><div class="qdsb"><div><div class="qdnum" id="qd-pct">—</div><div style="font-size:11px;color:#2060B0">/100</div></div><div style="text-align:right"><div style="font-size:13px;font-weight:700;color:#0C3060" id="qd-gr">—</div><div style="font-size:11px;color:#2060B0;margin-top:2px" id="qd-in">Remplir les questions</div></div></div><button class="btf btz" onclick="valQD()" type="button" style="margin-top:12px">✓ Valider</button></div></div></div>
+
+
+<div class="mov" id="constant-modal"><div class="modal"><div class="mhnd"></div>
+  <div class="mhd"><h2>Constant-Murley</h2><button class="mcl" onclick="closeConstant()" type="button">×</button></div>
+  <div class="mbd">
+    <div class="al alb" style="margin-bottom:14px"><span>ℹ</span><div>Score /100 · Remplir les 4 sections · MCID = 10 pts</div></div>
+
+    <!-- DOULEUR /15 -->
+    <div class="cscore-sect">
+      <div class="cscore-lbl">🔴 Douleur — /15 <span style="font-weight:400;text-transform:none">(0 = douleur maximale · 15 = aucune douleur)</span></div>
+      <div class="cscore-btns" id="c-douleur"></div>
+    </div>
+
+    <!-- AVQ /20 -->
+    <div class="cscore-sect">
+      <div class="cscore-lbl">🟡 Activités de la vie quotidienne — /20</div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:8px">Niveau d'activité (max 4 pts)</div>
+      <div class="cscore-btns" id="c-avq-niv"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:8px 0 4px">Positionnement du bras (max 10 pts)</div>
+      <div class="cscore-btns" id="c-avq-pos"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:8px 0 4px">Sommeil perturbé — 2 pts si non perturbé</div>
+      <div class="cscore-btns" id="c-avq-som"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:8px 0 4px">Travail/loisirs — 4 pts si aucune limitation</div>
+      <div class="cscore-btns" id="c-avq-trav"></div>
+    </div>
+
+    <!-- MOBILITE /40 -->
+    <div class="cscore-sect">
+      <div class="cscore-lbl">🟢 Mobilité — /40 <span style="font-weight:400;text-transform:none">(paliers selon amplitude mesurée)</span></div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:4px">Flexion antérieure (max 10 pts)</div>
+      <div class="cscore-btns" id="c-flex"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:8px 0 4px">Abduction (max 10 pts)</div>
+      <div class="cscore-btns" id="c-abd"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:8px 0 4px">Rotation externe (max 10 pts)</div>
+      <div class="cscore-btns" id="c-re"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:8px 0 4px">Rotation interne — niveau atteint (max 10 pts)</div>
+      <div class="cscore-btns" id="c-ri"></div>
+    </div>
+
+    <!-- FORCE /25 -->
+    <div class="cscore-sect">
+      <div class="cscore-lbl">🔵 Force — /25 <span style="font-weight:400;text-transform:none">(0–25 pts)</span></div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:4px">Score de force en abduction (dynamomètre ou estimation clinique)</div>
+      <div class="cscore-btns" id="c-force"></div>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="cscore-total">
+      <div><div class="cscore-num" id="c-total-num">—</div><div class="cscore-sub">/100 · Constant-Murley</div></div>
+      <div style="text-align:right"><div style="font-size:14px;font-weight:700;color:var(--zd)" id="c-grade-lbl">—</div><div style="font-size:11px;color:var(--tx3);margin-top:2px" id="c-interp-lbl">Remplir les sections</div></div>
+    </div>
+    <button class="btf btz" onclick="valConstant()" type="button" style="margin-top:12px">✓ Valider</button>
+  </div>
+</div></div>
+
+<div class="toast" id="toast">Bilan sauvegardé</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ÉTAT GLOBAL — centralisé
+// ══════════════════════════════════════════════════════
+var D={eva:null,qd:null,tests:{},mrc:{},chips:{},checks:{},mesures:{flex:'',abd:'',re_att:'',re_sain:''}};
+var curS=1,activeCR='s';
+var SULCUS_GRADE=null;
+var PARK_TESTS={arc:null,neer:null,hawkins:null};
+var isisData={};
+var SN=['','Identité patient','Anamnèse & triage','Examen physique','Bilan fonctionnel','Analyse & diagnostic','Compte-rendu'];
+// Aliases pour compatibilité avec les fonctions existantes
+var TESTS=D.tests, MRC=D.mrc, CHIPS=D.chips, CHECKS=D.checks;
+
+// ══════════════════════════════════════════════════════
+// SAUVEGARDE localStorage
+// ══════════════════════════════════════════════════════
+function saveState(){
+  try{
+    localStorage.setItem('bilan-epaule-v3',JSON.stringify({D:D,SULCUS_GRADE:SULCUS_GRADE,PARK_TESTS:PARK_TESTS,isisData:isisData,psfsSt:psfsSt,constantData:constantData}));
+    showToast('Bilan sauvegardé');
+  }catch(e){}
+}
+function loadState(){
+  try{
+    var raw=localStorage.getItem('bilan-epaule-v3');
+    if(!raw)return;
+    var st=JSON.parse(raw);
+    if(st.D){
+      D.eva=st.D.eva;D.qd=st.D.qd;
+      D.tests=st.D.tests||{};D.mrc=st.D.mrc||{};
+      D.chips=st.D.chips||{};D.checks=st.D.checks||{};
+      D.mesures=st.D.mesures||{flex:'',abd:'',re_att:'',re_sain:''};
+      // Sync aliases
+      TESTS=D.tests;MRC=D.mrc;CHIPS=D.chips;CHECKS=D.checks;
+    }
+    if(st.SULCUS_GRADE) SULCUS_GRADE=st.SULCUS_GRADE;
+    if(st.PARK_TESTS) PARK_TESTS=st.PARK_TESTS;
+    if(st.isisData) isisData=st.isisData;
+    if(st.psfsSt) psfsSt=st.psfsSt;
+    if(st.constantData) constantData=st.constantData;
+    restoreUI();
+  }catch(e){}
+}
+function restoreUI(){
+  // Restaurer chips
+  Object.keys(D.chips).forEach(function(g){
+    (D.chips[g]||[]).forEach(function(v){
+      document.querySelectorAll('#'+g+' .chip').forEach(function(c){
+        if(c.textContent.trim()===v)c.classList.add('on');
+        buildPSFS();
+});
+    });
+  });
+  // Restaurer checks
+  Object.keys(D.checks).forEach(function(g){
+    var el=document.getElementById(g);if(!el)return;
+    el.querySelectorAll('.crow').forEach(function(row){
+      var t=row.querySelector('.ctx2,.ctext,.ctx');
+      if(t&&D.checks[g].indexOf(t.textContent.trim())!==-1){
+        var cls=(g==='rf')?'or':'on';
+        row.classList.add(cls);
+        var cbox=row.querySelector('.cbox');if(cbox){cbox.querySelector('.cmk').style.display='block';}
+      }
+    });
+  });
+  // Restaurer EVA
+  if(D.eva!==null){
+    var evBtn=document.querySelector('#eva .evab[data-v="'+D.eva+'"]');
+    if(evBtn)evBtn.classList.add('on');
+  }
+  // Restaurer tests (Park)
+  PARK_KEYS.forEach(function(k){
+    if(PARK_TESTS[k]){
+      var tbEl=document.querySelector('[onclick*="setPark"][onclick*="\''+k+'\'"][onclick*="\''+PARK_TESTS[k]+'\'"]');
+      if(tbEl)tbEl.classList.add(PARK_TESTS[k]);
+    }
+  });
+  // Restaurer tests ordinaires
+  Object.keys(D.tests).forEach(function(t){
+    if(PARK_KEYS.indexOf(t)!==-1)return;
+    var res=D.tests[t];
+    var btn=document.querySelector('[onclick*="ST(this,\''+t+'\'"][onclick*="\''+res+'\'"]');
+    if(btn)btn.classList.add(res);
+  });
+  // Restaurer MRC
+  Object.keys(D.mrc).forEach(function(t){
+    var v=D.mrc[t];
+    var btn=document.querySelector('#mrc-'+t+' .mrc-btn[onclick*="'+v+'"]');
+    if(btn)btn.classList.add('on');
+  });
+  // Restaurer sulcus grade
+  if(SULCUS_GRADE){
+    var sgBtn=document.querySelector('#sulcus-grade-btns .grade-btn[onclick*="\''+SULCUS_GRADE+'\'"]');
+    if(sgBtn)sgBtn.classList.add('on');
+  }
+  // Restaurer mesures
+  if(D.mesures){
+    if(D.mesures.re_att){var el=document.getElementById('m-re-att');if(el)el.value=D.mesures.re_att;}
+    if(D.mesures.re_sain){var el=document.getElementById('m-re-sain');if(el)el.value=D.mesures.re_sain;}
+    if(D.mesures.abd){var el=document.getElementById('m-abd');if(el)el.value=D.mesures.abd;}
+    if(D.mesures.flex){var el=document.getElementById('m-flex');if(el)el.value=D.mesures.flex;}
+    calcGIRD();
+  }
+  // Restaurer ISIS visuellement
+  if(Object.keys(isisData).length) buildISIS();
+  // Restaurer QuickDASH résultat affiché
+  if(D.qd){
+    var r=document.getElementById('qd-res');
+    if(r){r.style.display='block';document.getElementById('qd-score').textContent=D.qd.score;document.getElementById('qd-grade').textContent=D.qd.grade;}
+  }
+  // Park counter
+  updateParkCounter();
+}
+function showToast(msg){
+  var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2000);
+}
+function copyCR(){
+  var a=document.querySelector('.crv.on');
+  if(!a)return;
+  var txt=a.innerText||a.textContent;
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){showToast('Compte-rendu copié ✓');});}
+  else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copié ✓');}
+}
+
+// ══════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════
+function goS(n){
+  ['s1','s2','s3','s4','s5','s6'].forEach(function(id){document.getElementById(id).classList.remove('active');});
+  document.getElementById('s'+n).classList.add('active');
+  curS=n;
+  var pct=Math.round((n/6)*100);
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('slbl').textContent='Étape '+n+'/6 — '+SN[n];
+  document.getElementById('bni').textContent='Étape '+n+'/6';
+  document.getElementById('btn-back').disabled=(n===1);
+  var nb=document.getElementById('btn-next');
+  nb.textContent=n===4?'Analyser →':'Suivant →';
+  if(n===5||n===6){nb.style.visibility='hidden';}else{nb.style.visibility='visible';}
+  if(n===4) buildProgressChecklist();
+  if(n===4) buildISIS();
+  window.scrollTo(0,0);
+  saveState();
+}
+function navNext(){if(curS===4){analyser();}else if(curS<6){goS(curS+1);}}
+function navBack(){if(curS>1) goS(curS-1);}
+
+function buildProgressChecklist(){
+  var items=[
+    {label:'Identité',ok:!!(getC('cote').length)},
+    {label:'Anamnèse',ok:!!(getC('installation').length||D.eva!==null)},
+    {label:'Examen physique',ok:Object.keys(TESTS).length>0},
+    {label:'EVA renseignée',ok:D.eva!==null},
+    {label:'Contexte sélectionné',ok:getC('ctx').length>0}
+  ];
+  var el=document.getElementById('step-progress-bar');if(!el)return;
+  var html='<div class="step-progress">';
+  items.forEach(function(it){html+='<div class="sp-item '+(it.ok?'done':'warn')+'">'+(it.ok?'✓ ':'⚠ ')+it.label+'</div>';});
+  el.innerHTML=html+'</div>';
+}
+
+// ══════════════════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════════════════
+function toggleSC(h){
+  var b=h.nextElementSibling,ch=h.querySelector('.scch');
+  var wasOpen=b.classList.contains('o');
+  b.classList.toggle('o');if(ch)ch.classList.toggle('o');
+  if(!wasOpen){
+    setTimeout(function(){
+      var navH=document.querySelector('.bnav').offsetHeight;
+      var rect=b.getBoundingClientRect();
+      if(rect.bottom>window.innerHeight-navH-16){
+        window.scrollBy({top:rect.bottom-(window.innerHeight-navH-16),behavior:'smooth'});
+      }
+    },150);
+  }
+}
+function TC(el,g,solo){
+  if(solo){document.querySelectorAll('#'+g+' .chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');CHIPS[g]=[el.textContent.trim()];}
+  else{el.classList.toggle('on');if(!CHIPS[g])CHIPS[g]=[];var t=el.textContent.trim();if(el.classList.contains('on')){if(CHIPS[g].indexOf(t)===-1)CHIPS[g].push(t);}else CHIPS[g]=CHIPS[g].filter(function(x){return x!==t;});}
+}
+function TCK(el,g,cls){
+  el.classList.toggle(cls||'on');if(!CHECKS[g])CHECKS[g]=[];
+  var t=el.querySelector('.ctx2,.ctext,.ctx').textContent.trim();
+  if(el.classList.contains(cls||'on')){if(CHECKS[g].indexOf(t)===-1)CHECKS[g].push(t);}else CHECKS[g]=CHECKS[g].filter(function(x){return x!==t;});
+}
+function evaC(el){document.querySelectorAll('#eva .evab').forEach(function(b){b.classList.remove('on');});el.classList.add('on');D.eva=parseInt(el.dataset.v);}
+function ST(btn,test,res){
+  btn.closest('.tbs').querySelectorAll('.tb').forEach(function(b){b.classList.remove('pos','neg');});
+  btn.classList.add(res);TESTS[test]=res;
+}
+function tg(id){document.getElementById(id).classList.toggle('o');}
+function setMRC(btn,test,val){
+  btn.closest('.mrc-wrap').querySelectorAll('.mrc-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');MRC[test]=val;
+}
+function getC(g){return CHIPS[g]||[];}
+function hasC(g,v){return getC(g).some(function(x){return x.toLowerCase().indexOf(v.toLowerCase())!==-1;});}
+function getK(g){return CHECKS[g]||[];}
+function hasK(g,v){return getK(g).some(function(x){return x.toLowerCase().indexOf(v.toLowerCase())!==-1;});}
+function isT(t,r){return TESTS[t]===r;}
+
+// Cluster Park 2005
+var PARK_KEYS=['arc','neer','hawkins'];
+function setPark(btn,key,res){
+  btn.closest('.tbs').querySelectorAll('.tb').forEach(function(b){b.classList.remove('pos','neg');});
+  btn.classList.add(res);PARK_TESTS[key]=res;TESTS[key]=res;
+  updateParkCounter();
+}
+function updateParkCounter(){
+  var count=PARK_KEYS.filter(function(k){return PARK_TESTS[k]==='pos';}).length;
+  document.getElementById('park-count').textContent=count;
+  var badge=document.getElementById('park-badge');
+  if(count>=2){badge.className='park-badge park-ok';badge.textContent='LR+ 5.0 — Conflit probable';}
+  else if(count===1){badge.className='park-badge park-warn';badge.textContent='1/3 — Insuffisant';}
+  else{badge.className='park-badge park-no';badge.textContent='LR+ non atteint';}
+}
+
+// Sulcus grade
+function selSulcusGrade(btn,grade){
+  document.querySelectorAll('#sulcus-grade-btns .grade-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');SULCUS_GRADE=grade;
+}
+
+// GIRD auto-calc depuis amplitudes
+function calcGIRD(){
+  var att=parseFloat(document.getElementById('m-re-att').value);
+  var sain=parseFloat(document.getElementById('m-re-sain').value);
+  var el=document.getElementById('gird-diff');
+  if(!isNaN(att)&&!isNaN(sain)){
+    var diff=sain-att;el.style.display='block';
+    if(diff>25){el.style.background='var(--redl)';el.style.color='var(--red)';el.textContent='GIRD : '+diff+'° — Déficit cliniquement significatif (seuil >25°) → contracture capsulaire postérieure';}
+    else if(diff>15){el.style.background='var(--ambl)';el.style.color='var(--amb)';el.textContent='Différentiel RE : '+diff+'° — Léger déficit (surveiller)';}
+    else{el.style.background='var(--grnl)';el.style.color='var(--grn)';el.textContent='Symétrie RE : différence '+diff+'° — Normal';}
+  }else{el.style.display='none';}
+}
+document.addEventListener('input',function(e){
+  if(e.target.id==='m-re-att'){D.mesures.re_att=e.target.value;calcGIRD();}
+  if(e.target.id==='m-re-sain'){D.mesures.re_sain=e.target.value;calcGIRD();}
+  if(e.target.id==='m-abd'){D.mesures.abd=e.target.value;}
+  if(e.target.id==='m-flex'){D.mesures.flex=e.target.value;}
+});
+
+// ══════════════════════════════════════════════════════
+// QUICKDASH — 11 items (Beaton, 2005)
+// ══════════════════════════════════════════════════════
+var QD_Q=[
+  {q:'Ouvrir un bocal bien fermé',o:['Aucune difficulté','Légère','Modérée','Grande','Impossible']},
+  {q:'Faire des tâches ménagères lourdes (frotter le sol…)',o:['Aucune','Légère','Modérée','Grande','Impossible']},
+  {q:'Porter un sac à provisions ou une mallette',o:['Aucune','Légère','Modérée','Grande','Impossible']},
+  {q:'Se laver le dos',o:['Aucune','Légère','Modérée','Grande','Impossible']},
+  {q:'Utiliser un couteau pour couper la nourriture',o:['Aucune','Légère','Modérée','Grande','Impossible']},
+  {q:'Activités de loisirs peu intenses (jouer aux cartes, tricoter…)',o:['Pas limité','Légèrement','Modérément','Très limité','Impossible']},
+  {q:'Activités de loisirs douloureuses au niveau du bras / épaule',o:['Pas du tout','Légèrement','Modérément','Très limité','Impossible']},
+  {q:'Douleur dans le bras, l\'épaule ou la main (semaine passée)',o:['Aucune','Légère','Modérée','Forte','Très forte']},
+  {q:'Fourmillements dans le bras, l\'épaule ou la main',o:['Aucun','Légers','Modérés','Forts','Très forts']},
+  {q:'Difficulté à dormir à cause de douleur dans le bras / épaule',o:['Aucune','Légère','Modérée','Grande','Impossible de dormir']},
+  {q:'Sentiment d\'être moins capable à cause de votre bras / épaule',o:['Pas du tout','Légèrement','Modérément','Beaucoup','Extrêmement']}
+];
+var QD_G=[[0,25,'Handicap léger','Fonction quasi normale.'],[26,50,'Handicap modéré','Limitations fonctionnelles. Rééducation active indiquée.'],[51,75,'Handicap sévère','Incapacité fonctionnelle importante.'],[76,100,'Handicap très sévère','Prise en charge intensive.']];
+var qdA=new Array(11).fill(null);
+
+function buildQD(){
+  var c=document.getElementById('qd-qs');c.innerHTML='';
+  QD_Q.forEach(function(q,qi){
+    var h='<div class="qdi"><div class="qdq">'+(qi+1)+'. '+q.q+'</div><div class="qdos">';
+    q.o.forEach(function(opt,oi){h+='<div class="qdo'+(qdA[qi]===oi?' on':'')+'" onclick="qdSel('+qi+','+oi+',this)">'+(oi+1)+'<br><span style="font-size:9px;font-weight:400">'+opt+'</span></div>';});
+    h+='</div></div>';c.innerHTML+=h;
+  });updQD();
+}
+function qdSel(qi,oi,el){
+  qdA[qi]=oi;el.closest('.qdi').querySelectorAll('.qdo').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');updQD();
+}
+function updQD(){
+  var answered=qdA.filter(function(a){return a!==null;});
+  var count=answered.length;
+  var pctEl=document.getElementById('qd-pct');
+  var grEl=document.getElementById('qd-gr');
+  var inEl=document.getElementById('qd-in');
+  if(!count){return;}
+  if(count<10){
+    pctEl.textContent='?';
+    grEl.textContent='Incomplet';
+    inEl.textContent=count+'/11 réponses — minimum 10 requis pour score valide';
+    D.qd=null;return;
+  }
+  // Formule officielle QuickDASH : sur les items répondus (min 10/11)
+  var sum=qdA.reduce(function(s,a){return s+(a!==null?a+1:0);},0);
+  var score=Math.round(((sum/count)-1)/4*100);
+  pctEl.textContent=score;
+  var grade='—',interp='';
+  QD_G.forEach(function(g){if(score>=g[0]&&score<=g[1]){grade=g[2];interp=g[3];}});
+  grEl.textContent=grade;inEl.textContent=interp;
+  D.qd={score:score,grade:grade,interp:interp};
+  if(count===10){inEl.textContent+=' (1 item manquant — score estimé)';}
+}
+function openQD(){buildQD();document.getElementById('qd-modal').classList.add('o');}
+function closeQD(){document.getElementById('qd-modal').classList.remove('o');}
+function valQD(){
+  closeQD();
+  if(D.qd){document.getElementById('qd-res').style.display='block';document.getElementById('qd-score').textContent=D.qd.score;document.getElementById('qd-grade').textContent=D.qd.grade;}
+}
+
+// ══════════════════════════════════════════════════════
+// ISIS SCORE (Balg & Boileau, 2007)
+// ══════════════════════════════════════════════════════
+var ISIS_ITEMS=[
+  {id:'age',label:'Âge < 20 ans',pts:2},
+  {id:'sport_comp',label:'Sport de compétition',pts:2},
+  {id:'sport_contact',label:'Sport de contact ou bras au-dessus de la tête',pts:1},
+  {id:'hyperlaxite',label:'Hyperlaxité de l\'épaule : RE > 85° en position 1 (bras au corps)',pts:2},
+  {id:'hill_sachs',label:'Encoche de Hill-Sachs visible sur radio (face RE)',pts:2},
+  {id:'glene',label:'Érosion / perte contour glénoïdien visible sur radio',pts:1}
+];
+function buildISIS(){
+  var cont=document.getElementById('isis-container');if(!cont)return;
+  var h='<div class="isb"><div class="ist">Score ISIS de Boileau — Risque récidive instabilité antérieure (Balg & Boileau, 2007)</div>';
+  ISIS_ITEMS.forEach(function(item){
+    var on=isisData[item.id]?'on':'';
+    var imgNote=(item.id==='hill_sachs'||item.id==='glene')?' <span style="font-size:9px;opacity:.6">(nécessite radio)</span>':'';
+    h+='<div class="isr"><div class="isl">'+item.label+imgNote+'<br><span style="font-size:10px;color:var(--tx3)">+'+item.pts+' pt'+(item.pts>1?'s':'')+'</span></div>';
+    h+='<button class="isbtn '+on+'" onclick="toggleISIS(this,\''+item.id+'\')" type="button">'+item.pts+'pt'+(item.pts>1?'s':'')+'</button></div>';
+  });
+  var reel=ISIS_ITEMS.filter(function(i){return isisData[i.id];}).reduce(function(s,i){return s+i.pts;},0);
+  var cls=reel>6?'ishi':'islo';
+  var txt=reel>6?'Score ISIS '+reel+'/10 — Risque de récidive élevé (70%)\nBankart arthroscopique seul déconseillé\nOrienter vers avis chirurgical (butée probable)':'Score ISIS '+reel+'/10 — Risque de récidive acceptable (≤10%)\nBankart arthroscopique envisageable';
+  h+='<div class="issd '+cls+'"><div class="isnum">'+reel+'<span style="font-size:14px;font-weight:400">/10</span></div><div class="isinfo" style="white-space:pre-line">'+txt+'</div></div>';
+  h+='<div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:6px;font-style:italic">Les 2 derniers critères nécessitent une radiographie. Sans imagerie : coter les 4 premiers critères cliniques uniquement (max 7 pts). Critère hyperlaxité : RE > 85° bras au corps (position 1) selon Balg & Boileau 2007.</div>';
+  h+='</div>';cont.innerHTML=h;
+}
+function toggleISIS(btn,id){isisData[id]=!isisData[id];buildISIS();}
+
+// ══════════════════════════════════════════════════════
+// SCORING DIAGNOSTIQUE
+// ══════════════════════════════════════════════════════
+var DMAX={sis:240,coiffe:230,traumatique:195,atraumatique:160,overhead:195,capsulite:185,acj:150,biceps_slap:140,dyskinésie:165,calcifiante:145,cervical:130};
+var DLBL={
+  sis:'Conflit sous-acromial — Cat. A',coiffe:'Tendinopathie / Rupture de coiffe — Cat. A',
+  traumatique:'Instabilité traumatique structurelle — Cat. B',atraumatique:'Instabilité atraumatique multidirectionnelle — Cat. B',
+  overhead:'Instabilité fonctionnelle overhead — Cat. B',capsulite:'Capsulite rétractile — Cat. A',
+  acj:'Pathologie acromio-claviculaire (ACJ) — Cat. A',biceps_slap:'Tendinopathie biceps / Lésion SLAP — Cat. A',
+  dyskinésie:'Dysfonction scapulaire / Contrôle moteur — Cat. C',calcifiante:'Tendinopathie calcifiante — Cat. A',
+  cervical:'Origine cervicale C5-C6 — Différentiel'
+};
+var DTAGS={
+  sis:[['dtz','Conflit'],['dtb','Cluster Park ≥2/3'],['dta','LR+ 5.0']],
+  coiffe:[['dtr','Urgence si rupture massive'],['dtz','Coiffe des rotateurs'],['dta','MRC cotée']],
+  traumatique:[['dtr','Bankart probable'],['dtb','Luxation ATCD'],['dta','Score ISIS si récidive']],
+  atraumatique:[['dtg','Atraumatique'],['dtb','Multidirectionnel'],['dtz','Rééducation prioritaire']],
+  overhead:[['dtz','Sport overhead'],['dtp','GIRD+Dyskinésie'],['dtb','Instabilité fonctionnelle']],
+  capsulite:[['dtr','Pattern capsulaire'],['dta','RE > ABD > RI'],['dtb','Terrain: diabète/thyroïde']],
+  acj:[['dtz','ACJ'],['dtb','Cross-body +'],['dta','Arthrose/entorse']],
+  biceps_slap:[['dtz','Biceps LPB'],['dtb','SLAP ?'],['dta','O\'Brien différentiel']],
+  dyskinésie:[['dtg','Cat. C Ann Cools'],['dtz','Scapula'],['dtp','Correction = test thérap.']],
+  calcifiante:[['dtr','Imagerie requise'],['dta','Phase résorption ?'],['dtb','Diabète/thyroïde']],
+  cervical:[['dtr','Différentiel'],['dtb','C5-C6'],['dta','Spurling +']]
+};
+var EXCL=[
+  ['capsulite','sis','La capsulite vraie exclut le conflit (amplitudes trop limitées)'],
+  ['capsulite','traumatique','Capsulite et instabilité traumatique sont cliniquement incompatibles'],
+  ['traumatique','atraumatique','Instabilité traumatique structurelle et multidirectionnelle constitutionnelle sont des mécanismes opposés'],
+  ['coiffe','cervical','Si Spurling fortement positif — la pathologie de coiffe peut être secondaire à C5-C6'],
+  ['capsulite','overhead','Tableau capsulaire incompatible avec une instabilité fonctionnelle overhead']
+];
+
+function calcScores(){
+  var s={sis:0,coiffe:0,traumatique:0,atraumatique:0,overhead:0,capsulite:0,acj:0,biceps_slap:0,dyskinésie:0,calcifiante:0,cervical:0};
+  var r={sis:[],coiffe:[],traumatique:[],atraumatique:[],overhead:[],capsulite:[],acj:[],biceps_slap:[],dyskinésie:[],calcifiante:[],cervical:[]};
+  var age=0,sexe=document.getElementById('sexe').value;
+  if(document.getElementById('ddn').value) age=Math.floor((new Date()-new Date(document.getElementById('ddn').value))/(365.25*24*3600*1000));
+
+  // Cluster Park 2005
+  var parkCount=PARK_KEYS.filter(function(k){return PARK_TESTS[k]==='pos';}).length;
+  if(parkCount>=2){s.sis+=60;r.sis.push('Cluster Park ≥2/3 — LR+ 5.0 pour conflit sous-acromial (+60 pts)');}
+  else{
+    if(isT('neer','pos')){s.sis+=35;r.sis.push('Neer positif (+35 pts)');}
+    if(isT('hawkins','pos')){s.sis+=35;r.sis.push('Hawkins-Kennedy positif (+35 pts)');}
+  }
+  if(hasK('amp_act','Arc douloureux')){s.sis+=40;r.sis.push('Arc douloureux 60–120° — signe pathognomonique (+40 pts)');}
+  if(hasC('rythme','Arc douloureux')){s.sis+=20;r.sis.push('Arc douloureux noté en anamnèse (+20 pts)');}
+  if(hasC('localisation','Latérale')){s.sis+=15;r.sis.push('Douleur latérale au moignon (+15 pts)');}
+  if(hasC('palpation','Bourse sous-acromiale')){s.sis+=15;r.sis.push('Bourse sous-acromiale douloureuse (+15 pts)');}
+  if(hasC('palpation','Tendon sus-épineux')){s.sis+=10;r.sis.push('Tendon sus-épineux douloureux (+10 pts)');}
+  if(hasK('amp_pas','Identiques')){s.sis+=10;r.sis.push('Amplitudes passives identiques à l\'actif (+10 pts)');}
+  if(hasK('amp_pas','Limitation passive TOUTES')){s.sis-=40;r.sis.push('Pattern capsulaire → pénalisation conflit (-40 pts)');}
+
+  // Coiffe — avec Empty Can, Full Can, Hornblower
+  if(isT('emptycan','pos')){s.coiffe+=35;r.coiffe.push('Empty Can positif — atteinte sus-épineuse (Sn 69%, Hughes 1996) (+35 pts)');}
+  if(isT('fullcan','pos')){s.coiffe+=30;r.coiffe.push('Full Can positif — atteinte sus-épineuse (moins de faux positifs) (+30 pts)');}
+  if(isT('emptycan','pos')&&isT('fullcan','pos')){s.coiffe+=15;r.coiffe.push('Empty Can + Full Can tous deux positifs — rupture probable (+15 pts bonus)');}
+  if(isT('patte','pos')){s.coiffe+=40;r.coiffe.push('Patte positif — rupture infra-épineux / petit rond (Sp 100%) (+40 pts)');}
+  if(isT('hornblower','pos')){s.coiffe+=50;r.coiffe.push('Hornblower positif — rupture complète sous-épineux (Sn 100%, Walch 1998) (+50 pts)');}
+  if(isT('liftoff','pos')){s.coiffe+=40;r.coiffe.push('Lift-Off positif — rupture sous-scapulaire (Sp 100%, Gerber 1991) (+40 pts)');}
+  if(isT('bearhug','pos')){s.coiffe+=30;r.coiffe.push('Bear Hug positif — déchirure sous-scapulaire supérieure (Barth 2006) (+30 pts)');}
+  if(isT('bellypress','pos')){s.coiffe+=25;r.coiffe.push('Belly Press positif — atteinte sous-scapulaire (+25 pts)');}
+  if(isT('droparm','pos')){s.coiffe+=55;r.coiffe.push('Drop Arm positif — rupture MASSIVE (très spécifique) (+55 pts)');}
+  if(MRC['emptycan']!==undefined&&MRC['emptycan']<=3){s.coiffe+=20;r.coiffe.push('Force MRC sus-épineux ≤3/5 (+20 pts)');}
+  if(MRC['patte']!==undefined&&MRC['patte']<=3){s.coiffe+=20;r.coiffe.push('Force MRC infra-épineux ≤3/5 (+20 pts)');}
+  if(MRC['liftoff']!==undefined&&MRC['liftoff']<=3){s.coiffe+=20;r.coiffe.push('Force MRC sous-scapulaire ≤3/5 (+20 pts)');}
+  if(hasK('inspection','Amyotrophie supra')){s.coiffe+=25;r.coiffe.push('Amyotrophie supra/infra-épineuse (+25 pts)');}
+  if(hasK('imagerie','Rupture coiffe confirmée')){s.coiffe+=40;r.coiffe.push('Rupture confirmée à l\'imagerie (+40 pts)');}
+  if(hasC('rythme','Nocturne')){s.coiffe+=15;r.coiffe.push('Douleur nocturne (+15 pts)');}
+
+  // Instabilité traumatique
+  if(isT('apprehension','pos')){s.traumatique+=60;r.traumatique.push('Appréhension positive — instabilité antérieure structurelle (Sp ~98%) (+60 pts)');}
+  if(isT('tiroir','pos')){s.traumatique+=30;r.traumatique.push('Tiroir antérieur + symptômes (+30 pts)');}
+  if(hasC('luxation','Luxation antérieure')){s.traumatique+=50;r.traumatique.push('ATCD luxation antérieure (+50 pts)');}
+  if(hasC('luxation','Luxations récidivantes')){s.traumatique+=60;r.traumatique.push('Luxations récidivantes (≥2) (+60 pts)');}
+  if(hasC('installation','Traumatique aigu')){s.traumatique+=25;r.traumatique.push('Mode d\'installation traumatique (+25 pts)');}
+  if(hasC('rythme','Sensation de déboîtement')){s.traumatique+=20;r.traumatique.push('Sensation de déboîtement (+20 pts)');}
+  if(hasC('luxation','Hyperlaxité')||hasC('atcd','Hyperlaxité')){s.traumatique-=20;r.traumatique.push('Hyperlaxité → pénalisation traumatique (-20 pts)');}
+
+  // Instabilité atraumatique — Sulcus grade
+  if(isT('sulcus','pos')){
+    var sg=SULCUS_GRADE;
+    var spSulcus=sg==='III'?60:sg==='II'?45:30;
+    s.atraumatique+=spSulcus;r.atraumatique.push('Sulcus Sign positif'+(sg?' Grade '+sg:'')+'(+'+spSulcus+' pts)');
+  }
+  if(hasC('luxation','Hyperlaxité constitutionnelle')||hasC('atcd','Hyperlaxité')){s.atraumatique+=40;r.atraumatique.push('Hyperlaxité ligamentaire constitutionnelle (+40 pts)');}
+  if(hasC('luxation','Subluxations récurrentes')&&!hasC('installation','Traumatique')){s.atraumatique+=35;r.atraumatique.push('Subluxations récurrentes sans traumatisme (+35 pts)');}
+  if(hasC('cote','Bilatéral')){s.atraumatique+=20;r.atraumatique.push('Atteinte bilatérale — laxité constitutionnelle (+20 pts)');}
+
+  // Overhead
+  if(hasC('activite','Sport overhead')||hasC('ctx','Sport overhead')){s.overhead+=40;r.overhead.push('Sport overhead (+40 pts)');}
+  if(isT('gird','pos')){s.overhead+=45;r.overhead.push('GIRD >25° — contracture capsulaire postérieure (+45 pts)');}
+  if(isT('kibler','pos')){s.overhead+=35;r.overhead.push('Dyskinésie scapulaire causale (+35 pts)');}
+  if(hasC('installation','Microtraumatique')){s.overhead+=30;r.overhead.push('Mode microtraumatique / surcharge (+30 pts)');}
+  if(hasC('declenchant','Geste d\'armé')){s.overhead+=25;r.overhead.push('Douleur au geste d\'armé (+25 pts)');}
+
+  // Capsulite
+  if(hasK('amp_pas','Limitation passive TOUTES')){s.capsulite+=65;r.capsulite.push('Pattern capsulaire complet — RE > ABD > RI (+65 pts)');}
+  if(hasK('amp_act','Rotation externe limitée')){s.capsulite+=30;r.capsulite.push('RE limitée — première amplitude perdue (+30 pts)');}
+  if(hasC('installation','Insidieux')){s.capsulite+=20;r.capsulite.push('Installation insidieuse (+20 pts)');}
+  if(hasC('atcd','Diabète')){s.capsulite+=25;r.capsulite.push('Diabète — facteur de risque majeur (+25 pts)');}
+  if(hasC('atcd','Thyroïde')){s.capsulite+=15;r.capsulite.push('Pathologie thyroïdienne (+15 pts)');}
+  if(hasC('ctx','Capsulite rétractile')){s.capsulite+=30;r.capsulite.push('Prescription capsulite (+30 pts)');}
+  if(hasC('installation','Post-immobilisation')){s.capsulite+=20;r.capsulite.push('Post-immobilisation (+20 pts)');}
+  if(sexe==='Femme'&&age>=45&&age<=65){s.capsulite+=20;r.capsulite.push('Femme 45–65 ans — profil épidémiologique (+20 pts)');}
+
+  // ACJ
+  if(isT('crossbody','pos')){s.acj+=50;r.acj.push('Cross-body positif — pathologie ACJ (Sn 77% Sp 79%) (+50 pts)');}
+  if(isT('obrien','pos')&&hasC('localisation','Supérieure')){s.acj+=25;r.acj.push('O\'Brien positif avec douleur superficielle ACJ (+25 pts)');}
+  if(hasC('palpation','ACJ douloureuse')){s.acj+=35;r.acj.push('ACJ douloureuse à la palpation (+35 pts)');}
+  if(hasC('localisation','Supérieure')){s.acj+=20;r.acj.push('Douleur localisée en région supérieure / ACJ (+20 pts)');}
+  if(hasK('inspection','Tuméfaction ACJ')){s.acj+=20;r.acj.push('Tuméfaction ACJ visible (+20 pts)');}
+
+  // Biceps / SLAP
+  if(isT('speed','pos')){s.biceps_slap+=35;r.biceps_slap.push('Speed positif — biceps LPB ou SLAP (+35 pts)');}
+  if(isT('yergason','pos')){s.biceps_slap+=40;r.biceps_slap.push('Yergason positif — tendinopathie biceps LPB (Sp ~86%) (+40 pts)');}
+  if(isT('obrien','pos')&&!hasC('localisation','Supérieure')){s.biceps_slap+=30;r.biceps_slap.push('O\'Brien positif — douleur profonde intra-articulaire → SLAP probable (+30 pts)');}
+  if(hasC('palpation','Gouttière bicipitale')){s.biceps_slap+=25;r.biceps_slap.push('Gouttière bicipitale douloureuse (+25 pts)');}
+  if(hasK('inspection','Ecchymose / hématome')){s.biceps_slap+=25;r.biceps_slap.push('Signe de Popeye / hématome — rupture biceps LPB (+25 pts)');}
+
+  // Dyskinésie
+  if(isT('kibler','pos')){s.dyskinésie+=60;r.dyskinésie.push('Dyskinésie scapulaire présente (Kibler) (+60 pts)');}
+  if(hasK('inspection','Dyskinésie scapulaire')){s.dyskinésie+=35;r.dyskinésie.push('Dyskinésie visible à l\'inspection (+35 pts)');}
+  if(hasC('activite','Sport overhead')||hasC('activite','Travail au-dessus')){s.dyskinésie+=25;r.dyskinésie.push('Activité overhead (+25 pts)');}
+  if(isT('gird','pos')){s.dyskinésie+=20;r.dyskinésie.push('GIRD présent — souvent associé (+20 pts)');}
+
+  // Calcifiante
+  if(hasK('imagerie','Calcifications tendineuses')){s.calcifiante+=80;r.calcifiante.push('Calcifications tendineuses confirmées (+80 pts)');}
+  if(hasC('atcd','Calcifications connues')){s.calcifiante+=70;r.calcifiante.push('Calcifications connues sur imagerie antérieure (+70 pts)');}
+  if(hasC('atcd','Diabète')){s.calcifiante+=15;r.calcifiante.push('Diabète (+15 pts)');}
+  if(sexe==='Femme'&&age>=30&&age<=55){s.calcifiante+=15;r.calcifiante.push('Femme 30–55 ans — profil épidémiologique (+15 pts)');}
+  if(D.eva!==null&&D.eva>=8){s.calcifiante+=20;r.calcifiante.push('EVA très élevée (≥8) — phase résorption active possible (+20 pts)');}
+
+  // Différentiel cervical
+  if(isT('spurling','pos')){s.cervical+=60;r.cervical.push('Spurling positif — compression foraminale C5-C6 (Sn 50% Sp 86%, Wainner 2003) (+60 pts)');}
+  if(hasC('localisation','Irradiation nuque')){s.cervical+=25;r.cervical.push('Irradiation nuque / cou (+25 pts)');}
+  if(hasC('localisation','Irradiation bras')){s.cervical+=20;r.cervical.push('Irradiation bras / avant-bras (+20 pts)');}
+  if(hasC('atcd','Cervicalgies associées')){s.cervical+=25;r.cervical.push('Cervicalgies associées (+25 pts)');}
+
+  // Amplitudes numériques — intégration dans le scoring
+  var mAbd=parseFloat(document.getElementById('m-abd').value);
+  var mFlex=parseFloat(document.getElementById('m-flex').value);
+  if(!isNaN(mAbd)&&mAbd<60){s.capsulite+=30;r.capsulite.push('Abduction < 60° — limitation sévère (+30 pts)');s.sis=Math.max(0,s.sis-20);r.sis.push('Abduction < 60° → peu compatible avec conflit seul (-20 pts)');}
+  else if(!isNaN(mAbd)&&mAbd<90){s.capsulite+=15;r.capsulite.push('Abduction < 90° — limitation significative (+15 pts)');}
+  if(!isNaN(mFlex)&&mFlex<90){s.capsulite+=25;r.capsulite.push('Flexion < 90° — limitation sévère (+25 pts)');}
+  else if(!isNaN(mFlex)&&mFlex<130){s.capsulite+=10;r.capsulite.push('Flexion < 130° — limitation modérée (+10 pts)');}
+
+  var pcts={};
+  Object.keys(s).forEach(function(k){pcts[k]=Math.min(Math.round((Math.max(s[k],0)/DMAX[k])*100),99);});
+  return{scores:s,pcts:pcts,raisons:r};
+}
+
+function findContradictions(pcts){
+  return EXCL.filter(function(p){return pcts[p[0]]>=35&&pcts[p[1]]>=35;})
+    .map(function(p){return '<strong>'+DLBL[p[0]]+'</strong> ('+pcts[p[0]]+'%) et <strong>'+DLBL[p[1]]+'</strong> ('+pcts[p[1]]+'%) — '+p[2]+'.';});
+}
+
+// ══════════════════════════════════════════════════════
+// RAISONNEMENT ANN COOLS
+// ══════════════════════════════════════════════════════
+function buildAnnCools(pcts){
+  var instMax=Math.max(pcts.traumatique,pcts.atraumatique,pcts.overhead);
+  var trauma=hasC('installation','Traumatique aigu')||hasC('luxation','Luxation antérieure')||hasC('luxation','Luxations récidivantes');
+  var instSigne=pcts.traumatique>=35||pcts.atraumatique>=35||pcts.overhead>=35||isT('apprehension','pos')||isT('sulcus','pos');
+  var dyskinSigne=pcts.dyskinésie>=35||isT('kibler','pos');
+  var coiffeSigne=pcts.sis>=30||pcts.coiffe>=30;
+  var isSec=instMax>=40&&coiffeSigne;
+  var parkOk=PARK_KEYS.filter(function(k){return PARK_TESTS[k]==='pos';}).length>=2;
+
+  var h='<div class="acb"><div class="act">Raisonnement clinique séquentiel — Ann Cools (Bern 2019)</div>';
+  h+='<div class="acs"><div class="acn">1</div><div class="acq"><strong>Traumatisme aigu (chute, luxation, choc) ?</strong></div><div class="acr '+(trauma?'ay':'an')+'">'+(trauma?'Oui':'Non')+'</div></div>';
+  h+='<div class="acs"><div class="acn">2</div><div class="acq"><strong>Signes d\'instabilité gléno-humérale ?</strong><br><span style="font-size:11px;opacity:.6">Appréhension, sulcus, tiroir, ATCD luxation, hyperlaxité</span></div><div class="acr '+(instSigne?'ay':'an')+'">'+(instSigne?'Oui — instabilité détectée':'Non détectée')+'</div></div>';
+  h+='<div class="acs"><div class="acn">3</div><div class="acq"><strong>Dysfonction scapulaire causale (Cat. C) ?</strong><br><span style="font-size:11px;opacity:.6">Kibler + test de correction positif</span></div><div class="acr '+(dyskinSigne?'ay':'an')+'">'+(dyskinSigne?'Oui — Cat. C prioritaire':'Non')+'</div></div>';
+  h+='<div class="acs"><div class="acn">4</div><div class="acq"><strong>Conflit sous-acromial — Cluster Park ≥2/3 ?</strong><br><span style="font-size:11px;opacity:.6">Arc douloureux + Hawkins + Neer → LR+ 5.0</span></div><div class="acr '+(parkOk?'ay':'aN')+'">'+(parkOk?'Oui — LR+ 5.0':'Non atteint')+'</div></div>';
+  h+='<div class="acs"><div class="acn">5</div><div class="acq"><strong>Si instabilité + coiffe : coiffe secondaire à l\'instabilité ?</strong></div><div class="acr '+(isSec?'ay':'aN')+'">'+(isSec?'Probable — traiter instabilité en 1er':'Non')+'</div></div>';
+  h+='<div class="acs"><div class="acn">6</div><div class="acq"><strong>Hornblower positif — pronostic chirurgical ?</strong></div><div class="acr '+(isT('hornblower','pos')?'ay':'aN')+'">'+(isT('hornblower','pos')?'Oui — rupture complète sous-épineux':'Non')+'</div></div>';
+
+  var topKeys=Object.keys(pcts).sort(function(a,b){return pcts[b]-pcts[a];}).filter(function(k){return pcts[k]>=40;});
+  var rf=getK('rf');
+  if(rf.length>0){h+='<div class="acc accb">Drapeaux rouges détectés — orientation médicale avant toute prise en charge.</div>';}
+  else if(topKeys.length>0){
+    h+='<div class="acc acca">Hypothèse principale : <strong>'+DLBL[topKeys[0]]+'</strong> ('+pcts[topKeys[0]]+'%)</div>';
+    if(topKeys.length>1)h+='<div class="accw">Différentiel : '+topKeys.slice(1,3).map(function(k){return DLBL[k]+' ('+pcts[k]+'%)';}).join(', ')+'</div>';
+  }else{h+='<div class="acc" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.5)">Données insuffisantes — compléter l\'anamnèse et les tests.</div>';}
+  h+='</div>';
+  return h;
+}
+
+// ══════════════════════════════════════════════════════
+// ANALYSER
+// ══════════════════════════════════════════════════════
+function analyser(){
+  var res=calcScores(),pcts=res.pcts,raisons=res.raisons;
+  var topDiags=Object.keys(pcts).sort(function(a,b){return pcts[b]-pcts[a];}).filter(function(k){return pcts[k]>=15;});
+  var rf=getK('rf'),yf=getK('yf'),contradictions=findContradictions(pcts);
+  var html='';
+
+  if(rf.length>0)html+='<div class="al alr"><span>🚨</span><div><strong>'+rf.length+' drapeau(x) rouge(s)</strong> — Avis médical requis.</div></div>';
+  if(D.eva!==null&&D.eva>=7)html+='<div class="al ala"><span>⚠</span><div><strong>Douleur intense (EVA '+D.eva+'/10)</strong> — Priorité antalgique.</div></div>';
+  if(contradictions.length>0)contradictions.forEach(function(w){html+='<div class="al alp"><span>⚡</span><div><strong>Incohérence :</strong> '+w+'</div></div>';});
+  if(isT('droparm','pos'))html+='<div class="al alr"><span>🚨</span><div><strong>Drop Arm positif</strong> — Rupture massive probable. Orienter vers avis chirurgical.</div></div>';
+  if(isT('hornblower','pos'))html+='<div class="al alr"><span>🚨</span><div><strong>Hornblower positif</strong> — Rupture complète sous-épineux. Facteur pronostique chirurgical majeur (Walch 1998).</div></div>';
+
+  html+=buildAnnCools(pcts);
+  html+='<div class="disc">Les probabilités sont un outil d\'aide au raisonnement clinique Ann Cools. Elles ne remplacent pas le jugement clinique.</div>';
+
+  if(topDiags.length>0){
+    html+='<div class="sc sa"><div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="#1A6FA8" stroke-width="1.5"/><path d="M6 9l2 2 4-4" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Probabilités diagnostiques</div></div></div></div><div class="scb o">';
+    topDiags.slice(0,5).forEach(function(k){
+      var pct=pcts[k],pcls=pct>=65?'ph':pct>=35?'pm':'pl',fcls=pct>=65?'fh2':pct>=35?'fm':'fl2',ccls=pct>=65?'ctp':pct>=35?'cp':'cpo';
+      var tags=(DTAGS[k]||[]).map(function(t){return '<span class="dtag '+t[0]+'">'+t[1]+'</span>';}).join('');
+      var rai=raisons[k]&&raisons[k].length?raisons[k][0]:'';
+      html+='<div class="dbar"><div class="dbrt"><div class="dbn">'+DLBL[k]+'</div><div class="dbp '+pcls+'">'+pct+'%</div></div>';
+      html+='<div class="dbt"><div class="dbf '+fcls+'" data-w="'+pct+'%"></div></div>';
+      html+='<span class="dc '+ccls+'">'+(pct>=65?'Probabilité élevée':pct>=35?'Probabilité modérée':'Probabilité faible')+'</span>';
+      if(rai)html+='<div class="dw '+(pct>=65?'wh':pct>=35?'wm':'')+' ">'+rai+'</div>';
+      if(tags)html+='<div class="dtags">'+tags+'</div>';
+      html+='</div>';
+    });
+    html+='</div></div>';
+  }
+
+  html+=buildTx(topDiags,pcts);
+  document.getElementById('s5c').innerHTML=html;
+  document.getElementById('s5a').style.display='block';document.getElementById('s5b').style.display='none';
+  setTimeout(function(){document.querySelectorAll('.dbf[data-w]').forEach(function(el){var w=el.getAttribute('data-w');el.removeAttribute('data-w');setTimeout(function(){el.style.width=w;},50);});},100);
+  buildCRs(topDiags,pcts);
+  goS(5);
+}
+
+// ══════════════════════════════════════════════════════
+// PLAN DE TRAITEMENT DYNAMIQUE
+// ══════════════════════════════════════════════════════
+function buildTx(topDiags,pcts){
+  var instMax=Math.max(pcts.traumatique||0,pcts.atraumatique||0,pcts.overhead||0);
+  var p1=['Cryothérapie post-effort, thermothérapie avant mobilisation'];
+  var p2=[],p3=[],p4=['Éducation posturale (correction antépulsion scapulaire, poste de travail)','Programme d\'entretien à domicile adapté'];
+
+  if(D.eva!==null&&D.eva>=5) p1.push('Antalgiques courants / TENS en phase aiguë (EVA '+D.eva+'/10)');
+  p1.push('Pendule de Codman — décoaptation passive antalgique');
+  p1.push('Massage péri-articulaire et para-scapulaires');
+
+  if(pcts.capsulite>=40){
+    p2.push('Mobilisations passives RE en priorité — jamais dans la douleur (pattern RE > ABD > RI)');
+    p2.push('Thermothérapie avant chaque séance de mobilisation capsulaire');
+    p2.push('Auto-étirements : RE, ABD, RI en décharge quotidiens');
+    if(hasC('atcd','Diabète'))p2.push('Suivi glycémique renforcé — terrain diabétique (facteur de risque capsulite)');
+  } else if(instMax>=40){
+    p2.push('Mobilisations douces en zone stable — éviter les positions d\'appréhension');
+    if(isT('gird','pos'))p2.push('Sleeper Stretch — étirement capsulaire postérieur ciblé (GIRD >25°)');
+    if(pcts.traumatique>=40)p2.push('Score ISIS calculé — évaluation chirurgicale si >6 (Balg & Boileau 2007)');
+    if(isT('gird','pos'))p2.push('Cross-Body Stretch — correction GIRD complémentaire');
+  } else {
+    p2.push('Mobilisations gléno-humérales en décoaptation caudale');
+    if(isT('gird','pos'))p2.push('Sleeper Stretch et Cross-Body Stretch — correction GIRD');
+    p2.push('Thérapie manuelle : mobilisations segmentaires gléno-humérales');
+  }
+
+  if(pcts.sis>=40||pcts.coiffe>=40){
+    p3.push('Renforcement rotateurs externes — élastique en excentrique (plan de la scapula)');
+    p3.push('Full Can progressif — sus-épineux dans le plan scapulaire (moins compressif que Empty Can)');
+    p3.push('Renforcement sous-scapulaire en rotation interne progressive');
+  }
+  if(pcts.dyskinésie>=30||isT('kibler','pos')){
+    p3.push('Renforcement trapèze inférieur — Prone Y et Prone T');
+    p3.push('Renforcement serratus anterior — Push-Up Plus progressif');
+    p3.push('Rétraction scapulaire active et co-contraction stabilisatrice');
+  }
+  if(instMax>=35){
+    p3.push('Co-contraction deltoïde / coiffe — centrage actif de la tête humérale');
+    p3.push('Proprioception épaule — appui sur plan instable progressif (mur → table → sol)');
+    p3.push('Renforcement en chaîne fermée (wall press, plan incliné progressif)');
+  }
+  if(!p3.length)p3.push('Renforcement global de la coiffe en décharge','Proprioception et contrôle moteur progressif');
+
+  if(hasC('activite','Sport overhead')){
+    p4.push('Reprise overhead progressive en 4 étapes : analytique → global → spécifique → compétition');
+    if(hasC('avq','Lancer / geste d\'armé impossible')||hasC('declenchant','Geste d\'armé'))p4.push('Protocole retour au lancer : distance progressive (10 → 20 → 30m) si GIRD et dyskinésie corrigés');
+  }
+  p4.push('Retour progressif aux activités professionnelles et quotidiennes');
+
+  var phases=[
+    {t:'Phase 1 — Antalgique (J1–J15)',items:p1,bg:'var(--redl)',c:'var(--red)'},
+    {t:'Phase 2 — Mobilisation articulaire (S2–S4)',items:p2,bg:'var(--ambl)',c:'var(--amb)'},
+    {t:'Phase 3 — Renforcement & stabilisation (S3–S8)',items:p3,bg:'var(--zl)',c:'var(--zd)'},
+    {t:'Phase 4 — Fonctionnel & retour activité (S6–S12)',items:p4,bg:'var(--blul)',c:'var(--blu)'}
+  ];
+
+  var h='<div class="sc sa" style="margin-top:10px"><div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="5" height="5" rx="1" stroke="#1A6FA8" stroke-width="1.5"/><rect x="10" y="3" width="5" height="5" rx="1" stroke="#1A6FA8" stroke-width="1.5"/><rect x="3" y="10" width="5" height="5" rx="1" stroke="#1A6FA8" stroke-width="1.5"/><rect x="10" y="10" width="5" height="5" rx="1" stroke="#1A6FA8" stroke-width="1.5"/></svg></div><div><div class="sct">Plan de traitement</div></div></div></div><div class="scb o">';
+  phases.forEach(function(ph){
+    if(!ph.items.length)return;
+    h+='<div class="phase"><div class="phh" style="background:'+ph.bg+';color:'+ph.c+'">'+ph.t+'</div><div class="phb"><ul class="tl2">';
+    ph.items.forEach(function(it){h+='<li>'+it+'</li>';});
+    h+='</ul></div></div>';
+  });
+  h+='</div></div>';
+
+  // Objectifs auto-générés
+  var objs=[];
+  if(D.eva!==null&&D.eva>=4)objs.push('Réduction de la douleur (EVA actuel : '+D.eva+'/10)');
+  if(hasK('amp_act','Rotation externe')||hasK('amp_pas','Limitation passive TOUTES'))objs.push('Restauration des amplitudes articulaires (rotation externe prioritaire)');
+  if(pcts.coiffe>=30||pcts.sis>=30)objs.push('Renforcement de la coiffe des rotateurs');
+  if(instMax>=35)objs.push('Stabilisation active de l\'articulation gléno-humérale');
+  if(pcts.dyskinésie>=30||isT('kibler','pos'))objs.push('Rééducation de la dyskinésie scapulaire et équilibre musculaire');
+  if(isT('gird','pos'))objs.push('Correction du déficit de rotation interne — étirement capsulaire postérieur (Sleeper Stretch)');
+  objs.push('Rééducation proprioceptive et contrôle moteur de l\'épaule');
+  if(document.getElementById('objectifs').value)objs.push('Objectif du patient : '+document.getElementById('objectifs').value);
+
+  h+='<div class="sc sa" style="margin-top:10px"><div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l1.8 4.5H15l-3.6 2.7 1.4 4.8L9 12.3 5.2 15l1.4-4.8L3 7.5h4.2L9 3z" stroke="#1A6FA8" stroke-width="1.5" stroke-linejoin="round"/></svg></div><div><div class="sct">Objectifs de rééducation</div></div></div></div><div class="scb o"><ul class="tl2">';
+  objs.forEach(function(o){h+='<li>'+o+'</li>';});
+  h+='</ul></div></div>';
+  return h;
+}
+
+// ══════════════════════════════════════════════════════
+// PROGRAMME D\'EXERCICES
+// ══════════════════════════════════════════════════════
+var PICTS={
+  dd:'<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#DCF0FF"/><rect x="4" y="17" width="20" height="2.5" rx="1.2" fill="#7BBCE0"/><ellipse cx="8" cy="15.5" rx="3" ry="2.5" fill="#1A6FA8"/><rect x="11" y="14.5" width="13" height="2.5" rx="1.2" fill="#1A6FA8"/></svg>',
+  db:'<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#DCF0FF"/><circle cx="14" cy="8" r="3" fill="#1A6FA8"/><line x1="14" y1="11" x2="14" y2="19" stroke="#1A6FA8" stroke-width="2" stroke-linecap="round"/><line x1="14" y1="14" x2="9" y2="18" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round"/><line x1="14" y1="14" x2="19" y2="18" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round"/><line x1="14" y1="19" x2="11" y2="25" stroke="#1A6FA8" stroke-width="2" stroke-linecap="round"/><line x1="14" y1="19" x2="17" y2="25" stroke="#1A6FA8" stroke-width="2" stroke-linecap="round"/></svg>',
+  dl:'<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#DCF0FF"/><circle cx="14" cy="7" r="3" fill="#1A6FA8"/><path d="M14 10v8" stroke="#1A6FA8" stroke-width="2" stroke-linecap="round"/><path d="M10 24l4-6 4 6" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+
+var EXOS=[
+  {id:'pendule',phase:'ant',nom:'Pendule de Codman — Décoaptation passive antalgique',mat:'aucun',p:'db',
+   c:function(p){return (D.eva||0)>=4||p.capsulite>=25||p.sis>=25;},
+   j:function(p){return 'EVA '+(D.eva||0)+'/10 ou capsulite/conflit '+Math.max(p.capsulite,p.sis)+'% — décoaptation par gravité sans effort musculaire, antalgique de première intention.';},
+   desc:'Debout penché en avant, bras pendant librement. Petits cercles passifs par le mouvement du corps (pas d\'effort du bras).',
+   proto:'3 × 1 min de cercles. 2 fois/jour.',
+   detail:'Le bras doit être totalement relâché. Augmenter progressivement le rayon des cercles sur plusieurs semaines.',
+   prog:'Cercles petits → cercles grands → léger poids (0,5 kg)'},
+  {id:'autoRE',phase:'mob',nom:'Auto-étirement en rotation externe',mat:'aucun',p:'dd',
+   c:function(p){return hasK('amp_act','Rotation externe')||p.capsulite>=25;},
+   j:function(p){return 'Rotation externe limitée ou capsulite '+p.capsulite+'% — première amplitude à restaurer selon le pattern capsulaire RE > ABD > RI.';},
+   desc:'Décubitus dorsal, coude fléchi à 90° au corps. Laisser le bras aller en RE par gravité (gravity stretch) ou aide légère de l\'autre main.',
+   proto:'3 × 45 sec. Progresser l\'amplitude doucement. 2 fois/jour.',
+   detail:'Ne jamais forcer. L\'étirement doit être ressenti comme une légère tension confortable.',
+   prog:'Gravity stretch → aide main controlatérale → bâton'},
+  {id:'sleeper',phase:'mob',nom:'Sleeper Stretch — Capsule postérieure (GIRD)',mat:'aucun',p:'dd',
+   c:function(p){return isT('gird','pos')||p.overhead>=25;},
+   j:function(p){return 'GIRD présent ou overhead '+p.overhead+'% — étirement de la capsule postérieure pour corriger le déficit de rotation interne (Tyler 2010).';},
+   desc:'Décubitus latéral sur le côté atteint, épaule à 90° de flexion, coude fléchi à 90°. L\'autre main pousse doucement l\'avant-bras vers le bas (RI).',
+   proto:'3 × 30 sec. 1 fois/jour. Idéalement après l\'effort.',
+   detail:'Maintenir la scapula fixée. Si douleur antérieure → arrêter. Efficacité prouvée sur le GIRD en 4–6 semaines.',
+   prog:'Gravity → aide controlatérale → durée progressive'},
+  {id:'crossbody_stretch',phase:'mob',nom:'Cross-Body Stretch — Capsule postérieure',mat:'aucun',p:'db',
+   c:function(p){return isT('gird','pos')||p.overhead>=25;},
+   j:function(p){return 'Alternative au Sleeper Stretch si décubitus latéral inconfortable — même cible : capsule postérieure.';},
+   desc:'Debout ou assis. Amener le bras atteint en adduction horizontale devant soi. L\'autre main saisit le coude et tire vers l\'épaule opposée.',
+   proto:'3 × 30 sec. 1 fois/jour.',
+   detail:'Différent du test Cross-Body diagnostic. Ici c\'est un étirement thérapeutique de la capsule postérieure.',prog:null},
+  {id:'mobCap',phase:'mob',nom:'Mobilisations passives douces — Capsulite rétractile',mat:'aucun',p:'dd',
+   c:function(p){return p.capsulite>=40;},
+   j:function(p){return 'Capsulite probable '+p.capsulite+'% — mobilisations passives progressives dans l\'indolence absolue.';},
+   desc:'Décubitus dorsal. Mobilisations passives lentes en RE, ABD, RI dans la zone strictement indolore. Progresser par paliers hebdomadaires de 5°.',
+   proto:'10 répétitions chaque direction × 2 séries. Quotidien si possible.',
+   detail:'Règle d\'or : jamais dans la douleur. Si EVA monte → réduire l\'amplitude immédiatement. La capsulite évolue en 12–18 mois.',
+   prog:'Amplitude minimale → progressif par paliers → travail actif aidé'},
+  {id:'re_elas',phase:'ren',nom:'Renforcement Rotation Externe — Élastique (excentrique)',mat:'élastique',p:'db',
+   c:function(p){return p.sis>=25||p.coiffe>=25;},
+   j:function(p){return 'Conflit ou coiffe '+Math.max(p.sis,p.coiffe)+'% — renforcement des rotateurs externes pour déprimer la tête humérale et libérer l\'espace sous-acromial.';},
+   desc:'Debout, coude fléchi à 90° au corps, serviette entre le coude et le thorax. Rotation externe contre élastique. Phase excentrique prioritaire (retour en 3 sec).',
+   proto:'3 × 15 répétitions. Excentrique 3 sec. 2 fois/semaine.',
+   detail:'La serviette force à garder le coude au corps. Résistance légère au départ.',
+   prog:'Isométrique → concentrique → excentrique → plan de la scapula'},
+  {id:'fullcan_prog',phase:'ren',nom:'Full Can progressif — Sus-épineux plan scapulaire',mat:'élastique',p:'db',
+   c:function(p){return p.sis>=30||p.coiffe>=30;},
+   j:function(p){return 'Conflit ou tendinopathie coiffe '+Math.max(p.sis,p.coiffe)+'% — plan de la scapula réduit de 30% la compression sous-acromiale.';},
+   desc:'Bras à 90° d\'abduction dans le plan de la scapula (30° en avant du plan frontal), pouce vers le haut. Maintenir contre résistance élastique.',
+   proto:'3 × 12–15 répétitions. Commencer en dessous de l\'arc douloureux si présent.',
+   detail:'Ne pas aller en abduction pure (frontale) si arc douloureux présent.',
+   prog:'Sans résistance → élastique léger → élastique moyen → amplitude complète'},
+  {id:'ri_elas',phase:'ren',nom:'Renforcement Rotation Interne — Sous-scapulaire',mat:'élastique',p:'db',
+   c:function(p){return p.coiffe>=25&&(isT('liftoff','pos')||isT('bearhug','pos')||isT('bellypress','pos'));},
+   j:function(p){return 'Atteinte sous-scapulaire probable — renforcement progressif de la rotation interne en respectant le seuil douloureux.';},
+   desc:'Même position que la RE mais direction inverse (RI contre élastique). Coude au corps, serviette maintenue.',
+   proto:'3 × 15 répétitions. Résistance légère.',
+   detail:'Progresser très lentement si atteinte sous-scapulaire confirmée. Ne jamais dépasser la douleur.',
+   prog:'Isométrique → concentrique léger → excentrique → progressif'},
+  {id:'trap_inf',phase:'ren',nom:'Renforcement Trapèze Inférieur — Prone Y',mat:'aucun',p:'dv',
+   c:function(p){return p.dyskinésie>=25||isT('kibler','pos')||p.sis>=30;},
+   j:function(p){return 'Dyskinésie scapulaire ou conflit '+Math.max(p.dyskinésie,p.sis)+'% — le trapèze inférieur est systématiquement déficitaire dans toutes les pathologies d\'épaule.';},
+   desc:'Décubitus ventral. Bras en Y (135° d\'élévation), pouces vers le haut. Élever les bras en rétractant les scapulas vers le bas et l\'intérieur.',
+   proto:'3 × 12 répétitions. Tenir 2 sec en haut. Mouvement lent et contrôlé.',
+   detail:'Le muscle le plus souvent négligé et le plus important pour corriger la dyskinésie. Ne pas compenser par une hyperextension cervicale.',
+   prog:'Sans charge → léger poids (0,5 kg) → élastique'},
+  {id:'serratus',phase:'ren',nom:'Serratus Anterior — Push-up Plus',mat:'aucun',p:'dv',
+   c:function(p){return p.dyskinésie>=25||isT('kibler','pos');},
+   j:function(p){return 'Dyskinésie scapulaire '+p.dyskinésie+'% — le serratus anterior protract et bascule la scapula, essentiel pour l\'espace sous-acromial.';},
+   desc:'Position de planche. En fin d\'extension des coudes, ajouter une poussée supplémentaire en avant (protraction scapulaire maximale). Tenir 2 sec.',
+   proto:'3 × 12 répétitions. La protraction finale est la partie cruciale.',
+   detail:'Sans la protraction finale, l\'exercice ne cible pas le serratus. C\'est ce mouvement ultime qui l\'active à 100%.',
+   prog:'Genoux → orteils → bande élastique → surface instable'},
+  {id:'retraction',phase:'ren',nom:'Rétraction scapulaire active — Correction posturale',mat:'aucun',p:'db',
+   c:function(p){return p.dyskinésie>=20||p.sis>=25;},
+   j:function(p){return 'Dyskinésie ou conflit — la rétraction scapulaire corrige l\'antépulsion et restaure l\'espace sous-acromial.';},
+   desc:'Debout ou assis. Rentrer le menton légèrement. Ramener les omoplates vers l\'axe central (rétraction). Tenir 5 sec.',
+   proto:'20 répétitions × 3 séries. À intégrer dans la journée (bureau, conduite…).',
+   detail:'Différencier "rentrer les épaules" (mauvais) de "rapprocher les omoplates" (bon).',
+   prog:'Statique → avec ouverture des bras → avec élastique'},
+  {id:'centrage',phase:'ren',nom:'Co-contraction et centrage actif — Tête humérale',mat:'élastique',p:'db',
+   c:function(p){return p.traumatique>=30||p.atraumatique>=30||p.overhead>=30;},
+   j:function(p){return 'Instabilité '+Math.max(p.traumatique,p.atraumatique,p.overhead)+'% — la co-contraction deltoïde/coiffe centre activement la tête humérale dans la glène.';},
+   desc:'Debout, bras légèrement écarté. Contracter simultanément tous les muscles de l\'épaule (isométrique, légère tension élastique). Pas de mouvement.',
+   proto:'Maintenir 10 sec × 10 répétitions × 3 séries. 2 fois/jour.',
+   detail:'Exercice fondamental dans l\'instabilité. Apprend au système neuromusculaire à centrer la tête humérale avant tout mouvement.',
+   prog:'Isométrique → petits arcs → amplitudes progressives'},
+  {id:'proprio_epaule',phase:'ren',nom:'Proprioception épaule — Plan instable',mat:'ballon',p:'dv',
+   c:function(p){return p.traumatique>=25||p.atraumatique>=25||p.overhead>=25||p.sis>=30;},
+   j:function(p){return 'Instabilité ou conflit — la proprioception est toujours déficitaire après une pathologie d\'épaule.';},
+   desc:'Appui sur ballon contre un mur (mains tendues). Petits cercles lents, le ballon roule. Progresser vers appui au sol.',
+   proto:'3 × 30 sec. 2 fois/semaine.',
+   detail:'Commencer contre un mur (charge réduite). Maintenir la scapula en position neutre pendant tout l\'exercice.',
+   prog:'Mur → plan incliné → sol → surface instable → un bras'},
+  {id:'chaine_ferm',phase:'ren',nom:'Chaîne fermée — Wall Press diagonal',mat:'aucun',p:'db',
+   c:function(p){return p.traumatique>=30||p.atraumatique>=30||p.coiffe>=30;},
+   j:function(p){return 'Instabilité ou coiffe — la chaîne fermée coactive toute la musculature stabilisatrice simultanément.';},
+   desc:'Debout face au mur, mains à hauteur d\'épaule. Appui léger. Petits cercles lents, diagonales. Progresser en s\'éloignant du mur.',
+   proto:'3 × 20 mouvements. 3 fois/semaine.',
+   detail:'Maintenir la scapula en position neutre pendant tout l\'exercice.',
+   prog:'Mur vertical → plan incliné → table → sol → surface instable'},
+  {id:'posture',phase:'ren',nom:'Éducation posturale & ergonomie',mat:'aucun',p:'db',
+   c:function(p){return p.sis>=20||p.dyskinésie>=20;},
+   j:function(p){return 'Conflit ou dyskinésie — la scapula en antépulsion réduit l\'espace sous-acromial. La correction posturale est aussi importante que le renforcement.';},
+   desc:'Réglage du poste de travail : écran à hauteur des yeux, coudes à 90°, épaules détendues. Auto-corrections toutes les 30 min.',
+   proto:'Travail intégré dans chaque séance. Réglage du poste recommandé.',
+   detail:'La scapula en antépulsion réduit l\'espace sous-acromial. La correction posturale est aussi importante que le renforcement.',prog:null},
+  {id:'retour_sport',phase:'fon',nom:'Programme de reprise sportive progressive — 4 étapes',mat:'aucun',p:'db',
+   c:function(p){return hasC('activite','Sport overhead')||hasC('activite','Sport de contact');},
+   j:function(p){return 'Sport overhead ou contact — reprise structurée en 4 étapes pour éviter la récidive. QuickDASH <25/100 avant reprise complète.';},
+   desc:'Étape 1 : gestes analytiques sous-maximaux. Étape 2 : gestes globaux à 50%. Étape 3 : spécifiques à 80%. Étape 4 : retour complet.',
+   proto:'1 étape par semaine selon tolérance. Réévaluation clinique entre chaque étape.',
+   detail:'Règle des 24h : si douleur le lendemain >24h → reculer d\'une étape.',
+   prog:'Analytique → global → spécifique sport → compétition'},
+  {id:'retour_lancer',phase:'fon',nom:'Protocole de retour au lancer — Sport overhead',mat:'aucun',p:'db',
+   c:function(p){return hasC('activite','Sport overhead')&&(hasC('avq','Lancer')||hasC('declenchant','Geste d\'armé'));},
+   j:function(p){return 'Sportif overhead avec geste d\'armé limité — protocole de retour progressif au lancer.';},
+   desc:'Phase 1 : lancer doux distance courte (10m). Phase 2 : augmentation distance. Phase 3 : vitesse progressive. Phase 4 : intensité compétition.',
+   proto:'2 séances/semaine. Progresser si indolore à chaque phase.',
+   detail:'Ne jamais sauter une phase. GIRD et dyskinésie doivent être corrigés avant la reprise.',
+   prog:'10m → 20m → 30m → vitesse progressive → compétition'}
+];
+
+function openProg(){
+  var cote=getC('cote')[0]||'—';
+  var nomP=(D.chips.prenom&&D.chips.prenom[0]||'')+(D.chips.nom&&D.chips.nom[0]?' '+D.chips.nom[0]:'')||'Patient';
+  document.getElementById('p-name').textContent='Programme — '+nomP;
+  document.getElementById('p-sub').textContent='Épaule · '+cote+' · '+new Date().toLocaleDateString('fr-FR');
+  var pcts={};try{pcts=calcScores().pcts;}catch(e){}
+  var filtered=EXOS.filter(function(e){return typeof e.c==='function'?e.c(pcts):true;});
+  var html='<div class="al alg" style="margin-bottom:12px"><span>✓</span><div>Programme personnalisé selon les données cliniques.</div></div>';
+  ['ant','mob','ren','fon'].forEach(function(phase){
+    var PNAMES={ant:'Phase 1 — Antalgique & décharge',mob:'Phase 2 — Mobilisation & souplesse',ren:'Phase 3 — Renforcement & stabilisation',fon:'Phase 4 — Fonctionnel'};
+    var PCLS={ant:'epa',mob:'epm',ren:'epr',fon:'epf'};
+    var exosP=filtered.filter(function(e){return e.phase===phase;});
+    if(!exosP.length)return;
+    html+='<div class="eplbl '+PCLS[phase]+'">'+PNAMES[phase]+'</div>';
+    exosP.forEach(function(e){
+      var pid='pe-'+e.id;
+      html+='<div class="exc"><div class="exh" onclick="toggleExo(\''+pid+'\')"><div class="exn">'+e.nom+'</div><span class="exm mn">'+e.mat+'</span><span class="exch" id="ec-'+pid+'">▼</span></div>';
+      html+='<div class="exbd" id="'+pid+'"><div class="expo">'+PICTS[e.p]+'<span class="expol">Position de départ</span></div>';
+      html+='<div class="exw">🎯 <strong>Pourquoi ?</strong> '+(typeof e.j==='function'?e.j(pcts):e.j)+'</div>';
+      html+='<div class="exdc">'+e.desc+'</div>';
+      html+='<div class="expr">📋 <strong>Protocole :</strong> '+e.proto+'</div>';
+      html+='<div class="exdt">💡 '+e.detail+'</div>';
+      if(e.prog)html+='<div class="expg">📈 <strong>Progression :</strong> '+e.prog+'</div>';
+      html+='</div></div>';
+    });
+  });
+  document.getElementById('p-cont').innerHTML=html;
+  document.getElementById('pov').classList.add('o');
+}
+function closeProg(){document.getElementById('pov').classList.remove('o');}
+function printProg(){window.print();}
+function toggleExo(id){var b=document.getElementById(id),ch=document.getElementById('ec-'+id);if(b){b.classList.toggle('o');if(ch)ch.classList.toggle('o');}}
+
+// ══════════════════════════════════════════════════════
+// COMPTE-RENDU
+// ══════════════════════════════════════════════════════
+function diagBlocks(topDiags,pcts){
+  if(!topDiags||!topDiags.length)return '<div style="font-size:12px;color:var(--tx3);padding:8px">Données insuffisantes</div>';
+  return topDiags.slice(0,3).map(function(k){var pct=pcts[k];return '<div class="crdi '+(pct>=65?'cdh':pct>=35?'cdm':'cdl')+'"><span>'+DLBL[k]+'</span><span>'+pct+'%</span></div>';}).join('');
+}
+function headerCR(){
+  var nom=(CHIPS.prenom&&CHIPS.prenom[0]||'')+(CHIPS.nom&&CHIPS.nom[0]?' '+CHIPS.nom[0]:'')||'—';
+  var ddn=document.getElementById('ddn').value?new Date(document.getElementById('ddn').value).toLocaleDateString('fr-FR'):'—';
+  var age='';if(document.getElementById('ddn').value){var d=new Date(document.getElementById('ddn').value);age=' ('+(new Date().getFullYear()-d.getFullYear())+' ans)';}
+  var h='<div class="crsh"><div class="crsn">'+nom+'</div><div class="crss">Bilan épaule</div><div class="crsp">';
+  h+='<span class="crspi"><strong>DDN :</strong> '+ddn+age+'</span>';
+  if(document.getElementById('sexe').value)h+='<span class="crspi"><strong>Sexe :</strong> '+document.getElementById('sexe').value+'</span>';
+  if(getC('cote').length)h+='<span class="crspi"><strong>Côté :</strong> '+getC('cote')[0]+'</span>';
+  if(document.getElementById('profession').value)h+='<span class="crspi"><strong>Profession :</strong> '+document.getElementById('profession').value+'</span>';
+  if(document.getElementById('datebilan').value)h+='<span class="crspi"><strong>Date :</strong> '+new Date(document.getElementById('datebilan').value).toLocaleDateString('fr-FR')+'</span>';
+  if(document.getElementById('medecin').value)h+='<span class="crspi"><strong>Prescripteur :</strong> '+document.getElementById('medecin').value+'</span>';
+  return h+'</div></div>';
+}
+function signCR(){
+  var d=document.getElementById('datebilan').value?new Date(document.getElementById('datebilan').value).toLocaleDateString('fr-FR'):new Date().toLocaleDateString('fr-FR');
+  return '<div class="crsig"><div class="crsigl">Signature — Yasser Ladraa, MK</div><div class="crsigl" style="text-align:right">Date : '+d+'</div></div>';
+}
+
+function buildCRs(topDiags,pcts){
+  var rf=getK('rf');
+  var tPos=Object.keys(TESTS).filter(function(k){return TESTS[k]==='pos';});
+  var tNeg=Object.keys(TESTS).filter(function(k){return TESTS[k]==='neg';});
+  var parkCount=PARK_KEYS.filter(function(k){return PARK_TESTS[k]==='pos';}).length;
+
+  var sh=headerCR();
+  sh+='<div class="crbl"><div class="crbt">Synthèse clinique</div>';
+  if(getC('ctx').length)sh+='<div class="crrow"><span class="crk">Contexte</span><span class="crval">'+getC('ctx').join(', ')+'</span></div>';
+  if(getC('cote').length)sh+='<div class="crrow"><span class="crk">Côté</span><span class="crval">'+getC('cote')[0]+'</span></div>';
+  if(D.eva!==null)sh+='<div class="crrow"><span class="crk">EVA</span><span class="crval">'+D.eva+'/10</span></div>';
+  if(D.psfs)sh+='<div class="crrow"><span class="crk">PSFS</span><span class="crval">'+D.psfs.avg+'/10 ('+D.psfs.vals.filter(function(v){return v!==null;}).length+' act.)</span></div>';
+  if(D.qd)sh+='<div class="crrow"><span class="crk">QuickDASH</span><span class="crval">'+D.qd.score+'/100 — '+D.qd.grade+'</span></div>';
+  if(D.constant)sh+='<div class="crrow"><span class="crk">Constant-Murley</span><span class="crval">'+D.constant.total+'/100 — '+D.constant.grade+' (D:'+D.constant.pain+' AVQ:'+D.constant.avq+' M:'+D.constant.mobil+' F:'+D.constant.force+')'+'</span></div>';
+  if(tPos.length)sh+='<div class="crrow"><span class="crk">Tests positifs</span><span class="crval">'+tPos.join(', ')+'</span></div>';
+  if(parkCount>=2)sh+='<div class="crrow"><span class="crk">Cluster Park</span><span class="crval">'+parkCount+'/3 ✓ — LR+ 5.0</span></div>';
+  if(SULCUS_GRADE&&isT('sulcus','pos'))sh+='<div class="crrow"><span class="crk">Sulcus Grade</span><span class="crval">'+SULCUS_GRADE+'</span></div>';
+  if(isT('hornblower','pos'))sh+='<div class="crrow"><span class="crk" style="color:var(--red)">Hornblower</span><span class="crval" style="color:var(--red)">Positif — rupture complète sous-épineux</span></div>';
+  if(rf.length>0)sh+='<div class="crrow"><span class="crk" style="color:var(--red)">Red flags</span><span class="crval" style="color:var(--red)">'+rf.length+' — avis médical requis</span></div>';
+  else sh+='<div class="crrow"><span class="crk">Red flags</span><span class="crval">Aucun</span></div>';
+  sh+='</div>';
+  sh+='<div class="crbl"><div class="crbt">Diagnostic kinésithérapique</div>'+diagBlocks(topDiags,pcts)+'</div>';
+  sh+=signCR();
+
+  var fu=headerCR();
+  fu+='<div class="crbl"><div class="crbt">Anamnèse</div>';
+  [['installation','Installation'],['luxation','Luxation ATCD'],['activite','Activité'],['rythme','Rythme'],['localisation','Localisation'],['declenchant','Déclenchants'],['atcd','Antécédents']].forEach(function(f){var v=getC(f[0]);if(v.length)fu+='<div class="crrow"><span class="crk">'+f[1]+'</span><span class="crval">'+v.join(', ')+'</span></div>';});
+  fu+='</div>';
+  fu+='<div class="crbl"><div class="crbt">Données objectives</div>';
+  fu+='<div class="crrow"><span class="crk">EVA</span><span class="crval">'+(D.eva!==null?D.eva+'/10':'—')+'</span></div>';
+  if(D.qd)fu+='<div class="crrow"><span class="crk">QuickDASH</span><span class="crval">'+D.qd.score+'/100 — '+D.qd.grade+' · '+D.qd.interp+'</span></div>';
+  var mre=document.getElementById('m-re-att').value,mres=document.getElementById('m-re-sain').value;
+  if(mre)fu+='<div class="crrow"><span class="crk">RE atteint / sain</span><span class="crval">'+mre+(mres?' / '+mres:'')+'</span></div>';
+  if(tPos.length)fu+='<div class="crrow"><span class="crk">Tests positifs</span><span class="crval">'+tPos.join(', ')+'</span></div>';
+  if(tNeg.length)fu+='<div class="crrow"><span class="crk">Tests négatifs</span><span class="crval">'+tNeg.join(', ')+'</span></div>';
+  if(parkCount>=2)fu+='<div class="crrow"><span class="crk">Cluster Park 2005</span><span class="crval">'+parkCount+'/3 tests positifs — LR+ 5.0 confirmé</span></div>';
+  if(SULCUS_GRADE&&isT('sulcus','pos'))fu+='<div class="crrow"><span class="crk">Sulcus Sign Grade</span><span class="crval">'+SULCUS_GRADE+'</span></div>';
+  if(isT('hornblower','pos'))fu+='<div class="crrow"><span class="crk" style="color:var(--red)">Hornblower (Walch)</span><span class="crval" style="color:var(--red)">Positif — rupture complète sous-épineux confirmée</span></div>';
+  var isisPts=ISIS_ITEMS.filter(function(i){return isisData[i.id];}).reduce(function(s,i){return s+i.pts;},0);
+  if(isisPts>0)fu+='<div class="crrow"><span class="crk">Score ISIS</span><span class="crval">'+isisPts+'/10 — '+(isisPts>6?'Risque élevé (butée probable)':'Risque acceptable')+'</span></div>';
+  if(rf.length>0)fu+='<div class="crrow"><span class="crk" style="color:var(--red)">Red flags</span><span class="crval" style="color:var(--red)">'+rf.join(' · ')+'</span></div>';
+  else fu+='<div class="crrow"><span class="crk">Red flags</span><span class="crval">Aucun</span></div>';
+  fu+='</div>';
+  fu+='<div class="crbl"><div class="crbt">Diagnostic kinésithérapique</div>'+diagBlocks(topDiags,pcts)+'</div>';
+  var obj=document.getElementById('objectifs').value,obs=document.getElementById('observations').value;
+  if(obj)fu+='<div class="crbl"><div class="crbt">Objectifs</div><div style="font-size:12px;color:var(--tx2)">'+obj+'</div></div>';
+  if(obs)fu+='<div class="crbl"><div class="crbt">Observations</div><div style="font-size:12px;color:var(--tx2)">'+obs+'</div></div>';
+  // Plan de traitement phasé dans CR complet
+  var instMaxCR=Math.max(pcts.traumatique||0,pcts.atraumatique||0,pcts.overhead||0);
+  var crPlan='<div class="crbl"><div class="crbt">Plan de rééducation</div>';
+  var crPhases=[
+    {t:'Phase 1 — Antalgique (J1–J15)',detail:'Cryothérapie, TENS si EVA ≥5, pendule de Codman'},
+    {t:'Phase 2 — Mobilisation (S2–S4)',detail:(pcts.capsulite>=40?'RE prioritaire (capsulite)':instMaxCR>=40?'Zone stable — Sleeper Stretch si GIRD':'Décoaptation caudale, thérapie manuelle')},
+    {t:'Phase 3 — Renforcement (S3–S8)',detail:'Coiffe (RE/RI), trapèze inférieur, serratus, centrage actif, proprioception'},
+    {t:'Phase 4 — Fonctionnel (S6–S12)',detail:'Retour activité progressif, ergonomie, programme domicile'+(hasC('activite','Sport overhead')?' · Protocole overhead 4 étapes':'')}
+  ];
+  crPhases.forEach(function(p){crPlan+='<div class="crrow"><span class="crk">'+p.t+'</span><span class="crval" style="max-width:70%;text-align:right">'+p.detail+'</span></div>';});
+  crPlan+='</div>';
+  fu+=crPlan;
+  fu+=signCR();
+
+  document.getElementById('cr-s').innerHTML=sh;
+  document.getElementById('cr-f').innerHTML=fu;
+}
+
+function switchCR(ver,btn){
+  activeCR=ver;
+  document.querySelectorAll('.crtab').forEach(function(t){t.classList.remove('on');});btn.classList.add('on');
+  document.querySelectorAll('.crv').forEach(function(v){v.classList.remove('on');});
+  document.getElementById('cr-'+ver).classList.add('on');
+}
+function printCR(){
+  document.querySelectorAll('.crv').forEach(function(v){v.classList.remove('pa');});
+  document.getElementById('cr-'+activeCR).classList.add('pa');window.print();
+}
+
+// INIT
+document.getElementById('datebilan').valueAsDate=new Date();
+loadState();
+goS(1);
+
+// ══════════════════════════════════════════════════════
+// EBP MODAL
+// ══════════════════════════════════════════════════════
+
+var EBP_DATA={
+  arc:{title:'Arc douloureux',ref:'Park HB et al. J Bone Joint Surg Am. 2005',stats:[{l:'Sensibilité',v:'74%',s:'conflit SAS'},{l:'Spécificité',v:'81%',s:''},{l:'LR+',v:'3.9',s:''},{l:'LR−',v:'0.33',s:''}],note:'Douleur entre 60° et 120° d\'élévation active. Cluster Park (arc + Hawkins + Neer) : si les 3 positifs, probabilité de conflit SAS très élevée. Test isolé de valeur modérée — toujours utiliser en cluster.'},
+  neer:{title:'Neer',ref:'Park HB et al. J Bone Joint Surg Am. 2005',stats:[{l:'Sensibilité',v:'79%',s:''},{l:'Spécificité',v:'53%',s:''},{l:'LR+',v:'1.7',s:''},{l:'LR−',v:'0.40',s:''}],note:'Flexion passive forcée bras en rotation interne, stabilisation de la scapula. Reproduction de la douleur sous-acromiale = positif. Sensibilité correcte mais spécificité faible — beaucoup de faux positifs. Toujours utiliser en cluster avec Hawkins et arc douloureux.'},
+  hawkins:{title:'Hawkins-Kennedy',ref:'Park HB et al. J Bone Joint Surg Am. 2005',stats:[{l:'Sensibilité',v:'79%',s:''},{l:'Spécificité',v:'59%',s:''},{l:'LR+',v:'1.9',s:''},{l:'LR−',v:'0.36',s:''}],note:'Flexion 90° + rotation interne forcée (abaissement de l\'avant-bras). Reproduit le conflit sous-acromial. Spécificité limitée comme Neer. Cluster Park (arc + Hawkins + Neer) : LR+ combiné ~10 si tous positifs.'},
+  emptycan:{title:'Empty Can (Jobe)',ref:'Hughes PC et al. Br J Sports Med. 2008',stats:[{l:'Sensibilité',v:'69%',s:'sus-épineux'},{l:'Spécificité',v:'66%',s:''},{l:'LR+',v:'2.0',s:''},{l:'LR−',v:'0.47',s:''}],note:'Bras à 90° dans le plan scapulaire, rotation interne (pouce vers le bas). Résistance à l\'abaissement. Valeur modérée. Préférer le Full Can qui génère moins de faux positifs douloureux. Comparer systématiquement au Full Can.'},
+  fullcan:{title:'Full Can',ref:'Itoi E et al. J Shoulder Elbow Surg. 1999',stats:[{l:'Sensibilité',v:'66%',s:'sus-épineux'},{l:'Spécificité',v:'64%',s:''},{l:'LR+',v:'1.8',s:''},{l:'LR−',v:'0.53',s:''}],note:'Bras à 90° dans le plan scapulaire, rotation externe (pouce vers le haut). Moins douloureux que Empty Can — moins de douleur = moins de faux positifs. Sensibilité similaire. Préférer le Full Can en première intention pour éviter la confusion avec un conflit.'},
+  patte:{title:'Patte Test (Lag Sign en rotation externe)',ref:'Hertel R et al. J Shoulder Elbow Surg. 1996',stats:[{l:'Sensibilité',v:'70%',s:'infra-épineux'},{l:'Spécificité',v:'100%',s:''},{l:'LR+',v:'∞',s:'rupture complète'},{l:'LR−',v:'0.30',s:''}],note:'Coude à 90°, bras maintenu à 20° d\'élévation et rotation externe maximale passive. Patient maintient la position activement. Chute du bras = POSITIF. Sp 100% — un résultat positif confirme la rupture de l\'infra-épineux.'},
+  hornblower:{title:'Hornblower\'s Sign',ref:'Walch G et al. J Shoulder Elbow Surg. 1998',stats:[{l:'Sensibilité',v:'100%',s:'rupture complète'},{l:'Spécificité',v:'93%',s:''},{l:'LR+',v:'14.3',s:''},{l:'LR−',v:'0',s:''}],note:'Incapacité à placer la main à la bouche sans abduire le coude (signe du clairon). Sn 100% pour rupture massive du sous-épineux et du petit rond. Un résultat positif impose une imagerie en urgence et une discussion chirurgicale.'},
+  liftoff:{title:'Lift-Off (Gerber)',ref:'Gerber C & Krushell RJ. J Bone Joint Surg Br. 1991',stats:[{l:'Sensibilité',v:'92%',s:'sous-scapulaire'},{l:'Spécificité',v:'100%',s:'rupture complète'},{l:'LR+',v:'∞',s:''},{l:'LR−',v:'0.08',s:''}],note:'Main dans le dos, patient décolle la main du dos contre résistance. Incapacité ou chute = POSITIF. Sp 100% pour rupture complète du sous-scapulaire. Si RI insuffisante pour atteindre le dos, utiliser Bear Hug ou Belly Press.'},
+  bearhug:{title:'Bear Hug',ref:'Barth JRH et al. Am J Sports Med. 2006',stats:[{l:'Sensibilité',v:'60%',s:'sous-scap. sup.'},{l:'Spécificité',v:'91%',s:''},{l:'LR+',v:'6.7',s:''},{l:'LR−',v:'0.44',s:''}],note:'Main ipsilatérale sur épaule opposée, patient maintient contre résistance en supination. Teste le sous-scapulaire supérieur. Plus facile à réaliser que le Lift-Off si RI insuffisante. Compléter avec Belly Press pour la portion inférieure.'},
+  bellypress:{title:'Belly Press (Napoleon)',ref:'Gerber C et al. J Bone Joint Surg Am. 1996',stats:[{l:'Sensibilité',v:'58%',s:''},{l:'Spécificité',v:'88%',s:''},{l:'LR+',v:'4.8',s:''},{l:'LR−',v:'0.48',s:''}],note:'Patient appuie sur l\'abdomen coude en avant (RI). Si la RI est insuffisante (poignet fléchi, coude recule) = POSITIF. Alternative au Lift-Off. Cluster sous-scapulaire : Lift-Off + Bear Hug + Belly Press — au moins 2/3 positifs augmente la valeur diagnostique.'},
+  droparm:{title:'Drop Arm (Codman)',ref:'Litaker D et al. Arch Intern Med. 2000',stats:[{l:'Sensibilité',v:'27%',s:'rupture massive'},{l:'Spécificité',v:'88%',s:''},{l:'LR+',v:'2.3',s:''},{l:'LR−',v:'0.83',s:''}],note:'Incapacité à maintenir le bras à 90° après élévation passive. Faible sensibilité — la plupart des ruptures ne donnent pas de drop arm. Un résultat positif, en revanche, est fortement évocateur de rupture massive. Imagerie en urgence si positif.'},
+  apprehension:{title:'Appréhension + Relocation test',ref:'Lo IKY et al. J Shoulder Elbow Surg. 2004',stats:[{l:'Sensibilité',v:'72%',s:'instab. ant.'},{l:'Spécificité',v:'98%',s:''},{l:'LR+',v:'36',s:'appréhension'},{l:'LR−',v:'0.29',s:''}],note:'Appréhension en abduction-rotation externe : Sp 98% — un résultat positif (appréhension vraie, pas simple douleur) confirme l\'instabilité antérieure structurelle. Soulagement par relocation = renforce le diagnostic. Ne pas confondre douleur et appréhension.'},
+  tiroir:{title:'Tiroir antérieur / postérieur gléno-huméral',ref:'Silliman JF & Hawkins RJ. Clin Sports Med. 1993',stats:[],note:'Translation antérieure et postérieure en DD avec bras à 0° puis 90°. Grader selon Hawkins (0-3+). Translation sans symptôme = laxité constitutionnelle. Translation reproduisant les symptômes = instabilité pathologique. Toujours comparer au côté sain.'},
+  sulcus:{title:'Sulcus Sign',ref:'McFarland EG et al. Am J Sports Med. 2003',stats:[{l:'Sensibilité',v:'28%',s:'IMD'},{l:'Spécificité',v:'97%',s:''}],note:'Traction axiale vers le bas, bras le long du corps. Dépression sous-acromiale visible = positif. Grader I (<1cm), II (1-2cm), III (>2cm). Grade III = instabilité multidirectionnelle probable. Faible sensibilité — souvent négatif même en IMD significative.'},
+  kibler:{title:'Test de dyskinésie scapulaire + correction (Kibler)',ref:'Kibler WB et al. Am J Sports Med. 2002 — McClure P et al. 2009',stats:[],note:'Observer la scapula lors de l\'élévation bilat. : décollement médial, basculement ant., asymétrie. Test de correction : appui manuel stabilisant la scapula → amélioration de la douleur ou de la force = dyskinésie symptomatique. Test thérapeutique clé pour guider la rééducation scapulaire.'},
+  gird:{title:'GIRD — Glenohumeral Internal Rotation Deficit',ref:'Burkhart SS et al. Arthroscopy. 2003',stats:[{l:'Seuil',v:'>25°',s:'entre les deux côtés'},{l:'Prévalence',v:'~18%',s:'sportifs overhead'}],note:'Mesure la RI passive GH (épaule à 90° d\'abduction, coude à 90°). GIRD > 25° entre les deux côtés = contracture capsulaire postérieure significative. Facteur de risque de lésion SLAP et de rupture de coiffe chez le sportif overhead. Traitement : Sleeper Stretch + Cross-Body Stretch.'},
+  speed:{title:'Speed test',ref:'Holtby R & Razmjou H. J Shoulder Elbow Surg. 2004',stats:[{l:'Sensibilité',v:'54%',s:'biceps / SLAP'},{l:'Spécificité',v:'81%',s:''},{l:'LR+',v:'2.8',s:''},{l:'LR−',v:'0.57',s:''}],note:'Élévation résistée à 60°, coude tendu, avant-bras en supination. Douleur au sillon bicipital = positif. Spécificité correcte mais sensibilité limitée pour le SLAP. Utiliser en cluster avec O\'Brien et Yergason.'},
+  yergason:{title:'Yergason',ref:'Holtby R & Razmjou H. J Shoulder Elbow Surg. 2004',stats:[{l:'Sensibilité',v:'43%',s:'biceps LPB'},{l:'Spécificité',v:'86%',s:''},{l:'LR+',v:'3.1',s:''},{l:'LR−',v:'0.66',s:''}],note:'Supination résistée coude à 90°, épaule neutre. Douleur au sillon bicipital = positif. Bonne spécificité pour les lésions de la longue portion du biceps. Sensibilité faible — combiner avec Speed pour augmenter la valeur diagnostique.'},
+  obrien:{title:'O\'Brien (Active Compression Test)',ref:'O\'Brien SJ et al. Am J Sports Med. 1998',stats:[{l:'Sensibilité',v:'47–78%',s:'SLAP'},{l:'Spécificité',v:'85%',s:'ACJ'}],note:'Flexion 90°, coude tendu, RI maximale : résistance. Puis supination. Localisation de la douleur = clé du différentiel. Douleur profonde en RI → SLAP probable. Douleur superficielle en RI disparaissant en supination → ACJ probable. Localisation > intensité.'},
+  crossbody:{title:'Cross-Body (adduction horizontale)',ref:'Chronopoulos E et al. Am J Sports Med. 2004',stats:[{l:'Sensibilité',v:'77%',s:'ACJ'},{l:'Spécificité',v:'79%',s:''},{l:'LR+',v:'3.7',s:''},{l:'LR−',v:'0.29',s:''}],note:'Adduction horizontale forcée du bras en flexion 90°. Douleur au niveau de l\'ACJ = positif. Bon test pour les pathologies acromio-claviculaires. Comparer au O\'Brien pour localiser la douleur.'},
+  spurling:{title:'Spurling (compression foraminale cervicale)',ref:'Wainner RS et al. J Orthop Sports Phys Ther. 2003',stats:[{l:'Sensibilité',v:'50%',s:'radiculopathie C'},{l:'Spécificité',v:'86%',s:''},{l:'LR+',v:'3.5',s:''},{l:'LR−',v:'0.58',s:''}],note:'Inclinaison homolatérale + extension cervicale + pression axiale. Reproduction de la radiculalgie vers le membre supérieur = positif. Bonne spécificité : un résultat positif oriente vers une origine cervicale C5-C6. À réaliser si douleur non clairement d\'origine articulaire.'}
+};
+
+
+function showEBP(key,event){
+  if(event)event.stopPropagation();
+  var d=EBP_DATA[key];
+  if(!d)return;
+  document.getElementById('ebp-title').textContent=d.title;
+  document.getElementById('ebp-ref').textContent=d.ref;
+  var sh=document.getElementById('ebp-stats');
+  sh.innerHTML='';
+  if(d.stats&&d.stats.length){
+    d.stats.forEach(function(s){
+      sh.innerHTML+='<div class="ebp-stat"><div class="ebp-stat-lbl">'+s.l+'</div><div class="ebp-stat-val">'+s.v+'</div>'+(s.s?'<div class="ebp-stat-sub">'+s.s+'</div>':'')+'</div>';
+    });
+    sh.style.display='grid';
+  }else{sh.style.display='none';}
+  var nb=document.getElementById('ebp-note');
+  if(d.note){nb.textContent=d.note;nb.style.display='block';}else{nb.style.display='none';}
+  document.getElementById('ebp-overlay').classList.add('o');
+}
+function closeEBP(event){
+  if(event&&event.target!==document.getElementById('ebp-overlay'))return;
+  document.getElementById('ebp-overlay').classList.remove('o');
+}
+
+
+var psfsSt={texts:['','',''],vals:[null,null,null]};
+function buildPSFS(){
+  var h='<div style="font-size:12px;color:var(--tx2);margin-bottom:10px">Identifiez 3 activités limitées par votre épaule — notez chacune de 0 (impossible) à 10 (normal).</div>';
+  for(var j=0;j<3;j++){
+    h+='<div class="psfs-item">';
+    h+='<input type="text" placeholder="Activité '+(j+1)+' (ex: monter les escaliers, conduire...)" value="'+(psfsSt.texts[j]||'')+'" oninput="setPsfsText('+j+',this.value)" style="margin-bottom:7px">';
+    h+='<div class="psfs-btns">';
+    for(var v=0;v<=10;v++){
+      h+='<button class="psfs-btn'+(psfsSt.vals[j]===v?' on':'')+'" onclick="setPsfsVal('+j+','+v+',this)" type="button">'+v+'</button>';
+    }
+    h+='</div></div>';
+  }
+  document.getElementById('psfs-items').innerHTML=h;
+  calcPSFS();
+}
+function setPsfsText(j,v){psfsSt.texts[j]=v;}
+function setPsfsVal(j,v,btn){btn.closest('.psfs-btns').querySelectorAll('.psfs-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');psfsSt.vals[j]=v;calcPSFS();}
+function calcPSFS(){
+  var vals=psfsSt.vals.filter(function(v){return v!==null;});if(!vals.length){document.getElementById('psfs-result').innerHTML='';return;}
+  var avg=(vals.reduce(function(s,v){return s+v;},0)/vals.length).toFixed(1);D.psfs={avg:parseFloat(avg),texts:psfsSt.texts,vals:psfsSt.vals};
+  var cls=parseFloat(avg)>=7?'sco-g':parseFloat(avg)>=4?'sco-m':'sco-r';
+  document.getElementById('psfs-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+avg+'<span style="font-size:14px;font-weight:600">/10</span></div><div class="score-info">PSFS<br>Moyenne activités<br><span style="font-weight:400;font-size:10px">'+vals.length+' item(s) · MCID=2</span></div></div>';
+}
+
+// ══════════════════════════════════════════════════════
+// CONSTANT-MURLEY SCORE
+// ══════════════════════════════════════════════════════
+var constantData = {
+  douleur: null,
+  avq_niv: null, avq_pos: null, avq_som: null, avq_trav: null,
+  flex: null, abd: null, re: null, ri: null,
+  force: null
+};
+
+var C_DOULEUR   = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+var C_AVQ_NIV   = [{l:'Pleine activité',v:4},{l:'Légère limitation',v:3},{l:'Limitation modérée',v:2},{l:'Repos uniquement',v:1},{l:'Aucune activité',v:0}];
+var C_AVQ_POS   = [{l:'Taille (2)',v:2},{l:'Xiphoïde (4)',v:4},{l:'Cou (6)',v:6},{l:'Tête (8)',v:8},{l:'Au-dessus tête (10)',v:10}];
+var C_AVQ_SOM   = [{l:'Non perturbé (2)',v:2},{l:'Perturbé (1)',v:1},{l:'Insomnie (0)',v:0}];
+var C_AVQ_TRAV  = [{l:'Aucune limite (4)',v:4},{l:'Légère (3)',v:3},{l:'Modérée (2)',v:2},{l:'Sévère (1)',v:1},{l:'Impossible (0)',v:0}];
+var C_FLEX      = [{l:'<30° (0)',v:0},{l:'31-60° (2)',v:2},{l:'61-90° (4)',v:4},{l:'91-120° (6)',v:6},{l:'121-150° (8)',v:8},{l:'>150° (10)',v:10}];
+var C_ABD       = [{l:'<30° (0)',v:0},{l:'31-60° (2)',v:2},{l:'61-90° (4)',v:4},{l:'91-120° (6)',v:6},{l:'121-150° (8)',v:8},{l:'>150° (10)',v:10}];
+var C_RE        = [{l:'Main nuque (2)',v:2},{l:'Main tête (4)',v:4},{l:'Main sommet (6)',v:6},{l:'Bras vertical (8)',v:8},{l:'Bras + ext. (10)',v:10},{l:'Aucune (0)',v:0}];
+var C_RI        = [{l:'Dorsum cuisse (0)',v:0},{l:'Fesse (2)',v:2},{l:'Sacrum (4)',v:4},{l:'L3 (6)',v:6},{l:'T12 (8)',v:8},{l:'T7 (10)',v:10}];
+
+function buildConstantBtns(containerId, items, field, isNumeric) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  var h = '';
+  if (isNumeric) {
+    for (var v = 0; v <= 25; v++) {
+      h += '<button class="cscore-btn' + (constantData[field] === v ? ' on' : '') + '" onclick="setConstant(\'' + field + '\',' + v + ',this)" type="button">' + v + '</button>';
+    }
+  } else {
+    items.forEach(function(item) {
+      h += '<button class="cscore-btn' + (constantData[field] === item.v ? ' on' : '') + '" onclick="setConstant(\'' + field + '\',' + item.v + ',this)" type="button">' + item.l + '</button>';
+    });
+  }
+  el.innerHTML = h;
+}
+
+function openConstant() {
+  buildConstantBtns('c-douleur',  C_DOULEUR,  'douleur',   true);
+  buildConstantBtns('c-avq-niv',  C_AVQ_NIV,  'avq_niv',   false);
+  buildConstantBtns('c-avq-pos',  C_AVQ_POS,  'avq_pos',   false);
+  buildConstantBtns('c-avq-som',  C_AVQ_SOM,  'avq_som',   false);
+  buildConstantBtns('c-avq-trav', C_AVQ_TRAV, 'avq_trav',  false);
+  buildConstantBtns('c-flex',     C_FLEX,     'flex',      false);
+  buildConstantBtns('c-abd',      C_ABD,      'abd',       false);
+  buildConstantBtns('c-re',       C_RE,       're',        false);
+  buildConstantBtns('c-ri',       C_RI,       'ri',        false);
+  buildConstantBtns('c-force',    null,       'force',     true);
+  calcConstant();
+  document.getElementById('constant-modal').style.display = 'flex';
+}
+
+function closeConstant() {
+  document.getElementById('constant-modal').style.display = 'none';
+}
+
+function setConstant(field, val, btn) {
+  btn.closest('.cscore-btns').querySelectorAll('.cscore-btn').forEach(function(b) { b.classList.remove('on'); });
+  btn.classList.add('on');
+  constantData[field] = val;
+  calcConstant();
+}
+
+function calcConstant() {
+  var d  = constantData.douleur   !== null ? constantData.douleur   : 0;
+  var n  = constantData.avq_niv   !== null ? constantData.avq_niv   : 0;
+  var p  = constantData.avq_pos   !== null ? constantData.avq_pos   : 0;
+  var s  = constantData.avq_som   !== null ? constantData.avq_som   : 0;
+  var t  = constantData.avq_trav  !== null ? constantData.avq_trav  : 0;
+  var fl = constantData.flex      !== null ? constantData.flex      : 0;
+  var ab = constantData.abd       !== null ? constantData.abd       : 0;
+  var re = constantData.re        !== null ? constantData.re        : 0;
+  var ri = constantData.ri        !== null ? constantData.ri        : 0;
+  var fo = constantData.force     !== null ? constantData.force     : 0;
+
+  var pain  = d;
+  var avq   = n + p + s + t;
+  var mobil = fl + ab + re + ri;
+  var force = fo;
+  var total = pain + avq + mobil + force;
+
+  var grade = total >= 80 ? 'Excellent' : total >= 65 ? 'Bon' : total >= 50 ? 'Moyen' : 'Mauvais';
+  var interp = 'Douleur: ' + pain + '/15 · AVQ: ' + avq + '/20 · Mobilité: ' + mobil + '/40 · Force: ' + force + '/25';
+
+  var el = document.getElementById('c-total-num');
+  if (el) el.textContent = total;
+  var el2 = document.getElementById('c-grade-lbl');
+  if (el2) el2.textContent = grade;
+  var el3 = document.getElementById('c-interp-lbl');
+  if (el3) el3.textContent = interp;
+
+  D.constant = { total: total, pain: pain, avq: avq, mobil: mobil, force: force, grade: grade };
+}
+
+function valConstant() {
+  closeConstant();
+  if (D.constant) {
+    document.getElementById('constant-res').style.display = 'block';
+    document.getElementById('constant-total').textContent = D.constant.total;
+    document.getElementById('constant-grade').textContent = D.constant.grade;
+    document.getElementById('constant-detail').textContent =
+      'Douleur: ' + D.constant.pain + '/15 · AVQ: ' + D.constant.avq + '/20 · Mobilité: ' + D.constant.mobil + '/40 · Force: ' + D.constant.force + '/25';
+    saveState();
+  }
+}
+
+</script>
+</body>
+</html>

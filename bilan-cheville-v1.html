@@ -1,0 +1,2361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1B2A38">
+<title>Bilan Cheville/Pied V1 — Yasser Ladraa</title>
+<style>
+:root{
+  --bg:#F2F0EC;--surf:#FFF;--surf2:#EDEAE3;--brd:#DDD9CF;--brd2:#C2BCB0;
+  --tx:#1A1714;--tx2:#56524C;--tx3:#98948A;
+  --z:#8B2635;--zl:#FAE8EB;--zd:#5A1520;--zm:#A33045;
+  --red:#9C2B2B;--redl:#FAEAEA;--amb:#B56E10;--ambl:#FAF0DC;
+  --blu:#1550A0;--blul:#E3EEF9;--pur:#5A3898;--purl:#EDE8F8;
+  --grn:#177A5A;--grnl:#DAF0E6;--nvy:#1B2A38;
+  --r:10px;--rl:16px;--nh:64px;--hh:72px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;min-height:100vh;padding-bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 32px);padding-top:var(--hh)}
+.hdr{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nvy);height:var(--hh);display:flex;flex-direction:column;justify-content:center;padding:0 16px}
+.hr1{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hn{font-size:13px;font-weight:700;color:#fff}.hs{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
+.hbadge{background:var(--zm);color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.hprog{margin-top:8px}.hpbar{height:3px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+.hpfill{height:100%;background:var(--zm);border-radius:99px;transition:width .4s ease}
+.hplbls{display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:rgba(255,255,255,.4)}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:#fff;border-top:1px solid var(--brd);height:calc(var(--nh) + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;padding:0 12px;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 24px rgba(0,0,0,.08);gap:8px}
+.bni{font-size:11px;color:var(--tx3);text-align:center;flex:1;line-height:1.3;min-width:0}
+.bbt{display:flex;align-items:center;gap:5px;padding:12px 20px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;min-width:96px;min-height:48px;justify-content:center;flex-shrink:0}
+.bbt:active{opacity:.8}.bbk{background:var(--surf2);color:var(--tx2)}.bbn{background:var(--zm);color:#fff}.bbt:disabled{opacity:.3;pointer-events:none}
+.app{max-width:680px;margin:0 auto;padding:16px 14px 0}
+.step{display:none}.step.active{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sc{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.sch{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;touch-action:manipulation;transition:background .15s;user-select:none;-webkit-user-select:none}
+.sch:active{background:var(--surf2)}.schl{display:flex;align-items:center;gap:10px}
+.sci{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.iz{background:var(--zl)}.ia{background:var(--ambl)}.ib{background:var(--blul)}.ir{background:var(--redl)}.ip{background:var(--purl)}.ig{background:var(--grnl)}
+.sct{font-size:13px;font-weight:600;color:var(--tx)}.scs{font-size:11px;color:var(--tx3);margin-top:1px}
+.scch{color:var(--tx3);font-size:11px;transition:transform .2s;flex-shrink:0}.scch.o{transform:rotate(180deg)}
+.scb{padding:14px 15px;border-top:1.5px solid var(--brd);display:none}.scb.o{display:block}
+.sa .sch{cursor:default}.sa .scch{display:none}.sa .scb{display:block}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+.fl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fh{font-size:11px;color:var(--tx3);font-weight:400;text-transform:none;letter-spacing:0}
+input[type=text],input[type=date],select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--tx);background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 13px;outline:none;transition:border .15s,background .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--zm);background:#fff}
+textarea{resize:vertical;min-height:60px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:380px){.g2{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1.5px solid var(--brd);border-radius:99px;padding:8px 14px;font-size:13px;cursor:pointer;color:var(--tx2);background:var(--surf2);transition:all .15s;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:40px;display:inline-flex;align-items:center}
+.chip:active{transform:scale(.97)}.chip.on{background:var(--zm);border-color:var(--zm);color:#fff;font-weight:600}
+.checks{display:flex;flex-direction:column;gap:7px}
+.crow{display:flex;align-items:flex-start;gap:10px;padding:12px 12px;border:1.5px solid var(--brd);border-radius:var(--r);cursor:pointer;transition:all .15s;background:var(--surf2);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.crow:active{transform:scale(.99)}.crow.on{background:var(--zl);border-color:#D07080}
+.cbox{width:22px;height:22px;border:1.5px solid var(--brd2);border-radius:6px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .15s}
+.crow.on .cbox{background:var(--zm);border-color:var(--zm)}
+.cmk{display:none;color:#fff;font-size:12px;font-weight:800}.crow.on .cmk{display:block}
+.ctx2{font-size:13px;color:var(--tx);flex:1;line-height:1.4}.csb{font-size:11px;color:var(--tx3);margin-top:2px}
+.evaw{display:flex;gap:4px;flex-wrap:wrap}
+.evab{width:40px;height:44px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:14px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.evab:active{transform:scale(.93)}.evab.on{color:#fff;border-color:transparent}
+.e0.on,.e1.on,.e2.on,.e3.on{background:#177A5A}.e4.on,.e5.on,.e6.on{background:#B56E10}
+.e7.on,.e8.on{background:#C04A15}.e9.on,.e10.on{background:#9C2B2B}
+.egal{display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:var(--tx3)}
+.ti{border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.tih{display:flex;align-items:center;padding:12px 13px;background:var(--surf2);cursor:pointer;touch-action:manipulation;gap:10px}
+.tih:active{background:#E5E0D8}.til{flex:1;min-width:0}
+.tin{font-size:13px;font-weight:600;color:var(--tx)}.tisb{font-size:11px;color:var(--tx3);margin-top:1px}
+.tibs{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.tib{font-size:13px;font-weight:700;padding:9px 14px;border-radius:99px;border:1.5px solid var(--brd);cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;white-space:nowrap;touch-action:manipulation;font-family:inherit;min-height:44px;display:inline-flex;align-items:center}
+.tib:active{transform:scale(.95)}.tib.pos{background:var(--redl);border-color:var(--red);color:var(--red)}.tib.neg{background:var(--grnl);border-color:var(--grn);color:var(--grn)}
+.tibody{display:none;padding:12px 13px;background:#fff;border-top:1.5px solid var(--brd)}.tibody.o{display:block}
+.tstps{list-style:none;padding:0;counter-reset:s}
+.tstps li{counter-increment:s;padding:5px 0 5px 26px;position:relative;font-size:12px;color:var(--tx2);border-bottom:1px dashed var(--brd);line-height:1.4}
+.tstps li:last-child{border-bottom:none}
+.tstps li::before{content:counter(s);position:absolute;left:0;top:5px;width:18px;height:18px;background:var(--zl);color:var(--zm);border-radius:50%;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.tint{font-size:12px;color:var(--tx2);margin-top:8px;padding:8px 10px;background:var(--surf2);border-radius:8px;border-left:3px solid var(--zm);line-height:1.5}
+.al{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border-radius:var(--r);margin-bottom:10px;font-size:13px;line-height:1.5}
+.al span{font-size:16px;flex-shrink:0;margin-top:1px}
+.alr{background:var(--redl);border:1px solid #ECAAAA;color:var(--red)}
+.ala{background:var(--ambl);border:1px solid #ECC878;color:#5A3200}
+.alz{background:var(--zl);border:1px solid #D07080;color:var(--zd)}
+.alg{background:var(--grnl);border:1px solid #7DCEB0;color:#065038}
+.alp{background:var(--purl);border:1px solid #C9B8F0;color:var(--pur)}
+.alb{background:var(--blul);border:1px solid #B0C8F0;color:var(--blu)}
+.cluster-box{border:2px solid var(--zm);border-radius:var(--rl);padding:13px 14px;margin-bottom:12px;background:var(--zl)}
+.cluster-box.amb{border-color:var(--amb);background:var(--ambl)}
+.cluster-title{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--zm);margin-bottom:8px}
+.cluster-box.amb .cluster-title{color:var(--amb)}
+.cluster-counter{display:flex;align-items:center;gap:10px;margin-top:8px}
+.cluster-dots{display:flex;gap:5px}
+.cluster-dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--zm);background:#fff;transition:all .2s}
+.cluster-dot.on{background:var(--zm)}
+.cluster-lr{font-size:13px;font-weight:700;color:var(--zm)}
+.amp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:420px){.amp-grid{grid-template-columns:1fr 1fr}}
+.amp-item{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 11px}
+.amp-lbl{font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:2px}
+.amp-norm{font-size:10px;color:var(--tx3);margin-bottom:5px}
+.amp-input{width:100%;background:#fff;border:1.5px solid var(--brd);border-radius:7px;padding:7px 9px;font-size:14px;font-weight:700;color:var(--tx);font-family:inherit;-webkit-appearance:none;text-align:center}
+.amp-input:focus{border-color:var(--zm);outline:none}
+.score-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.score-tab{flex:1;min-width:68px;padding:8px 6px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:11px;font-weight:700;cursor:pointer;text-align:center;background:var(--surf2);color:var(--tx2);transition:all .15s;touch-action:manipulation;font-family:inherit;line-height:1.3}
+.score-tab.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.score-panel{display:none}.score-panel.on{display:block}
+.sq-row{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--brd)}
+.sq-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.sq-q{font-size:13px;color:var(--tx);margin-bottom:6px;line-height:1.4}
+.sq-opts{display:flex;gap:5px;flex-wrap:wrap}
+.sq-btn{flex:1;min-width:36px;height:40px;border:1.5px solid var(--brd);border-radius:8px;background:var(--surf2);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;color:var(--tx2);touch-action:manipulation}
+.sq-btn:active{transform:scale(.93)}.sq-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.score-res{display:flex;align-items:center;gap:14px;padding:13px 15px;border-radius:var(--rl);margin-top:12px}
+.sco-g{background:var(--grnl);border:1.5px solid #7DCEB0}
+.sco-m{background:var(--ambl);border:1.5px solid #ECC878}
+.sco-r{background:var(--redl);border:1.5px solid #ECAAAA}
+.score-num{font-size:32px;font-weight:800;line-height:1}
+.sco-g .score-num{color:#065038}.sco-m .score-num{color:#5A3200}.sco-r .score-num{color:var(--red)}
+.score-info{font-size:12px;font-weight:600;line-height:1.5}
+.sco-g .score-info{color:#065038}.sco-m .score-info{color:#5A3200}.sco-r .score-info{color:var(--red)}
+.step-progress{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap}
+.sp-item{flex:1;min-width:60px;padding:7px 8px;border-radius:8px;border:1.5px solid var(--brd);font-size:10px;font-weight:700;text-align:center;color:var(--tx3);background:var(--surf2);line-height:1.3}
+.sp-item.done{background:var(--grnl);border-color:#7DCEB0;color:#065038}
+.sp-item.warn{background:var(--ambl);border-color:#ECC878;color:#4A2800}
+.diag-card{border:2px solid var(--brd);border-radius:var(--rl);margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.diag-card.top{border-color:var(--zm)}
+.diag-head{padding:12px 14px;display:flex;align-items:center;gap:10px;background:var(--surf2)}
+.diag-card.top .diag-head{background:var(--zl)}
+.diag-bar-wrap{height:8px;background:var(--brd);border-radius:99px;overflow:hidden;flex:1}
+.diag-bar{height:100%;border-radius:99px;background:var(--brd2);transition:width .5s ease}
+.diag-card.top .diag-bar{background:var(--zm)}
+.diag-pct{font-size:12px;font-weight:800;color:var(--tx2);min-width:36px;text-align:right}
+.diag-card.top .diag-pct{color:var(--zm)}
+.diag-name{font-size:13px;font-weight:700;color:var(--tx);min-width:140px}
+.diag-body{display:none;padding:12px 14px;font-size:12px;color:var(--tx2);border-top:1px solid var(--brd);background:#fff;line-height:1.5}
+.diag-body.o{display:block}
+.diag-reasons{list-style:none;padding:0}
+.diag-reasons li{padding:3px 0 3px 14px;position:relative}
+.diag-reasons li::before{content:"+";position:absolute;left:0;color:var(--zm);font-weight:800}
+.dtag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin:2px}
+.dtz{background:var(--zl);color:var(--zd)}.dta{background:var(--ambl);color:#5A3200}.dtr{background:var(--redl);color:#5A1515}.dtb{background:var(--blul);color:#0C3060}.dtp{background:var(--purl);color:var(--pur)}.dtg{background:var(--grnl);color:#065038}
+.cr-box{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);padding:16px;margin-bottom:12px}
+.cr-title{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--zm);margin-bottom:10px}
+.cr-row{display:flex;gap:8px;margin-bottom:6px;font-size:13px;line-height:1.5}
+.cr-lbl{font-weight:700;color:var(--tx2);min-width:110px;flex-shrink:0}
+.cr-val{color:var(--tx);flex:1}
+.cr-tabs{display:flex;gap:6px;margin-bottom:12px}
+.cr-tab{flex:1;padding:9px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:12px;font-weight:700;cursor:pointer;text-align:center;background:var(--surf2);color:var(--tx2);transition:all .15s;touch-action:manipulation;font-family:inherit}
+.cr-tab.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.cr-panel{display:none}.cr-panel.on{display:block}
+.crsig{display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--brd);flex-wrap:wrap;gap:8px}
+.crsigl{border-bottom:1px solid var(--brd2);padding-bottom:2px;font-size:11px;color:var(--tx3);min-width:180px}
+.btf{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:var(--rl);border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;margin-top:10px}
+.btf:active{opacity:.85}.btz{background:var(--zm);color:#fff}.btn2{background:var(--nvy);color:#fff}.btg{background:var(--surf2);color:var(--tx2);border:1.5px solid var(--brd)}
+.pov{position:fixed;inset:0;background:var(--bg);z-index:400;display:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.pov.o{display:block}
+.phdr{position:sticky;top:0;background:var(--nvy);padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:10}
+.pclose{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:18px;cursor:pointer;font-family:inherit;flex-shrink:0;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.phinfo{flex:1}.phtitle{font-size:14px;font-weight:700;color:#fff}.phsub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.ppbtn{padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;touch-action:manipulation}
+.pcont{padding:16px 14px}
+.ph-section{margin-bottom:20px}
+.ph-stitle{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--zm);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--zl)}
+.ex-card{background:#fff;border:1.5px solid var(--brd);border-radius:var(--rl);margin-bottom:10px;overflow:hidden}
+.ex-head{padding:12px 14px;background:var(--surf2)}
+.ex-name{font-size:14px;font-weight:700;color:var(--tx)}
+.ex-meta{font-size:11px;color:var(--tx3);margin-top:2px}
+.ex-body{padding:12px 14px;border-top:1px solid var(--brd)}
+.ex-row{display:flex;gap:8px;margin-bottom:6px;font-size:13px}
+.ex-lbl{font-weight:700;color:var(--tx2);min-width:90px;flex-shrink:0}
+.ex-val{color:var(--tx);flex:1;line-height:1.4}
+.ex-just{font-size:12px;color:var(--tx3);background:var(--surf2);padding:8px 10px;border-radius:8px;border-left:3px solid var(--zm);margin-top:6px;line-height:1.5}
+.toast{position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 12px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--nvy);color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media print{.bnav,.hdr,.pclose,.ppbtn,.btf,.no-print{display:none!important}.pov{position:static}.phdr{background:#fff;color:#000}}
+
+.ebp-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--brd2);background:#fff;color:var(--tx3);font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.ebp-btn:active{background:var(--blul);border-color:var(--blu);color:var(--blu)}
+.ebp-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.ebp-overlay.o{opacity:1;pointer-events:auto}
+.ebp-sheet{background:#fff;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-width:540px;width:100%;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.ebp-overlay.o .ebp-sheet{transform:translateY(0)}
+.ebp-drag{width:36px;height:4px;background:var(--brd2);border-radius:99px;margin:0 auto 16px}
+.ebp-title{font-size:15px;font-weight:800;color:var(--nvy);margin-bottom:4px}
+.ebp-ref{font-size:11px;color:var(--tx3);margin-bottom:14px;font-style:italic}
+.ebp-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.ebp-stat{background:var(--surf2);border-radius:10px;padding:10px 12px;border:1.5px solid var(--brd)}
+.ebp-stat-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.ebp-stat-val{font-size:18px;font-weight:800;color:var(--nvy)}
+.ebp-stat-sub{font-size:10px;color:var(--tx3);margin-top:2px}
+.ebp-note{font-size:12px;color:var(--tx2);background:var(--blul);border:1.5px solid #B0C8F0;border-radius:8px;padding:10px 12px;line-height:1.5;margin-bottom:14px}
+.ebp-close{width:100%;padding:13px;border-radius:var(--r);border:none;background:var(--nvy);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation}
+
+.hbtn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.12);border:none;color:#fff;cursor:pointer;touch-action:manipulation;flex-shrink:0;text-decoration:none;font-size:16px;}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hr1">
+    <div>
+      <div class="hn" id="hdr-patient">Bilan Cheville / Pied</div>
+      <div class="hs" id="hdr-step">Étape 1/6</div>
+    </div>
+    <a class="hbtn" href="index.html" title="Accueil">&#8962;</a>
+    <span class="hbadge">Cheville</span>
+  </div>
+  <div class="hprog">
+    <div class="hpbar"><div class="hpfill" id="prog-fill" style="width:16.6%"></div></div>
+    <div class="hplbls">
+      <span>Identité</span><span>Anamnèse</span><span>Physique</span><span>Tests</span><span>Analyse</span><span>CR</span>
+    </div>
+  </div>
+</header>
+
+<div class="app">
+
+<!-- ══════════ ÉTAPE 1 — IDENTITÉ ══════════ -->
+<div class="step active" id="s1">
+
+  <div class="sc sa">
+    <div class="sch"><div class="schl">
+      <div class="sci iz"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B2635" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+      <div><div class="sct">Identité patient</div></div>
+    </div></div>
+    <div class="scb o">
+      <div class="g2">
+        <div class="field"><div class="fl">Nom</div><input type="text" id="nom" placeholder="Dupont" oninput="D.nom=this.value;updateHeader()"></div>
+        <div class="field"><div class="fl">Prénom</div><input type="text" id="prenom" placeholder="Jean" oninput="D.prenom=this.value;updateHeader()"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><div class="fl">Date de naissance</div><input type="date" id="ddn" oninput="D.ddn=this.value"></div>
+        <div class="field"><div class="fl">Sexe</div>
+          <select id="sexe" onchange="D.sexe=this.value">
+            <option value="">—</option><option>Homme</option><option>Femme</option>
+          </select>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="field"><div class="fl">Date du bilan</div><input type="date" id="datebilan" oninput="D.datebilan=this.value"></div>
+        <div class="field"><div class="fl">Côté atteint</div>
+          <select id="cote" onchange="D.cote=this.value">
+            <option value="">—</option><option>Droit</option><option>Gauche</option><option>Bilatéral</option>
+          </select>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="field"><div class="fl">Profession</div><input type="text" id="profession" placeholder="Infirmier..." oninput="D.profession=this.value"></div>
+        <div class="field"><div class="fl">Médecin prescripteur</div><input type="text" id="medecin" placeholder="Dr Martin" oninput="D.medecin=this.value"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc sa">
+    <div class="sch"><div class="schl">
+      <div class="sci ia"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B56E10" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div>
+      <div><div class="sct">Contexte clinique</div><div class="scs">Oriente le score fonctionnel</div></div>
+    </div></div>
+    <div class="scb o">
+      <div class="field">
+        <div class="fl">Contexte principal</div>
+        <div class="chips" id="ctx-chips">
+          <button class="chip" onclick="TC(this,'ctx',true)" type="button">Entorse aiguë</button>
+          <button class="chip" onclick="TC(this,'ctx',true)" type="button">Instabilité chronique</button>
+          <button class="chip" onclick="TC(this,'ctx',true)" type="button">Tendinopathie Achille</button>
+          <button class="chip" onclick="TC(this,'ctx',true)" type="button">Rupture Achille</button>
+          <button class="chip" onclick="TC(this,'ctx',true)" type="button">Post-opératoire</button>
+          <button class="chip" onclick="TC(this,'ctx',true)" type="button">Fasciite plantaire</button>
+          <button class="chip" onclick="TC(this,'ctx',true)" type="button">Pied antérieur</button>
+          <button class="chip" onclick="TC(this,'ctx',true)" type="button">Autre</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="fl">Activité physique</div>
+        <div class="chips">
+          <button class="chip" onclick="TC(this,'activite')" type="button">Sédentaire</button>
+          <button class="chip" onclick="TC(this,'activite')" type="button">Marche / Randonnée</button>
+          <button class="chip" onclick="TC(this,'activite')" type="button">Course à pied</button>
+          <button class="chip" onclick="TC(this,'activite')" type="button">Sports collectifs</button>
+          <button class="chip" onclick="TC(this,'activite')" type="button">Sports de saut</button>
+          <button class="chip" onclick="TC(this,'activite')" type="button">Danse / Gym</button>
+          <button class="chip" onclick="TC(this,'activite')" type="button">Cyclisme</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /s1 -->
+
+<!-- ══════════ ÉTAPE 2 — ANAMNÈSE ══════════ -->
+<div class="step" id="s2">
+
+  <div class="sc sa">
+    <div class="sch"><div class="schl">
+      <div class="sci ir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9C2B2B" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div>
+      <div><div class="sct">Motif et douleur</div></div>
+    </div></div>
+    <div class="scb o">
+      <div class="field">
+        <div class="fl">EVA douleur <span class="fh">— au repos</span></div>
+        <div class="evaw" id="eva-repos">
+          <button class="evab e0" onclick="evaC(this,'repos')" type="button">0</button>
+          <button class="evab e1" onclick="evaC(this,'repos')" type="button">1</button>
+          <button class="evab e2" onclick="evaC(this,'repos')" type="button">2</button>
+          <button class="evab e3" onclick="evaC(this,'repos')" type="button">3</button>
+          <button class="evab e4" onclick="evaC(this,'repos')" type="button">4</button>
+          <button class="evab e5" onclick="evaC(this,'repos')" type="button">5</button>
+          <button class="evab e6" onclick="evaC(this,'repos')" type="button">6</button>
+          <button class="evab e7" onclick="evaC(this,'repos')" type="button">7</button>
+          <button class="evab e8" onclick="evaC(this,'repos')" type="button">8</button>
+          <button class="evab e9" onclick="evaC(this,'repos')" type="button">9</button>
+          <button class="evab e10" onclick="evaC(this,'repos')" type="button">10</button>
+        </div>
+        <div class="egal"><span>Pas de douleur</span><span>Douleur max</span></div>
+      </div>
+      <div class="field">
+        <div class="fl">EVA douleur <span class="fh">— à la marche</span></div>
+        <div class="evaw" id="eva-marche">
+          <button class="evab e0" onclick="evaC(this,'marche')" type="button">0</button>
+          <button class="evab e1" onclick="evaC(this,'marche')" type="button">1</button>
+          <button class="evab e2" onclick="evaC(this,'marche')" type="button">2</button>
+          <button class="evab e3" onclick="evaC(this,'marche')" type="button">3</button>
+          <button class="evab e4" onclick="evaC(this,'marche')" type="button">4</button>
+          <button class="evab e5" onclick="evaC(this,'marche')" type="button">5</button>
+          <button class="evab e6" onclick="evaC(this,'marche')" type="button">6</button>
+          <button class="evab e7" onclick="evaC(this,'marche')" type="button">7</button>
+          <button class="evab e8" onclick="evaC(this,'marche')" type="button">8</button>
+          <button class="evab e9" onclick="evaC(this,'marche')" type="button">9</button>
+          <button class="evab e10" onclick="evaC(this,'marche')" type="button">10</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci ia"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B56E10" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div><div class="sct">Mode d'installation</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+      <div class="field">
+        <div class="fl">Mode</div>
+        <div class="chips">
+          <button class="chip" onclick="TC(this,'installation')" type="button">Traumatique (chute, torsion)</button>
+          <button class="chip" onclick="TC(this,'installation')" type="button">Progressif</button>
+          <button class="chip" onclick="TC(this,'installation')" type="button">Surmenage</button>
+          <button class="chip" onclick="TC(this,'installation')" type="button">Post-opératoire</button>
+          <button class="chip" onclick="TC(this,'installation')" type="button">Idiopathique</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="fl">Localisation douleur</div>
+        <div class="chips">
+          <button class="chip" onclick="TC(this,'localisation')" type="button">Malléole externe</button>
+          <button class="chip" onclick="TC(this,'localisation')" type="button">Malléole interne</button>
+          <button class="chip" onclick="TC(this,'localisation')" type="button">Tendon Achille</button>
+          <button class="chip" onclick="TC(this,'localisation')" type="button">Postéro-inf. (insertion)</button>
+          <button class="chip" onclick="TC(this,'localisation')" type="button">Sinus du tarse</button>
+          <button class="chip" onclick="TC(this,'localisation')" type="button">Plantaire (talon)</button>
+          <button class="chip" onclick="TC(this,'localisation')" type="button">Avant-pied</button>
+          <button class="chip" onclick="TC(this,'localisation')" type="button">Diffuse</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="fl">Rythme</div>
+        <div class="chips">
+          <button class="chip" onclick="TC(this,'rythme')" type="button">Mécanique</button>
+          <button class="chip" onclick="TC(this,'rythme')" type="button">Inflammatoire (nuit/repos)</button>
+          <button class="chip" onclick="TC(this,'rythme')" type="button">Dérouillage matinal</button>
+          <button class="chip" onclick="TC(this,'rythme')" type="button">Effort</button>
+          <button class="chip" onclick="TC(this,'rythme')" type="button">Premiers pas (matin)</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="fl">Facteurs déclenchants</div>
+        <div class="chips">
+          <button class="chip" onclick="TC(this,'declenchant')" type="button">Marche prolongée</button>
+          <button class="chip" onclick="TC(this,'declenchant')" type="button">Course à pied</button>
+          <button class="chip" onclick="TC(this,'declenchant')" type="button">Montée/descente</button>
+          <button class="chip" onclick="TC(this,'declenchant')" type="button">Terrain irrégulier</button>
+          <button class="chip" onclick="TC(this,'declenchant')" type="button">Station debout prolongée</button>
+          <button class="chip" onclick="TC(this,'declenchant')" type="button">Saut / réception</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="fl">Observations cliniques <span class="fh">— texte libre</span></div>
+        <textarea id="observations" placeholder="Notes cliniques, contexte particulier, traitements en cours..." oninput="D.observations=this.value" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci ig"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#177A5A" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>
+        <div><div class="sct">Antécédents</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+      <div class="checks">
+        <div class="crow" onclick="TCK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Entorse(s) ipsilatérale(s) antérieure(s)</div></div>
+        <div class="crow" onclick="TCK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Chirurgie cheville / pied (ligamentoplastie, ostéosynthèse...)</div></div>
+        <div class="crow" onclick="TCK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Tendinopathie / rupture Achille antérieure</div></div>
+        <div class="crow" onclick="TCK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Fracture métatarsien / cheville</div></div>
+        <div class="crow" onclick="TCK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Pathologie rhumatismale connue (PR, SPA, goutte...)</div></div>
+        <div class="crow" onclick="TCK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Diabète / neuropathie</div></div>
+        <div class="crow" onclick="TCK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Prise de fluoroquinolones (facteur de risque tendinopathie)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci ir"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9C2B2B" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div><div class="sct">Drapeaux rouges</div><div class="scs">Signes nécessitant orientation urgente</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+      <div class="al ala"><span>&#8505;</span><div>En présence d'un drapeau rouge, orienter avant tout traitement de kinésithérapie.</div></div>
+      <div class="checks">
+        <div class="crow" onclick="TCK(this,'redflags');checkRedFlags()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2"><strong>Déformation osseuse / craquement osseux</strong><div class="csb">Suspicion fracture — Ottawa +</div></div></div>
+        <div class="crow" onclick="TCK(this,'redflags');checkRedFlags()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2"><strong>Œdème massif + ecchymose étendue</strong><div class="csb">Entorse grade III / rupture ligamentaire complète</div></div></div>
+        <div class="crow" onclick="TCK(this,'redflags');checkRedFlags()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2"><strong>Absence de flexion plantaire active</strong><div class="csb">Suspicion rupture tendon Achille</div></div></div>
+        <div class="crow" onclick="TCK(this,'redflags');checkRedFlags()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2"><strong>Signes vasculaires (rougeur, chaleur, TVP)</strong><div class="csb">Phlébite / infection — bilan vasculaire urgent</div></div></div>
+        <div class="crow" onclick="TCK(this,'redflags');checkRedFlags()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2"><strong>Anesthésie / paresthésies distales</strong><div class="csb">Compression nerf fibulaire ou tibial</div></div></div>
+        <div class="crow" onclick="TCK(this,'redflags');checkRedFlags()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2"><strong>Douleur nocturne intense non mécanique</strong><div class="csb">Tumeur osseuse / infection</div></div></div>
+      </div>
+      <div class="al alr" id="redflag-alert" style="display:none;margin-top:10px"><span>&#9888;</span><div><strong>Drapeau rouge coché</strong> — orienter vers médecin / urgences avant poursuite du bilan.</div></div>
+    </div>
+  </div>
+
+</div><!-- /s2 -->
+
+<!-- ══════════ ÉTAPE 3 — EXAMEN PHYSIQUE ══════════ -->
+<div class="step" id="s3">
+
+  <div class="sc sa">
+    <div class="sch"><div class="schl">
+      <div class="sci iz"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B2635" stroke-width="2" stroke-linecap="round"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="2"/></svg></div>
+      <div><div class="sct">Amplitudes articulaires</div><div class="scs">Comparatif côté sain / atteint</div></div>
+    </div></div>
+    <div class="scb o">
+      <div class="amp-grid">
+        <div class="amp-item"><div class="amp-lbl">Dorsiflexion</div><div class="amp-norm">Norme ≥10°</div><input class="amp-input" type="number" placeholder="°" id="amp-df" oninput="D.amps.df=this.value"></div>
+        <div class="amp-item"><div class="amp-lbl">Flexion plantaire</div><div class="amp-norm">Norme ≥45°</div><input class="amp-input" type="number" placeholder="°" id="amp-fp" oninput="D.amps.fp=this.value"></div>
+        <div class="amp-item"><div class="amp-lbl">Inversion</div><div class="amp-norm">Norme ≈30°</div><input class="amp-input" type="number" placeholder="°" id="amp-inv" oninput="D.amps.inv=this.value"></div>
+        <div class="amp-item"><div class="amp-lbl">Éversion</div><div class="amp-norm">Norme ≈15°</div><input class="amp-input" type="number" placeholder="°" id="amp-ev" oninput="D.amps.ev=this.value"></div>
+        <div class="amp-item"><div class="amp-lbl">Sous-talienne</div><div class="amp-norm">Inversion+éversion</div><input class="amp-input" type="number" placeholder="°" id="amp-st" oninput="D.amps.st=this.value"></div>
+        <div class="amp-item"><div class="amp-lbl">Dorsiflexion sain</div><div class="amp-norm">Comparatif</div><input class="amp-input" type="number" placeholder="°" id="amp-df-sain" oninput="D.amps.df_sain=this.value"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci ig"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#177A5A" stroke-width="2" stroke-linecap="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 8v8M8 12h8"/></svg></div>
+        <div><div class="sct">Examen morphologique</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+      <div class="field">
+        <div class="fl">Morphologie du pied</div>
+        <div class="chips">
+          <button class="chip" onclick="TC(this,'morpho')" type="button">Normal</button>
+          <button class="chip" onclick="TC(this,'morpho')" type="button">Pied plat valgus</button>
+          <button class="chip" onclick="TC(this,'morpho')" type="button">Pied creux varus</button>
+          <button class="chip" onclick="TC(this,'morpho')" type="button">Hallux valgus</button>
+          <button class="chip" onclick="TC(this,'morpho')" type="button">Orteils en griffe</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="fl">Signes locaux</div>
+        <div class="checks">
+          <div class="crow" onclick="TCK(this,'signes')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Œdème péri-malléolaire<div class="csb">Siège et importance</div></div></div>
+          <div class="crow" onclick="TCK(this,'signes')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Ecchymose<div class="csb">Localisation et étendue</div></div></div>
+          <div class="crow" onclick="TCK(this,'signes')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Épaississement tendon Achille<div class="csb">Fusiforme ou nodulaire</div></div></div>
+          <div class="crow" onclick="TCK(this,'signes')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Gap palpable tendon Achille<div class="csb">Suspicion rupture totale</div></div></div>
+          <div class="crow" onclick="TCK(this,'signes')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Crépitations tendineuses</div></div>
+          <div class="crow" onclick="TCK(this,'signes')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Instabilité ressentie à la marche</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci ib"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1550A0" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></div>
+        <div><div class="sct">Force musculaire MRC</div><div class="scs">Muscles clés cheville / pied</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+      <div id="mrc-section"></div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci ip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5A3898" stroke-width="2" stroke-linecap="round"><path d="M12 22V12M12 12C12 6 6 4 6 4s2 6 6 8M12 12c0-6 6-4 6-4s-2 6-6 8"/></svg></div>
+        <div><div class="sct">Bilan neurovasculaire</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+      <div class="field">
+        <div class="fl">Sensibilité</div>
+        <div class="chips">
+          <button class="chip" onclick="TC(this,'sensi',true)" type="button">Normale</button>
+          <button class="chip" onclick="TC(this,'sensi',true)" type="button">Hypoesthésie dorsale</button>
+          <button class="chip" onclick="TC(this,'sensi',true)" type="button">Hypoesthésie plantaire</button>
+          <button class="chip" onclick="TC(this,'sensi',true)" type="button">Paresthésies</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="fl">Test du monofilament</div>
+        <div class="chips">
+          <button class="chip" onclick="TC(this,'monofil',true)" type="button">Non réalisé</button>
+          <button class="chip" onclick="TC(this,'monofil',true)" type="button">Normal</button>
+          <button class="chip" onclick="TC(this,'monofil',true)" type="button">Altéré — diabète/neuropathie</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /s3 -->
+
+<!-- ══════════ ÉTAPE 4 — TESTS CLINIQUES EBP ══════════ -->
+<div class="step" id="s4">
+
+  <!-- CLUSTER OTTAWA -->
+  <div class="cluster-box" id="ottawa-cluster">
+    <div class="cluster-title">Règles d'Ottawa — Indication radiologique</div>
+    <div style="font-size:12px;color:var(--zd);margin-bottom:8px;line-height:1.5">Stiell 1994 — Se 98% — Indique une radio si 1 critère présent</div>
+    <div class="checks">
+      <div class="crow" onclick="TCK(this,'ottawa');updateOttawa()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Douleur bord post. ou pointe malléole EXTERNE (6 cm distaux fibula)<div class="csb">Zone A — ligament péronéo-astragalien ant.</div></div></div>
+      <div class="crow" onclick="TCK(this,'ottawa');updateOttawa()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Douleur bord post. ou pointe malléole INTERNE (6 cm distaux tibia)<div class="csb">Zone B — ligament deltoïdien</div></div></div>
+      <div class="crow" onclick="TCK(this,'ottawa');updateOttawa()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Douleur palpation base du 5e métatarse<div class="csb">Zone C — fracture avulsion fibulaires</div></div></div>
+      <div class="crow" onclick="TCK(this,'ottawa');updateOttawa()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Douleur palpation os naviculaire<div class="csb">Zone D — fracture naviculaire</div></div></div>
+      <div class="crow" onclick="TCK(this,'ottawa');updateOttawa()"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Impossibilité de faire 4 pas en charge immédiatement + aux urgences<div class="csb">Critère fonctionnel commun cheville et médio-pied</div></div></div>
+    </div>
+    <div class="cluster-counter">
+      <div class="cluster-dots" id="ottawa-dots">
+        <div class="cluster-dot"></div><div class="cluster-dot"></div><div class="cluster-dot"></div><div class="cluster-dot"></div><div class="cluster-dot"></div>
+      </div>
+      <span class="cluster-lr" id="ottawa-result">0/5 — Radio non indiquée</span>
+    </div>
+  </div>
+
+  <!-- TESTS LIGAMENTAIRES -->
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci iz"></div>
+        <div><div class="sct">Stabilité ligamentaire latérale</div><div class="scs">Tiroir ant. · Tilt talaire · Stress test</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Anterior Drawer Test (Tiroir ant.)</div>
+            <div class="tisb">van Dijk 1996 — Se 74% · Sp 88% · LR+ 6.2 · LR− 0.30</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('adt',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'adt','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'adt','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Patient assis, genou à 90° ou décubitus dorsal</li>
+            <li>Stabiliser le tibia d'une main</li>
+            <li>Saisir le calcanéum, pied en légère flexion plantaire (20°)</li>
+            <li>Tirer le pied vers l'avant</li>
+            <li>Positif : translation antérieure &gt;3 mm ou laxité &gt; côté sain</li>
+          </ol>
+          <div class="tint">Test réalisé à J4-5 post-entorse (œdème réduit). Comparer systématiquement au côté sain.</div>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Talar Tilt (Inclinaison talaire)</div>
+            <div class="tisb">Frost & Amendola 1996 — Se 50% · Sp 88% · LR+ 4.2</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('tilt',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'tilt','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'tilt','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Patient en décubitus dorsal, pied en position neutre</li>
+            <li>Stabiliser la jambe, saisir le calcanéum</li>
+            <li>Forcer en inversion (varus forcé)</li>
+            <li>Positif : ouverture articulaire &gt;10° ou &gt;5° vs côté sain</li>
+          </ol>
+          <div class="tint">Teste le LTFA et LCF. Comparer cliniquement ou sous amplificateur si doute.</div>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Stress test en éversion (LLI)</div>
+            <div class="tisb">Ligament latéral interne — Se modérée</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('stress_lli',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'stress_lli','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'stress_lli','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Forcer en éversion (valgus forcé)</li>
+            <li>Positif : douleur et/ou laxité en éversion</li>
+          </ol>
+          <div class="tint">Entorse médiale rare (~10% des entorses). Associer à une lésion syndesmo-tibio-fibulaire si positive.</div>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Squeeze Test (Syndesmose tibio-fibulaire)</div>
+            <div class="tisb">Syndesmose — Se 30% · Sp 93%</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('squeeze',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'squeeze','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'squeeze','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Comprimer tibia + fibula au niveau du 1/3 moyen de jambe</li>
+            <li>Positif : douleur distale (syndesmose)</li>
+          </ol>
+          <div class="tint">Spécificité élevée — si positif : imagerie syndesmose obligatoire.</div>
+        </div>
+      </div>
+
+      <!-- CLUSTER INSTABILITÉ LATÉRALE -->
+      <div class="cluster-box" style="margin-top:10px">
+        <div class="cluster-title">Cluster instabilité latérale</div>
+        <div style="font-size:12px;color:var(--zd);line-height:1.5">ADT positif + Tilt talaire positif + Ecchymose + Douleur malléole antérieure = entorse grade II/III probable</div>
+        <div id="instab-cluster-result" style="margin-top:8px;font-size:13px;font-weight:700;color:var(--zm)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACHILLE -->
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci ir"></div>
+        <div><div class="sct">Tendon d'Achille</div><div class="scs">Rupture · Tendinopathie</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Thompson Test (Simmonds)</div>
+            <div class="tisb">Maffulli 1998 — Se 96% · Sp 93% · LR+ 13.7 — Rupture totale</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('thompson',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'thompson','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'thompson','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Patient en décubitus ventral, pied dans le vide</li>
+            <li>Comprimer le mollet dans son tiers proximal</li>
+            <li>Positif : ABSENCE de flexion plantaire</li>
+          </ol>
+          <div class="tint" style="border-left-color:var(--red);background:var(--redl)">Thompson positif = rupture totale jusqu'à preuve du contraire — échographie urgente.</div>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Matles Test</div>
+            <div class="tisb">Matles 1975 — Se 88% · Sp 85% · LR+ 5.9</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('matles',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'matles','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'matles','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Décubitus ventral, demander flexion active des genoux à 90°</li>
+            <li>Observer la position spontanée du pied</li>
+            <li>Positif : pied en dorsiflexion neutre ou dorsiflexion (côté sain en FP légère)</li>
+          </ol>
+          <div class="tint">Complément du Thompson. Les deux positifs : VPP &gt;98% pour rupture totale.</div>
+        </div>
+      </div>
+
+      <!-- ALERTE RUPTURE ACHILLE -->
+      <div class="al alr" id="achille-urgence-alert" style="display:none;margin-bottom:4px">
+        <span>&#9888;</span><div></div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">RLHT — Royal London Hospital Test</div>
+            <div class="tisb">Maffulli 1998 — Se 78% · Sp 80% — Tendinopathie corporéale</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('rlht',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'rlht','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'rlht','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Palpation du tendon en position neutre : repérer la zone douloureuse maximale</li>
+            <li>Dorsiflexion passive maximale du pied</li>
+            <li>Positif : DIMINUTION de la douleur en dorsiflexion (signe caractéristique)</li>
+          </ol>
+          <div class="tint">Distingue tendinopathie corporéale (RLHT+) de tendinite d'insertion (RLHT−).</div>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Arc Sign</div>
+            <div class="tisb">Khan 2003 — Se 53% · Sp 93%</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('arc',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'arc','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'arc','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Placer deux doigts de chaque côté du tendon, identifier un épaississement</li>
+            <li>Mobilisation passive en flexion plantaire</li>
+            <li>Positif : l'épaississement SE DÉPLACE avec le tendon (dans le paratendon)</li>
+            <li>Négatif : l'épaississement reste fixe (tendinite d'insertion, kyste)</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Heel Rise Test (élévation unipodal)</div>
+            <div class="tisb">Capacité fonctionnelle mollet — seuil 25 répétitions côté sain</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('heelrise',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'heelrise','pos',this)" type="button">Déficit</button>
+            <button class="tib" onclick="setTest(event,'heelrise','neg',this)" type="button">Normal</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Debout unipodal, main au mur pour l'équilibre uniquement</li>
+            <li>Répétitions maximales de montée sur la pointe des pieds</li>
+            <li>Comparer les deux côtés — seuil LSI 90%</li>
+          </ol>
+          <div class="tint">Seuil retour sport : LSI ≥90%. &lt;10 répétitions = déficit sévère.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- INSTABILITÉ CHRONIQUE / PROPRIOCEPTION -->
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci ig"></div>
+        <div><div class="sct">Instabilité chronique &amp; proprioception</div><div class="scs">CAIT · Y-Balance · Hop tests</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">SEBT / Y-Balance Test (Reach antérieur)</div>
+            <div class="tisb">Plisky 2009 — seuil composite ≥89% · Déficit &gt;4 cm = risque blessure ×2</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('ybt',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'ybt','pos',this)" type="button">Déficit</button>
+            <button class="tib" onclick="setTest(event,'ybt','neg',this)" type="button">Normal</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Debout sur un pied (côté atteint), mains sur les hanches</li>
+            <li>Atteindre au maximum dans les 3 directions : antérieure, postéro-médiale, postéro-latérale</li>
+            <li>Mesurer la distance (cm) dans chaque direction</li>
+            <li>Calculer score composite = (ant + PM + PL) / (3 × longueur membre) × 100</li>
+          </ol>
+          <div class="tint">Déficit &gt;4 cm reach antérieur vs côté sain = risque de récidive significativement augmenté (Plisky 2009).</div>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Single Hop for Distance</div>
+            <div class="tisb">van Melick 2016 — LSI ≥90% retour sport</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('singlehop',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'singlehop','pos',this)" type="button">Déficit</button>
+            <button class="tib" onclick="setTest(event,'singlehop','neg',this)" type="button">Normal</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Saut unipodal maximal vers l'avant</li>
+            <li>Mesurer distance de saut (cm) — 3 essais, retenir la meilleure</li>
+            <li>LSI = (côté atteint / côté sain) × 100 — seuil ≥90%</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Équilibre unipodal (statique)</div>
+            <div class="tisb">Seuil : ≥30 sec yeux ouverts, ≥15 sec yeux fermés</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('equil',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'equil','pos',this)" type="button">Déficit</button>
+            <button class="tib" onclick="setTest(event,'equil','neg',this)" type="button">Normal</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Debout sur pied atteint, mains sur les hanches</li>
+            <li>Yeux ouverts : maintien 30 secondes</li>
+            <li>Yeux fermés : maintien 15 secondes</li>
+            <li>Comparer au côté sain</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SINUS DU TARSE / SOUS-TALIEN -->
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci ia"></div>
+        <div><div class="sct">Sinus du tarse &amp; sous-talien</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Palpation sinus du tarse</div>
+            <div class="tisb">Boya 2006 — Se 70-80% — Sinus tarsi syndrome</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('sinus',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'sinus','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'sinus','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Repérer le sinus du tarse : dépression antéro-inférieure à la malléole externe</li>
+            <li>Pression directe du pouce</li>
+            <li>Positif : reproduction de la douleur profonde caractéristique</li>
+          </ol>
+          <div class="tint">Fréquemment associé aux séquelles d'entorse latérale. Associer test de charge en pronation.</div>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Compression sous-talienne</div>
+            <div class="tisb">Douleur sous-talienne profonde à la compression axiale</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('subtalar',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'subtalar','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'subtalar','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Patient assis, pied dans le vide</li>
+            <li>Comprimer le calcanéum vers le haut (axe sous-talien)</li>
+            <li>Positif : douleur profonde sous-talienne</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FASCIITE PLANTAIRE / PIED ANTÉRIEUR -->
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)">
+      <div class="schl">
+        <div class="sci iz"></div>
+        <div><div class="sct">Fasciite plantaire &amp; pied antérieur</div><div class="scs">Windlass · Morton · Hallux</div></div>
+      </div>
+      <span class="scch">&#9660;</span>
+    </div>
+    <div class="scb">
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Windlass Test</div>
+            <div class="tisb">Karabay 2007 — Se 32% · Sp 100% — Fasciite plantaire</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('windlass',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'windlass','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'windlass','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Patient debout ou assis</li>
+            <li>Extension passive maximale des orteils (hallux en particulier)</li>
+            <li>Positif : reproduction de la douleur talonnière plantaire</li>
+          </ol>
+          <div class="tint">Sp 100% — si positif, fasciite plantaire quasi certaine. La faible sensibilité ne doit pas faire rejeter le diagnostic si négatif.</div>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Palpation insertion fascia (Tinel plantaire)</div>
+            <div class="tisb">Gold standard clinique fasciite — Se élevée</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('fascia_palp',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'fascia_palp','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'fascia_palp','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Palpation directe de l'insertion du fascia plantaire sur la face antéro-médiale du calcanéum</li>
+            <li>Positif : douleur exquise reproduisant la plainte</li>
+          </ol>
+          <div class="tint">Douleur des premiers pas le matin = signe cardinal. Associer Windlass test.</div>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Compression métatarsale (Morton)</div>
+            <div class="tisb">Mulder 1951 — Se 84% · Sp 96% — Névrome de Morton</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('morton',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'morton','pos',this)" type="button">Pos</button>
+            <button class="tib" onclick="setTest(event,'morton','neg',this)" type="button">Neg</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Comprimer latéralement l'avant-pied (signe de Mulder)</li>
+            <li>Simultanément, pression du pouce dans l'espace inter-métatarsien 3-4</li>
+            <li>Positif : douleur irradiante vers les orteils + claquement (signe de Mulder)</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="ti">
+        <div class="tih" onclick="toggleTI(this)">
+          <div class="til">
+            <div class="tin">Test hallux valgus (mesure angulaire)</div>
+            <div class="tisb">Angle HVA normal &lt;15° / IMA normal &lt;9°</div>
+          </div>
+          <button class="ebp-btn" onclick="showEBP('hallux',event)" type="button">ⓘ</button>
+          <div class="tibs">
+            <button class="tib" onclick="setTest(event,'hallux','pos',this)" type="button">Déviation</button>
+            <button class="tib" onclick="setTest(event,'hallux','neg',this)" type="button">Normal</button>
+          </div>
+        </div>
+        <div class="tibody">
+          <ol class="tstps">
+            <li>Évaluation clinique de l'angle du premier rayon</li>
+            <li>HVA (Hallux Valgus Angle) : angle entre M1 et hallux — normal &lt;15°</li>
+            <li>Douleur au niveau de la 1ère MTP ? Inflammation bunion ?</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /s4 -->
+
+<!-- ══════════ ÉTAPE 5 — SCORES FONCTIONNELS ══════════ -->
+<div class="step" id="s5">
+
+  <div class="al alz" id="score-orient" style="margin-bottom:14px">
+    <span>&#127919;</span><div id="score-orient-text">Sélectionner le contexte (étape 1) pour une recommandation automatique.</div>
+  </div>
+
+  <div class="score-tabs" id="score-tabs-main">
+    <button class="score-tab on" onclick="switchScore('faam',this)" id="tab-faam" type="button">FAAM</button>
+    <button class="score-tab" onclick="switchScore('cait',this)" id="tab-cait" type="button">CAIT</button>
+    <button class="score-tab" onclick="switchScore('visa',this)" id="tab-visa" type="button">VISA-A</button>
+    <button class="score-tab" onclick="switchScore('faos',this)" id="tab-faos" type="button">FAOS</button>
+    <button class="score-tab" onclick="switchScore('psfs',this)" id="tab-psfs" type="button">PSFS</button>
+  </div>
+
+  <!-- FAAM -->
+  <div class="score-panel on" id="panel-faam">
+    <div class="al alb" style="margin-bottom:10px"><span>&#8505;</span><div><strong>FAAM</strong> — Foot &amp; Ankle Ability Measure (Martin 2005). 21 items ADL + 8 items Sport. MCID ADL = 8 pts, Sport = 9 pts.</div></div>
+    <div id="faam-adl-items"></div>
+    <div id="faam-result"></div>
+    <div id="faam-sport-section" style="display:none;margin-top:14px">
+      <div class="fl" style="margin-bottom:8px">Sous-score Sport (si applicable)</div>
+      <div id="faam-sport-items"></div>
+      <div id="faam-sport-result"></div>
+    </div>
+    <button class="btg" onclick="toggleFaamSport()" type="button" id="btn-faam-sport" style="margin-top:8px;padding:10px;font-size:13px">+ Ajouter sous-score Sport</button>
+  </div>
+
+  <!-- CAIT -->
+  <div class="score-panel" id="panel-cait">
+    <div class="al alb" style="margin-bottom:10px"><span>&#8505;</span><div><strong>CAIT</strong> — Cumberland Ankle Instability Tool (Hiller 2006). 9 questions. Score /30. Seuil instabilité chronique : ≤24. MCID = 3 pts.</div></div>
+    <div id="cait-items"></div>
+    <div id="cait-result"></div>
+  </div>
+
+  <!-- VISA-A -->
+  <div class="score-panel" id="panel-visa">
+    <div class="al alb" style="margin-bottom:10px"><span>&#8505;</span><div><strong>VISA-A</strong> — Victorian Institute of Sport Assessment – Achilles (Robinson 2001). 8 questions. Score /100. Asymptomatique = 100. MCID = 12 pts.</div></div>
+    <div id="visa-items"></div>
+    <div id="visa-result"></div>
+  </div>
+
+  <!-- FAOS -->
+  <div class="score-panel" id="panel-faos">
+    <div class="al ala" style="margin-bottom:10px"><span>&#8505;</span><div><strong>FAOS</strong> — Foot &amp; Ankle Outcome Score (Roos 2001). Version simplifiée mobile — 5 sous-scores. Indiqué en contexte post-opératoire ou arthrose tibio-talienne.</div></div>
+    <div id="faos-items"></div>
+    <div id="faos-result"></div>
+  </div>
+
+  <!-- PSFS -->
+  <div class="score-panel" id="panel-psfs">
+    <div class="al alb" style="margin-bottom:10px"><span>&#8505;</span><div><strong>PSFS</strong> — Patient-Specific Functional Scale. 3 activités limitées, notées 0–10. MCID = 2 pts. Utilisable toutes pathologies.</div></div>
+    <div id="psfs-items"></div>
+    <div id="psfs-result"></div>
+  </div>
+
+</div><!-- /s5 -->
+
+<!-- ══════════ ÉTAPE 6 — ANALYSE & CR ══════════ -->
+<div class="step" id="s6">
+
+  <div class="step-progress" id="analyse-checklist"></div>
+
+  <!-- ALGORITHME DIAGNOSTIQUE -->
+  <div class="sc sa">
+    <div class="sch"><div class="schl">
+      <div class="sci iz"></div>
+      <div><div class="sct">Analyse diagnostique</div><div class="scs">Algorithme pondéré EBP</div></div>
+    </div></div>
+    <div class="scb o">
+      <div id="diag-cards"></div>
+      <div id="diag-excl" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <!-- CR -->
+  <div class="sc sa">
+    <div class="sch"><div class="schl">
+      <div class="sci ig"></div>
+      <div><div class="sct">Compte-rendu</div><div class="scs">Court · Complet</div></div>
+    </div></div>
+    <div class="scb o">
+      <div class="cr-tabs">
+        <button class="cr-tab on" onclick="switchCR('short',this)" type="button">Court</button>
+        <button class="cr-tab" onclick="switchCR('full',this)" type="button">Complet</button>
+      </div>
+      <div class="cr-panel on" id="cr-short"><div id="cr-short-content"></div></div>
+      <div class="cr-panel" id="cr-full"><div id="cr-full-content"></div></div>
+      <div class="crsig">
+        <div class="crsigl">Signature du kinésithérapeute</div>
+        <div style="font-size:11px;color:var(--tx3)" id="cr-date-sig"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRAMME EXERCICES -->
+  <button class="btf btz" onclick="openProgram()" type="button" id="btn-prog">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    Programme d'exercices (28 ex.)
+  </button>
+
+  <button class="btg" onclick="resetBilan()" type="button" style="margin-top:8px">
+    Nouveau bilan
+  </button>
+
+</div><!-- /s6 -->
+
+</div><!-- /app -->
+
+<nav class="bnav no-print">
+  <button class="bbt bbk" id="btn-back" onclick="navBack()" type="button" disabled>&#8592; Retour</button>
+  <div class="bni" id="bni">Étape 1/6 — Identité</div>
+  <button class="bbt bbn" id="btn-next" onclick="navNext()" type="button">Suivant &#8594;</button>
+</nav>
+
+<!-- PROGRAMME OVERLAY -->
+<div class="pov" id="prog-overlay">
+  <div class="phdr">
+    <button class="pclose" onclick="closeProgram()" type="button">&#215;</button>
+    <div class="phinfo">
+      <div class="phtitle" id="prog-patient-name">Programme</div>
+      <div class="phsub" id="prog-patient-info">Cheville / Pied</div>
+    </div>
+    <button class="ppbtn" onclick="window.print()" type="button">PDF</button>
+  </div>
+  <div class="pcont" id="prog-content"></div>
+</div>
+
+<div class="toast" id="toast">Bilan sauvegardé</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ÉTAT GLOBAL
+// ══════════════════════════════════════════════════════
+var D={
+  nom:'',prenom:'',ddn:'',sexe:'',cote:'',profession:'',datebilan:'',medecin:'',
+  observations:'',
+  eva:{repos:null,marche:null},
+  ctx:null,
+  amps:{df:null,fp:null,inv:null,ev:null,st:null,df_sain:null}
+};
+var CUR=1;
+var CHIPS={};
+var CHECKS={};
+var TESTS={};
+var MRC={};
+var faamADL={},faamSport={};
+var caitSt={};
+var visaSt={};
+var faosSt={};
+var psfsSt={texts:['','',''],vals:[null,null,null]};
+var faamSportVisible=false;
+var NAV_LABELS=['Identité patient','Anamnèse & triage','Examen physique','Tests cliniques EBP','Scores fonctionnels','Analyse & CR'];
+
+// ══════════════════════════════════════════════════════
+// SAUVEGARDE localStorage
+// ══════════════════════════════════════════════════════
+function saveState(){
+  try{
+    var state={D:D,CHIPS:CHIPS,CHECKS:CHECKS,TESTS:TESTS,MRC:MRC,faamADL:faamADL,faamSport:faamSport,caitSt:caitSt,visaSt:visaSt,faosSt:faosSt,psfsSt:psfsSt,CUR:CUR};
+    localStorage.setItem('bilan-cheville-v1',JSON.stringify(state));
+    showToast('Bilan sauvegardé');
+  }catch(e){}
+}
+function loadState(){
+  try{
+    var raw=localStorage.getItem('bilan-cheville-v1');
+    if(!raw)return;
+    var s=JSON.parse(raw);
+    if(s.D)D=s.D;
+    if(s.CHIPS)CHIPS=s.CHIPS;
+    if(s.CHECKS)CHECKS=s.CHECKS;
+    if(s.TESTS)TESTS=s.TESTS;
+    if(s.MRC)MRC=s.MRC;
+    if(s.faamADL)faamADL=s.faamADL;
+    if(s.faamSport)faamSport=s.faamSport;
+    if(s.caitSt)caitSt=s.caitSt;
+    if(s.visaSt)visaSt=s.visaSt;
+    if(s.faosSt)faosSt=s.faosSt;
+    if(s.psfsSt)psfsSt=s.psfsSt;
+    // Restaurer l'UI après chargement
+    setTimeout(restoreUI,0);
+  }catch(e){}
+}
+function restoreUI(){
+  // Champs texte
+  ['nom','prenom','ddn','sexe','cote','profession','datebilan','medecin'].forEach(function(f){
+    var el=document.getElementById(f);
+    if(el&&D[f])el.value=D[f];
+  });
+  // Observations
+  var obs=document.getElementById('observations');
+  if(obs&&D.observations)obs.value=D.observations;
+  // Header patient
+  updateHeader();
+  // Amplitudes
+  var ampMap={df:'amp-df',fp:'amp-fp',inv:'amp-inv',ev:'amp-ev',st:'amp-st',df_sain:'amp-df-sain'};
+  Object.keys(ampMap).forEach(function(k){
+    var el=document.getElementById(ampMap[k]);
+    if(el&&D.amps[k])el.value=D.amps[k];
+  });
+  // EVA
+  ['repos','marche'].forEach(function(type){
+    if(D.eva[type]!==null){
+      var btns=document.querySelectorAll('#eva-'+type+' .evab');
+      btns.forEach(function(b){
+        if(parseInt(b.textContent)===D.eva[type])b.classList.add('on');
+      });
+    }
+  });
+  // Chips
+  Object.keys(CHIPS).forEach(function(g){
+    var vals=CHIPS[g]||[];
+    document.querySelectorAll('[onclick*="TC(this,\''+g+'\'"]').forEach(function(el){
+      if(vals.indexOf(el.textContent.trim())>-1)el.classList.add('on');
+    });
+  });
+  // Ctx solo
+  if(D.ctx){
+    document.querySelectorAll('#ctx-chips .chip').forEach(function(el){
+      if(el.textContent.trim()===D.ctx)el.classList.add('on');
+    });
+  }
+  // Checks (crow)
+  Object.keys(CHECKS).forEach(function(g){
+    var vals=CHECKS[g]||[];
+    document.querySelectorAll('[onclick*="TCK(this,\''+g+'\'"]').forEach(function(el){
+      var ctx2=el.querySelector('.ctx2');
+      if(!ctx2)return;
+      var t='';
+      ctx2.childNodes.forEach(function(node){
+        if(node.nodeType===3)t+=node.textContent;
+        else if(node.nodeType===1&&!node.classList.contains('csb'))t+=node.textContent;
+      });
+      t=t.trim();
+      if(vals.indexOf(t)>-1)el.classList.add('on');
+    });
+  });
+  // Tests : restaurer visuellement les boutons pos/neg
+  Object.keys(TESTS).forEach(function(key){
+    var val=TESTS[key];
+    document.querySelectorAll('[onclick*="setTest(event,\''+key+'\'"]').forEach(function(btn){
+      var btnVal=btn.getAttribute('onclick').match(/setTest\(event,'[^']+','([^']+)'/);
+      if(btnVal&&btnVal[1]===val){
+        btn.classList.add(val==='pos'||val==='Déficit'?'pos':'neg');
+      }
+    });
+  });
+  // MRC
+  buildMRC();
+  // Drapeaux rouges
+  checkRedFlags();
+  // Ottawa
+  updateOttawa();
+  // Cluster instabilité
+  updateInstabCluster();
+  // Alerte rupture Achille
+  checkAchilleAlerte();
+}
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2000);
+}
+
+// ══════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════
+function goS(n){
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s'+n).classList.add('active');
+  CUR=n;
+  document.getElementById('bni').textContent='Étape '+n+'/6 — '+NAV_LABELS[n-1];
+  document.getElementById('hdr-step').textContent='Étape '+n+'/6';
+  document.getElementById('prog-fill').style.width=(n/6*100)+'%';
+  document.getElementById('btn-back').disabled=n===1;
+  document.getElementById('btn-next').textContent=n===6?'Terminer':'Suivant →';
+  if(n===5){initScores();}
+  if(n===6){buildAnalyse();buildCR();}
+  window.scrollTo(0,0);
+  saveState();
+}
+function navNext(){if(CUR<6)goS(CUR+1);}
+function navBack(){if(CUR>1)goS(CUR-1);}
+
+// ══════════════════════════════════════════════════════
+// HELPERS UI
+// ══════════════════════════════════════════════════════
+function updateHeader(){
+  var n=D.prenom||D.nom?((D.prenom||'')+' '+(D.nom||'')).trim():'Bilan Cheville / Pied';
+  document.getElementById('hdr-patient').textContent=n;
+}
+function toggleSC(h){
+  var b=h.nextElementSibling,ch=h.querySelector('.scch');
+  var wasOpen=b.classList.contains('o');
+  b.classList.toggle('o');if(ch)ch.classList.toggle('o');
+  if(!wasOpen){
+    setTimeout(function(){
+      var navH=document.querySelector('.bnav').offsetHeight;
+      var rect=b.getBoundingClientRect();
+      if(rect.bottom>window.innerHeight-navH-16){
+        window.scrollBy({top:rect.bottom-(window.innerHeight-navH-16),behavior:'smooth'});
+      }
+    },150);
+  }
+}
+function toggleTI(h){
+  var b=h.nextElementSibling;
+  b.classList.toggle('o');
+}
+function TC(el,g,solo){
+  if(solo){
+    document.querySelectorAll('#ctx-chips .chip').forEach(function(c){c.classList.remove('on');});
+    if(!CHIPS[g])CHIPS[g]=[];
+    CHIPS[g]=[];
+    el.classList.add('on');
+    CHIPS[g]=[el.textContent.trim()];
+    D.ctx=el.textContent.trim();
+  } else {
+    el.classList.toggle('on');
+    if(!CHIPS[g])CHIPS[g]=[];
+    var t=el.textContent.trim();
+    if(el.classList.contains('on')){if(CHIPS[g].indexOf(t)===-1)CHIPS[g].push(t);}
+    else CHIPS[g]=CHIPS[g].filter(function(x){return x!==t;});
+  }
+}
+function TCK(el,g){
+  el.classList.toggle('on');
+  if(!CHECKS[g])CHECKS[g]=[];
+  var ctx2=el.querySelector('.ctx2');
+  // Extraire uniquement le texte direct (firstChild textNode), ignorer les sous-éléments .csb
+  var t='';
+  ctx2.childNodes.forEach(function(node){
+    if(node.nodeType===3)t+=node.textContent; // textNode direct
+    else if(node.nodeType===1&&!node.classList.contains('csb'))t+=node.textContent; // élément non-csb (strong...)
+  });
+  t=t.trim();
+  if(el.classList.contains('on')){if(CHECKS[g].indexOf(t)===-1)CHECKS[g].push(t);}
+  else CHECKS[g]=CHECKS[g].filter(function(x){return x!==t;});
+}
+function evaC(el,type){
+  document.querySelectorAll('#eva-'+type+' .evab').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');
+  D.eva[type]=parseInt(el.textContent);
+}
+function setTest(e,key,val,btn){
+  e.stopPropagation();
+  var container=btn.closest('.tibs');
+  container.querySelectorAll('.tib').forEach(function(b){b.classList.remove('pos','neg');});
+  btn.classList.add(val==='pos'||val==='Déficit'?'pos':'neg');
+  TESTS[key]=val;
+  if(key==='adt'||key==='tilt')updateInstabCluster();
+  if(key==='thompson'||key==='matles')checkAchilleAlerte();
+}
+function checkAchilleAlerte(){
+  var thompsonPos=TESTS['thompson']==='pos';
+  var matlesPos=TESTS['matles']==='pos';
+  var el=document.getElementById('achille-urgence-alert');
+  if(!el)return;
+  if(thompsonPos){
+    el.style.display='flex';
+    el.querySelector('div').innerHTML=matlesPos
+      ?'<strong>Thompson + ET Matles +</strong> — Rupture totale Achille très probable (VPP &gt;98%). Orientation chirurgicale urgente. Immobilisation en équin, pas de mise en charge.'
+      :'<strong>Thompson positif</strong> — Rupture totale du tendon Achille jusqu\'à preuve du contraire. Échographie ou IRM urgente. Orientation chirurgicale.';
+  } else {
+    el.style.display='none';
+  }
+}
+function checkRedFlags(){
+  var any=document.querySelectorAll('#s2 .crow.on').length>0;
+  document.getElementById('redflag-alert').style.display=any?'flex':'none';
+}
+
+// ══════════════════════════════════════════════════════
+// OTTAWA & CLUSTERS
+// ══════════════════════════════════════════════════════
+function updateOttawa(){
+  var n=document.querySelectorAll('#ottawa-cluster .crow.on').length;
+  var dots=document.querySelectorAll('#ottawa-dots .cluster-dot');
+  dots.forEach(function(d,i){d.classList.toggle('on',i<n);});
+  var res=document.getElementById('ottawa-result');
+  if(n===0){res.textContent='0/5 — Radio non indiquée';res.style.color='var(--grn)';}
+  else if(n>=1){res.textContent=n+'/5 — Radio INDIQUÉE (Ottawa +)';res.style.color='var(--red)';}
+}
+function updateInstabCluster(){
+  var adtPos=TESTS['adt']==='pos';
+  var tiltPos=TESTS['tilt']==='pos';
+  var ecchymose=(CHECKS['signes']||[]).some(function(s){return s.indexOf('Ecchymose')>-1;});
+  var count=[adtPos,tiltPos,ecchymose].filter(Boolean).length;
+  var el=document.getElementById('instab-cluster-result');
+  if(!el)return;
+  if(count>=2){el.textContent='Cluster positif ('+count+'/3) — Entorse grade II/III probable';}
+  else{el.textContent='Cluster: '+count+'/3 — Insuffisant';}
+}
+
+// ══════════════════════════════════════════════════════
+// MRC SECTION
+// ══════════════════════════════════════════════════════
+var MRC_MUSCLES=[
+  {key:'fp',label:'Flexion plantaire (triceps sural)'},
+  {key:'df',label:'Dorsiflexion (tibial antérieur)'},
+  {key:'inv',label:'Inversion (tibial postérieur)'},
+  {key:'ev',label:'Éversion (fibulaires)'},
+  {key:'ext_hal',label:'Extension hallux (extens. long)'}
+];
+function buildMRC(){
+  var h='';
+  MRC_MUSCLES.forEach(function(m){
+    h+='<div class="field"><div class="fl">'+m.label+'</div>';
+    h+='<div style="display:flex;gap:6px;flex-wrap:wrap">';
+    [0,1,2,3,4,5].forEach(function(v){
+      h+='<button style="width:44px;height:44px;border-radius:8px;border:1.5px solid var(--brd);font-size:14px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit" class="mrc-val'+(MRC[m.key]===v?' on':'')+'" onclick="setMRC(\''+m.key+'\','+v+',this)" type="button">'+v+'</button>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('mrc-section').innerHTML=h;
+}
+function setMRC(key,val,btn){
+  btn.closest('div').querySelectorAll('.mrc-val').forEach(function(b){
+    b.classList.remove('on');
+    b.style.background='';b.style.borderColor='';b.style.color='';
+  });
+  btn.classList.add('on');
+  btn.style.background='var(--zm)';btn.style.borderColor='var(--zm)';btn.style.color='#fff';
+  MRC[key]=val;
+}
+
+// ══════════════════════════════════════════════════════
+// FAAM (Martin 2005) — 21 items ADL
+// ══════════════════════════════════════════════════════
+var FAAM_ADL=[
+  'Vous tenir debout','Marcher sur sol plat','Marcher pieds nus sur sol dur','Monter les escaliers','Descendre les escaliers',
+  'Marcher sur terrain irrégulier','Monter/descendre une pente','Marcher sur le trottoir','Entrer/sortir d\'une voiture',
+  'Se lever d\'une chaise','S\'agenouiller','Courir courte distance','Marcher 15 min sans s\'arrêter',
+  'Porter des charges légères','Activités ménagères légères','Soins personnels',
+  'Activités légères de loisirs','Debout 1 heure','Assis 1 heure','Travail habituel','Activités habituelles'
+];
+var FAAM_SPORT=[
+  'Courir','Sauter','Atterrir d\'un saut','Démarrer et s\'arrêter rapidement',
+  'Couper sur le côté','Activités à faible impact','Capacité à participer à un sport','Pratiquer votre sport habituel'
+];
+function buildFAAM(){
+  var h='';
+  FAAM_ADL.forEach(function(q,i){
+    h+='<div class="sq-row"><div class="sq-q">'+(i+1)+'. '+q+'</div><div class="sq-opts">';
+    [{v:4,l:'Aucune diff.'},{v:3,l:'Légère'},{v:2,l:'Modérée'},{v:1,l:'Sévère'},{v:0,l:'Impossible'}].forEach(function(o){
+      h+='<button class="sq-btn'+(faamADL['f'+i]===o.v?' on':'')+'" onclick="setFAAM(\'adl\','+i+','+o.v+',this)" type="button" style="font-size:10px">'+o.l+'</button>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('faam-adl-items').innerHTML=h;
+  calcFAAM('adl');
+}
+function buildFAAMSport(){
+  var h='';
+  FAAM_SPORT.forEach(function(q,i){
+    h+='<div class="sq-row"><div class="sq-q">'+(i+1)+'. '+q+'</div><div class="sq-opts">';
+    [{v:4,l:'Aucune diff.'},{v:3,l:'Légère'},{v:2,l:'Modérée'},{v:1,l:'Sévère'},{v:0,l:'Impossible'}].forEach(function(o){
+      h+='<button class="sq-btn'+(faamSport['s'+i]===o.v?' on':'')+'" onclick="setFAAM(\'sport\','+i+','+o.v+',this)" type="button" style="font-size:10px">'+o.l+'</button>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('faam-sport-items').innerHTML=h;
+  calcFAAM('sport');
+}
+function setFAAM(type,i,val,btn){
+  btn.closest('.sq-opts').querySelectorAll('.sq-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  if(type==='adl')faamADL['f'+i]=val;
+  else faamSport['s'+i]=val;
+  calcFAAM(type);
+}
+function calcFAAM(type){
+  if(type==='adl'){
+    var n=Object.keys(faamADL).length;if(!n){document.getElementById('faam-result').innerHTML='';return;}
+    var total=Object.values(faamADL).reduce(function(s,v){return s+v;},0);
+    var score=Math.round((total/(n*4))*100);
+    var cls=score>=75?'sco-g':score>=50?'sco-m':'sco-r';
+    var grade=score>=85?'Fonction normale':score>=75?'Légèrement altérée':score>=50?'Modérément altérée':'Sévèrement altérée';
+    document.getElementById('faam-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+score+'<span style="font-size:14px;font-weight:600">/100</span></div><div class="score-info">FAAM ADL<br>'+grade+'<br><span style="font-weight:400;font-size:10px">'+n+'/21 items · MCID=8 pts · Martin 2005</span></div></div>';
+  } else {
+    var ns=Object.keys(faamSport).length;if(!ns){document.getElementById('faam-sport-result').innerHTML='';return;}
+    var tots=Object.values(faamSport).reduce(function(s,v){return s+v;},0);
+    var scores=Math.round((tots/(ns*4))*100);
+    var clss=scores>=75?'sco-g':scores>=50?'sco-m':'sco-r';
+    var grades=scores>=75?'Apte au sport':scores>=50?'Limitation sport':'Inapte';
+    document.getElementById('faam-sport-result').innerHTML='<div class="score-res '+clss+'"><div class="score-num">'+scores+'<span style="font-size:14px;font-weight:600">/100</span></div><div class="score-info">FAAM Sport<br>'+grades+'<br><span style="font-weight:400;font-size:10px">'+ns+'/8 items · MCID=9 pts</span></div></div>';
+  }
+}
+function toggleFaamSport(){
+  faamSportVisible=!faamSportVisible;
+  document.getElementById('faam-sport-section').style.display=faamSportVisible?'block':'none';
+  document.getElementById('btn-faam-sport').textContent=faamSportVisible?'- Masquer sous-score Sport':'+ Ajouter sous-score Sport';
+  if(faamSportVisible)buildFAAMSport();
+}
+
+// ══════════════════════════════════════════════════════
+// CAIT (Hiller 2006)
+// ══════════════════════════════════════════════════════
+var CAIT_Q=[
+  {q:'Ma cheville ne me fait jamais mal.',opts:[{v:0,l:'Jamais'},{v:1,l:'Pendant sport'},{v:2,l:'Après sport'},{v:3,l:'Sport quotidien'},{v:4,l:'Activités quotidiennes'},{v:5,l:'Permanent'}]},
+  {q:'Ma cheville est instable quand je marche sur terrain irrégulier.',opts:[{v:0,l:'Jamais'},{v:1,l:'Parfois'},{v:2,l:'Souvent'},{v:3,l:'Toujours'}]},
+  {q:'Ma cheville est instable quand je marche sur terrain plat.',opts:[{v:0,l:'Jamais'},{v:1,l:'Parfois'},{v:2,l:'Souvent'},{v:3,l:'Toujours'}]},
+  {q:'Ma cheville est instable quand je descends les escaliers.',opts:[{v:0,l:'Jamais'},{v:1,l:'Parfois'},{v:2,l:'Souvent'},{v:3,l:'Toujours'}]},
+  {q:'Ma cheville est instable quand je me tiens sur un pied.',opts:[{v:0,l:'Jamais'},{v:1,l:'Parfois'},{v:2,l:'Souvent'},{v:3,l:'Toujours'}]},
+  {q:'Ma cheville est instable quand je sautille d\'un pied sur l\'autre.',opts:[{v:0,l:'Jamais'},{v:1,l:'Parfois'},{v:2,l:'Souvent'},{v:3,l:'Toujours'}]},
+  {q:'Ma cheville est instable quand je saute.',opts:[{v:0,l:'Jamais'},{v:1,l:'Parfois'},{v:2,l:'Souvent'},{v:3,l:'Toujours'}]},
+  {q:'Ma cheville est instable quand je cours sur terrain irrégulier.',opts:[{v:0,l:'Jamais'},{v:1,l:'Parfois'},{v:2,l:'Souvent'},{v:3,l:'Toujours'}]},
+  {q:'Ma cheville se dérobe (gives way) lors de mes activités quotidiennes.',opts:[{v:0,l:'Jamais'},{v:1,l:'Rarement'},{v:2,l:'Parfois'},{v:3,l:'Souvent'},{v:4,l:'Toujours'}]}
+];
+function buildCAIT(){
+  var h='';
+  CAIT_Q.forEach(function(item,i){
+    h+='<div class="sq-row"><div class="sq-q">'+(i+1)+'. '+item.q+'</div><div class="sq-opts">';
+    item.opts.forEach(function(o){
+      h+='<button class="sq-btn'+(caitSt['c'+i]===o.v?' on':'')+'" onclick="setCAIT('+i+','+o.v+',this)" type="button" style="font-size:10px;min-width:44px">'+o.l+'</button>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('cait-items').innerHTML=h;
+  calcCAIT();
+}
+function setCAIT(i,val,btn){
+  btn.closest('.sq-opts').querySelectorAll('.sq-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  caitSt['c'+i]=val;
+  calcCAIT();
+}
+function calcCAIT(){
+  var n=Object.keys(caitSt).length;if(!n){document.getElementById('cait-result').innerHTML='';return;}
+  var total=Object.values(caitSt).reduce(function(s,v){return s+v;},0);
+  var score=30-total;
+  var cls=score>=25?'sco-g':score>=20?'sco-m':'sco-r';
+  var grade=score>=25?'Stabilité normale':score>=20?'Instabilité légère':'Instabilité chronique';
+  var seuil=score<=24?'<span style="background:var(--redl);color:var(--red);font-size:10px;font-weight:700;padding:2px 6px;border-radius:99px;margin-left:5px">ICA &lt;= 24</span>':'';
+  document.getElementById('cait-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+score+'<span style="font-size:14px;font-weight:600">/30</span></div><div class="score-info">CAIT'+seuil+'<br>'+grade+'<br><span style="font-weight:400;font-size:10px">'+n+'/9 items · Seuil ICA ≤24 · Hiller 2006</span></div></div>';
+}
+
+// ══════════════════════════════════════════════════════
+// VISA-A (Robinson 2001)
+// ══════════════════════════════════════════════════════
+var VISA_Q=[
+  {q:'Combien de minutes pouvez-vous rester assis sans douleur ?',opts:[{v:0,l:'0 min'},{v:4,l:'<10 min'},{v:7,l:'10-30 min'},{v:10,l:'>30 min'}]},
+  {q:'Avez-vous de la douleur en marchant sur terrain plat ?',opts:[{v:0,l:'Intense'},{v:3,l:'Forte'},{v:5,l:'Modérée'},{v:7,l:'Légère'},{v:10,l:'Aucune'}]},
+  {q:'Avez-vous de la douleur lors des descentes d\'escalier ?',opts:[{v:0,l:'Intense'},{v:3,l:'Forte'},{v:5,l:'Modérée'},{v:7,l:'Légère'},{v:10,l:'Aucune'}]},
+  {q:'Avez-vous de la douleur lors des montées d\'escalier ?',opts:[{v:0,l:'Intense'},{v:3,l:'Forte'},{v:5,l:'Modérée'},{v:7,l:'Légère'},{v:10,l:'Aucune'}]},
+  {q:'Avez-vous de la douleur ou raideur au tendon le matin au réveil ?',opts:[{v:0,l:'Intense'},{v:2,l:'Forte'},{v:5,l:'Modérée'},{v:7,l:'Légère'},{v:10,l:'Aucune'}]},
+  {q:'Pouvez-vous faire des élévations de talon unipodale sans douleur ?',opts:[{v:0,l:'Non (douleur)'},{v:4,l:'Avec douleur'},{v:7,l:'Légère douleur'},{v:10,l:'Oui'}]},
+  {q:'Pouvez-vous courir sur terrain plat sans douleur ?',opts:[{v:0,l:'Non'},{v:4,l:'>10 min avec douleur'},{v:7,l:'Légère douleur'},{v:10,l:'Oui'}]},
+  {q:'Participez-vous à votre sport habituel ?',opts:[{v:0,l:'Pas du tout'},{v:4,l:'Niveau réduit'},{v:7,l:'Près du normal'},{v:10,l:'Pleinement'}]}
+];
+function buildVISA(){
+  var h='';
+  VISA_Q.forEach(function(item,i){
+    h+='<div class="sq-row"><div class="sq-q">'+(i+1)+'. '+item.q+'</div><div class="sq-opts">';
+    item.opts.forEach(function(o){
+      h+='<button class="sq-btn'+(visaSt['v'+i]===o.v?' on':'')+'" onclick="setVISA('+i+','+o.v+',this)" type="button" style="font-size:10px;min-width:44px">'+o.l+'</button>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('visa-items').innerHTML=h;
+  calcVISA();
+}
+function setVISA(i,val,btn){
+  btn.closest('.sq-opts').querySelectorAll('.sq-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  visaSt['v'+i]=val;
+  calcVISA();
+}
+function calcVISA(){
+  var n=Object.keys(visaSt).length;if(!n){document.getElementById('visa-result').innerHTML='';return;}
+  var score=Object.values(visaSt).reduce(function(s,v){return s+v;},0);
+  var cls=score>=70?'sco-g':score>=40?'sco-m':'sco-r';
+  var grade=score>=80?'Asymptomatique':score>=70?'Légèrement symptomatique':score>=40?'Modérément symptomatique':'Sévèrement atteint';
+  document.getElementById('visa-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+score+'<span style="font-size:14px;font-weight:600">/100</span></div><div class="score-info">VISA-A<br>'+grade+'<br><span style="font-weight:400;font-size:10px">'+n+'/8 items · MCID=12 pts · Robinson 2001</span></div></div>';
+}
+
+// ══════════════════════════════════════════════════════
+// FAOS simplifié (Roos 2001) — 5 sous-scores × 4 items
+// ══════════════════════════════════════════════════════
+var FAOS_SECTIONS=[
+  {key:'douleur',label:'Douleur',items:['Fréquence de la douleur','Douleur à la torsion/pivot','Lors de l\'extension complète','Lors de la flexion complète']},
+  {key:'raideur',label:'Raideur',items:['Raideur matinale','Raideur après inactivité','Limitation d\'amplitude']},
+  {key:'avq',label:'Activités quotidiennes',items:['Descendre les escaliers','Monter les escaliers','Se lever d\'une chaise','Se tenir debout']},
+  {key:'sport',label:'Sport/loisirs',items:['Accroupi','Course à pied','Sauter','Pivoter/tourner sur pied atteint']},
+  {key:'qol',label:'Qualité de vie',items:['Fréquence douleur au quotidien','Modification style de vie','Confiance dans la cheville','Difficultés globales']}
+];
+function buildFAOS(){
+  var h='';
+  FAOS_SECTIONS.forEach(function(sec){
+    h+='<div style="margin-bottom:14px"><div class="fl">'+sec.label+'</div>';
+    sec.items.forEach(function(q,i){
+      var key=sec.key+'_'+i;
+      h+='<div class="sq-row"><div class="sq-q">'+q+'</div><div class="sq-opts">';
+      [{v:0,l:'Aucune'},{v:1,l:'Légère'},{v:2,l:'Modérée'},{v:3,l:'Sévère'},{v:4,l:'Extrême'}].forEach(function(o){
+        h+='<button class="sq-btn'+(faosSt[key]===o.v?' on':'')+'" onclick="setFAOS(\''+key+'\','+o.v+',this)" type="button" style="font-size:10px">'+o.l+'</button>';
+      });
+      h+='</div></div>';
+    });
+    h+='</div>';
+  });
+  document.getElementById('faos-items').innerHTML=h;
+}
+function setFAOS(key,val,btn){
+  btn.closest('.sq-opts').querySelectorAll('.sq-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  faosSt[key]=val;
+  calcFAOS();
+}
+function calcFAOS(){
+  var results=[];
+  FAOS_SECTIONS.forEach(function(sec){
+    var vals=sec.items.map(function(q,i){return faosSt[sec.key+'_'+i];}).filter(function(v){return v!==undefined;});
+    if(!vals.length)return;
+    var max=vals.length*4;
+    var score=Math.round(((max-vals.reduce(function(s,v){return s+v;},0))/max)*100);
+    results.push('<span style="font-size:12px;font-weight:700;color:var(--tx2);margin-right:4px">'+sec.label+':</span><span style="font-size:13px;font-weight:800;color:'+(score>=75?'#065038':score>=50?'#5A3200':'#7A1515')+'">'+score+'/100</span>');
+  });
+  if(results.length){
+    document.getElementById('faos-result').innerHTML='<div style="background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:12px 14px;margin-top:8px;display:flex;flex-wrap:wrap;gap:8px">'+results.join(' · ')+'</div>';
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// PSFS
+// ══════════════════════════════════════════════════════
+function buildPSFS(){
+  var h='<div style="font-size:12px;color:var(--tx2);margin-bottom:10px">Demandez au patient d\'identifier 3 activités limitées par sa cheville et de les noter de 0 (impossible) à 10 (niveau normal).</div>';
+  for(var j=0;j<3;j++){
+    h+='<div style="margin-bottom:12px"><input type="text" placeholder="Activité '+(j+1)+' (ex: courir, monter les escaliers...)" value="'+(psfsSt.texts[j]||'')+'" oninput="setPsfsText('+j+',this.value)" style="margin-bottom:7px"><div style="display:flex;gap:4px;flex-wrap:wrap">';
+    for(var v=0;v<=10;v++){
+      h+='<button style="width:40px;height:44px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:14px;font-weight:700;cursor:pointer;background:'+(psfsSt.vals[j]===v?'var(--zm)':'var(--surf2)')+';color:'+(psfsSt.vals[j]===v?'#fff':'var(--tx2)')+';border-color:'+(psfsSt.vals[j]===v?'var(--zm)':'var(--brd)')+';touch-action:manipulation;font-family:inherit;display:flex;align-items:center;justify-content:center" onclick="setPsfsVal('+j+','+v+',this)" type="button">'+v+'</button>';
+    }
+    h+='</div></div>';
+  }
+  document.getElementById('psfs-items').innerHTML=h;
+  calcPSFS();
+}
+function setPsfsText(j,v){psfsSt.texts[j]=v;}
+function setPsfsVal(j,v,btn){
+  btn.closest('div').querySelectorAll('button').forEach(function(b){b.style.background='var(--surf2)';b.style.color='var(--tx2)';b.style.borderColor='var(--brd)';});
+  btn.style.background='var(--zm)';btn.style.color='#fff';btn.style.borderColor='var(--zm)';
+  psfsSt.vals[j]=v;calcPSFS();
+}
+function calcPSFS(){
+  var vals=psfsSt.vals.filter(function(v){return v!==null;});if(!vals.length){document.getElementById('psfs-result').innerHTML='';return;}
+  var avg=(vals.reduce(function(s,v){return s+v;},0)/vals.length).toFixed(1);
+  var cls=parseFloat(avg)>=7?'sco-g':parseFloat(avg)>=4?'sco-m':'sco-r';
+  document.getElementById('psfs-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+avg+'<span style="font-size:14px;font-weight:600">/10</span></div><div class="score-info">PSFS<br>Moyenne activités<br><span style="font-weight:400;font-size:10px">'+vals.length+' item(s) · MCID=2</span></div></div>';
+}
+
+// ══════════════════════════════════════════════════════
+// INIT SCORES
+// ══════════════════════════════════════════════════════
+function initScores(){
+  var ctx=D.ctx||'';
+  var isAchille=ctx.indexOf('Achille')>-1;
+  var isInstab=ctx.indexOf('Instabilité')>-1||ctx.indexOf('Entorse')>-1;
+  var isPostOp=ctx.indexOf('Post-op')>-1;
+  var msg='';
+  if(isAchille){switchScore('visa',document.getElementById('tab-visa'));msg='Tendinopathie Achille → <strong>VISA-A recommandé</strong>';}
+  else if(isInstab){switchScore('cait',document.getElementById('tab-cait'));msg='Instabilité / entorse → <strong>CAIT + FAAM recommandés</strong>';}
+  else if(isPostOp){switchScore('faos',document.getElementById('tab-faos'));msg='Post-opératoire → <strong>FAOS recommandé</strong>';}
+  else{switchScore('faam',document.getElementById('tab-faam'));msg='Profil général → <strong>FAAM ADL recommandé</strong>';}
+  document.getElementById('score-orient-text').innerHTML=msg||'FAAM ADL — score principal toutes pathologies';
+  buildFAAM();buildCAIT();buildVISA();buildFAOS();buildPSFS();
+}
+function switchScore(type,btn){
+  document.querySelectorAll('.score-tab').forEach(function(t){t.classList.remove('on');});
+  if(btn)btn.classList.add('on');
+  document.querySelectorAll('.score-panel').forEach(function(p){p.classList.remove('on');});
+  document.getElementById('panel-'+type).classList.add('on');
+}
+
+// ══════════════════════════════════════════════════════
+// ALGORITHME DIAGNOSTIQUE
+// ══════════════════════════════════════════════════════
+var TEST_LABELS={
+  adt:'Anterior Drawer Test',tilt:'Tilt talaire',stress_lli:'Stress test LLI',squeeze:'Squeeze Test (syndesmose)',
+  thompson:'Thompson (Simmonds)',matles:'Matles Test',rlht:'RLHT',arc:'Arc Sign',heelrise:'Heel Rise Test',
+  ybt:'Y-Balance Test',singlehop:'Single Hop LSI',equil:'Equilibre unipodal',
+  sinus:'Palpation sinus du tarse',subtalar:'Compression sous-talienne',
+  windlass:'Windlass Test',fascia_palp:'Palpation fascia plantaire',morton:'Signe de Mulder (Morton)',hallux:'Test hallux valgus'
+};
+var DLBL={
+  entorse_lat:'Entorse ligamentaire latérale',
+  rupture_achille:'Rupture tendon Achille',
+  tendinopathie:'Tendinopathie Achille',
+  instab_chronique:'Instabilité chronique de cheville',
+  sinus_tarse:'Syndrome sinus du tarse',
+  fasciite:'Fasciite plantaire',
+  morton:'Névrome de Morton',
+  arthrose:'Arthrose tibio-talienne',
+  hallux:'Hallux valgus / pathologie MTP'
+};
+var DTAGS_MAP={
+  entorse_lat:[['dtr','Trauma récent'],['dtz','Ligaments ext.'],['dtb','Ottawa +/−']],
+  rupture_achille:[['dtr','Urgence'],['dtr','Thompson +'],['dta','Chirurgie']],
+  tendinopathie:[['dtz','Achille'],['dtb','RLHT +'],['dta','HSR indiqué']],
+  instab_chronique:[['dtb','CAIT ≤24'],['dtz','Proprioception'],['dtg','YBT déficit']],
+  sinus_tarse:[['dta','Post-entorse'],['dtz','Antérolatéral'],['dtb','Palpation +']],
+  fasciite:[['dtz','Plantaire'],['dtb','Premiers pas'],['dta','Windlass +']],
+  morton:[['dta','Avant-pied'],['dtb','3-4 espace'],['dtz','Mulder +']],
+  arthrose:[['dtr','Dégénératif'],['dta','Raideur'],['dtg','Mécanique']],
+  hallux:[['dtz','1ère MTP'],['dta','Déviation'],['dtb','Biomécanique']]
+};
+var DMAX={entorse_lat:200,rupture_achille:210,tendinopathie:185,instab_chronique:175,sinus_tarse:150,fasciite:165,morton:155,arthrose:130,hallux:110};
+
+function calcScores(){
+  var s={entorse_lat:0,rupture_achille:0,tendinopathie:0,instab_chronique:0,sinus_tarse:0,fasciite:0,morton:0,arthrose:0,hallux:0};
+  var r={entorse_lat:[],rupture_achille:[],tendinopathie:[],instab_chronique:[],sinus_tarse:[],fasciite:[],morton:[],arthrose:[],hallux:[]};
+
+  // Contexte
+  var ctx=D.ctx||'';
+  if(ctx.indexOf('Entorse')>-1){s.entorse_lat+=20;r.entorse_lat.push('Contexte entorse (+20)');}
+  if(ctx.indexOf('Instabilité')>-1){s.instab_chronique+=20;r.instab_chronique.push('Contexte instabilité (+20)');}
+  if(ctx.indexOf('Achille')>-1){s.tendinopathie+=20;r.tendinopathie.push('Contexte Achille (+20)');}
+  if(ctx.indexOf('Rupture')>-1){s.rupture_achille+=30;r.rupture_achille.push('Contexte rupture (+30)');}
+  if(ctx.indexOf('Fasciite')>-1){s.fasciite+=25;r.fasciite.push('Contexte fasciite (+25)');}
+  if(ctx.indexOf('Pied antérieur')>-1){s.morton+=20;r.morton.push('Contexte pied ant. (+20)');}
+
+  // Localisation
+  var locs=CHIPS['localisation']||[];
+  if(locs.indexOf('Malléole externe')>-1){s.entorse_lat+=20;r.entorse_lat.push('Localisation malléole ext. (+20)');}
+  if(locs.indexOf('Tendon Achille')>-1){s.tendinopathie+=20;r.tendinopathie.push('Localisation Achille (+20)');}
+  if(locs.indexOf('Plantaire (talon)')>-1){s.fasciite+=25;r.fasciite.push('Douleur talonnière plantaire (+25)');}
+  if(locs.indexOf('Avant-pied')>-1){s.morton+=20;r.morton.push('Localisation avant-pied (+20)');}
+  if(locs.indexOf('Sinus du tarse')>-1){s.sinus_tarse+=25;r.sinus_tarse.push('Localisation sinus du tarse (+25)');}
+
+  // Rythme
+  var rythmes=CHIPS['rythme']||[];
+  if(rythmes.indexOf('Premiers pas (matin)')>-1){s.fasciite+=25;r.fasciite.push('Douleur premiers pas matin (+25)');}
+  if(rythmes.indexOf('Mécanique')>-1){s.arthrose+=15;r.arthrose.push('Rythme mécanique (+15)');}
+  if(rythmes.indexOf('Inflammatoire (nuit/repos)')>-1){s.arthrose+=15;r.arthrose.push('Composante inflammatoire (+15)');}
+
+  // Tests
+  if(TESTS['adt']==='pos'){s.entorse_lat+=50;r.entorse_lat.push('ADT positif — Se 74% Sp 88% (+50)');}
+  if(TESTS['tilt']==='pos'){s.entorse_lat+=35;r.entorse_lat.push('Tilt talaire positif (+35)');}
+  if(TESTS['thompson']==='pos'){s.rupture_achille+=80;r.rupture_achille.push('Thompson positif — Se 96% Sp 93% (+80)');}
+  if(TESTS['matles']==='pos'){s.rupture_achille+=50;r.rupture_achille.push('Matles positif — LR+ 5.9 (+50)');}
+  if(TESTS['rlht']==='pos'){s.tendinopathie+=45;r.tendinopathie.push('RLHT positif — Se 78% Sp 80% (+45)');}
+  if(TESTS['arc']==='pos'){s.tendinopathie+=35;r.tendinopathie.push('Arc sign positif — Sp 93% (+35)');}
+  if(TESTS['heelrise']==='pos'){s.tendinopathie+=20;r.tendinopathie.push('Déficit Heel Rise (+20)');}
+  if(TESTS['ybt']==='pos'){s.instab_chronique+=40;r.instab_chronique.push('YBT déficit (+40)');}
+  if(TESTS['equil']==='pos'){s.instab_chronique+=30;r.instab_chronique.push('Équilibre unipodal déficitaire (+30)');}
+  if(TESTS['singlehop']==='pos'){s.instab_chronique+=25;r.instab_chronique.push('Single hop LSI <90% (+25)');}
+  if(TESTS['sinus']==='pos'){s.sinus_tarse+=55;r.sinus_tarse.push('Palpation sinus du tarse (+55)');}
+  if(TESTS['windlass']==='pos'){s.fasciite+=60;r.fasciite.push('Windlass positif — Sp 100% (+60)');}
+  if(TESTS['fascia_palp']==='pos'){s.fasciite+=45;r.fasciite.push('Palpation insertion fascia (+45)');}
+  if(TESTS['morton']==='pos'){s.morton+=65;r.morton.push('Signe de Mulder positif — Se 84% Sp 96% (+65)');}
+  if(TESTS['hallux']==='pos'){s.hallux+=50;r.hallux.push('Déviation hallux valgus (+50)');}
+
+  // CAIT
+  var caitScore=0;var nc=Object.keys(caitSt).length;
+  if(nc>0){caitScore=30-Object.values(caitSt).reduce(function(a,b){return a+b;},0);}
+  if(nc>0&&caitScore<=24){s.instab_chronique+=40;r.instab_chronique.push('CAIT ≤24 — Instabilité chronique confirmée (+40)');}
+
+  // Antécédents
+  var atcds=CHECKS['atcd']||[];
+  if(atcds.some(function(a){return a.indexOf('Entorse')>-1;})){s.entorse_lat+=10;s.instab_chronique+=15;r.entorse_lat.push('Antécédents entorse (+10)');r.instab_chronique.push('Antécédents entorse → instab. (+15)');}
+  if(atcds.some(function(a){return a.indexOf('Achille')>-1;})){s.tendinopathie+=15;r.tendinopathie.push('Antécédents tendinopathie (+15)');}
+  if(atcds.some(function(a){return a.indexOf('Fluoroquinolone')>-1||a.indexOf('fluoroquinolone')>-1;})){s.tendinopathie+=20;r.tendinopathie.push('Prise fluoroquinolones — facteur de risque (+20)');}
+
+  return {s:s,r:r};
+}
+
+function buildAnalyse(){
+  var res=calcScores();
+  var s=res.s,r=res.r;
+  var keys=Object.keys(s).sort(function(a,b){return (s[b]/DMAX[b])-(s[a]/DMAX[a]);});
+  var html='';
+  keys.forEach(function(k,idx){
+    if(s[k]===0)return;
+    var pct=Math.min(100,Math.round((s[k]/DMAX[k])*100));
+    var isTop=idx===0&&pct>=30;
+    var tags=(DTAGS_MAP[k]||[]).map(function(t){return '<span class="dtag '+t[0]+'">'+t[1]+'</span>';}).join('');
+    html+='<div class="diag-card'+(isTop?' top':'')+'">';
+    html+='<div class="diag-head" onclick="toggleDiag(this)">';
+    html+='<div class="diag-name">'+DLBL[k]+'</div>';
+    html+='<div class="diag-bar-wrap"><div class="diag-bar" style="width:'+pct+'%"></div></div>';
+    html+='<div class="diag-pct">'+pct+'%</div>';
+    html+='</div>';
+    if(r[k].length||tags){
+      html+='<div class="diag-body'+(isTop?' o':'')+'">';
+      html+='<div class="dtags" style="margin-bottom:8px">'+tags+'</div>';
+      if(r[k].length){
+        html+='<ul class="diag-reasons">';
+        r[k].forEach(function(reason){html+='<li>'+reason+'</li>';});
+        html+='</ul>';
+      }
+      html+='</div>';
+    }
+    html+='</div>';
+  });
+  if(!html)html='<div class="al ala"><span>&#8505;</span><div>Compléter les étapes précédentes pour obtenir une analyse diagnostique.</div></div>';
+  document.getElementById('diag-cards').innerHTML=html;
+  buildAnalyseChecklist();
+}
+function toggleDiag(h){
+  h.nextElementSibling&&h.nextElementSibling.classList.toggle('o');
+}
+function buildAnalyseChecklist(){
+  var items=[
+    {label:'Identité',ok:!!(D.nom||D.prenom)},
+    {label:'EVA renseignée',ok:D.eva.repos!==null||D.eva.marche!==null},
+    {label:'Contexte',ok:!!D.ctx},
+    {label:'Tests réalisés',ok:Object.keys(TESTS).length>0},
+    {label:'Score fonctionnel',ok:Object.keys(faamADL).length>0||Object.keys(caitSt).length>0||Object.keys(visaSt).length>0}
+  ];
+  var el=document.getElementById('analyse-checklist');
+  if(!el)return;
+  var h='';
+  items.forEach(function(it){h+='<div class="sp-item '+(it.ok?'done':'warn')+'">'+(it.ok?'✓ ':'⚠ ')+it.label+'</div>';});
+  el.innerHTML=h;
+}
+
+// ══════════════════════════════════════════════════════
+// COMPTE-RENDU
+// ══════════════════════════════════════════════════════
+function buildCR(){
+  var res=calcScores();
+  var s=res.s;
+  var keys=Object.keys(s).filter(function(k){return s[k]>0;}).sort(function(a,b){return (s[b]/DMAX[b])-(s[a]/DMAX[a]);});
+  var top=keys[0]?DLBL[keys[0]]:'Non déterminé';
+  var pct0=keys[0]?Math.min(100,Math.round((s[keys[0]]/DMAX[keys[0]])*100)):0;
+  var dateStr=D.datebilan?new Date(D.datebilan).toLocaleDateString('fr-FR'):'—';
+  var ptName=(D.prenom&&D.nom)?D.prenom+' '+D.nom:(D.nom||D.prenom||'—');
+  var age='—';
+  if(D.ddn){var b=new Date(D.ddn);var today=new Date();age=today.getFullYear()-b.getFullYear();}
+  var evaR=D.eva.repos!==null?D.eva.repos+'/10':'—';
+  var evaM=D.eva.marche!==null?D.eva.marche+'/10':'—';
+
+  // CR court
+  var shortHTML='<div class="cr-box">';
+  shortHTML+='<div class="cr-title">Synthèse clinique</div>';
+  shortHTML+='<div class="cr-row"><span class="cr-lbl">Patient :</span><span class="cr-val">'+ptName+' · '+age+' ans · '+D.sexe+' · Côté '+D.cote+'</span></div>';
+  shortHTML+='<div class="cr-row"><span class="cr-lbl">Date :</span><span class="cr-val">'+dateStr+'</span></div>';
+  shortHTML+='<div class="cr-row"><span class="cr-lbl">Contexte :</span><span class="cr-val">'+(D.ctx||'—')+'</span></div>';
+  shortHTML+='<div class="cr-row"><span class="cr-lbl">EVA :</span><span class="cr-val">Repos '+evaR+' · Marche '+evaM+'</span></div>';
+  shortHTML+='<div class="cr-row"><span class="cr-lbl">Hypothèse diag. :</span><span class="cr-val"><strong>'+top+'</strong>'+(pct0?(' ('+pct0+'% concordance EBP)'):'')+'</span></div>';
+  if(keys[1]){shortHTML+='<div class="cr-row"><span class="cr-lbl">Diagnostic diff. :</span><span class="cr-val">'+DLBL[keys[1]]+'</span></div>';}
+  shortHTML+='</div>';
+  document.getElementById('cr-short-content').innerHTML=shortHTML;
+
+  // CR complet
+  var fullHTML='<div class="cr-box">';
+  fullHTML+='<div class="cr-title">Bilan kinésithérapique — Cheville / Pied</div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Patient :</span><span class="cr-val">'+ptName+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">DDN :</span><span class="cr-val">'+(D.ddn?new Date(D.ddn).toLocaleDateString('fr-FR'):'—')+' ('+age+' ans)</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Sexe :</span><span class="cr-val">'+(D.sexe||'—')+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Profession :</span><span class="cr-val">'+(D.profession||'—')+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Côté atteint :</span><span class="cr-val">'+(D.cote||'—')+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Date bilan :</span><span class="cr-val">'+dateStr+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Prescripteur :</span><span class="cr-val">'+(D.medecin||'—')+'</span></div>';
+  fullHTML+='</div>';
+
+  fullHTML+='<div class="cr-box">';
+  fullHTML+='<div class="cr-title">Anamnèse</div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Contexte :</span><span class="cr-val">'+(D.ctx||'—')+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Installation :</span><span class="cr-val">'+((CHIPS['installation']||[]).join(', ')||'—')+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Localisation :</span><span class="cr-val">'+((CHIPS['localisation']||[]).join(', ')||'—')+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Rythme :</span><span class="cr-val">'+((CHIPS['rythme']||[]).join(', ')||'—')+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">EVA repos :</span><span class="cr-val">'+evaR+'</span></div>';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">EVA marche :</span><span class="cr-val">'+evaM+'</span></div>';
+  if((CHECKS['atcd']||[]).length){fullHTML+='<div class="cr-row"><span class="cr-lbl">Antécédents :</span><span class="cr-val">'+CHECKS['atcd'].join(', ')+'</span></div>';}
+  if(D.observations){fullHTML+='<div class="cr-row"><span class="cr-lbl">Observations :</span><span class="cr-val">'+D.observations+'</span></div>';}
+  fullHTML+='</div>';
+
+  // Amplitudes
+  fullHTML+='<div class="cr-box"><div class="cr-title">Examen physique</div>';
+  var amps=[];
+  if(D.amps.df)amps.push('Dorsiflexion '+D.amps.df+'°');
+  if(D.amps.fp)amps.push('FP '+D.amps.fp+'°');
+  if(D.amps.inv)amps.push('Inversion '+D.amps.inv+'°');
+  if(D.amps.ev)amps.push('Éversion '+D.amps.ev+'°');
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Amplitudes :</span><span class="cr-val">'+(amps.length?amps.join(' · '):'Non renseignées')+'</span></div>';
+  // MRC
+  var mrcStr=Object.keys(MRC).map(function(k){return k+':'+MRC[k]+'/5';}).join(' · ')||'—';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Force MRC :</span><span class="cr-val">'+mrcStr+'</span></div>';
+  fullHTML+='</div>';
+
+  // Tests
+  var testsPos=Object.keys(TESTS).filter(function(k){return TESTS[k]==='pos'||TESTS[k]==='Déficit';});
+  var testsNeg=Object.keys(TESTS).filter(function(k){return TESTS[k]==='neg'||TESTS[k]==='Normal';});
+  var labelPos=testsPos.map(function(k){return TEST_LABELS[k]||k;});
+  var labelNeg=testsNeg.map(function(k){return TEST_LABELS[k]||k;});
+  fullHTML+='<div class="cr-box"><div class="cr-title">Tests cliniques EBP</div>';
+  if(labelPos.length)fullHTML+='<div class="cr-row"><span class="cr-lbl">Positifs :</span><span class="cr-val">'+labelPos.join(', ')+'</span></div>';
+  if(labelNeg.length)fullHTML+='<div class="cr-row"><span class="cr-lbl">Négatifs :</span><span class="cr-val">'+labelNeg.join(', ')+'</span></div>';
+  if(!labelPos.length&&!labelNeg.length)fullHTML+='<div class="cr-row"><span class="cr-lbl">Tests :</span><span class="cr-val">Non réalisés</span></div>';
+  fullHTML+='</div>';
+
+  // Scores
+  fullHTML+='<div class="cr-box"><div class="cr-title">Scores fonctionnels</div>';
+  var faamN=Object.keys(faamADL).length;
+  if(faamN){
+    var faamT=Object.values(faamADL).reduce(function(a,b){return a+b;},0);
+    fullHTML+='<div class="cr-row"><span class="cr-lbl">FAAM ADL :</span><span class="cr-val">'+Math.round((faamT/(faamN*4))*100)+'/100 ('+faamN+'/21 items)</span></div>';
+  }
+  var caitN=Object.keys(caitSt).length;
+  if(caitN){
+    var caitT=30-Object.values(caitSt).reduce(function(a,b){return a+b;},0);
+    fullHTML+='<div class="cr-row"><span class="cr-lbl">CAIT :</span><span class="cr-val">'+caitT+'/30'+(caitT<=24?' — ICA confirmée':'')+'</span></div>';
+  }
+  var visaN=Object.keys(visaSt).length;
+  if(visaN){
+    var visaT=Object.values(visaSt).reduce(function(a,b){return a+b;},0);
+    fullHTML+='<div class="cr-row"><span class="cr-lbl">VISA-A :</span><span class="cr-val">'+visaT+'/100</span></div>';
+  }
+  fullHTML+='</div>';
+
+  // Conclusion
+  fullHTML+='<div class="cr-box"><div class="cr-title">Conclusion & orientation</div>';
+  var pct0str=pct0?' ('+pct0+'% concordance EBP)':'';
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Hypothèse principale :</span><span class="cr-val"><strong>'+top+'</strong>'+pct0str+'</span></div>';
+  if(keys[1]){fullHTML+='<div class="cr-row"><span class="cr-lbl">Différentiel :</span><span class="cr-val">'+DLBL[keys[1]]+'</span></div>';}
+  fullHTML+='<div class="cr-row"><span class="cr-lbl">Programme :</span><span class="cr-val">Programme rééducation cheville/pied — 26 exercices — voir programme joint</span></div>';
+  fullHTML+='</div>';
+
+  document.getElementById('cr-full-content').innerHTML=fullHTML;
+  document.getElementById('cr-date-sig').textContent='Fait le '+dateStr;
+}
+function switchCR(type,btn){
+  document.querySelectorAll('.cr-tab').forEach(function(t){t.classList.remove('on');});btn.classList.add('on');
+  document.querySelectorAll('.cr-panel').forEach(function(p){p.classList.remove('on');});
+  document.getElementById('cr-'+type).classList.add('on');
+}
+
+// ══════════════════════════════════════════════════════
+// PROGRAMME D'EXERCICES — 26 EXERCICES
+// ══════════════════════════════════════════════════════
+var PROGRAMME=[
+  {
+    phase:'Phase antalgique &amp; protection (J1-J7)',
+    color:'#FAE8EB',
+    borderColor:'#D07080',
+    exercises:[
+      {
+        name:'RICE / PRICE',
+        duree:'3-5× par jour',
+        meta:'Phase aiguë — J1-J3',
+        protocole:'Repos relatif · Glace 15-20 min · Compression (bandage) · Élévation membre',
+        precautions:'Ne pas appliquer la glace directement sur la peau. Pas de massage en phase aiguë.',
+        progression:'Dès J4 : passage à la mobilisation précoce douce.',
+        justification:'Protocole PRICE : réduit l\'œdème et la douleur en phase aiguë. Repos relatif (pas immobilisation totale) favorise une cicatrisation de qualité.'
+      },
+      {
+        name:'Mobilisation cheville en décharge (ABC)',
+        duree:'3× 5 min / jour',
+        meta:'Phase aiguë — décharge',
+        protocole:'Assis ou allongé. Tracer les lettres de l\'alphabet avec le pied dans l\'air. Amplitude indolore uniquement.',
+        precautions:'Arrêter si douleur > EVA 3. Ne pas forcer l\'amplitude.',
+        progression:'Augmenter la taille des lettres progressivement. Passer en charge dès tolérance.',
+        justification:'Maintient la mobilité articulaire et la proprioception précoce sans contrainte mécanique. Prévient la raideur post-entorse.'
+      },
+      {
+        name:'Pompe tibiale (flexion-extension active)',
+        duree:'3× 20 répétitions / jour',
+        meta:'Anti-œdème · Activation musculaire précoce',
+        protocole:'Assis, membre surélevé. Flexion-extension active de la cheville : dorsiflexion maximale → flexion plantaire maximale. Lent et contrôlé.',
+        precautions:'Respecter les amplitudes indolores. Intensifier progressivement.',
+        progression:'Passage en charge dès que la douleur le permet (J3-J5 entorse légère).',
+        justification:'Active la pompe veino-lymphatique du mollet, réduit l\'œdème. Maintient la continuité neuro-musculaire précoce.'
+      },
+      {
+        name:'Bérenger-Féraud (proprioception en décharge)',
+        duree:'3× 2 min / côté',
+        meta:'Proprioception précoce — assis',
+        protocole:'Assis sur chaise. Pied sur plateau proprioceptif (ou coussin) posé au sol. Rotations lentes du plateau dans toutes les directions en gardant le pied en contact.',
+        precautions:'Décharge partielle uniquement. Arrêter si douleur.',
+        progression:'Passer à la proprioception debout dès J7-J10.',
+        justification:'Stimulation proprioceptive précoce en décharge : restaure les mécanorécepteurs ligamentaires sans contrainte en charge. Prévient le déficit proprioceptif post-entorse.'
+      }
+    ]
+  },
+  {
+    phase:'Phase de mobilisation &amp; récupération (J7-J21)',
+    color:'#FAF0DC',
+    borderColor:'#D4A030',
+    exercises:[
+      {
+        name:'Étirement manuel gastrocnémien',
+        duree:'3× 30 sec / côté — 2×/jour',
+        meta:'Flexibilité mollet — genou tendu',
+        protocole:'Debout face à un mur, mains en appui. Pied atteint en arrière, genou tendu, talon au sol. Avancer les hanches vers le mur jusqu\'à sensation d\'étirement.',
+        precautions:'Ne jamais forcer sur une entorse récente. Respecter le délai cicatriciel (>J7).',
+        progression:'Augmenter la durée (45 sec) puis utiliser une marche ou un step pour augmenter l\'amplitude.',
+        justification:'Étirement gastrocnémien : composante essentielle du traitement tendinopathie Achille (Alfredson, Beyer) et prévention fasciite plantaire (Young 2001).'
+      },
+      {
+        name:'Étirement soléaire (genou fléchi)',
+        duree:'3× 30 sec / côté — 2×/jour',
+        meta:'Flexibilité soléaire — genou fléchi',
+        protocole:'Même position que précédent mais genou arrière légèrement fléchi (30-40°). Avancer hanches vers le mur.',
+        precautions:'Distincter bien l\'étirement gastrocnémien (genou tendu) de celui du soléaire (genou fléchi).',
+        progression:'Augmenter progressivement l\'angle de flexion du genou.',
+        justification:'Le soléaire est chef majeur de la tendinopathie Achille d\'insertion. Étirement spécifique indispensable (programme HSR Beyer 2015).'
+      },
+      {
+        name:'Auto-mobilisation dorsiflexion (knee to wall)',
+        duree:'3× 10 répétitions / côté',
+        meta:'Récupération mobilité tibio-talienne',
+        protocole:'Debout, pied à 10 cm du mur, genou fléchi vers le mur en gardant le talon au sol. Mesurer la distance pied-mur sans décollement du talon.',
+        precautions:'Progression lente si entorse récente. Ne pas forcer en présence d\'œdème.',
+        progression:'Augmenter la distance pied-mur progressivement (objectif >12 cm). Comparer les deux côtés.',
+        justification:'Le déficit de dorsiflexion est un facteur de risque de récidive d\'entorse et de fasciite plantaire. La mesure knee-to-wall est reproductible et permet un suivi objectif (Bennell 1998).'
+      },
+      {
+        name:'Étirement fascia plantaire (self-stretch)',
+        duree:'3× 30 sec — matin au réveil + 2 séances',
+        meta:'Fasciite plantaire — premiers pas',
+        protocole:'Assis, croiser la cheville sur le genou opposé. Saisir les orteils et les tirer en dorsiflexion jusqu\'à sentir la tension sous le pied. Maintenir.',
+        precautions:'Réaliser AVANT les premiers pas du matin. En cas de douleur aiguë, ne pas forcer.',
+        progression:'Associer roulement de bouteille glacée (2 min) pour effet antalgique.',
+        justification:'Étirement spécifique du fascia plantaire avant les premiers pas réduit significativement la douleur matinale (DiGiovanni 2003 — RCT). Protocole de base fasciite plantaire.'
+      },
+      {
+        name:'Mobilisation sous-talienne (glissement calcanéen)',
+        duree:'3× 10 répétitions douces',
+        meta:'Récupération mobilité sous-talienne',
+        protocole:'Assis, saisir le calcanéum des deux mains, effectuer des glissements latéraux doux (varus-valgus passif assisté). Amplitude indolore.',
+        precautions:'Technique manuelle — à réaliser dans le cadre de la séance. Ne pas forcer.',
+        progression:'Augmenter l\'amplitude de glissement progressivement.',
+        justification:'Les restrictions de mobilité sous-talienne post-entorse peuvent contribuer à l\'instabilité chronique et au sinus du tarse (Hertel 2000).'
+      }
+    ]
+  },
+  {
+    phase:'Phase de renforcement (J21 — 6 semaines)',
+    color:'#E3EEF9',
+    borderColor:'#3070B0',
+    exercises:[
+      {
+        name:'Élévation talons bipodale (calf raises)',
+        duree:'3× 15 répétitions — tempo 3-1-3',
+        meta:'Renforcement triceps sural — charge bilaterale',
+        protocole:'Debout, mains légèrement en appui pour l\'équilibre. Montée sur la pointe des deux pieds, maintien 1 sec, descente lente (3 sec).',
+        precautions:'Ne pas commencer si douleur Achille >EVA 3. Progresser avant passage unipodal.',
+        progression:'Semaine 2 : utiliser un step (amplitude complète). Semaine 3 : passage unipodal.',
+        justification:'Base du protocole HSR (Heavy Slow Resistance, Beyer 2015) — renforcement progressif triceps sural. Résultats équivalents à l\'Alfredson avec meilleure tolérance.'
+      },
+      {
+        name:'Élévation talons unipodale excentrique (protocole HSR)',
+        duree:'3× 15 répétitions — 3 séries — 3×/semaine',
+        meta:'Tendinopathie Achille — protocole HSR principal',
+        protocole:'Step ou sol. Montée sur deux pieds, descente lente (3-4 sec) sur un seul pied. Progresser vers montée ET descente sur un pied. Utiliser un sac lorsque le poids du corps devient insuffisant.',
+        precautions:'Douleur acceptable jusqu\'à EVA 4/10 pendant l\'exercice. Toujours surveiller la réaction 24h après. Arrêter si EVA >6 ou si la douleur ne s\'améliore pas dans les 2 premières semaines.',
+        progression:'Protocole 12 semaines (Beyer 2015) : semaine 1-3 = 3×15 poids du corps · semaine 4-6 = 3×12 avec sac lesté · semaine 7-12 = 3×10 charge maximale. MCID VISA-A = 12 pts.',
+        justification:'HSR (Heavy Slow Resistance) — Beyer 2015 (RCT) : résultats équivalents à l\'Alfredson excentrique classique, avec meilleure tolérance à la douleur. Mécanisme : stimulation de la synthèse collagénique par charge mécanique progressive.'
+      },
+      {
+        name:'Renforcement tibial antérieur (résistance élastique)',
+        duree:'3× 15 répétitions — 3×/semaine',
+        meta:'Équilibre agoniste/antagoniste — prévention récidive',
+        protocole:'Assis ou debout. Élastique fixé à un pied de table (bas). Dorsiflexion active contre résistance, retour contrôlé.',
+        precautions:'Ne pas compenser par une flexion de genou ou de hanche.',
+        progression:'Augmenter la résistance de l\'élastique. Passage à l\'exercice debout.',
+        justification:'Le renforcement du tibial antérieur améliore l\'équilibre musculaire et contribue à la stabilité dynamique. Complément indispensable du renforcement du triceps sural.'
+      },
+      {
+        name:'Renforcement fibulaires (éversion résistée)',
+        duree:'3× 15 répétitions — 3×/semaine',
+        meta:'Stabilité ligamentaire latérale active',
+        protocole:'Assis, cheville en légère inversion. Élastique autour du milieu du pied. Éversion active contre résistance jusqu\'en position neutre, retour contrôlé.',
+        precautions:'Pas en phase aiguë d\'entorse. Douleur nulle ou minimale.',
+        progression:'Augmenter la résistance. Associer à la proprioception debout.',
+        justification:'Les fibulaires sont les stabilisateurs actifs principaux de la cheville latérale. Leur renforcement réduit le risque de récidive d\'entorse (Verhagen 2004).'
+      },
+      {
+        name:'Renforcement inverseurs (tibial postérieur)',
+        duree:'3× 12 répétitions',
+        meta:'Stabilité médiale — pied plat',
+        protocole:'Assis. Élastique autour du milieu du pied. Inversion active contre résistance, retour contrôlé.',
+        precautions:'Éviter si instabilité médiale aiguë.',
+        progression:'Passage à des exercices en charge (relevé de voûte).',
+        justification:'Le tibial postérieur est le stabilisateur actif de la voûte plantaire et contribue à la stabilité sous-talienne. Son renforcement est indiqué dans le traitement du pied plat valgus douloureux.'
+      },
+      {
+        name:'Relevé de voûte (short foot exercise)',
+        duree:'3× 20 répétitions / côté',
+        meta:'Renforcement intrinsèques plantaires',
+        protocole:'Debout, pieds à plat. Contracter les muscles intrinsèques plantaires pour "raccourcir" le pied sans fléchir les orteils : soulever la voûte en rapprochant la tête du 1er métatarse du talon.',
+        precautions:'Difficile à isoler au début — guider manuellement si nécessaire. Ne pas criper les orteils.',
+        progression:'Passage à la position unipodale. Associer à la marche consciencieuse.',
+        justification:'Le Short Foot Exercise renforce les intrinsèques plantaires, améliore la stabilité dynamique du médio-pied et est indiqué dans la fasciite plantaire et le pied plat fonctionnel (Jung 2011).'
+      }
+    ]
+  },
+  {
+    phase:'Phase proprioceptive &amp; équilibre (semaine 3-8)',
+    color:'#EDE8F8',
+    borderColor:'#7060B0',
+    exercises:[
+      {
+        name:'Équilibre unipodal statique (yeux ouverts)',
+        duree:'3× 30 secondes / côté',
+        meta:'Proprioception de base — charge',
+        protocole:'Debout sur pied atteint, mains sur les hanches. Maintenir l\'équilibre 30 secondes. Surface ferme.',
+        precautions:'Avoir une main prête à s\'appuyer. Progression très lente si instabilité sévère.',
+        progression:'YF → surface instable → yeux fermés → avec perturbations externes.',
+        justification:'Exercice de base pour la restauration proprioceptive. Le temps d\'équilibre unipodal est un prédicteur de risque de récidive d\'entorse et prédit les déficits proprioceptifs (McGuine 2006).'
+      },
+      {
+        name:'Équilibre unipodal sur surface instable',
+        duree:'3× 30 secondes / côté',
+        meta:'Proprioception avancée — plateau, coussin',
+        protocole:'Debout sur plateau proprioceptif ou coussin de mousse. Maintenir l\'équilibre 30 secondes sur pied atteint.',
+        precautions:'Placer le plateau contre un mur les premières séances. Supervision recommandée.',
+        progression:'Yeux fermés · Doubles tâches (attraper une balle) · Perturbations externes.',
+        justification:'La surface instable augmente le défi proprioceptif et simule les conditions fonctionnelles. Réduction significative du risque de récidive (Verhagen 2004 — RCT, 116 joueurs de volleyball).'
+      },
+      {
+        name:'Exercice étoile (Star Excursion simplifié)',
+        duree:'3× 8 directions / côté',
+        meta:'Contrôle postural dynamique — YBT fonctionnel',
+        protocole:'Debout sur pied atteint. Atteindre au maximum avec le pied libre dans les 8 directions (étoile dessinée au sol). Revenir sans poser le pied.',
+        precautions:'Ne pas poser le pied libre à l\'appui. Si CAIT ≤24, supervision rapprochée.',
+        progression:'Augmenter la vitesse du mouvement. Fermer les yeux. Surface instable.',
+        justification:'Simplifié du Y-Balance Test — entraîne le contrôle postural multidirectionnel et les stratégies d\'équilibre anticipatoires. Corrèle avec le risque de blessure (Plisky 2009).'
+      },
+      {
+        name:'Marche sur terrain irrégulier',
+        duree:'15-20 min / séance — 3×/semaine',
+        meta:'Transfert proprioceptif fonctionnel',
+        protocole:'Marche sur terrain varié : herbe, gravier, sol inégal. Vitesse normale, aucune aide à la marche si possible.',
+        precautions:'Chaussures adaptées. Commencer par de courtes durées (5 min) si instabilité sévère.',
+        progression:'Augmenter durée et difficulté du terrain. Introduire la course sur terrain irrégulier en phase fonctionnelle.',
+        justification:'La marche sur terrain irrégulier stimule les réflexes de protection ligamentaire dans des conditions proches de la vie réelle. Composante essentielle de la réhabilitation fonctionnelle (Hertel 2002).'
+      }
+    ]
+  },
+  {
+    phase:'Phase fonctionnelle &amp; retour au sport (semaine 6-12)',
+    color:'#DAF0E6',
+    borderColor:'#30A070',
+    exercises:[
+      {
+        name:'Course en ligne droite progressive',
+        duree:'Programme 8 semaines — voir protocole',
+        meta:'Retour à la course — prérequis LSI ≥90%',
+        protocole:'Semaine 1-2 : marche rapide alternée course (1 min marche / 1 min course). Semaine 3-4 : course continue 10-15 min à allure modérée. Semaine 5-6 : augmentation volume. Semaine 7-8 : allure cible.',
+        precautions:'Prérequis : Heel Rise LSI ≥90%, EVA ≤2 à la course, FAAM Sport ≥75. Ne jamais augmenter de plus de 10% / semaine.',
+        progression:'Avant course sur terrain irrégulier, puis changements de direction.',
+        justification:'Protocole de retour à la course progressif. Les prérequis fonctionnels objectifs (LSI, FAAM Sport) permettent de sécuriser la reprise (van Melick 2016).'
+      },
+      {
+        name:'Sauts bilatéraux (squat jump)',
+        duree:'3× 10 répétitions — 3×/semaine',
+        meta:'Préparation aux activités à impact',
+        protocole:'Squat léger, saut vertical, réception contrôlée sur deux pieds. Genou aligné sur le pied à la réception. Amortissement progressif (orteils → talon).',
+        precautions:'Prérequis : Heel Rise LSI ≥90%. Ne pas débuter si douleur Achille >EVA 3.',
+        progression:'Sauts unilatéraux → sauts multidirectionnels → sauts avec réception sur pied atteint.',
+        justification:'La progression des sauts renforce la capacité de choc et prépare les ligaments à la réception. Composante essentielle du retour au sport après entorse (van Melick 2016).'
+      },
+      {
+        name:'Single Leg Hop progressif (LSI)',
+        duree:'3× 3 sauts / côté — mesure distances',
+        meta:'Critère objectif retour sport — LSI ≥90%',
+        protocole:'Saut unipodal maximal vers l\'avant. Mesurer la distance (cm). 3 essais, retenir la meilleure. Calculer LSI = atteint/sain × 100.',
+        precautions:'Ne pas réaliser si FAAM Sport <50. Supervision requise.',
+        progression:'Passage aux 4 hop tests (Crossover, Triple, 6m Timed) pour profil complet retour sport.',
+        justification:'LSI ≥90% = critère de retour au sport (van Melick 2016). Le Single Hop est le test fonctionnel le mieux corrélé à la performance sportive après blessure cheville/Achille.'
+      },
+      {
+        name:'Changements de direction progressifs',
+        duree:'3× 5 répétitions par direction',
+        meta:'Agilité — sport collectif',
+        protocole:'Parcours en 8, cônes à 5m. Commencer lentement (50% vitesse), progresser vers vitesse maximale. Introduire les pivots, les décélérations brusques.',
+        precautions:'Prérequis : Single Hop LSI ≥90%, CAIT ≥25. Terrain revêtu. Chaussures adaptées au sport.',
+        progression:'Augmenter la vitesse, les angles de changement de direction. Introduire un adversaire.',
+        justification:'Les changements de direction sont le principal mécanisme de nouvelle entorse en sports collectifs. Leur entraînement progressif améliore le contrôle neuromusculaire dynamique (Eils & Rosenbaum 2001).'
+      },
+      {
+        name:'Reprise sport spécifique encadrée',
+        duree:'Selon activité — 2-4 semaines de transition',
+        meta:'Retour activité sportive complète',
+        protocole:'Semaine 1 : entraînement partiel (50%), sans adversaire. Semaine 2 : entraînement complet sans match. Semaine 3 : match retour. Utiliser une orthèse de cheville pour les 2-3 premières semaines de compétition.',
+        precautions:'Critères de retour : FAAM Sport ≥75/100, LSI Single Hop ≥90%, CAIT ≥25, EVA ≤2 à l\'effort.',
+        progression:'Diminution progressive du port de l\'orthèse selon tolérance.',
+        justification:'Le retour progressif au sport avec critères objectifs réduit le risque de récidive (Verhagen 2004). L\'orthèse fonctionnelle lors du retour en compétition diminue le risque de récidive de 50% (McKeon & Hertel 2008).'
+      }
+    ]
+  },
+  {
+    phase:'Programme spécifique Tendinopathie Achille (HSR — 12 semaines)',
+    color:'#FAE8EB',
+    borderColor:'#A33045',
+    exercises:[
+      {
+        name:'HSR — Montée bipodale, descente bipodale chargée',
+        duree:'3× 15 répétitions — 3×/semaine (alternées avec repos)',
+        meta:'HSR semaine 1-3 — poids du corps',
+        protocole:'Sur step ou sol : montée sur deux pieds (2-3 sec), descente sur deux pieds lentement (3-4 sec). Tempo 3-1-3. Poids du corps.',
+        precautions:'EVA acceptable jusqu\'à 4/10 pendant l\'exercice. Évaluer 24h après : si EVA >5 le lendemain, réduire la charge.',
+        progression:'Si 3×15 facile → passer à 3×15 avec sac lesté (semaine 4-6).',
+        justification:'Protocole HSR (Beyer 2015) : phase initiale en charge bipodale. Stimulation de la synthèse collagénique. RCT : résultats équivalents à Alfredson à 12 semaines avec meilleure satisfaction et tolérance.'
+      },
+      {
+        name:'HSR — Montée bipodale, descente unipodale (phase intermédiaire)',
+        duree:'3× 12 répétitions — 3×/semaine — avec sac lesté',
+        meta:'HSR semaine 4-6 — charge progressive',
+        protocole:'Sur step : montée sur deux pieds (2-3 sec), descente sur pied atteint uniquement, lentement (4 sec). Sac lesté adapté (objectif : effort ressenti 6-7/10).',
+        precautions:'Si EVA >6 au lendemain : réduire le poids. Si EVA ≤3 : augmenter la charge.',
+        progression:'Semaine 7-12 : montée ET descente unipodale avec charge maximale tolérée.',
+        justification:'Charge progressive progressive selon le protocole HSR. L\'augmentation de la charge mécanique sur le tendon stimule la remodelisation collagénique et améliore les propriétés mécaniques tendon (Cook & Purdam 2009).'
+      },
+      {
+        name:'HSR — Charge maximale unipodale (phase avancée)',
+        duree:'3× 10 répétitions — 3×/semaine — charge max',
+        meta:'HSR semaine 7-12 — adaptation maximale',
+        protocole:'Sur step : montée ET descente sur pied atteint uniquement. Charge maximale dans la limite EVA ≤4 pendant et ≤5 le lendemain. Sac lesté, gilet leste ou machine à mollets.',
+        precautions:'Ne jamais dépasser 5/10 EVA le lendemain. Repos inter-séance 48h minimum.',
+        progression:'Évaluer VISA-A à 6 semaines et 12 semaines. Si progression <12 pts sur 6 semaines : reconsidérer le diagnostic.',
+        justification:'Phase finale HSR — charge maximale. L\'objectif est de stimuler la synthèse de collagène de type I par chargement mécanique intense et répété. MCID VISA-A = 12 pts. Durée minimale de protocole : 12 semaines (Beyer 2015, Beelen 2023).'
+      },
+      {
+        name:'Étirement soléaire post-séance HSR',
+        duree:'3× 45 sec après chaque séance HSR',
+        meta:'Récupération — maintien mobilité',
+        protocole:'Après chaque séance de calf raises : étirement soléaire genou fléchi contre un mur. Maintien 45 sec. Ne pas étirer agressivement en phase de douleur aiguë.',
+        precautions:'Étirement doux uniquement. Ne pas étirer si la douleur dépasse EVA 4.',
+        progression:'Augmenter la durée de maintien jusqu\'à 60 sec.',
+        justification:'Le maintien de la mobilité de dorsiflexion est crucial dans la tendinopathie Achille. La raideur du soléaire augmente la tension tendineuse résiduelle et retarde la guérison.'
+      }
+    ]
+  }
+];
+
+function openProgram(){
+  var ptName=(D.prenom&&D.nom)?D.prenom+' '+D.nom:(D.nom||D.prenom||'Patient');
+  document.getElementById('prog-patient-name').textContent=ptName;
+  document.getElementById('prog-patient-info').textContent='Cheville / Pied · '+(D.cote||'')+'  · '+(D.ctx||'');
+  var html='';
+  PROGRAMME.forEach(function(section){
+    html+='<div class="ph-section">';
+    html+='<div class="ph-stitle" style="color:'+section.borderColor+';border-color:'+section.color+'">'+section.phase+'</div>';
+    section.exercises.forEach(function(ex){
+      html+='<div class="ex-card">';
+      html+='<div class="ex-head" style="background:'+section.color+'"><div class="ex-name">'+ex.name+'</div><div class="ex-meta">'+ex.meta+'</div></div>';
+      html+='<div class="ex-body">';
+      html+='<div class="ex-row"><span class="ex-lbl">Protocole</span><span class="ex-val">'+ex.protocole+'</span></div>';
+      html+='<div class="ex-row"><span class="ex-lbl">Dosage</span><span class="ex-val">'+ex.duree+'</span></div>';
+      html+='<div class="ex-row"><span class="ex-lbl">Précautions</span><span class="ex-val">'+ex.precautions+'</span></div>';
+      html+='<div class="ex-row"><span class="ex-lbl">Progression</span><span class="ex-val">'+ex.progression+'</span></div>';
+      html+='<div class="ex-just">'+ex.justification+'</div>';
+      html+='</div></div>';
+    });
+    html+='</div>';
+  });
+  document.getElementById('prog-content').innerHTML=html;
+  document.getElementById('prog-overlay').classList.add('o');
+  document.getElementById('prog-overlay').scrollTop=0;
+}
+function closeProgram(){
+  document.getElementById('prog-overlay').classList.remove('o');
+}
+function resetBilan(){
+  if(confirm('Effacer le bilan en cours ?')){
+    localStorage.removeItem('bilan-cheville-v1');
+    location.reload();
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',function(){
+  loadState();
+  buildMRC();
+});
+
+// ══════════════════════════════════════════════════════
+// EBP MODAL
+// ══════════════════════════════════════════════════════
+
+var EBP_DATA={
+  adt:{title:'Anterior Drawer Test (Tiroir antérieur)',ref:'van Dijk CN et al. J Bone Joint Surg Br. 1996',stats:[{l:'Sensibilité',v:'74%',s:'entorse lat.'},{l:'Spécificité',v:'88%',s:''},{l:'LR+',v:'6.2',s:''},{l:'LR−',v:'0.30',s:''}],note:'Test de référence pour les lésions du LTFA. Réaliser à J4-5 post-entorse (œdème réduit). Translation > 3 mm ou laxité > côté sain = positif. LR+ 6.2 : un résultat positif multiplie par 6 la probabilité de rupture ligamentaire. Comparer systématiquement au côté sain.'},
+  tilt:{title:'Talar Tilt (Inclinaison talaire)',ref:'Frost SC & Amendola A. Clin J Sport Med. 1999',stats:[{l:'Sensibilité',v:'50%',s:''},{l:'Spécificité',v:'88%',s:''},{l:'LR+',v:'4.2',s:''}],note:'Varus forcé en position neutre. Ouverture > 10° ou > 5° vs côté sain = positif. Teste le LTFA et le LCF. Bonne spécificité : si positif, lésion ligamentaire probable. Sensibilité limitée — un résultat négatif n\'écarte pas la lésion. Compléter avec le Tiroir antérieur.'},
+  stress_lli:{title:'Stress test en éversion (LLI)',ref:'Données EBP limitées — description clinique',stats:[],note:'Entorse médiale rare (~10% des entorses de cheville). Douleur et/ou laxité en éversion = positif. Associer à la recherche d\'une lésion syndesmotique si positive (les deux structures sont souvent lésées ensemble).'},
+  squeeze:{title:'Squeeze Test (Syndesmose tibio-fibulaire)',ref:'Beumer A et al. Br J Sports Med. 2003',stats:[{l:'Sensibilité',v:'30%',s:'syndesmose'},{l:'Spécificité',v:'93%',s:''},{l:'LR+',v:'4.3',s:''}],note:'Compression tibio-fibulaire au 1/3 moyen de jambe → douleur distale. Faible sensibilité mais haute spécificité : un résultat positif impose une imagerie de la syndesmose. Les entorses de syndesmose ont un pronostic plus sévère et une récupération plus longue.'},
+  thompson:{title:'Thompson Test (Simmonds)',ref:'Maffulli N. J Bone Joint Surg Br. 1998',stats:[{l:'Sensibilité',v:'96%',s:'rupture totale'},{l:'Spécificité',v:'93%',s:''},{l:'LR+',v:'13.7',s:''},{l:'LR−',v:'0.04',s:''}],note:'Compression mollet en DV : absence de flexion plantaire = POSITIF. Test de référence pour la rupture totale du tendon d\'Achille. LR- 0.04 : un résultat négatif écarte quasi certaine la rupture totale. Toujours compléter par le Matles test.'},
+  matles:{title:'Matles Test',ref:'Matles AL. Foot Ankle. 1975 — Maffulli N. JBJS. 1998',stats:[{l:'Sensibilité',v:'88%',s:'rupture totale'},{l:'Spécificité',v:'85%',s:''},{l:'LR+',v:'5.9',s:''},{l:'LR−',v:'0.14',s:''}],note:'Flexion active des genoux à 90° en DV : pied atteint en dorsiflexion (neutre ou au-delà) = positif. Complémentaire du Thompson. Thompson + Matles positifs : VPP > 98% pour rupture totale. Imagerie pour confirmer avant décision chirurgicale.'},
+  rlht:{title:'RLHT — Royal London Hospital Test',ref:'Maffulli N et al. Arthroscopy. 1998',stats:[{l:'Sensibilité',v:'78%',s:'tendinopathie corp.'},{l:'Spécificité',v:'80%',s:''}],note:'Palpation douloureuse en position neutre → dorsiflexion passive → DIMINUTION de la douleur = POSITIF. Distingue la tendinopathie corporéale (RLHT+) de la tendinopathie d\'insertion (RLHT-). Orienter la rééducation selon le résultat.'},
+  arc:{title:'Arc Sign',ref:'Khan KM et al. Br J Sports Med. 2003',stats:[{l:'Sensibilité',v:'53%',s:'tendinopathie corp.'},{l:'Spécificité',v:'93%',s:''}],note:'Épaississement nodulaire qui se déplace avec le tendon en flexion plantaire = paratendinopathie ou tendinopathie corporéale. Si l\'épaississement est fixe = tendinite d\'insertion ou kyste. Haute spécificité : un arc sign positif confirme l\'atteinte corporéale.'},
+  heelrise:{title:'Heel Rise Test (Single Leg Heel Rise)',ref:'Lunsford BR & Perry J. Phys Ther. 1995',stats:[{l:'Seuil retour sport',v:'LSI ≥90%',s:''},{l:'Seuil sévère',v:'< 10 rép.',s:'déficit marqué'}],note:'Seuil normatif : 25 répétitions côté sain (adulte actif). LSI < 90% = déficit cliniquement significatif. < 10 répétitions = déficit sévère — programme de renforcement intensif. Test fonctionnel de référence pour le suivi de la rééducation achilléenne.'},
+  ybt:{title:'SEBT / Y-Balance Test',ref:'Plisky PJ et al. N Am J Sports Phys Ther. 2009',stats:[{l:'Seuil composite',v:'≥89%',s:'score composite'},{l:'Risque blessure',v:'×2',s:'si déficit >4 cm reach ant.'}],note:'Score composite = (ant + PM + PL) / (3 × longueur membre) × 100. Déficit > 4 cm en reach antérieur vs côté sain : risque de récidive doublé. Utilisé pour la clearance retour sport. Réaliser après consolidation complète.'},
+  singlehop:{title:'Single Hop for Distance',ref:'van Melick N et al. Br J Sports Med. 2016',stats:[{l:'Seuil retour sport',v:'LSI ≥90%',s:''}],note:'LSI = (distance côté atteint / distance côté sain) × 100. Seuil ≥ 90% pour retour sport sécurisé. Utilisé en série (triple hop, crossover hop) pour une évaluation plus complète. Seuil validé dans la littérature retour sport multisport.'},
+  equil:{title:'Équilibre unipodal statique',ref:'Données normatives — test clinique standardisé',stats:[{l:'YO seuil',v:'≥30 sec',s:'yeux ouverts'},{l:'YF seuil',v:'≥15 sec',s:'yeux fermés'}],note:'Évalue la proprioception et le contrôle postural. YO < 30 sec ou YF < 10 sec = déficit proprioceptif significatif. Comparer les deux côtés. Indispensable dans l\'évaluation de l\'instabilité chronique de cheville (CAIT > 0).'},
+  sinus:{title:'Palpation sinus du tarse',ref:'Boya H et al. J Foot Ankle Surg. 2006',stats:[{l:'Sensibilité',v:'70–80%',s:'sinus tarsi syndrome'}],note:'Dépression antéro-inférieure à la malléole externe. Pression directe reproduisant la douleur profonde caractéristique = positif. Fréquemment associé aux séquelles d\'entorse latérale. Associer test de charge en pronation pour confirmer.'},
+  subtalar:{title:'Compression sous-talienne',ref:'Description clinique',stats:[],note:'Douleur sous-talienne profonde à la compression axiale du calcanéum. Absence de données Se/Sp publiées. Valeur clinique orientatrice pour l\'atteinte sous-talienne secondaire (coxarthrose sous-talienne, séquelles d\'entorse).'},
+  windlass:{title:'Windlass Test',ref:'Karabay N et al. J Am Podiatr Med Assoc. 2007',stats:[{l:'Sensibilité',v:'32%',s:'fasciite plantaire'},{l:'Spécificité',v:'100%',s:''},{l:'LR+',v:'∞',s:''}],note:'Extension passive des orteils (hallux) → reproduction de la douleur talonnière plantaire = positif. Sp 100% : un résultat positif confirme la fasciite plantaire. La faible sensibilité ne doit pas faire rejeter le diagnostic si négatif. Associer palpation de l\'insertion fascia.'},
+  fascia_palp:{title:'Palpation insertion fascia plantaire',ref:'Lemont H et al. J Am Podiatr Med Assoc. 2003',stats:[{l:'Sensibilité',v:'élevée',s:'gold standard clinique'}],note:'Douleur exquise à la palpation de la face antéro-médiale du calcanéum = signe cardinal de fasciite plantaire. Première douleur le matin (douleur de premier pas) est pathognomonique. Associer au Windlass test. Signe clinique le plus fiable en pratique.'},
+  morton:{title:'Compression métatarsale (signe de Mulder)',ref:'Mulder JD. J Bone Joint Surg Br. 1951',stats:[{l:'Sensibilité',v:'84%',s:'névrome de Morton'},{l:'Spécificité',v:'96%',s:''},{l:'LR+',v:'21',s:''}],note:'Compression latérale de l\'avant-pied + pression dans l\'espace 3-4 → douleur irradiante + claquement (signe de Mulder). LR+ 21 : très forte valeur prédictive positive. Un résultat positif typique confirme le névrome de Morton avec quasi-certitude.'},
+  hallux:{title:'Test hallux valgus',ref:'Nix S et al. J Foot Ankle Res. 2010 — Valeurs normatives',stats:[{l:'HVA normal',v:'< 15°',s:'angle hallux valgus'},{l:'IMA normal',v:'< 9°',s:'inter-métatarsien'}],note:'HVA 15-20° = déformation légère. 20-40° = modérée. > 40° = sévère. IMA > 9° = métatarsus varus associé. Associer EVA douleur à la 1ère MTP et retentissement fonctionnel. Orientera vers chaussage adapté, orthèse plantaire ou avis chirurgical.'}
+};
+
+
+function showEBP(key,event){
+  if(event)event.stopPropagation();
+  var d=EBP_DATA[key];
+  if(!d)return;
+  document.getElementById('ebp-title').textContent=d.title;
+  document.getElementById('ebp-ref').textContent=d.ref;
+  var sh=document.getElementById('ebp-stats');
+  sh.innerHTML='';
+  if(d.stats&&d.stats.length){
+    d.stats.forEach(function(s){
+      sh.innerHTML+='<div class="ebp-stat"><div class="ebp-stat-lbl">'+s.l+'</div><div class="ebp-stat-val">'+s.v+'</div>'+(s.s?'<div class="ebp-stat-sub">'+s.s+'</div>':'')+'</div>';
+    });
+    sh.style.display='grid';
+  }else{sh.style.display='none';}
+  var nb=document.getElementById('ebp-note');
+  if(d.note){nb.textContent=d.note;nb.style.display='block';}else{nb.style.display='none';}
+  document.getElementById('ebp-overlay').classList.add('o');
+}
+function closeEBP(event){
+  if(event&&event.target!==document.getElementById('ebp-overlay'))return;
+  document.getElementById('ebp-overlay').classList.remove('o');
+}
+
+</script>
+</body>
+</html>

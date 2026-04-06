@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1B2A38">
+<title>Bilan Hanche V2 — Yasser Ladraa</title>
+<style>
+:root{
+  --bg:#F2F0EC;--surf:#FFF;--surf2:#EDEAE3;--brd:#DDD9CF;--brd2:#C2BCB0;
+  --tx:#1A1714;--tx2:#56524C;--tx3:#98948A;
+  --z:#1A6FA8;--zl:#DCF0FF;--zd:#0A3D6B;--zm:#2186C8;
+  --red:#9C2B2B;--redl:#FAEAEA;--amb:#B56E10;--ambl:#FAF0DC;
+  --blu:#1550A0;--blul:#E3EEF9;--pur:#5A3898;--purl:#EDE8F8;
+  --grn:#177A5A;--grnl:#DAF0E6;--nvy:#1B2A38;
+  --ter:#8B4513;--terl:#FFF0E6;
+  --r:10px;--rl:16px;--nh:64px;--hh:72px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;min-height:100vh;padding-bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 32px);padding-top:var(--hh)}
+.hdr{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nvy);height:var(--hh);display:flex;flex-direction:column;justify-content:center;padding:0 16px}
+.hr1{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hn{font-size:13px;font-weight:700;color:#fff}.hs{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
+.hbadge{background:var(--ter);color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.hprog{margin-top:8px}.hpbar{height:3px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+.hpfill{height:100%;background:var(--ter);border-radius:99px;transition:width .4s ease}
+.hplbls{display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:rgba(255,255,255,.4)}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:#fff;border-top:1px solid var(--brd);height:calc(var(--nh) + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;padding:0 12px;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 24px rgba(0,0,0,.08);gap:8px}
+.bni{font-size:11px;color:var(--tx3);text-align:center;flex:1;line-height:1.3;min-width:0}
+.bbt{display:flex;align-items:center;gap:5px;padding:12px 20px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;min-width:96px;min-height:48px;justify-content:center;flex-shrink:0}
+.bbt:active{opacity:.8}.bbk{background:var(--surf2);color:var(--tx2)}.bbn{background:var(--ter);color:#fff}.bbt:disabled{opacity:.3;pointer-events:none}
+.app{max-width:680px;margin:0 auto;padding:16px 14px 0}
+.step{display:none}.step.active{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sc{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.sch{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;touch-action:manipulation;transition:background .15s;user-select:none;-webkit-user-select:none}
+.sch:active{background:var(--surf2)}.schl{display:flex;align-items:center;gap:10px}
+.sci{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.iz{background:var(--zl)}.ia{background:var(--ambl)}.ib{background:var(--blul)}.ir{background:var(--redl)}.ip{background:var(--purl)}.ig{background:var(--grnl)}.it{background:var(--terl)}
+.sct{font-size:13px;font-weight:600;color:var(--tx)}.scs{font-size:11px;color:var(--tx3);margin-top:1px}
+.scch{color:var(--tx3);font-size:11px;transition:transform .2s;flex-shrink:0}.scch.o{transform:rotate(180deg)}
+.scb{padding:14px 15px;border-top:1.5px solid var(--brd);display:none}.scb.o{display:block}
+.sa .sch{cursor:default}.sa .scch{display:none}.sa .scb{display:block}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+.fl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fh{font-size:11px;color:var(--tx3);font-weight:400;text-transform:none;letter-spacing:0}
+input[type=text],input[type=date],select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--tx);background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 13px;outline:none;transition:border .15s,background .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--ter);background:#fff}
+textarea{resize:vertical;min-height:60px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:380px){.g2{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1.5px solid var(--brd);border-radius:99px;padding:8px 14px;font-size:13px;cursor:pointer;color:var(--tx2);background:var(--surf2);transition:all .15s;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:40px;display:inline-flex;align-items:center}
+.chip:active{transform:scale(.97)}.chip.on{background:var(--ter);border-color:var(--ter);color:#fff;font-weight:600}
+.checks{display:flex;flex-direction:column;gap:7px}
+.crow{display:flex;align-items:flex-start;gap:10px;padding:12px 12px;border:1.5px solid var(--brd);border-radius:var(--r);cursor:pointer;transition:all .15s;background:var(--surf2);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.crow:active{transform:scale(.99)}.crow.on{background:var(--zl);border-color:#7BBCE0}
+.cbox{width:22px;height:22px;border:1.5px solid var(--brd2);border-radius:6px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .15s}
+.crow.on .cbox{background:var(--ter);border-color:var(--ter)}
+.cmk{display:none;color:#fff;font-size:12px;font-weight:800}.crow.on .cmk{display:block}
+.ctx2{font-size:13px;color:var(--tx);flex:1;line-height:1.4}.csb{font-size:11px;color:var(--tx3);margin-top:2px}
+.evaw{display:flex;gap:4px;flex-wrap:wrap}
+.evab{width:40px;height:44px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:14px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.evab:active{transform:scale(.93)}.evab.on{color:#fff;border-color:transparent}
+.e0.on,.e1.on,.e2.on,.e3.on{background:#177A5A}.e4.on,.e5.on,.e6.on{background:#B56E10}
+.e7.on,.e8.on{background:#C04A15}.e9.on,.e10.on{background:#9C2B2B}
+.egal{display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:var(--tx3)}
+.ti{border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.th{display:flex;align-items:center;padding:12px 13px;background:var(--surf2);cursor:pointer;touch-action:manipulation;gap:10px}
+.th:active{background:#E5E0D8}.tl{flex:1;min-width:0}
+.tn{font-size:13px;font-weight:600;color:var(--tx)}.tsb{font-size:11px;color:var(--tx3);margin-top:1px}
+.tbs{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.tb{font-size:13px;font-weight:700;padding:9px 14px;border-radius:99px;border:1.5px solid var(--brd);cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;white-space:nowrap;touch-action:manipulation;font-family:inherit;min-height:44px;display:inline-flex;align-items:center}
+.tb:active{transform:scale(.95)}.tb.pos{background:var(--redl);border-color:var(--red);color:var(--red)}.tb.neg{background:var(--grnl);border-color:var(--grn);color:var(--grn)}
+.tbody{display:none;padding:12px 13px;background:#fff;border-top:1.5px solid var(--brd)}.tbody.o{display:block}
+.tstps{list-style:none;padding:0;counter-reset:s}
+.tstps li{counter-increment:s;padding:5px 0 5px 26px;position:relative;font-size:12px;color:var(--tx2);border-bottom:1px dashed var(--brd);line-height:1.4}
+.tstps li:last-child{border-bottom:none}
+.tstps li::before{content:counter(s);position:absolute;left:0;top:5px;width:18px;height:18px;background:var(--terl);color:var(--ter);border-radius:50%;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.tint{font-size:12px;color:var(--tx2);margin-top:8px;padding:8px 10px;background:var(--surf2);border-radius:8px;border-left:3px solid var(--ter);line-height:1.5}
+.amp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:420px){.amp-grid{grid-template-columns:1fr 1fr}}
+.amp-item{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 11px}
+.amp-lbl{font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:2px}
+.amp-norm{font-size:10px;color:var(--tx3);margin-bottom:5px}
+.amp-input{width:100%;background:#fff;border:1.5px solid var(--brd);border-radius:7px;padding:7px 9px;font-size:14px;font-weight:700;color:var(--tx);font-family:inherit;-webkit-appearance:none;text-align:center}
+.amp-input:focus{border-color:var(--ter);outline:none}
+.amp-diff{font-size:11px;margin-top:5px;padding:4px 8px;border-radius:6px;display:none;line-height:1.3}
+.al{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border-radius:var(--r);margin-bottom:10px;font-size:13px;line-height:1.5}
+.al span{font-size:16px;flex-shrink:0;margin-top:1px}
+.alr{background:var(--redl);border:1px solid #ECAAAA;color:var(--red)}
+.ala{background:var(--ambl);border:1px solid #ECC878;color:#5A3200}
+.alz{background:var(--zl);border:1px solid #7BBCE0;color:var(--zd)}
+.alg{background:var(--grnl);border:1px solid #7DCEB0;color:#065038}
+.alp{background:var(--purl);border:1px solid #C9B8F0;color:var(--pur)}
+.alb{background:var(--blul);border:1px solid #B0C8F0;color:var(--blu)}
+.alt{background:var(--terl);border:1px solid #E0C090;color:var(--ter)}
+.cluster-box{border:2px solid var(--ter);border-radius:var(--rl);padding:13px 14px;margin-bottom:12px;background:var(--terl)}
+.cluster-box.amb{border-color:var(--amb);background:var(--ambl)}
+.cluster-title{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ter);margin-bottom:8px}
+.cluster-box.amb .cluster-title{color:var(--amb)}
+.cluster-counter{display:flex;align-items:center;gap:10px;margin-top:8px}
+.cluster-dots{display:flex;gap:5px}
+.cluster-dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--ter);background:#fff;transition:all .2s}
+.cluster-dot.on-ter{background:var(--ter)}
+.cluster-dot.amb-dot{border-color:var(--amb)}
+.cluster-dot.on-amb{background:var(--amb)}
+.cluster-lr{font-size:13px;font-weight:700;color:var(--ter)}
+.cluster-box.amb .cluster-lr{color:var(--amb)}
+.mrc-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.mrc-btn{width:40px;height:44px;border-radius:8px;border:1.5px solid var(--brd);font-size:13px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.mrc-btn:active{transform:scale(.93)}.mrc-btn.on{background:var(--ter);border-color:var(--ter);color:#fff}
+.mrc-lbl{font-size:10px;color:var(--tx3);margin-top:6px;font-style:italic}
+.score-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.score-tab{flex:1;min-width:68px;padding:8px 6px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:11px;font-weight:700;cursor:pointer;text-align:center;background:var(--surf2);color:var(--tx2);transition:all .15s;touch-action:manipulation;font-family:inherit;line-height:1.3}
+.score-tab.on{background:var(--ter);border-color:var(--ter);color:#fff}
+.score-panel{display:none}.score-panel.on{display:block}
+.sq-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--brd)}
+.sq-row:last-of-type{border-bottom:none}
+.sq-q{font-size:12px;color:var(--tx2);flex:1;line-height:1.4}
+.sq-opts{display:flex;gap:4px;flex-shrink:0}
+.sq-btn{width:32px;height:32px;border-radius:7px;border:1.5px solid var(--brd);font-size:11px;font-weight:700;cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.sq-btn:active{transform:scale(.9)}.sq-btn.on{background:var(--ter);border-color:var(--ter);color:#fff}
+.score-res{margin-top:10px;padding:12px 14px;border-radius:var(--r);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.score-num{font-size:28px;font-weight:800}.score-info{font-size:12px;font-weight:600;text-align:right;line-height:1.4}
+.sco-g{background:var(--grnl);border:1px solid #7DCEB0}.sco-g .score-num{color:var(--grn)}.sco-g .score-info{color:#065038}
+.sco-m{background:var(--ambl);border:1px solid #ECC878}.sco-m .score-num{color:var(--amb)}.sco-m .score-info{color:#4A2800}
+.sco-r{background:var(--redl);border:1px solid #ECAAAA}.sco-r .score-num{color:var(--red)}.sco-r .score-info{color:#5A1515}
+.leq-item{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--brd)}
+.leq-item:last-of-type{border-bottom:none}
+.leq-q{flex:1;font-size:12px;color:var(--tx2);line-height:1.4}
+.leq-opts{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:150px}
+.leq-btn{min-width:30px;height:32px;padding:0 6px;border-radius:7px;border:1.5px solid var(--brd);font-size:11px;font-weight:700;cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.leq-btn:active{transform:scale(.9)}.leq-btn.on{background:var(--grn);border-color:var(--grn);color:#fff}
+.psfs-item{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.psfs-btns{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
+.psfs-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--brd);font-size:11px;font-weight:700;cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.psfs-btn:active{transform:scale(.9)}.psfs-btn.on{background:var(--ter);border-color:var(--ter);color:#fff}
+.dbar{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:11px 13px;margin-bottom:8px}
+.dbrt{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.dbn{font-size:13px;font-weight:600;color:var(--tx);line-height:1.3}
+.dbp{font-size:18px;font-weight:800;flex-shrink:0}
+.ph{color:var(--red)}.pm{color:var(--amb)}.pl{color:var(--grn)}
+.dc{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;display:inline-block;margin-right:6px}
+.ctp{background:var(--redl);color:var(--red)}.cp{background:var(--ambl);color:var(--amb)}.cpo{background:var(--zl);color:var(--zd)}.cpp{background:var(--surf2);color:var(--tx3)}
+.dbt{height:6px;background:var(--surf2);border-radius:99px;overflow:hidden;margin-bottom:6px}
+.dbf{height:100%;border-radius:99px;width:0;transition:width .6s ease}
+.fh2{background:var(--red)}.fm{background:var(--amb)}.fl2{background:var(--z)}.fv{background:var(--brd2)}
+.dw{font-size:12px;color:var(--tx2);line-height:1.5;background:var(--surf2);padding:8px 10px;border-radius:8px;border-left:3px solid var(--ter)}
+.wh{border-left-color:var(--red)}.wm{border-left-color:var(--amb)}
+.dtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.dtag{font-size:10px;font-weight:700;padding:2px 9px;border-radius:99px}
+.dtz{background:var(--zl);color:var(--zd)}.dta{background:var(--ambl);color:#5A3200}.dtr{background:var(--redl);color:#5A1515}.dtb{background:var(--blul);color:#0C3060}.dtp{background:var(--purl);color:var(--pur)}.dtg{background:var(--grnl);color:#065038}.dtt{background:var(--terl);color:#4A2000}
+.acb{background:var(--nvy);border-radius:var(--rl);padding:14px;margin-bottom:12px}
+.act{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:10px}
+.acs{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.acs:last-child{border-bottom:none}
+.acn{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:2px}
+.acq{flex:1;font-size:12px;color:rgba(255,255,255,.7);line-height:1.4}
+.acr{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0;align-self:center}
+.ay{background:rgba(23,122,90,.35);color:#7DCEB0}.an{background:rgba(181,110,16,.35);color:#F0C060}.aN{background:rgba(255,255,255,.08);color:rgba(255,255,255,.4)}
+.acc{font-size:12px;border-radius:8px;padding:8px 11px;margin-top:8px;line-height:1.4}
+.acca{background:rgba(23,122,90,.25);color:#7DCEB0}.accb{background:rgba(181,110,16,.25);color:#F0C060}.accc{background:rgba(156,43,43,.25);color:#F09090}.accd{background:rgba(26,111,168,.25);color:#7BBCE0}
+.acw{font-size:12px;background:rgba(139,69,19,.25);border-radius:8px;padding:8px 11px;color:#D4A070;margin-top:6px;line-height:1.5;border-left:2px solid #D4A070}
+.step-progress{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap}
+.sp-item{flex:1;min-width:60px;padding:7px 8px;border-radius:8px;border:1.5px solid var(--brd);font-size:10px;font-weight:700;text-align:center;color:var(--tx3);background:var(--surf2);line-height:1.3}
+.sp-item.done{background:var(--grnl);border-color:#7DCEB0;color:#065038}
+.sp-item.warn{background:var(--ambl);border-color:#ECC878;color:#4A2800}
+.phase{border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.phh{padding:8px 13px;font-size:12px;font-weight:800}.phb{padding:10px 13px;background:var(--surf)}
+.tl2{list-style:none;padding:0}
+.tl2 li{padding:6px 0;border-bottom:1px solid var(--brd);font-size:13px;color:var(--tx2);display:flex;gap:8px;line-height:1.4}
+.tl2 li:last-child{border-bottom:none}
+.tl2 li::before{content:"→";color:var(--ter);font-weight:800;flex-shrink:0}
+.disc{background:rgba(90,56,152,.07);border:1.5px solid rgba(90,56,152,.18);border-radius:var(--r);padding:10px 13px;font-size:11px;color:var(--pur);line-height:1.5;margin-bottom:12px}
+.btf{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:var(--rl);border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;margin-top:10px}
+.btf:active{opacity:.85}.btz{background:var(--ter);color:#fff}.btn2{background:var(--nvy);color:#fff}.btg{background:var(--surf2);color:var(--tx2);border:1.5px solid var(--brd)!important}
+.crsh{background:var(--nvy);padding:14px 16px;border-radius:var(--rl) var(--rl) 0 0}
+.crsn{font-size:14px;font-weight:800;color:#fff}.crss{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.crsp{margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.08);border-radius:8px;display:flex;flex-wrap:wrap;gap:10px}
+.crspi{font-size:12px;color:rgba(255,255,255,.8)}
+.crbl{padding:12px 15px;border-bottom:1px solid var(--brd)}
+.crbt{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--brd)}
+.crrow{display:flex;justify-content:space-between;padding:4px 0;flex-wrap:wrap;gap:4px}
+.crk{font-size:12px;color:var(--tx3);font-weight:600}.crval{font-size:12px;color:var(--tx);text-align:right;max-width:65%}
+.crdi{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:8px;margin-bottom:5px;font-size:13px;font-weight:700}
+.cdh{background:var(--redl);color:var(--red)}.cdm{background:var(--ambl);color:var(--amb)}.cdl{background:var(--zl);color:var(--zd)}
+.crsig{padding:12px 15px;border-top:1px dashed var(--brd);display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.crsigl{font-size:11px;color:var(--tx3);border-top:1px solid var(--tx3);padding-top:4px;width:180px}
+.crtabs{display:flex;gap:6px;margin-bottom:12px}
+.crtab{flex:1;padding:9px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:12px;font-weight:700;cursor:pointer;text-align:center;background:var(--surf2);color:var(--tx2);transition:all .15s;touch-action:manipulation;font-family:inherit}
+.crtab.on{background:var(--nvy);border-color:var(--nvy);color:#fff}
+.crv{display:none}.crv.on{display:block}
+.crs{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);overflow:hidden}
+.pov{position:fixed;inset:0;z-index:400;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
+.pov.o{display:flex}
+.phdr{background:var(--nvy);padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px}
+.pclose{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;touch-action:manipulation;flex-shrink:0}
+.phinfo{flex:1}.phtitle{font-size:14px;font-weight:700;color:#fff}.phsub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.ppbtn{background:var(--ter);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;touch-action:manipulation;flex-shrink:0;min-height:44px}
+.pcont{padding:14px;flex:1;max-width:680px;margin:0 auto;width:100%}
+.eplbl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:5px;margin:10px 0 8px}
+.epa{background:var(--redl);color:var(--red)}.epm{background:var(--ambl);color:var(--amb)}.epr{background:var(--zl);color:var(--zd)}.epf{background:var(--blul);color:var(--blu)}
+.exc{border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:9px;overflow:hidden;background:var(--surf)}
+.exh{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 13px;background:var(--surf2);cursor:pointer;touch-action:manipulation;min-height:52px}
+.exh:active{background:#E5E0D8}.exn{font-size:13px;font-weight:600;color:var(--tx);flex:1;line-height:1.3}
+.exm{font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.mn{background:var(--zl);color:var(--zd)}.me{background:var(--ambl);color:var(--amb)}.mb{background:var(--blul);color:var(--blu)}
+.exch{font-size:11px;color:var(--tx3);transition:transform .2s;flex-shrink:0;margin-top:2px}.exch.o{transform:rotate(180deg)}
+.exbd{display:none;padding:12px 13px;border-top:1.5px solid var(--brd)}.exbd.o{display:block}
+.exw{font-size:12px;color:var(--zd);background:var(--zl);padding:7px 9px;border-radius:7px;margin-bottom:8px;line-height:1.4}
+.expo{display:flex;align-items:center;gap:8px;padding:6px 9px;background:var(--surf2);border-radius:7px;margin-bottom:8px}
+.expol{font-size:11px;color:var(--tx3);font-weight:600}
+.exdc{font-size:12px;color:var(--tx2);line-height:1.5;margin-bottom:7px}
+.exdt{font-size:12px;color:var(--tx3);line-height:1.5;margin-bottom:5px;padding-left:9px;border-left:2px solid var(--ter)}
+.expg{font-size:11px;color:var(--pur);background:var(--purl);padding:5px 8px;border-radius:6px;margin-top:6px;line-height:1.4}
+.toast{position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 12px);left:50%;transform:translateX(-50%) translateY(8px);background:var(--nvy);color:#fff;font-size:13px;font-weight:600;padding:9px 18px;border-radius:99px;opacity:0;transition:all .25s;z-index:500;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media print{.hdr,.bnav,.btf,.crtabs,.crv:not(.pa){display:none!important}.crv.pa{display:block!important}}
+
+.ebp-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--brd2);background:#fff;color:var(--tx3);font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.ebp-btn:active{background:var(--blul);border-color:var(--blu);color:var(--blu)}
+.ebp-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.ebp-overlay.o{opacity:1;pointer-events:auto}
+.ebp-sheet{background:#fff;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-width:540px;width:100%;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.ebp-overlay.o .ebp-sheet{transform:translateY(0)}
+.ebp-drag{width:36px;height:4px;background:var(--brd2);border-radius:99px;margin:0 auto 16px}
+.ebp-title{font-size:15px;font-weight:800;color:var(--nvy);margin-bottom:4px}
+.ebp-ref{font-size:11px;color:var(--tx3);margin-bottom:14px;font-style:italic}
+.ebp-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.ebp-stat{background:var(--surf2);border-radius:10px;padding:10px 12px;border:1.5px solid var(--brd)}
+.ebp-stat-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.ebp-stat-val{font-size:18px;font-weight:800;color:var(--nvy)}
+.ebp-stat-sub{font-size:10px;color:var(--tx3);margin-top:2px}
+.ebp-note{font-size:12px;color:var(--tx2);background:var(--blul);border:1.5px solid #B0C8F0;border-radius:8px;padding:10px 12px;line-height:1.5;margin-bottom:14px}
+.ebp-close{width:100%;padding:13px;border-radius:var(--r);border:none;background:var(--nvy);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation}
+
+.hbtn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.12);border:none;color:#fff;cursor:pointer;touch-action:manipulation;flex-shrink:0;text-decoration:none;font-size:16px;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hr1">
+    <div><div class="hn">Bilan Hanche V2 · Yasser Ladraa</div><div class="hs" id="stepLbl">Etape 1/6</div></div>
+    <a class="hbtn" href="index.html" title="Accueil">&#8962;</a>
+    <div class="hbadge">HANCHE</div>
+  </div>
+  <div class="hprog"><div class="hpbar"><div class="hpfill" id="prog" style="width:16.6%"></div></div>
+  <div class="hplbls"><span>Identite</span><span>Anamn.</span><span>Clinique</span><span>Tests</span><span>Scores</span><span>Resultats</span></div></div>
+</div>
+
+<div class="app">
+
+<!-- STEP 1 IDENTITE -->
+<div class="step active" id="s1">
+<div class="sc sa"><div class="sch"><div class="schl"><div class="sci it"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3" stroke="#8B4513" stroke-width="1.5"/><path d="M3 16c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#8B4513" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Identite du patient</div><div class="scs">Informations generales</div></div></div></div>
+<div class="scb o">
+<div class="g2"><div class="field"><label class="fl">Prenom</label><input type="text" id="prenom" placeholder="Prenom" autocomplete="off"></div><div class="field"><label class="fl">Nom</label><input type="text" id="nom" placeholder="Nom" autocomplete="off"></div></div>
+<div class="g2"><div class="field"><label class="fl">Date de naissance</label><input type="date" id="ddn"></div><div class="field"><label class="fl">Sexe</label><select id="sexe"><option value="">—</option><option>Homme</option><option>Femme</option></select></div></div>
+<div class="g2"><div class="field"><label class="fl">Date du bilan</label><input type="date" id="datebilan"></div><div class="field"><label class="fl">Medecin prescripteur</label><input type="text" id="medecin" placeholder="Dr Martin" autocomplete="off"></div></div>
+<div class="field"><div class="fl">Cote atteint</div><div class="chips" id="cote"><div class="chip" onclick="TC(this,'cote',1)">Hanche droite</div><div class="chip" onclick="TC(this,'cote',1)">Hanche gauche</div><div class="chip" onclick="TC(this,'cote',1)">Bilateral</div></div></div>
+<div class="field"><div class="fl">Cote dominant</div><div class="chips" id="dominant"><div class="chip" onclick="TC(this,'dominant',1)">Droitier</div><div class="chip" onclick="TC(this,'dominant',1)">Gaucher</div></div></div>
+</div></div>
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#B56E10" stroke-width="1.5"/><path d="M6 9h6M6 6h3M6 12h4" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Contexte clinique</div><div class="scs">Selection unique — oriente le bilan</div></div></div><span class="scch">&#9660;</span></div>
+<div class="scb"><div class="chips" id="ctx">
+<div class="chip" onclick="TC(this,'ctx',1)">Coxarthrose</div>
+<div class="chip" onclick="TC(this,'ctx',1)">Conflit femoro-acetabulaire (FAI)</div>
+<div class="chip" onclick="TC(this,'ctx',1)">Tendinopathie / GTPS</div>
+<div class="chip" onclick="TC(this,'ctx',1)">Post-operatoire (PTH)</div>
+<div class="chip" onclick="TC(this,'ctx',1)">Post-fracture</div>
+<div class="chip" onclick="TC(this,'ctx',1)">Syndrome du piriforme</div>
+<div class="chip" onclick="TC(this,'ctx',1)">Pathologie sportive</div>
+<div class="chip" onclick="TC(this,'ctx',1)">Bilan global / orientation</div>
+</div></div></div>
+</div>
+
+<!-- STEP 2 ANAMN -->
+<div class="step" id="s2">
+<div class="sc sa"><div class="sch"><div class="schl"><div class="sci ir"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l6 11H3L9 3z" stroke="#9C2B2B" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 8v3M9 13v1" stroke="#9C2B2B" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Red Flags — Drapeaux rouges</div><div class="scs">Verification prioritaire absolue</div></div></div></div>
+<div class="scb o">
+<div class="al alr"><span>&#128680;</span><div><strong>Si ≥1 flag present</strong> — Orienter vers avis medical urgent.</div></div>
+<div class="checks" id="rf">
+<div class="crow" onclick="CK(this,'rf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Douleur nocturne intense, insomniante <span class="csb">non mecanique — suspicion tumorale / infectieuse</span></div></div>
+<div class="crow" onclick="CK(this,'rf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Alteration etat general (amaigrissement, fievre, sueurs nocturnes)</div></div>
+<div class="crow" onclick="CK(this,'rf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Antecedent de cancer <span class="csb">metastases osseuses frequentes a la hanche</span></div></div>
+<div class="crow" onclick="CK(this,'rf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Corticotherapie prolongee (&gt;3 mois) <span class="csb">risque necrose avasculaire</span></div></div>
+<div class="crow" onclick="CK(this,'rf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Alcool chronique <span class="csb">facteur majeur necrose avasculaire</span></div></div>
+<div class="crow" onclick="CK(this,'rf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Drepanocytose <span class="csb">NAV tres frequente</span></div></div>
+<div class="crow" onclick="CK(this,'rf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Traumatisme recent + impotence fonctionnelle <span class="csb">fracture a exclure</span></div></div>
+<div class="crow" onclick="CK(this,'rf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Douleur inguinale + fievre + syndrome infectieux <span class="csb">coxite septique — urgence</span></div></div>
+</div>
+<div id="navBlock" style="display:none;margin-top:10px"><div class="al alr"><span>&#129462;</span><div><strong>Risque NAV detecte</strong> — IRM obligatoire avant mobilisation. Ne pas mobiliser sans imagerie.</div></div></div>
+</div></div>
+
+<div class="sc sa"><div class="sch"><div class="schl"><div class="sci it"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v6l3 3" stroke="#8B4513" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="6.5" stroke="#8B4513" stroke-width="1.5"/></svg></div><div><div class="sct">Histoire de la douleur</div><div class="scs">Installation · Localisation · Rythme</div></div></div></div>
+<div class="scb o">
+<div class="al alt"><span>&#127919;</span><div><strong>Triade orientatrice :</strong> Age + Localisation + Rythme permettent d'orienter FAI / Coxarthrose / GTPS / Piriforme.</div></div>
+<div class="field"><div class="fl">Mode d'installation</div><div class="chips" id="installation">
+<div class="chip" onclick="TC(this,'installation',1)">Traumatique aigu</div>
+<div class="chip" onclick="TC(this,'installation',1)">Microtraumatique / surcharge</div>
+<div class="chip" onclick="TC(this,'installation',1)">Insidieux / progressif</div>
+<div class="chip" onclick="TC(this,'installation',1)">Post-operatoire</div>
+</div></div>
+<div class="field"><div class="fl">Localisation principale <span class="fh">(multiple)</span></div><div class="chips" id="localisation">
+<div class="chip" onclick="TC(this,'localisation')">Inguinale (anterieure)</div>
+<div class="chip" onclick="TC(this,'localisation')">Trochenterienne (laterale)</div>
+<div class="chip" onclick="TC(this,'localisation')">Fessiere (posterieure)</div>
+<div class="chip" onclick="TC(this,'localisation')">Diffuse</div>
+<div class="chip" onclick="TC(this,'localisation')">Irradiation cuisse anterieure</div>
+<div class="chip" onclick="TC(this,'localisation')">Irradiation genou</div>
+</div></div>
+<div class="field"><div class="fl">Rythme <span class="fh">(multiple)</span></div><div class="chips" id="rythme">
+<div class="chip" onclick="TC(this,'rythme')">Mecanique (marche, escaliers)</div>
+<div class="chip" onclick="TC(this,'rythme')">Derouillage matin &lt;30 min</div>
+<div class="chip" onclick="TC(this,'rythme')">Derouillage matin &gt;30 min</div>
+<div class="chip" onclick="TC(this,'rythme')">Nocturne decubitus lateral</div>
+<div class="chip" onclick="TC(this,'rythme')">Continue / permanente</div>
+<div class="chip" onclick="TC(this,'rythme')">Claquement / ressaut articulaire</div>
+</div></div>
+<div class="field"><div class="fl">Facteurs declenchants <span class="fh">(multiple)</span></div><div class="chips" id="declenchant">
+<div class="chip" onclick="TC(this,'declenchant')">Flexion + adduction + RI (FADIR)</div>
+<div class="chip" onclick="TC(this,'declenchant')">Marche prolongee</div>
+<div class="chip" onclick="TC(this,'declenchant')">Position assise prolongee</div>
+<div class="chip" onclick="TC(this,'declenchant')">Escaliers</div>
+<div class="chip" onclick="TC(this,'declenchant')">Appui monopodal</div>
+<div class="chip" onclick="TC(this,'declenchant')">Sport / effort</div>
+</div></div>
+<div class="field"><div class="fl">Facteurs soulageants</div><div class="chips" id="soulageant">
+<div class="chip" onclick="TC(this,'soulageant')">Repos</div>
+<div class="chip" onclick="TC(this,'soulageant')">Chaleur</div>
+<div class="chip" onclick="TC(this,'soulageant')">Antalgiques</div>
+<div class="chip" onclick="TC(this,'soulageant')">Marche legere</div>
+</div></div>
+<div class="field"><div class="fl">Anciennete</div><div class="chips" id="anciennete">
+<div class="chip" onclick="TC(this,'anciennete',1)">Aigue &lt;4 sem</div>
+<div class="chip" onclick="TC(this,'anciennete',1)">Subaigue 4-12 sem</div>
+<div class="chip" onclick="TC(this,'anciennete',1)">Chronique &gt;3 mois</div>
+</div></div>
+<div class="field"><div class="fl">Activite principale</div><div class="chips" id="activite">
+<div class="chip" onclick="TC(this,'activite')">Sport de pivot / combat</div>
+<div class="chip" onclick="TC(this,'activite')">Athletisme / course</div>
+<div class="chip" onclick="TC(this,'activite')">Cyclisme / endurance</div>
+<div class="chip" onclick="TC(this,'activite')">Travail debout prolonge</div>
+<div class="chip" onclick="TC(this,'activite')">Sedentaire</div>
+</div></div>
+</div></div>
+
+<div class="sc sa"><div class="sch"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3c0 0-5 4-5 8a5 5 0 0010 0c0-4-5-8-5-8z" stroke="#B56E10" stroke-width="1.5" stroke-linejoin="round"/></svg></div><div><div class="sct">EVA — Intensite douloureuse</div><div class="scs">0 = aucune · 10 = maximale</div></div></div></div>
+<div class="scb o">
+<div class="evaw" id="eva">
+<div class="evab e0" data-v="0" onclick="evaC(this)">0</div><div class="evab e1" data-v="1" onclick="evaC(this)">1</div><div class="evab e2" data-v="2" onclick="evaC(this)">2</div><div class="evab e3" data-v="3" onclick="evaC(this)">3</div><div class="evab e4" data-v="4" onclick="evaC(this)">4</div><div class="evab e5" data-v="5" onclick="evaC(this)">5</div><div class="evab e6" data-v="6" onclick="evaC(this)">6</div><div class="evab e7" data-v="7" onclick="evaC(this)">7</div><div class="evab e8" data-v="8" onclick="evaC(this)">8</div><div class="evab e9" data-v="9" onclick="evaC(this)">9</div><div class="evab e10" data-v="10" onclick="evaC(this)">10</div>
+</div>
+<div class="egal"><span>Pas de douleur</span><span>Moderee</span><span>Maximale</span></div>
+</div></div>
+
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3h6v12H3V3h3M6 3v3h6V3" stroke="#1550A0" stroke-width="1.5" stroke-linejoin="round"/></svg></div><div><div class="sct">Antecedents &amp; facteurs de risque</div><div class="scs">Selection multiple</div></div></div><span class="scch">&#9660;</span></div>
+<div class="scb">
+<div class="checks" id="atcd">
+<div class="crow" onclick="CK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Coxarthrose confirmee (imagerie)</div></div>
+<div class="crow" onclick="CK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Dysplasie de hanche</div></div>
+<div class="crow" onclick="CK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Chirurgie hanche (PTH, ostéotomie, labrum)</div></div>
+<div class="crow" onclick="CK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Corticotherapie prolongee (&gt;3 mois)</div></div>
+<div class="crow" onclick="CK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Diabete</div></div>
+<div class="crow" onclick="CK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Obesite (IMC &gt;30)</div></div>
+<div class="crow" onclick="CK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Lombalgies / pathologie rachidienne associee</div></div>
+<div class="crow" onclick="CK(this,'atcd')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Spondylarthropathie / rhumatisme inflammatoire</div></div>
+</div>
+<div class="field" style="margin-top:12px"><div class="fl">Imagerie disponible</div><div class="chips" id="imagerie">
+<div class="chip" onclick="TC(this,'imagerie')">Radio standard</div>
+<div class="chip" onclick="TC(this,'imagerie')">IRM hanche</div>
+<div class="chip" onclick="TC(this,'imagerie')">Scanner hanche</div>
+<div class="chip" onclick="TC(this,'imagerie')">Echo parties molles</div>
+</div></div>
+<div class="field"><div class="fl">Perimetre de marche</div><div class="chips" id="perimetre">
+<div class="chip" onclick="TC(this,'perimetre',1)">Non limite</div>
+<div class="chip" onclick="TC(this,'perimetre',1)">Limite (&lt;500m)</div>
+<div class="chip" onclick="TC(this,'perimetre',1)">Tres limite (&lt;100m)</div>
+<div class="chip" onclick="TC(this,'perimetre',1)">Quasi nul</div>
+</div></div>
+<div class="field"><div class="fl">Difficultes fonctionnelles <span class="fh">(multiple)</span></div><div class="chips" id="avq">
+<div class="chip" onclick="TC(this,'avq')">Chaussage / chaussettes</div>
+<div class="chip" onclick="TC(this,'avq')">Escaliers (montee)</div>
+<div class="chip" onclick="TC(this,'avq')">Escaliers (descente)</div>
+<div class="chip" onclick="TC(this,'avq')">Accroupissement</div>
+<div class="chip" onclick="TC(this,'avq')">Appui monopodal</div>
+<div class="chip" onclick="TC(this,'avq')">Conduite automobile</div>
+<div class="chip" onclick="TC(this,'avq')">Marche &gt;10 min</div>
+<div class="chip" onclick="TC(this,'avq')">Assis prolonge</div>
+</div></div>
+<div class="field"><div class="fl">Yellow flags</div><div class="checks" id="yf">
+<div class="crow" onclick="CK(this,'yf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Kinesiophobie <span class="csb">evitement actif des activites douloureuses</span></div></div>
+<div class="crow" onclick="CK(this,'yf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Catastrophisation</div></div>
+<div class="crow" onclick="CK(this,'yf')"><div class="cbox"><span class="cmk">&#10003;</span></div><div class="ctx2">Arret de travail &gt;3 mois</div></div>
+</div></div>
+<div class="field"><label class="fl">Objectifs du patient</label><textarea id="objectifs" placeholder="Reprendre le sport, marcher 30 min..."></textarea></div>
+<div class="field"><label class="fl">Observations / imagerie</label><textarea id="observations" placeholder="Resultats IRM, radio..."></textarea></div>
+</div></div>
+</div>
+
+<!-- STEP 3 CLINIQUE -->
+<div class="step" id="s3">
+<div class="sc sa"><div class="sch"><div class="schl"><div class="sci it"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3a6 6 0 100 12A6 6 0 009 3z" stroke="#8B4513" stroke-width="1.5"/><path d="M9 9l3-3M9 9v3" stroke="#8B4513" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Amplitudes articulaires</div><div class="scs">Cote symptomatique · Deficits automatiques</div></div></div></div>
+<div class="scb o">
+<div class="al alz"><span>&#8505;</span><div>La <strong>rotation interne passive &lt;15°</strong> est le critere le plus discriminant pour la coxarthrose (Cluster Altman, Sp 95%, LR+ 24).</div></div>
+<div class="amp-grid">
+<div class="amp-item"><div class="amp-lbl">Flexion</div><div class="amp-norm">Norme : 120°</div><input class="amp-input" id="a_flex" type="number" placeholder="°" min="0" max="140" oninput="updateAmp('flex')"><div class="amp-diff" id="diff_flex"></div></div>
+<div class="amp-item"><div class="amp-lbl">Extension</div><div class="amp-norm">Norme : 20°</div><input class="amp-input" id="a_ext" type="number" placeholder="°" min="0" max="40" oninput="updateAmp('ext')"><div class="amp-diff" id="diff_ext"></div></div>
+<div class="amp-item"><div class="amp-lbl">Abduction</div><div class="amp-norm">Norme : 45°</div><input class="amp-input" id="a_abd" type="number" placeholder="°" min="0" max="60" oninput="updateAmp('abd')"><div class="amp-diff" id="diff_abd"></div></div>
+<div class="amp-item"><div class="amp-lbl">Adduction</div><div class="amp-norm">Norme : 30°</div><input class="amp-input" id="a_add" type="number" placeholder="°" min="0" max="45" oninput="updateAmp('add')"><div class="amp-diff" id="diff_add"></div></div>
+<div class="amp-item"><div class="amp-lbl">Rot. Interne</div><div class="amp-norm">Norme : 35° &#9888;</div><input class="amp-input" id="a_ri" type="number" placeholder="°" min="0" max="60" oninput="updateAmp('ri')"><div class="amp-diff" id="diff_ri"></div></div>
+<div class="amp-item"><div class="amp-lbl">Rot. Externe</div><div class="amp-norm">Norme : 45°</div><input class="amp-input" id="a_re" type="number" placeholder="°" min="0" max="70" oninput="updateAmp('re')"><div class="amp-diff" id="diff_re"></div></div>
+</div>
+<div id="ampAlert" style="margin-top:10px"></div>
+</div></div>
+
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="2" stroke="#B56E10" stroke-width="1.5"/><path d="M5 14c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Palpation &amp; Analyse de la marche</div><div class="scs">Zones douloureuses · Trendelenburg · Boiteries</div></div></div><span class="scch">&#9660;</span></div>
+<div class="scb">
+<div class="field"><div class="fl">Palpation — zones douloureuses</div><div class="chips" id="palpation">
+<div class="chip" onclick="TC(this,'palpation')">Grand trochanter</div>
+<div class="chip" onclick="TC(this,'palpation')">Facette superieure GT</div>
+<div class="chip" onclick="TC(this,'palpation')">Zone inguinale</div>
+<div class="chip" onclick="TC(this,'palpation')">Fesse (piriforme)</div>
+<div class="chip" onclick="TC(this,'palpation')">Para-vertebraux lombaires</div>
+</div></div>
+<div class="field"><div class="fl">Analyse de la marche</div><div class="chips" id="marche">
+<div class="chip" onclick="TC(this,'marche',1)">Normale</div>
+<div class="chip" onclick="TC(this,'marche',1)">Boiterie antalgique</div>
+<div class="chip" onclick="TC(this,'marche',1)">Boiterie Trendelenburg</div>
+<div class="chip" onclick="TC(this,'marche',1)">Double boiterie</div>
+</div></div>
+<div class="field"><div class="fl">Perimetrie cuisse <span class="fh">(facultatif)</span></div>
+<div class="g2"><div><label style="font-size:11px;color:var(--tx3)">Cote atteint (cm)</label><input type="number" id="peri_att" placeholder="43" oninput="calcPeri()"></div><div><label style="font-size:11px;color:var(--tx3)">Cote sain (cm)</label><input type="number" id="peri_sain" placeholder="45" oninput="calcPeri()"></div></div>
+<div id="peri_diff" class="amp-diff" style="margin-top:6px"></div>
+</div>
+<div class="field"><div class="fl">MRC abducteurs (moyen fessier)</div>
+<div class="mrc-wrap" id="mrcAbd">
+<button class="mrc-btn" onclick="mrcSel(this,'abd',0)" type="button">0</button><button class="mrc-btn" onclick="mrcSel(this,'abd',1)" type="button">1</button><button class="mrc-btn" onclick="mrcSel(this,'abd',2)" type="button">2</button><button class="mrc-btn" onclick="mrcSel(this,'abd',3)" type="button">3</button><button class="mrc-btn" onclick="mrcSel(this,'abd',4)" type="button">4</button><button class="mrc-btn" onclick="mrcSel(this,'abd',5)" type="button">5</button>
+</div><div class="mrc-lbl">0=aucune · 1=trace · 2=sans pesanteur · 3=contre pesanteur · 4=contre resistance partielle · 5=normal</div>
+</div>
+<div class="field"><div class="fl">MRC grand fessier (extenseurs)</div>
+<div class="mrc-wrap" id="mrcGF">
+<button class="mrc-btn" onclick="mrcSel(this,'grand_fessier',0)" type="button">0</button><button class="mrc-btn" onclick="mrcSel(this,'grand_fessier',1)" type="button">1</button><button class="mrc-btn" onclick="mrcSel(this,'grand_fessier',2)" type="button">2</button><button class="mrc-btn" onclick="mrcSel(this,'grand_fessier',3)" type="button">3</button><button class="mrc-btn" onclick="mrcSel(this,'grand_fessier',4)" type="button">4</button><button class="mrc-btn" onclick="mrcSel(this,'grand_fessier',5)" type="button">5</button>
+</div>
+</div>
+</div></div>
+</div>
+
+<!-- STEP 4 TESTS -->
+<div class="step" id="s4">
+
+<!-- CLUSTER FAI -->
+<div class="sc sa"><div class="sch"><div class="schl"><div class="sci it"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="#8B4513" stroke-width="1.5"/><path d="M6 12c0-3 6-3 6-6" stroke="#8B4513" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Cluster FAI — Conflit femoro-acetabulaire</div><div class="scs">FADIR · FABER · Scour · Stinchfield</div></div></div></div>
+<div class="scb o">
+<div class="al alz"><span>&#8505;</span><div>Le <strong>FADIR isole</strong> a Sn 87% mais Sp 58%. Combinaison FADIR + Scour + douleur inguinale augmente la probabilite post-test. Raisonnement pondere sans LR+ publie pour le cluster complet.</div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-fadir')"><div class="tl"><div class="tn">FADIR — Flexion-Adduction-Rotation Interne</div><div class="tsb">FAI · Labrum · Sn 87% / Sp 58% (Maslowski 2010)</div></div><button class="ebp-btn" onclick="showEBP('fadir',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'fadir','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'fadir','neg')" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-fadir"><ol class="tstps"><li>Decubitus dorsal</li><li>Flexion hanche 90°, adduction maximale, rotation interne maximale</li><li>Maintenir 30 secondes</li></ol><div class="tint"><strong>Positif</strong> si douleur inguinale reproduite. Test le plus utilise pour FAI. Haute sensibilite mais specificite moderee — a combiner avec Scour.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-faber')"><div class="tl"><div class="tn">FABER (Patrick) — Flexion-Abduction-Rotation Externe</div><div class="tsb">FAI · Coxarthrose · ASI · Sn 60% / Sp 75% — coter la localisation</div></div><button class="ebp-btn" onclick="showEBP('faber',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();faberSel(this,'ing')" type="button">Inguinale</button><button class="tb" onclick="event.stopPropagation();faberSel(this,'post')" type="button">Postérieure</button><button class="tb" onclick="event.stopPropagation();faberSel(this,'neg')" type="button">Négatif</button></div></div>
+<div class="tbody" id="tb-faber"><ol class="tstps"><li>Décubitus dorsal</li><li>Pied testé posé sur le genou controlatéral (position chiffre 4)</li><li>Laisser le genou descendre par gravité — stabiliser le bassin controlatéral</li><li><strong>Coter la localisation de la douleur reproduite</strong></li></ol>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+<div style="flex:1;min-width:120px;padding:8px 10px;border-radius:var(--r);background:var(--ambl);border:1px solid #ECC878;font-size:12px;color:#5A3200;line-height:1.4"><strong>Inguinale</strong> → hanche (FAI, coxarthrose) — alimente le cluster FAI</div>
+<div style="flex:1;min-width:120px;padding:8px 10px;border-radius:var(--r);background:var(--purl);border:1px solid #C9B8F0;font-size:12px;color:var(--pur);line-height:1.4"><strong>Postérieure</strong> → ASI — alimente le cluster Laslett</div>
+<div style="flex:1;min-width:120px;padding:8px 10px;border-radius:var(--r);background:var(--surf2);border:1px solid var(--brd);font-size:12px;color:var(--tx3);line-height:1.4"><strong>Genou ne descend pas</strong> → rétraction capsulaire ou psoas</div>
+</div>
+<div id="faber-result" style="display:none;margin-top:8px;padding:7px 10px;border-radius:8px;font-size:12px;font-weight:600"></div>
+</div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-scour')"><div class="tl"><div class="tn">Scour Test (quadrant test)</div><div class="tsb">Pathologie intra-articulaire · Cartilage · Sn 91%</div></div><button class="ebp-btn" onclick="showEBP('scour',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'scour','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'scour','neg')" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-scour"><ol class="tstps"><li>Decubitus dorsal, genou flechis</li><li>Pression axiale sur la hanche</li><li>Arc de cercle : flexion-ABD-RE → flexion-ADD-RI</li></ol><div class="tint"><strong>Positif</strong> si douleur, craquement ou blocage dans l'arc → pathologie intra-articulaire (labrum, cartilage, FAI). Sn 91%.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-stinch')"><div class="tl"><div class="tn">Test de Stinchfield</div><div class="tsb">Pathologie intra-articulaire · Sn 59% / Sp 32%</div></div><button class="ebp-btn" onclick="showEBP('stinchfield',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'stinchfield','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'stinchfield','neg')" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-stinch"><ol class="tstps"><li>Decubitus dorsal</li><li>Flexion active hanche 30-45°, genou en extension</li><li>Resistance vers le bas sur la cuisse</li></ol><div class="tint"><strong>Positif</strong> si douleur inguinale profonde → pathologie intra-articulaire. Sensibilite moderee — complement utile FADIR/Scour.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-ric')"><div class="tl"><div class="tn">Rotation interne en charge debout</div><div class="tsb">FAI anterieur · Coxarthrose precoce</div></div><button class="ebp-btn" onclick="showEBP('ric',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'ric','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'ric','neg')" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-ric"><ol class="tstps"><li>Patient debout, appui monopodal</li><li>Rotation interne maximale du membre en appui</li><li>Mise en charge progressive</li></ol><div class="tint"><strong>Positif</strong> si douleur inguinale en charge en RI → conflit femoro-acetabulaire anterieur. Test fonctionnel complementaire.</div></div></div>
+</div></div>
+
+<!-- CLUSTER COXARTHROSE ALTMAN -->
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ig"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="5" stroke="#177A5A" stroke-width="1.5"/><circle cx="9" cy="9" r="2" fill="#177A5A"/></svg></div><div><div class="sct">Cluster Coxarthrose — Altman 1995</div><div class="scs">RI &lt;15° + Douleur inguinale + Age &gt;50 → LR+ 24.3</div></div></div><span class="scch">&#9660;</span></div>
+<div class="scb">
+<div class="cluster-box">
+<div class="cluster-title">Cluster Altman — Probabilite coxarthrose</div>
+<div class="cluster-counter">
+<div class="cluster-dots"><div class="cluster-dot" id="ad0"></div><div class="cluster-dot" id="ad1"></div><div class="cluster-dot" id="ad2"></div></div>
+<div class="cluster-lr" id="altman-lr">0/3 — Peu probable</div>
+</div>
+</div>
+<div class="ti"><div class="th" onclick="tgl('tb-rip')"><div class="tl"><div class="tn">RI passive &lt;15° <span style="font-size:10px;background:var(--terl);color:var(--ter);padding:1px 6px;border-radius:99px;margin-left:4px">Altman #1</span></div><div class="tsb">Critere majeur Sp 95%</div></div><button class="ebp-btn" onclick="showEBP('ri15',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'ri15','pos');updateAltman()" type="button">+ &lt;15°</button><button class="tb" onclick="event.stopPropagation();STH(this,'ri15','neg');updateAltman()" type="button">- ≥15°</button></div></div>
+<div class="tbody" id="tb-rip"><ol class="tstps"><li>Decubitus dorsal, hanche neutre ou genou fléchi 90°</li><li>Rotation interne passive mesuree au goniometre</li></ol><div class="tint">RI &lt;15° = <strong>specificite 95%</strong> pour coxarthrose. Avec douleur inguinale + age &gt;50 : probabilite post-test &gt;91% (LR+ 24.3).</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-dri')"><div class="tl"><div class="tn">Douleur inguinale a la RI passive <span style="font-size:10px;background:var(--terl);color:var(--ter);padding:1px 6px;border-radius:99px;margin-left:4px">Altman #2</span></div><div class="tsb">Cluster coxarthrose</div></div><button class="ebp-btn" onclick="showEBP('doulri',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'doulri','pos');updateAltman()" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'doulri','neg');updateAltman()" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-dri"><ol class="tstps"><li>Meme position que RI passive</li><li>Rotation interne lente — douleur inguinale reproduite ?</li></ol><div class="tint"><strong>Positif</strong> si douleur inguinale reproduite → 2eme critere Altman. Combinaison 3/3 criteres : probabilite &gt;91%.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-age50')"><div class="tl"><div class="tn">Age &gt;50 ans <span style="font-size:10px;background:var(--terl);color:var(--ter);padding:1px 6px;border-radius:99px;margin-left:4px">Altman #3</span></div><div class="tsb">Facteur demographique majeur</div></div><button class="ebp-btn" onclick="showEBP('age50',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'age50','pos');updateAltman()" type="button">+ &gt;50 ans</button><button class="tb" onclick="event.stopPropagation();STH(this,'age50','neg');updateAltman()" type="button">- ≤50 ans</button></div></div>
+<div class="tbody" id="tb-age50"><div class="tint">3eme critere du cluster Altman. Renseigne automatiquement si date de naissance saisie en etape 1.</div></div></div>
+</div></div>
+
+<!-- CLUSTER GTPS -->
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 4v10M4 9h10" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="6" stroke="#B56E10" stroke-width="1.5"/></svg></div><div><div class="sct">Cluster GTPS — Tendinopathie abducteurs</div><div class="scs">Palpation · Compression · Trendelenburg · MRC</div></div></div><span class="scch">&#9660;</span></div>
+<div class="scb">
+<div class="al ala"><span>&#8505;</span><div>Le GTPS regroupe tendinopathie moyen/petit fessier et bursite trochantérienne. La palpation du grand trochanter est le signe le plus sensible. Combine les 4 criteres pour la probabilite.</div></div>
+<div class="cluster-box amb">
+<div class="cluster-title">Score GTPS — Probabilite tendinopathie abducteurs</div>
+<div class="cluster-counter">
+<div class="cluster-dots"><div class="cluster-dot amb-dot" id="gd0"></div><div class="cluster-dot amb-dot" id="gd1"></div><div class="cluster-dot amb-dot" id="gd2"></div><div class="cluster-dot amb-dot" id="gd3"></div></div>
+<div class="cluster-lr" id="gtps-lr">0/4 — Insuffisant</div>
+</div>
+</div>
+<div class="ti"><div class="th" onclick="tgl('tb-paltro')"><div class="tl"><div class="tn">Palpation trochantérienne <span style="font-size:10px;background:var(--ambl);color:var(--amb);padding:1px 6px;border-radius:99px;margin-left:4px">GTPS #1</span></div><div class="tsb">Signe le plus sensible pour GTPS</div></div><button class="ebp-btn" onclick="showEBP('paltro',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'paltro','pos');updateGTPS()" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'paltro','neg');updateGTPS()" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-paltro"><ol class="tstps"><li>Decubitus lateral ou debout</li><li>Palpation directe des facettes du grand trochanter (superieure et posterieure)</li><li>Pression progressive sur les insertions tendineuses</li></ol><div class="tint"><strong>Positif</strong> si douleur vive et reproduite → tendinopathie insertionnelle moyen ou petit fessier. Signe le plus sensible pour le GTPS.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-comptro')"><div class="tl"><div class="tn">Compression trochantérienne <span style="font-size:10px;background:var(--ambl);color:var(--amb);padding:1px 6px;border-radius:99px;margin-left:4px">GTPS #2</span></div><div class="tsb">Bursite / Tendinopathie trochantérienne</div></div><button class="ebp-btn" onclick="showEBP('comptro',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'comptro','pos');updateGTPS()" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'comptro','neg');updateGTPS()" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-comptro"><ol class="tstps"><li>Decubitus lateral cote douloureux (compression par le poids du corps)</li><li>Maintenir 30 secondes</li></ol><div class="tint"><strong>Positif</strong> si douleur reproduite → argument pour bursite ou tendinopathie insertionnelle. Signe pratique et reproductible.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-tren')"><div class="tl"><div class="tn">Trendelenburg <span style="font-size:10px;background:var(--ambl);color:var(--amb);padding:1px 6px;border-radius:99px;margin-left:4px">GTPS #3</span></div><div class="tsb">Moyen fessier · Sn 72% / Sp 77% (Bird 2001)</div></div><button class="ebp-btn" onclick="showEBP('trendelenburg',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'trendelenburg','pos');updateGTPS()" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'trendelenburg','neg');updateGTPS()" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-tren"><ol class="tstps"><li>Patient debout de face</li><li>Appui monopodal cote teste (elevation genou oppose)</li><li>Observer horizontalite du bassin 30 secondes</li></ol><div class="tint"><strong>Positif</strong> si affaissement du bassin cote non en appui → insuffisance moyen fessier. Sn 72%, Sp 77% (Bird 2001). Test de reference pour le moyen fessier.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-mrc-abd')"><div class="tl"><div class="tn">Force abducteurs MRC &lt;4/5 <span style="font-size:10px;background:var(--ambl);color:var(--amb);padding:1px 6px;border-radius:99px;margin-left:4px">GTPS #4</span></div><div class="tsb">Cotation MRC — saisie a l'etape 3</div></div><div class="tbs" id="mrc-abd-result"></div></div>
+<div class="tbody" id="tb-mrc-abd"><div style="font-size:11px;color:var(--tx3);margin-bottom:6px">Utilise la cotation MRC saisie en etape Clinique (etape 3). MRC &lt;4/5 = critere GTPS.</div><div class="tint">Deficit moteur moyen fessier. Critere complementaire GTPS.</div></div></div>
+</div></div>
+
+<!-- RETRACTION + DIFFERENTIELS -->
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ig"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M9 3v12" stroke="#177A5A" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="6" stroke="#177A5A" stroke-width="1.5"/></svg></div><div><div class="sct">Tests de retraction &amp; Hip-Spine</div><div class="scs">Thomas · Ober · Differentiel lombaire</div></div></div><span class="scch">&#9660;</span></div>
+<div class="scb">
+<div class="ti"><div class="th" onclick="tgl('tb-thomas')"><div class="tl"><div class="tn">Test de Thomas</div><div class="tsb">Retraction psoas-iliaque · FAI · Coxarthrose</div></div><button class="ebp-btn" onclick="showEBP('thomas',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'thomas','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'thomas','neg')" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-thomas"><ol class="tstps"><li>Decubitus dorsal, fesses au bord de table</li><li>Ramener les deux genoux sur la poitrine</li><li>Lacher la jambe a tester — observer si elle reste soulevee</li></ol><div class="tint"><strong>Positif</strong> si cuisse ne descend pas a l'horizontale → retraction psoas-iliaque. Angle residuel &gt;15° = significatif. Frequent en coxarthrose et FAI.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-ober')"><div class="tl"><div class="tn">Test d'Ober</div><div class="tsb">Retraction bandelette ilio-tibiale (TFL)</div></div><button class="ebp-btn" onclick="showEBP('ober',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'ober','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'ober','neg')" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-ober"><ol class="tstps"><li>Decubitus lateral, cote a tester au-dessus</li><li>Kiné stabilise le bassin</li><li>Abduire et etendre la hanche superieure, genou 90° — lacher</li></ol><div class="tint"><strong>Positif</strong> si jambe reste en abduction → retraction bandelette IT. Contribue aux douleurs trochanteriennes et compression tendineuse en GTPS.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-hipspine')"><div class="tl"><div class="tn">Differentiel Hip-Spine</div><div class="tsb">Lombaire vs Hanche · Nerf femoral L2-L4</div></div><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'hipspine','pos')" type="button">Lombaire</button><button class="tb" onclick="event.stopPropagation();STH(this,'hipspine','neg')" type="button">Hanche</button></div></div>
+<div class="tbody" id="tb-hipspine"><ol class="tstps"><li>Reproduire la douleur inguinale avec FADIR/FABER</li><li>Tester si la douleur est modifiee par les mouvements lombaires</li></ol><div class="tint"><strong>Lombaire</strong> si douleur inguinale modifiee par mobilisation lombaire (L1-L4) · <strong>Hanche</strong> si uniquement reproduite par tests de hanche. Coexistence dans ~24% des cas.</div></div></div>
+</div></div>
+
+<!-- PIRIFORME -->
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 4c2 3 6 3 8 6-2 3-6 3-8 6" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Syndrome du piriforme &amp; differentiel sciatique</div><div class="scs">FAIR · Pace · Lasegue differentiel</div></div></div><span class="scch">&#9660;</span></div>
+<div class="scb">
+<div class="ti"><div class="th" onclick="tgl('tb-fair')"><div class="tl"><div class="tn">FAIR Test</div><div class="tsb">Syndrome du piriforme · Sn 88% / Sp 83% (Fishman 2002)</div></div><button class="ebp-btn" onclick="showEBP('fair',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'fair','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'fair','neg')" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-fair"><ol class="tstps"><li>Decubitus lateral, cote symptomatique au-dessus</li><li>Hanche flechie 60°, genou fléchi 60°</li><li>Pression vers le bas sur le genou (RI forcee)</li></ol><div class="tint"><strong>Positif</strong> si douleur fessiere profonde et/ou paresthesies sciatiques → syndrome du piriforme probable. Sn 88%, Sp 83%.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-pace')"><div class="tl"><div class="tn">Test de Pace (ABD-RE resistee assis)</div><div class="tsb">Syndrome du piriforme</div></div><button class="ebp-btn" onclick="showEBP('pace',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'pace','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'pace','neg')" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-pace"><ol class="tstps"><li>Patient assis, hanches flechies 90°</li><li>ABD-RE contre resistance bilaterale (kine resiste)</li></ol><div class="tint"><strong>Positif</strong> si douleur fessiere reproduite → contraction algique du piriforme. Complementaire au FAIR test.</div></div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-las')"><div class="tl"><div class="tn">Lasegue (differentiel lombaire)</div><div class="tsb">Composante radiculaire L4-S1</div></div><button class="ebp-btn" onclick="showEBP('lasegue',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'lasegue','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'lasegue','neg')" type="button">- Negatif</button></div></div>
+<div class="tbody" id="tb-las"><ol class="tstps"><li>Decubitus dorsal</li><li>Elevation membre inferieur tendu</li><li>Positif si douleur radiculaire avant 60°</li></ol><div class="tint"><strong>Positif</strong> si douleur radiculaire dans le trajet sciatique avant 60° → composante lombaire. Si douleur uniquement inguinale → origine hanche.</div></div></div>
+</div></div>
+
+<!-- CLUSTER LASLETT ASI -->
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ip"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3c0 0-3 2-3 6s3 6 3 6 3-2 3-6-3-6-3-6z" stroke="#5A3898" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 9h12" stroke="#5A3898" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Cluster de Laslett — Articulation Sacro-Iliaque</div><div class="scs">6 tests · ≥2/4 ou ≥3/6 positifs → ASI probable (Laslett 2005)</div></div></div><span class="scch">&#9660;</span></div>
+<div class="scb">
+<div class="al alp"><span>&#8505;</span><div>Le cluster de Laslett différencie la douleur sacro-iliaque des douleurs coxo-fémorales et du piriforme. <strong>Version 6 tests (≥3/6 positifs)</strong> ou version optimisée <strong>4 tests (≥2/4</strong> : distraction, thigh thrust, compression, sacral thrust). FABER est déjà réalisé à l'étape précédente et compris dans les 6. Sn 88% — Sp 78% (Laslett 2005).</div></div>
+
+<div class="cluster-box" style="border-color:var(--pur);background:var(--purl)">
+<div class="cluster-title" style="color:var(--pur)">Score Laslett — Douleur sacro-iliaque</div>
+<div class="cluster-counter">
+<div class="cluster-dots">
+<div class="cluster-dot" style="border-color:var(--pur)" id="ld0"></div>
+<div class="cluster-dot" style="border-color:var(--pur)" id="ld1"></div>
+<div class="cluster-dot" style="border-color:var(--pur)" id="ld2"></div>
+<div class="cluster-dot" style="border-color:var(--pur)" id="ld3"></div>
+<div class="cluster-dot" style="border-color:var(--pur)" id="ld4"></div>
+<div class="cluster-dot" style="border-color:var(--pur)" id="ld5"></div>
+</div>
+<div class="cluster-lr" style="color:var(--pur)" id="laslett-lr">0/6 — ASI peu probable</div>
+</div>
+</div>
+
+<div class="al alz" style="margin-bottom:8px"><span>&#9888;</span><div>Exclure d'abord une douleur discogène (centralisation McKenzie). Des tests ASI positifs en présence de centralisation peuvent être des faux positifs.</div></div>
+
+<!-- TEST 1 : DISTRACTION -->
+<div class="ti"><div class="th" onclick="tgl('tb-las-dist')">
+<div class="tl"><div class="tn">Distraction (Gapping) <span style="font-size:10px;background:var(--purl);color:var(--pur);padding:1px 6px;border-radius:99px;margin-left:4px">Laslett #1</span></div><div class="tsb">Stress antérieur ligaments sacro-iliaques · Sn 60% / Sp 81%</div></div>
+<button class="ebp-btn" onclick="showEBP('las_dist',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'las_dist','pos');updateLaslett()" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'las_dist','neg');updateLaslett()" type="button">- Négatif</button></div>
+</div>
+<div class="tbody" id="tb-las-dist">
+<ol class="tstps"><li>Décubitus dorsal, jambes étendues</li><li>Mains croisées sur les deux ÉIAS</li><li>Pression postéro-latérale progressive (3–6 poussées) — distraction des ASI</li></ol>
+<div class="tint"><strong>Positif</strong> si reproduction de la douleur sacro-iliaque ou fessière familiere. Test avec la <strong>valeur prédictive positive la plus élevée</strong> du cluster (Laslett 2005). À réaliser en premier.</div>
+</div></div>
+
+<!-- TEST 2 : THIGH THRUST -->
+<div class="ti"><div class="th" onclick="tgl('tb-las-thigh')">
+<div class="tl"><div class="tn">Thigh Thrust (Posterior Shear) <span style="font-size:10px;background:var(--purl);color:var(--pur);padding:1px 6px;border-radius:99px;margin-left:4px">Laslett #2</span></div><div class="tsb">Cisaillement postérieur ASI · Sn 88% / Sp 69%</div></div>
+<button class="ebp-btn" onclick="showEBP('las_thigh',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'las_thigh','pos');updateLaslett()" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'las_thigh','neg');updateLaslett()" type="button">- Négatif</button></div>
+</div>
+<div class="tbody" id="tb-las-thigh">
+<ol class="tstps"><li>Décubitus dorsal, hanche fléchie à 90° côté testé</li><li>Stabiliser le sacrum contre la table avec la main opposée sur l'ÉIAS controlatérale</li><li>Pression axiale progressive dans l’axe du fémur vers le bas (cisaillement postérieur ASI)</li></ol>
+<div class="tint"><strong>Positif</strong> si douleur sacro-iliaque ou fessière familiere reproduite. Test le plus <strong>sensible</strong> du cluster (Sn 88%). Si distraction ET thigh thrust positifs : critère ≥2/4 atteint, arrêt possible.</div>
+</div></div>
+
+<!-- TEST 3 : COMPRESSION -->
+<div class="ti"><div class="th" onclick="tgl('tb-las-comp')">
+<div class="tl"><div class="tn">Compression <span style="font-size:10px;background:var(--purl);color:var(--pur);padding:1px 6px;border-radius:99px;margin-left:4px">Laslett #3</span></div><div class="tsb">Compression transversale ASI · Sn 69% / Sp 69%</div></div>
+<button class="ebp-btn" onclick="showEBP('las_comp',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'las_comp','pos');updateLaslett()" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'las_comp','neg');updateLaslett()" type="button">- Négatif</button></div>
+</div>
+<div class="tbody" id="tb-las-comp">
+<ol class="tstps"><li>Décubitus latéral côté testé au-dessus</li><li>Pression verticale vers le bas sur la crête iliaque (compression des deux ASI)</li><li>Poussées progressives et soutenues</li></ol>
+<div class="tint"><strong>Positif</strong> si douleur sacro-iliaque familiere reproduite. Attention : ne pas confondre avec le test de compression trochantérienne (GTPS) — la pression ici est sur la crête iliaque, pas sur le grand trochanter.</div>
+</div></div>
+
+<!-- TEST 4 : SACRAL THRUST -->
+<div class="ti"><div class="th" onclick="tgl('tb-las-sacral')">
+<div class="tl"><div class="tn">Sacral Thrust <span style="font-size:10px;background:var(--purl);color:var(--pur);padding:1px 6px;border-radius:99px;margin-left:4px">Laslett #4</span></div><div class="tsb">Cisaillement postérieur bilateral ASI · Sn 63% / Sp 75%</div></div>
+<button class="ebp-btn" onclick="showEBP('las_sacral',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'las_sacral','pos');updateLaslett()" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'las_sacral','neg');updateLaslett()" type="button">- Négatif</button></div>
+</div>
+<div class="tbody" id="tb-las-sacral">
+<ol class="tstps"><li>Procubitus (décubitus ventral)</li><li>Paume de la main sur l’apex du sacrum (niveau S2)</li><li>Pression verticale vers le bas, progressive (nutate le sacrum, cisaillement postérieur bilateral)</li></ol>
+<div class="tint"><strong>Positif</strong> si douleur sacro-iliaque familiere reproduite. Test les deux ASI simultanément. Complémentaire au thigh thrust qui teste un seul côté.</div>
+</div></div>
+
+<!-- TEST 5 : GAENSLEN -->
+<div class="ti"><div class="th" onclick="tgl('tb-las-gaenslen')">
+<div class="tl"><div class="tn">Test de Gaenslen <span style="font-size:10px;background:var(--purl);color:var(--pur);padding:1px 6px;border-radius:99px;margin-left:4px">Laslett #5</span></div><div class="tsb">Torsion pelvienne ASI · Sn 53% / Sp 71% — valeur ajoutée limitée</div></div>
+<button class="ebp-btn" onclick="showEBP('las_gaenslen',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'las_gaenslen','pos');updateLaslett()" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'las_gaenslen','neg');updateLaslett()" type="button">- Négatif</button></div>
+</div>
+<div class="tbody" id="tb-las-gaenslen">
+<ol class="tstps"><li>Décubitus latéral ou dos sur le bord de table, fesse au bord</li><li>Genou côté testé ramené sur la poitrine, jambe opposée laissée en extension hors de la table</li><li>Pression simultanée : genou testé vers poitrine + jambe opposée vers le sol — torsion pelvienne</li></ol>
+<div class="tint"><strong>Positif</strong> si douleur sacro-iliaque familiere. Place l'ASI testée en RI et l'ASI opposée en RE simultanément. <strong>Note :</strong> Laslett (2005) a montré que ce test n'apporte pas de valeur ajoutée dans la version optimisée à 4 tests — utile seulement pour la version 6 tests.</div>
+</div></div>
+
+<!-- TEST 6 : FABER (rappel) -->
+<div class="ti"><div class="th" onclick="tgl('tb-las-faber')">
+<div class="tl"><div class="tn">FABER / Patrick — composante ASI <span style="font-size:10px;background:var(--purl);color:var(--pur);padding:1px 6px;border-radius:99px;margin-left:4px">Laslett #6</span></div><div class="tsb">Déjà réalisé en section FAI — composante postérieure</div></div>
+<button class="ebp-btn" onclick="showEBP('las_faber',event)" type="button">ⓘ</button><div class="tbs"><span style="font-size:11px;color:var(--tx3);font-style:italic;align-self:center">Résultat reporté depuis le FABER ci-dessus</span></div>
+</div>
+<div class="tbody" id="tb-las-faber">
+<ol class="tstps"><li>Déjà effectué dans la section FAI (FABER / Patrick)</li><li>Reporter ici le résultat si la douleur était <strong>postérieure</strong> (sacro-iliaque)</li><li>Si la douleur était inguinale (hanche) : ne pas coter positif ici</li></ol>
+<div class="tint">Dans le contexte du cluster de Laslett, seule la <strong>douleur postérieure (ASI)</strong> au FABER est pertinente. La douleur inguinale oriente vers la hanche (FAI, coxarthrose) et ne compte pas dans ce cluster.</div>
+</div></div>
+
+</div></div>
+
+<!-- STABILITE LOMBO-PELVIENNE + GILLET -->
+<div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ig"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v6l-3 3" stroke="#177A5A" stroke-width="1.5" stroke-linecap="round"/><path d="M5 15h8" stroke="#177A5A" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="3" r="1.5" fill="#177A5A"/></svg></div><div><div class="sct">Stabilite lombo-pelvienne &amp; mobilite ASI</div><div class="scs">Step test · Gillet-Piedallu</div></div></div><span class="scch">&#9660;</span></div>
+<div class="scb">
+<div class="al alg" style="margin-bottom:10px"><span>&#8505;</span><div>Tests complementaires pour evaluer le controle moteur frontal du bassin et la mobilite sacro-iliaque. Non diagnostiques au sens strict — outils d'evaluation fonctionnelle.</div></div>
+
+<div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--brd)">Step test — controle lombo-pelvien dynamique</div>
+<div class="ti"><div class="th" onclick="tgl('tb-step-h')">
+<div class="tl"><div class="tn">Step test (McGill)</div><div class="tsb">Stabilite lombo-pelvienne dynamique · Controle moteur frontal</div></div>
+<button class="ebp-btn" onclick="showEBP('step_h',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'step_h','pos')" type="button">Altere</button><button class="tb" onclick="event.stopPropagation();STH(this,'step_h','neg')" type="button">Normal</button></div>
+</div>
+<div class="tbody" id="tb-step-h">
+<ol class="tstps"><li>Patient debout face a une marche ou tabouret bas (~20 cm)</li><li>Monter le pied sur la marche — observer le controle du bassin pendant la montee</li><li>Descendre lentement — phase excentrique du moyen fessier</li><li>Repeter 5x chaque cote — comparer la qualite du mouvement</li></ol>
+<div class="tint">Altere si : affaissement du bassin cote non en appui, inclinaison excessive du tronc, perte du controle frontal. Pas de seuil EBP publie — test d'evaluation motrice. Deficit = indication renforcement moyen fessier. Complementaire au Trendelenburg deja realise.</div>
+</div></div>
+
+<div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin:14px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--brd)">Test de Gillet-Piedallu — mobilite ASI</div>
+<div class="al ala" style="margin-bottom:8px"><span>&#9888;</span><div><strong>Fiabilite inter-examinateur faible (kappa ~0.1–0.3)</strong> — ne pas inclure dans le score Laslett. Utile comme test d'orientation initial avant le cluster.</div></div>
+<div class="ti"><div class="th" onclick="tgl('tb-gillet-h')">
+<div class="tl"><div class="tn">Test de flexion debout (Gillet-Piedallu)</div><div class="tsb">Mobilite ASI · Fiabilite faible — orientation uniquement</div></div>
+<button class="ebp-btn" onclick="showEBP('gillet_h',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();STH(this,'gillet_h','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();STH(this,'gillet_h','neg')" type="button">- Negatif</button></div>
+</div>
+<div class="tbody" id="tb-gillet-h">
+<ol class="tstps"><li>Patient debout, therapeute assis derriere</li><li>Poser les deux pouces sur les EIPS (epines iliaques postero-superieures)</li><li>Patient flechit le tronc en avant lentement — observer la symetrie de deplacement des EIPS</li><li>Positif si l'EIPS cote teste monte au lieu de descendre (asymetrie de nutation)</li></ol>
+<div class="tint">Teste la mobilite en nutation de l'ASI. <strong>Fiabilite inter-examinateur tres faible (kappa ~0.1–0.3)</strong> — ne remplace pas le cluster de Laslett. A utiliser uniquement comme orientation initiale. Un resultat positif doit toujours etre confirme par le cluster.</div>
+</div></div>
+
+</div></div>
+
+</div>
+
+
+<!-- STEP 5 SCORES -->
+<div class="step" id="s5">
+<div class="sc sa"><div class="sch"><div class="schl"><div class="sci it"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#8B4513" stroke-width="1.5"/><path d="M6 9l2 2 4-4" stroke="#8B4513" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Scores fonctionnels valides</div><div class="scs">HOOS-12 · HOS · Lequesne · PSFS</div></div></div></div>
+<div class="scb o">
+<div class="al alt" id="scoreOrient"><span>&#127919;</span><div>Selection en cours selon profil clinique...</div></div>
+<div class="score-tabs">
+<button class="score-tab on" id="tab-hoos" onclick="switchScore('hoos',this)" type="button">HOOS-12<br><span style="font-size:10px;font-weight:400">Coxarthrose</span></button>
+<button class="score-tab" id="tab-hos" onclick="switchScore('hos',this)" type="button">HOS<br><span style="font-size:10px;font-weight:400">Sport/FAI</span></button>
+<button class="score-tab" id="tab-leq" onclick="switchScore('leq',this)" type="button">Lequesne<br><span style="font-size:10px;font-weight:400">Critere PTH</span></button>
+<button class="score-tab" id="tab-psfs" onclick="switchScore('psfs',this)" type="button">PSFS<br><span style="font-size:10px;font-weight:400">Patient</span></button>
+</div>
+<div class="score-panel on" id="panel-hoos">
+<div class="al alz" style="margin-bottom:10px"><span>&#8505;</span><div><strong>HOOS-12</strong> (Roos &amp; Lohmander 2003, version courte validee). Score 0-100 : 100 = aucun probleme. MCID = 10 points.</div></div>
+<div id="hoos-items"></div><div id="hoos-result"></div>
+</div>
+<div class="score-panel" id="panel-hos">
+<div class="al alg" style="margin-bottom:10px"><span>&#8505;</span><div><strong>HOS (Hip Outcome Score)</strong> (Martin 2006) — valide pour pathologies de hanche du sportif et jeune adulte. Score 0-100.</div></div>
+<div id="hos-items"></div><div id="hos-result"></div>
+</div>
+<div class="score-panel" id="panel-leq">
+<div class="al ala" style="margin-bottom:10px"><span>&#8505;</span><div><strong>Index de Lequesne</strong> (1987) — score composite 0-24. Seuil indication PTH habituel : ≥10. Extremement severe : ≥14.</div></div>
+<div id="leq-items"></div><div id="leq-result"></div>
+</div>
+<div class="score-panel" id="panel-psfs">
+<div class="al alp" style="margin-bottom:10px"><span>&#8505;</span><div><strong>PSFS — Patient-Specific Functional Scale</strong> (Stratford 1995). 3 activites limitees notees 0-10. MCID = 2 points.</div></div>
+<div id="psfs-items"></div><div id="psfs-result"></div>
+</div>
+</div></div>
+</div>
+
+<!-- STEP 6 RESULTATS -->
+<div class="step" id="s6">
+<div id="s6c"></div>
+<div id="s6a" style="display:none">
+<div class="sc sa" style="margin-top:12px"><div class="sch"><div class="schl"><div class="sci it"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="2" width="12" height="14" rx="2" stroke="#8B4513" stroke-width="1.5"/><path d="M6 6h6M6 9h6M6 12h4" stroke="#8B4513" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Compte-rendu kinesitherapique</div><div class="scs">Version courte · Version complete</div></div></div></div>
+<div class="scb o">
+<div class="crtabs"><button class="crtab on" onclick="switchCR('s',this)" type="button">Version courte</button><button class="crtab" onclick="switchCR('f',this)" type="button">Version complete</button></div>
+<div class="crs"><div class="crv on" id="cr-s"></div><div class="crv" id="cr-f"></div></div>
+<button class="btf btg" style="margin-top:8px" onclick="window.print()" type="button">Imprimer</button>
+<button class="btf btn1" onclick="copyCR()" type="button" style="margin-top:8px">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="#fff" stroke-width="1.3"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="#fff" stroke-width="1.3"/></svg>
+  Copier le compte-rendu
+</button>
+</div></div>
+<button class="btf btz" onclick="openProg()" type="button">Programme exercices personnalise</button>
+<button class="btf btn2" onclick="resetBilan()" type="button" style="margin-top:8px">Nouveau bilan</button>
+</div>
+</div>
+
+</div>
+
+<nav class="bnav">
+<button class="bbt bbk" id="btn-prev" onclick="navPrev()" type="button" disabled>&#8592; Retour</button>
+<span class="bni" id="nav-label">Identite &amp; Contexte</span>
+<button class="bbt bbn" id="btn-next" onclick="navNext()" type="button">Suivant &#8594;</button>
+</nav>
+
+<div class="pov" id="pov">
+<div class="phdr"><button class="pclose" onclick="closeProg()" type="button">&#10005;</button><div class="phinfo"><div class="phtitle" id="p-name">Programme</div><div class="phsub" id="p-sub">Hanche V2</div></div><button class="ppbtn" onclick="window.print()" type="button">Imprimer</button></div>
+<div class="pcont" id="p-cont"></div>
+</div>
+
+<div class="toast" id="toast">Bilan sauvegarde</div>
+
+<script>
+var D={prenom:'',nom:'',ddn:null,sexe:'',datebilan:'',medecin:'',eva:null,tests:{},chips:{},checks:{},amps:{flex:null,ext:null,abd:null,add:null,ri:null,re:null},mrc:{abd:null,grand_fessier:null},hoos:null,hos:null,leq:null,psfs:null,objectifs:'',observations:''};
+var CUR=1;var TOTAL=6;
+var hoosSt={};var hosSt={};var leqSt={};var psfsSt={texts:['','',''],vals:[null,null,null]};
+var NAV_LABELS=['Identite & Contexte','Anamn\u00e8se & Douleur','Bilan Clinique','Tests EBP','Scores Fonctionnels','Analyse & CR'];
+
+function saveState(){
+  try{collectFields();localStorage.setItem('bilan-hanche-v2',JSON.stringify({D:D,hoosSt:hoosSt,hosSt:hosSt,leqSt:leqSt,psfsSt:psfsSt}));showToast('Bilan sauvegard\u00e9');}catch(e){}
+}
+function loadState(){
+  try{var s=localStorage.getItem('bilan-hanche-v2');if(!s)return;var p=JSON.parse(s);if(p.D)D=Object.assign(D,p.D);if(p.hoosSt)hoosSt=p.hoosSt;if(p.hosSt)hosSt=p.hosSt;if(p.leqSt)leqSt=p.leqSt;if(p.psfsSt)psfsSt=p.psfsSt;restoreUI();}catch(e){}
+}
+function restoreUI(){
+  var flds={prenom:D.prenom,nom:D.nom,ddn:D.ddn,sexe:D.sexe,datebilan:D.datebilan,medecin:D.medecin,objectifs:D.objectifs,observations:D.observations};
+  Object.keys(flds).forEach(function(k){var el=document.getElementById(k);if(el&&flds[k])el.value=flds[k];});
+  if(D.eva!==null) document.querySelectorAll('#eva .evab').forEach(function(b){if(parseInt(b.dataset.v)===D.eva)b.classList.add('on');});
+  Object.keys(D.chips).forEach(function(key){
+    (D.chips[key]||[]).forEach(function(v){document.querySelectorAll('#'+key+' .chip').forEach(function(el){if(el.textContent.trim()===v)el.classList.add('on');});});
+  });
+  Object.keys(D.checks).forEach(function(key){
+    (D.checks[key]||[]).forEach(function(v){document.querySelectorAll('#'+key+' .crow').forEach(function(el){var t=el.querySelector('.ctx2');if(t&&t.textContent.trim()===v)el.classList.add('on');});});
+  });
+  var ampKeys=['flex','ext','abd','add','ri','re'];
+  ampKeys.forEach(function(k){if(D.amps[k]!==null){var el=document.getElementById('a_'+k);if(el){el.value=D.amps[k];updateAmp(k);}}});
+  checkNAV();updateAltman();updateGTPS();
+  updateMRCDisplay('abd');updateMRCDisplay('grand_fessier');
+}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2000);}
+function copyCR(){var a=document.querySelector('.crv.on');if(!a)return;var txt=a.innerText||a.textContent;if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){showToast('Compte-rendu copié ✓');});}else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copié ✓');}}
+
+function goS(n){
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s'+n).classList.add('active');
+  CUR=n;
+  document.getElementById('prog').style.width=(n/TOTAL*100)+'%';
+  document.getElementById('stepLbl').textContent='Etape '+n+'/'+TOTAL;
+  document.getElementById('nav-label').textContent=NAV_LABELS[n-1];
+  document.getElementById('btn-prev').disabled=n===1;
+  document.getElementById('btn-next').textContent=n===TOTAL?'Terminer':'Suivant \u2192';
+  if(n===5)initScores();
+  window.scrollTo(0,0);
+  saveState();
+}
+function navNext(){if(CUR===5){collectFields();calcAndShow();}else if(CUR<TOTAL)goS(CUR+1);}
+function navPrev(){if(CUR>1)goS(CUR-1);}
+
+function toggleSC(h){var b=h.nextElementSibling,ch=h.querySelector('.scch');b.classList.toggle('o');if(ch)ch.classList.toggle('o');}
+function tgl(id){var b=document.getElementById(id);if(b)b.classList.toggle('o');}
+
+function TC(el,key,solo){
+  if(solo)document.querySelectorAll('#'+key+' .chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.toggle('on');
+  D.chips[key]=[];
+  document.querySelectorAll('#'+key+' .chip.on').forEach(function(c){D.chips[key].push(c.textContent.trim());});
+  if(key==='rf'||key==='atcd')checkNAV();
+}
+function CK(el,key){
+  el.classList.toggle('on');
+  D.checks[key]=[];
+  document.querySelectorAll('#'+key+' .crow.on').forEach(function(c){var t=c.querySelector('.ctx2');if(t)D.checks[key].push(t.textContent.trim());});
+  if(key==='rf')checkNAV();
+}
+function getC(key){return D.chips[key]||[];}
+function hasC(key,val){return getC(key).some(function(v){return v.toLowerCase().indexOf(val.toLowerCase())>=0;});}
+function getK(key){return D.checks[key]||[];}
+function hasK(key,val){return getK(key).some(function(v){return v.toLowerCase().indexOf(val.toLowerCase())>=0;});}
+function isT(key,val){return D.tests[key]===val;}
+
+function collectFields(){
+  ['prenom','nom','ddn','sexe','datebilan','medecin','objectifs','observations'].forEach(function(k){var el=document.getElementById(k);if(el)D[k]=el.value||'';});
+  D.ddn=D.ddn||null;
+}
+function checkNAV(){
+  var nav=hasK('rf','Corticotherapie')||hasK('rf','Alcool')||hasK('rf','Drepanocytose');
+  document.getElementById('navBlock').style.display=nav?'block':'none';
+}
+function evaC(el){document.querySelectorAll('#eva .evab').forEach(function(b){b.classList.remove('on');});el.classList.add('on');D.eva=parseInt(el.dataset.v);}
+
+function mrcSel(btn,muscle,val){
+  btn.closest('.mrc-wrap').querySelectorAll('.mrc-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');D.mrc[muscle]=val;
+  if(muscle==='abd'){updateMRCDisplay('abd');updateGTPS();}
+}
+function updateMRCDisplay(muscle){
+  if(muscle==='abd'){
+    var r=document.getElementById('mrc-abd-result');
+    if(r&&D.mrc.abd!==null){r.innerHTML=D.mrc.abd<4?'<span class="tb pos" style="font-size:12px;min-height:36px">D\u00e9ficit '+D.mrc.abd+'/5</span>':'<span class="tb neg" style="font-size:12px;min-height:36px">Normal '+D.mrc.abd+'/5</span>';}
+  }
+  var mrcWrap=document.getElementById(muscle==='abd'?'mrcAbd':'mrcGF');
+  if(mrcWrap&&D.mrc[muscle]!==null){mrcWrap.querySelectorAll('.mrc-btn').forEach(function(b,i){if(i===D.mrc[muscle])b.classList.add('on');});}
+}
+
+function STH(btn,key,val){
+  var wrap=btn.closest('.tbs');
+  if(wrap)wrap.querySelectorAll('.tb').forEach(function(b){b.classList.remove('pos','neg');});
+  btn.classList.add(val==='pos'?'pos':'neg');
+  D.tests[key]=val;
+}
+
+var AMP_NORMS={flex:120,ext:20,abd:45,add:30,ri:35,re:45};
+function updateAmp(zone){
+  var v=parseFloat(document.getElementById('a_'+zone).value);
+  D.amps[zone]=isNaN(v)?null:v;
+  var norm=AMP_NORMS[zone];
+  var el=document.getElementById('diff_'+zone);
+  if(!isNaN(v)&&el){
+    var d=norm-v;el.style.display='block';
+    if(d<=5){el.style.background='#DAF0E6';el.style.color='#065038';el.textContent='Normal ('+v+'\u00b0 / norme '+norm+'\u00b0)';}
+    else if(d<=20){el.style.background='#FAF0DC';el.style.color='#5A3200';el.textContent='D\u00e9ficit mod\u00e9r\u00e9 : \u2212'+d+'\u00b0';}
+    else{el.style.background='#FAEAEA';el.style.color='#9C2B2B';el.textContent='D\u00e9ficit s\u00e9v\u00e8re : \u2212'+d+'\u00b0 (norme '+norm+'\u00b0)';}
+  }else if(el)el.style.display='none';
+  var alerts='';
+  if(D.amps.ri!==null&&D.amps.ri<15){alerts+='<div class="al alr"><span>&#129462;</span><div><strong>RI &lt;15\u00b0</strong> \u2014 Crit\u00e8re majeur Cluster Altman (Sp 95%). Tr\u00e8s \u00e9vocateur de coxarthrose si \u226550 ans + douleur inguinale.</div></div>';D.tests['ri15']='pos';updateAltman();}
+  if(D.amps.flex!==null&&D.amps.flex<90)alerts+='<div class="al ala"><span>&#9888;</span><div><strong>Flexion &lt;90\u00b0</strong> \u2014 Limitation s\u00e9v\u00e8re. Douleur de fin d\'amplitude \u2192 FAI ou blocage capsulaire.</div></div>';
+  if(D.amps.abd!==null&&D.amps.abd<20)alerts+='<div class="al ala"><span>&#9888;</span><div><strong>Abduction &lt;20\u00b0</strong> \u2014 Limitation importante. Contracture capsulaire ou insuffisance abducteurs.</div></div>';
+  document.getElementById('ampAlert').innerHTML=alerts;
+}
+
+function calcPeri(){
+  var att=parseFloat(document.getElementById('peri_att').value);
+  var sain=parseFloat(document.getElementById('peri_sain').value);
+  var el=document.getElementById('peri_diff');
+  if(!isNaN(att)&&!isNaN(sain)){
+    var d=sain-att;el.style.display='block';
+    if(d<=0){el.style.background='#DAF0E6';el.style.color='#065038';el.textContent='Sym\u00e9trique';}
+    else if(d<1.5){el.style.background='#FAF0DC';el.style.color='#5A3200';el.textContent='Amyotrophie l\u00e9g\u00e8re : \u2212'+d.toFixed(1)+' cm';}
+    else{el.style.background='#FAEAEA';el.style.color='#9C2B2B';el.textContent='Amyotrophie significative : \u2212'+d.toFixed(1)+' cm';}
+  }else el.style.display='none';
+}
+
+function getAge(){if(!D.ddn)return null;return Math.floor((new Date()-new Date(D.ddn))/(365.25*24*3600*1000));}
+
+function updateAltman(){
+  var age=getAge();
+  var c1=isT('ri15','pos')||(D.amps.ri!==null&&D.amps.ri<15);
+  var c2=isT('doulri','pos');
+  var c3=isT('age50','pos')||(age!==null&&age>50);
+  var n=[c1,c2,c3].filter(Boolean).length;
+  for(var i=0;i<3;i++){var d=document.getElementById('ad'+i);if(d){d.classList.toggle('on-ter',i<n);}}
+  var el=document.getElementById('altman-lr');
+  if(el)el.textContent=n===3?'3/3 \u2713 LR+ 24.3 \u2192 Probabilit\u00e9 >91%':n===2?'2/3 \u2014 Probable (imagerie recommand\u00e9e)':n===1?'1/3 \u2014 Insuffisant':'0/3 \u2014 Non contributif';
+}
+
+function updateGTPS(){
+  var c1=isT('paltro','pos');var c2=isT('comptro','pos');var c3=isT('trendelenburg','pos');var c4=D.mrc.abd!==null&&D.mrc.abd<4;
+  var n=[c1,c2,c3,c4].filter(Boolean).length;
+  for(var i=0;i<4;i++){var d=document.getElementById('gd'+i);if(d){d.classList.toggle('on-amb',i<n);}}
+  var el=document.getElementById('gtps-lr');
+  if(el)el.textContent=n>=3?n+'/4 \u2014 GTPS tr\u00e8s probable':n===2?'2/4 \u2014 Probable':n===1?'1/4 \u2014 Insuffisant':'0/4 \u2014 Non contributif';
+}
+
+// HOOS-12 items
+var HOOS12=[
+  {q:'Fréquence de votre douleur de hanche (semaine passée)',d:'Douleur'},
+  {q:'Douleur en position assise ou allongée',d:'Douleur'},
+  {q:'Douleur lors de la marche sur terrain plat',d:'Douleur'},
+  {q:'Douleur en montant ou descendant les escaliers',d:'Douleur'},
+  {q:'Difficulté pour rester debout prolongé',d:'Fonction'},
+  {q:'Difficulté pour se lever d\'une position assise',d:'Fonction'},
+  {q:'Difficulté pour marcher sur terrain irrégulier',d:'Fonction'},
+  {q:'Difficulté pour sortir d\'une voiture',d:'Fonction'},
+  {q:'Problèmes liés à la hanche dans vos loisirs',d:'QdV'},
+  {q:'Fréquence de la conscience de vos problèmes de hanche',d:'QdV'},
+  {q:'Modifications de votre mode de vie à cause de la hanche',d:'QdV'},
+  {q:'Difficulté à vous fier à votre hanche',d:'QdV'}
+];
+var HOS_Q=[
+  'Descendre les escaliers','Monter les escaliers','Se lever d\'une chaise',
+  'Posture debout prolong\u00e9e','Se pencher en avant','Marcher sur surface plane',
+  'Marcher sur surface irr\u00e9guli\u00e8re','Marche longue distance','Monter/descendre d\'une voiture',
+  'Faire ses courses','Activit\u00e9s l\u00e9g\u00e8res (jardinage)','Marcher en c\u00f4te'
+];
+var LEQ_Q=[
+  {q:'A. Douleur nocturne',opts:[[0,'Aucune'],[1,'Aux mouvements / certaines postures'],[2,'Même immobile']],half:false},
+  {q:'B. Dérouillage matinal',opts:[[0,'Aucun ou <1 min'],[1,'1 à 15 min'],[2,'>15 min']],half:false},
+  {q:'C. Rester debout 30 min augmente la douleur ?',opts:[[0,'Non'],[1,'Oui']],half:false},
+  {q:'D. Douleur à la marche',opts:[[0,'Aucune'],[1,'Seulement après quelque distance'],[2,'Dès le début et de façon croissante']],half:false},
+  {q:'E. Station assise prolongée (2h) douloureuse ?',opts:[[0,'Non'],[1,'Oui']],half:false},
+  {q:'Périmètre de marche maximal',opts:[[0,'Illimité'],[1,'>1 km'],[2,'~1 km (~15 min)'],[3,'500–900 m'],[4,'300–500 m'],[5,'100–300 m'],[6,'<100 m']],half:false},
+  {q:'Aide technique nécessaire',opts:[[0,'Aucune'],[1,'1 canne ou béquille'],[2,'2 cannes ou béquilles']],half:false},
+  {q:'Monter un étage',opts:[[0,'Sans difficulté'],[0.5,'Assez facilement'],[1,'Avec difficulté'],[1.5,'Avec beaucoup de difficulté'],[2,'Impossible']],half:true},
+  {q:'Enfiler chaussettes / chaussures par devant',opts:[[0,'Sans difficulté'],[0.5,'Assez facilement'],[1,'Avec difficulté'],[1.5,'Avec beaucoup de difficulté'],[2,'Impossible']],half:true},
+  {q:'Ramasser un objet par terre',opts:[[0,'Sans difficulté'],[0.5,'Assez facilement'],[1,'Avec difficulté'],[1.5,'Avec beaucoup de difficulté'],[2,'Impossible']],half:true},
+  {q:'Sortir d\'une voiture ou d\'un fauteuil profond',opts:[[0,'Sans difficulté'],[0.5,'Assez facilement'],[1,'Avec difficulté'],[1.5,'Avec beaucoup de difficulté'],[2,'Impossible']],half:true}
+];
+
+function updateLaslett(){
+  var c1=isT('las_dist','pos');
+  var c2=isT('las_thigh','pos');
+  var c3=isT('las_comp','pos');
+  var c4=isT('las_sacral','pos');
+  var c5=isT('las_gaenslen','pos');
+  var c6=isT('las_faber','pos');
+  var n=[c1,c2,c3,c4,c5,c6].filter(Boolean).length;
+  for(var i=0;i<6;i++){
+    var d=document.getElementById('ld'+i);
+    if(d){
+      d.classList.toggle('on-pur',i<n);
+      d.style.background=i<n?'var(--pur)':'#fff';
+    }
+  }
+  var el=document.getElementById('laslett-lr');
+  if(!el)return;
+  if(n>=3){
+    el.textContent=n+'/6 — ASI très probable (Sn 88% Sp 78%)';
+  } else if(n===2){
+    var has4=(c1||c2||c3||c4);
+    el.textContent=n===2&&[c1,c2,c3,c4].filter(Boolean).length>=2?'2/4 tests principaux — ASI probable (≥2/4 atteint)':'2/6 — Insuffisant pour conclure';
+  } else if(n===1){
+    el.textContent='1/6 — Insuffisant';
+  } else {
+    el.textContent='0/6 — ASI peu probable';
+  }
+}
+
+
+function faberSel(btn,loc){
+  // Reset tous les boutons FABER (section FAI + Laslett #6)
+  var allFaberBtns=document.querySelectorAll('[onclick*="faberSel"]');
+  allFaberBtns.forEach(function(b){b.classList.remove('pos','neg');});
+  btn.classList.add(loc==='neg'?'neg':'pos');
+
+  // Stocker le résultat
+  D.tests['faber']=loc;
+  D.tests['las_faber']=loc==='post'?'pos':'neg';
+
+  // Afficher le résultat coloré
+  var res=document.getElementById('faber-result');
+  if(res){
+    res.style.display='block';
+    if(loc==='ing'){
+      res.style.background='var(--ambl)';res.style.color='#5A3200';res.style.border='1px solid #ECC878';
+      res.textContent='Douleur inguinale → FAI / Coxarthrose (+25 pts FAI)';
+    } else if(loc==='post'){
+      res.style.background='var(--purl)';res.style.color='var(--pur)';res.style.border='1px solid #C9B8F0';
+      res.textContent='Douleur postérieure → ASI — compte dans le cluster Laslett';
+    } else {
+      res.style.background='var(--grnl)';res.style.color='#065038';res.style.border='1px solid #7DCEB0';
+      res.textContent='FABER négatif — hanche et ASI moins probables';
+    }
+  }
+
+  // Mettre à jour les clusters
+  updateLaslett();
+}
+
+
+function initScores(){
+  var age=getAge();
+  var isFAI=hasC('ctx','FAI')||isT('fadir','pos');
+  var isSport=hasC('activite','pivot')||hasC('activite','Athletisme')||hasC('activite','Cyclisme');
+  var isArthro=hasK('atcd','Coxarthrose')||hasC('ctx','Coxarthrose')||(age&&age>55);
+  var msg='';
+  if(isFAI||isSport){switchScore('hos',document.getElementById('tab-hos'));msg='Profil FAI/sport \u2192 <strong>HOS recommand\u00e9</strong>';}
+  else if(isArthro){switchScore('hoos',document.getElementById('tab-hoos'));msg='Profil coxarthrosique \u2192 <strong>HOOS-12 recommand\u00e9</strong>';}
+  else msg='Profil mixte \u2014 tous les scores disponibles';
+  document.getElementById('scoreOrient').innerHTML='<span>&#127919;</span><div>'+msg+'</div>';
+  buildHOOS();buildHOS();buildLEQ();buildPSFS();
+}
+function switchScore(type,btn){
+  document.querySelectorAll('.score-tab').forEach(function(t){t.classList.remove('on');});btn.classList.add('on');
+  document.querySelectorAll('.score-panel').forEach(function(p){p.classList.remove('on');});document.getElementById('panel-'+type).classList.add('on');
+}
+function buildPSFS(){
+  var h='<div style="font-size:12px;color:var(--tx2);margin-bottom:10px">Demandez au patient d’identifier 3 activités limitées par sa hanche et de les noter de 0 (impossible) à 10 (niveau normal).</div>';
+  for(var j=0;j<3;j++){
+    h+='<div class="psfs-item">';
+    h+='<input type="text" placeholder="Activité '+(j+1)+' (ex: monter les escaliers, jardiner...)" value="'+(psfsSt.texts[j]||'')+'" oninput="setPsfsText('+j+',this.value)" style="margin-bottom:7px">';
+    h+='<div class="psfs-btns">';
+    for(var v=0;v<=10;v++){
+      h+='<button class="psfs-btn'+(psfsSt.vals[j]===v?' on':'')+'" onclick="setPsfsVal('+j+','+v+',this)" type="button">'+v+'</button>';
+    }
+    h+='</div></div>';
+  }
+  document.getElementById('psfs-items').innerHTML=h;
+  calcPSFS();
+}
+
+function buildHOOS(){
+  var h='';HOOS12.forEach(function(item,i){
+    h+='<div class="sq-row"><div class="sq-q"><span style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:var(--terl);color:var(--ter);margin-right:5px">'+item.d+'</span>'+item.q+'</div><div class="sq-opts">';
+    [0,1,2,3,4].forEach(function(v){h+='<button class="sq-btn'+(hoosSt['h'+i]===v?' on':'')+'" onclick="setScore(\'hoos\','+i+','+v+',this)" type="button">'+v+'</button>';});
+    h+='</div></div>';
+  });
+  document.getElementById('hoos-items').innerHTML=h;calcHOOS();
+}
+function buildHOS(){
+  var h='';HOS_Q.forEach(function(q,i){
+    h+='<div class="sq-row"><div class="sq-q">'+q+'</div><div class="sq-opts">';
+    [0,1,2,3,4].forEach(function(v){h+='<button class="sq-btn'+(hosSt['h'+i]===v?' on':'')+'" onclick="setScore(\'hos\','+i+','+v+',this)" type="button">'+v+'</button>';});
+    h+='</div></div>';
+  });
+  document.getElementById('hos-items').innerHTML=h;calcHOS();
+}
+function buildLEQ(){
+  var h='<div class="al ala" style="margin-bottom:10px"><span>&#8505;</span><div><strong>Index de Lequesne</strong> (Lequesne 1987). Items A–E = douleur. Périmètre + aide = locomotion. 4 items AVQ en demi-points (0/0.5/1/1.5/2). Score 0–24. Seuil PTH : ≥10.</div></div>';
+  LEQ_Q.forEach(function(item,i){
+    h+='<div class="leq-item"><div class="leq-q">'+item.q+'</div><div class="leq-opts">';
+    item.opts.forEach(function(opt){
+      var lbl=item.half?String(opt[0]):opt[1];
+      h+='<button class="leq-btn'+(leqSt['l'+i]===opt[0]?' on':'')+'" onclick="setLeq('+i+','+opt[0]+',this)" type="button" title="'+opt[1]+'">'+lbl+'</button>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('leq-items').innerHTML=h;calcLEQ();
+}
+function setLeq(idx,val,btn){btn.closest('.leq-opts').querySelectorAll('.leq-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');leqSt['l'+idx]=parseFloat(val);calcLEQ();}
+function setPsfsText(j,v){psfsSt.texts[j]=v;}
+function setPsfsVal(j,v,btn){btn.closest('.psfs-btns').querySelectorAll('.psfs-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');psfsSt.vals[j]=v;calcPSFS();}
+
+function calcHOOS(){
+  var n=Object.keys(hoosSt).length;if(!n){document.getElementById('hoos-result').innerHTML='';return;}
+  var total=Object.values(hoosSt).reduce(function(s,v){return s+v;},0);
+  var score=Math.round(((n*4-total)/(n*4))*100);D.hoos={score:score,n:n};
+  var cls=score>=75?'sco-g':score>=50?'sco-m':'sco-r';
+  var grade=score>=75?'Sympt\u00f4mes l\u00e9gers':score>=50?'Sympt\u00f4mes mod\u00e9r\u00e9s':'Sympt\u00f4mes s\u00e9v\u00e8res';
+  document.getElementById('hoos-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+score+'<span style="font-size:14px;font-weight:600">/100</span></div><div class="score-info">HOOS-12<br>'+grade+'<br><span style="font-weight:400;font-size:10px">'+n+'/12 items \u00b7 MCID=10</span></div></div>';
+}
+function calcHOS(){
+  var n=Object.keys(hosSt).length;if(!n){document.getElementById('hos-result').innerHTML='';return;}
+  var total=Object.values(hosSt).reduce(function(s,v){return s+v;},0);
+  var score=Math.round(((n*4-total)/(n*4))*100);D.hos={score:score,n:n};
+  var cls=score>=80?'sco-g':score>=50?'sco-m':'sco-r';
+  var grade=score>=80?'Bonne fonction':score>=50?'Fonction mod\u00e9r\u00e9e':'Fonction alt\u00e9r\u00e9e';
+  document.getElementById('hos-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+score+'<span style="font-size:14px;font-weight:600">/100</span></div><div class="score-info">HOS Score<br>'+grade+'<br><span style="font-weight:400;font-size:10px">'+n+'/12 items</span></div></div>';
+}
+function calcLEQ(){
+  var n=Object.keys(leqSt).length;if(!n){document.getElementById('leq-result').innerHTML='';return;}
+  var total=Object.values(leqSt).reduce(function(s,v){return s+parseFloat(v);},0);
+  total=Math.round(total*2)/2;
+  D.leq={score:total,n:n};
+  var cls=total>=14?'sco-r':total>=8?'sco-m':'sco-g';
+  var grade=total>=14?'Handicap extrême — PTH fortement indiquée':total>=11?'Handicap très important':total>=8?'Handicap important':total>=5?'Handicap moyen':'Handicap modeste';
+  var pth=total>=10?'<span style="background:var(--redl);color:var(--red);font-size:10px;font-weight:700;padding:2px 6px;border-radius:99px;margin-left:5px">⚠ Seuil PTH</span>':'';
+  document.getElementById('leq-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+total+'<span style="font-size:14px;font-weight:600">/24</span></div><div class="score-info">Lequesne'+pth+'<br>'+grade+'<br><span style="font-weight:400;font-size:10px">'+n+'/11 items • Lequesne 1987</span></div></div>';
+}
+function calcPSFS(){
+  var vals=psfsSt.vals.filter(function(v){return v!==null;});if(!vals.length){document.getElementById('psfs-result').innerHTML='';return;}
+  var avg=(vals.reduce(function(s,v){return s+v;},0)/vals.length).toFixed(1);D.psfs={avg:parseFloat(avg),texts:psfsSt.texts,vals:psfsSt.vals};
+  var cls=parseFloat(avg)>=7?'sco-g':parseFloat(avg)>=4?'sco-m':'sco-r';
+  document.getElementById('psfs-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+avg+'<span style="font-size:14px;font-weight:600">/10</span></div><div class="score-info">PSFS<br>Moyenne activit\u00e9s<br><span style="font-weight:400;font-size:10px">'+vals.length+' item(s) \u00b7 MCID=2</span></div></div>';
+}
+
+// DIAGNOSTIC
+var DLBL={asi:'Dysfonction sacro-iliaque (ASI)',fai:'Conflit f\u00e9moro-ac\u00e9tabulaire (FAI)',coxarthrose:'Coxarthrose',gtps:'Tendinopathie abducteurs / GTPS',piriforme:'Syndrome du piriforme',labrum:'D\u00e9chirure labrumale',lombaire:'Diff\u00e9rentiel lombaire / radiculopathie',inflammatoire:'Pathologie inflammatoire / rhumatismale',pth:'Suivi post-PTH'};
+var DMAX={fai:195,coxarthrose:220,gtps:185,piriforme:145,labrum:135,lombaire:130,inflammatoire:110,pth:120,asi:200};
+var DTAGS={
+  asi:[['dtp','Sacro-iliaque'],['dtb','Laslett ≥2/4'],['dtg','Diff. hanche']],
+  fai:[['dtz','Jeune adulte'],['dtt','Inguinal'],['dta','Sport pivot']],
+  coxarthrose:[['dtr','D\u00e9g\u00e9n\u00e9ratif'],['dta','>50 ans'],['dtg','Altman \u22652/3']],
+  gtps:[['dta','Trochant\u00e9rien'],['dtg','Moyen fessier'],['dtb','F>40 ans']],
+  piriforme:[['dtb','Fessier'],['dtz','Exclusion'],['dtp','Sciatique']],
+  labrum:[['dtz','Intra-articulaire'],['dtr','FAI associ\u00e9']],
+  lombaire:[['dtp','Radiculopathie'],['dtb','L2-L4']],
+  inflammatoire:[['dtr','Rhumatisme'],['dtp','Nuit/repos'],['dtb','SPA']],
+  pth:[['dtz','Post-op'],['dtb','PTH']]
+};
+var EXCL=[
+  ['fai','coxarthrose','FAI (jeune) et coxarthrose (>50 ans) — v\u00e9rifier \u00e2ge et imagerie'],
+  ['piriforme','fai','Douleur fessi\u00e8re (piriforme) distincte de la douleur inguinale (FAI)']
+];
+
+function calcScores(){
+  collectFields();
+  var s={fai:0,coxarthrose:0,gtps:0,piriforme:0,labrum:0,lombaire:0,inflammatoire:0,pth:0,asi:0};
+  var r={fai:[],coxarthrose:[],gtps:[],piriforme:[],labrum:[],lombaire:[],inflammatoire:[],pth:[],asi:[]};
+  var age=getAge();
+  if(isT('fadir','pos')){s.fai+=40;r.fai.push('FADIR positif (Sn 87%) (+40)');}
+  if(D.tests['faber']==='ing'){s.fai+=25;r.fai.push('FABER inguinal → FAI/Coxarthrose (+25)');}if(D.tests['faber']==='post'){s.asi+=25;r.asi.push('FABER postérieur → ASI (+25) — Laslett #6');}
+  if(isT('scour','pos')){s.fai+=25;r.fai.push('Scour positif Sn 91% (+25)');s.labrum+=30;r.labrum.push('Scour positif (+30)');}
+  if(isT('stinchfield','pos')){s.fai+=15;r.fai.push('Stinchfield positif (+15)');}
+  if(isT('ric','pos')){s.fai+=20;r.fai.push('RI en charge douloureuse (+20)');}
+  if(isT('thomas','pos')){s.fai+=10;r.fai.push('Thomas positif (+10)');}
+  if(hasC('declenchant','FADIR')){s.fai+=20;r.fai.push('D\u00e9clenchement en FADIR (+20)');}
+  if(hasC('declenchant','assise')){s.fai+=15;r.fai.push('Position assise douloureuse (+15)');}
+  if(hasC('localisation','Inguinale')){s.fai+=15;r.fai.push('Localisation inguinale (+15)');}
+  if(hasC('activite','pivot')||hasC('activite','Athletisme')){s.fai+=10;r.fai.push('Sport de pivot (+10)');}
+  if(age&&age<45){s.fai+=15;r.fai.push('\u00c2ge <45 ans (+15)');}
+  if(isT('fadir','pos')){s.labrum+=25;r.labrum.push('FADIR positif (+25)');}
+  if(hasC('rythme','Claquement')){s.labrum+=25;r.labrum.push('Claquement/ressaut articulaire (+25)');}
+  if(hasC('installation','Traumatique')){s.labrum+=20;r.labrum.push('Traumatisme (+20)');}
+  if(isT('ri15','pos')||(D.amps.ri!==null&&D.amps.ri<15)){s.coxarthrose+=45;r.coxarthrose.push('RI <15\u00b0 (Sp 95%) (+45)');}
+  if(isT('doulri','pos')){s.coxarthrose+=30;r.coxarthrose.push('Douleur inguinale \u00e0 la RI (+30)');}
+  if(age&&age>50){s.coxarthrose+=25;r.coxarthrose.push('\u00c2ge >50 ans (+25)');}
+  if(hasK('atcd','Coxarthrose confirmee')){s.coxarthrose+=50;r.coxarthrose.push('Coxarthrose confirm\u00e9e imagerie (+50)');}
+  if(hasC('rythme','Mecanique')){s.coxarthrose+=15;r.coxarthrose.push('Rythme m\u00e9canique (+15)');}
+  if(hasC('rythme','Derouillage matin <30')){s.coxarthrose+=15;r.coxarthrose.push('D\u00e9rouillage <30 min (+15)');}
+  if(D.leq&&D.leq.score>=10){s.coxarthrose+=20;r.coxarthrose.push('Lequesne \u226510 (+20)');}
+  if(isT('paltro','pos')){s.gtps+=45;r.gtps.push('Palpation troch. positive (+45)');}
+  if(isT('comptro','pos')){s.gtps+=30;r.gtps.push('Compression troch. positive (+30)');}
+  if(isT('trendelenburg','pos')){s.gtps+=25;r.gtps.push('Trendelenburg positif (+25)');}
+  if(D.mrc.abd!==null&&D.mrc.abd<4){s.gtps+=20;r.gtps.push('MRC abducteurs <4/5 (+20)');}
+  if(hasC('localisation','Troch')){s.gtps+=20;r.gtps.push('Localisation troch\u00e9ant\u00e9rienne (+20)');}
+  if(hasC('rythme','Nocturne')){s.gtps+=20;r.gtps.push('Douleur nocturne d\u00e9cubitus lat (+20)');}
+  if(hasC('declenchant','Appui monopodal')){s.gtps+=15;r.gtps.push('Appui monopodal (+15)');}
+  if(isT('ober','pos')){s.gtps+=15;r.gtps.push('Ober positif (+15)');}
+  var sexe=document.getElementById('sexe').value;
+  if(sexe==='Femme'&&age&&age>40){s.gtps+=10;r.gtps.push('Femme >40 ans (+10)');}
+  if(isT('fair','pos')){s.piriforme+=50;r.piriforme.push('FAIR positif Sn 88% Sp 83% (+50)');}
+  // ASI — Cluster Laslett
+  if(isT('las_dist','pos')){s.asi+=50;r.asi.push('Distraction positive — VPP max du cluster (+50)');}
+  if(isT('las_thigh','pos')){s.asi+=45;r.asi.push('Thigh Thrust positif — test le plus sensible Sn 88% (+45)');}
+  if(isT('las_comp','pos')){s.asi+=35;r.asi.push('Compression positive (+35)');}
+  if(isT('las_sacral','pos')){s.asi+=35;r.asi.push('Sacral Thrust positif (+35)');}
+  if(isT('las_gaenslen','pos')){s.asi+=25;r.asi.push('Gaenslen positif (+25)');}
+  // FABER ASI géré via faberSel() — D.tests.faber==='post' traité plus haut
+  if(isT('pace','pos')){s.piriforme+=30;r.piriforme.push('Pace positif (+30)');}
+  if(hasC('localisation','Fessiere')){s.piriforme+=20;r.piriforme.push('Localisation fessi\u00e8re (+20)');}
+  if(hasK('palpation','Fesse')){s.piriforme+=20;r.piriforme.push('Palpation piriforme (+20)');}
+  if(isT('lasegue','pos')){s.piriforme+=15;r.piriforme.push('Las\u00e8gue positif (+15)');}
+  if(isT('hipspine','pos')){s.lombaire+=35;r.lombaire.push('Hip-Spine positif (+35)');}
+  var nLas=[isT('las_dist','pos'),isT('las_thigh','pos'),isT('las_comp','pos'),isT('las_sacral','pos'),isT('las_gaenslen','pos'),isT('las_faber','pos')].filter(Boolean).length;
+  if(nLas>=3){s.lombaire+=40;r.lombaire.push('Cluster Laslett ≥3/6 — ASI très probable (+40)');}
+  else if(nLas===2){s.lombaire+=20;r.lombaire.push('Cluster Laslett 2/6 — ASI possible (+20)');}
+  if(isT('lasegue','pos')){s.lombaire+=30;r.lombaire.push('Las\u00e8gue positif (+30)');}
+  if(hasK('atcd','Lombalgies')){s.lombaire+=25;r.lombaire.push('Lombalgies associ\u00e9es (+25)');}
+  if(hasC('localisation','Irradiation')){s.lombaire+=20;r.lombaire.push('Irradiation cuisse/genou (+20)');}
+  if(hasC('rythme','Derouillage matin >30')){s.inflammatoire+=45;r.inflammatoire.push('D\u00e9rouillage >30 min (+45)');}
+  if(hasK('atcd','Spondylarthropathie')){s.inflammatoire+=50;r.inflammatoire.push('Spondylarthropathie (+50)');}
+  if(hasC('rythme','Continue')){s.inflammatoire+=20;r.inflammatoire.push('Douleur continue (+20)');}
+  if(hasC('ctx','Post-operatoire')){s.pth+=80;r.pth.push('Contexte post-PTH (+80)');}
+  if(hasK('atcd','Chirurgie hanche')){s.pth+=60;r.pth.push('Chirurgie hanche (+60)');}
+  var pcts={};Object.keys(s).forEach(function(k){pcts[k]=Math.min(Math.round((Math.max(s[k],0)/DMAX[k])*100),99);});
+  return {pcts:pcts,raisons:r};
+}
+
+function buildAlgo(pcts){
+  var age=getAge();
+  var isFAI=pcts.fai>=35||isT('fadir','pos');
+  var isCox=pcts.coxarthrose>=35||(D.amps.ri!==null&&D.amps.ri<15);
+  var isGTPS=pcts.gtps>=35||isT('paltro','pos');
+  var h='<div class="acb"><div class="act">Algorithme diagnostique hanche \u2014 Raisonnement s\u00e9quentiel EBP</div>';
+  var ar=age?(age<45?'ay':(age>55?'an':'aN')):'aN';
+  var at=age?(age<45?'\u226445 ans \u2192 FAI / Labrum':(age>55?'>55 ans \u2192 Coxarthrose':'45\u201355 ans \u2014 transition')):'Age non renseign\u00e9';
+  h+='<div class="acs"><div class="acn">1</div><div class="acq"><strong>Profil d\'age</strong></div><div class="acr '+ar+'">'+at+'</div></div>';
+  var locIng=hasC('localisation','Inguinale'),locTro=hasC('localisation','Troch'),locFes=hasC('localisation','Fessiere');
+  var lt=locIng?'Inguinale \u2192 FAI / Coxarthrose':locTro?'Troch\u00e9ant\u00e9rienne \u2192 GTPS':locFes?'Fessi\u00e8re \u2192 Piriforme':'Non renseign\u00e9e';
+  h+='<div class="acs"><div class="acn">2</div><div class="acq"><strong>Localisation</strong></div><div class="acr '+(locIng||locTro||locFes?'ay':'aN')+'">'+lt+'</div></div>';
+  var testTxt=isT('fadir','pos')?'FADIR \u271a \u2192 FAI probable':(D.amps.ri!==null&&D.amps.ri<15)?'RI <15\u00b0 \u2192 Coxarthrose':isT('paltro','pos')?'Palpation GT \u271a \u2192 GTPS':isT('fair','pos')?'FAIR \u271a \u2192 Piriforme':'Aucun test discriminant positif';
+  var testPos=isT('fadir','pos')||isT('paltro','pos')||isT('fair','pos')||(D.amps.ri!==null&&D.amps.ri<15);
+  h+='<div class="acs"><div class="acn">3</div><div class="acq"><strong>Test discriminant principal</strong></div><div class="acr '+(testPos?'ay':'aN')+'">'+testTxt+'</div></div>';
+  if(isCox){
+    var a=0;if(age&&age>50)a++;if(hasC('localisation','Inguinale'))a++;if(isT('ri15','pos')||(D.amps.ri!==null&&D.amps.ri<15))a++;
+    h+='<div class="acs"><div class="acn">4</div><div class="acq"><strong>Cluster Altman</strong> (Age>50 + douleur inguinale + RI&lt;15\u00b0)</div><div class="acr '+(a>=3?'ay':a>=2?'an':'aN')+'">'+a+'/3'+(a>=3?' \u2014 LR+ 24.3 \u2192 >91%':a>=2?' \u2014 Probable':' \u2014 Insuffisant')+'</div></div>';
+    if(a>=3)h+='<div class="acc acca">\u2713 Cluster Altman complet. Coxarthrose tr\u00e8s probable.</div>';
+    if(D.leq&&D.leq.score>=10)h+='<div class="acc accc">\u26a0 Lequesne \u226510 \u2014 Seuil indication PTH atteint.</div>';
+  }
+  if(isGTPS){
+    var g=0;if(isT('paltro','pos'))g+=2;if(isT('trendelenburg','pos'))g++;if(isT('comptro','pos'))g++;if(D.mrc.abd!==null&&D.mrc.abd<4)g++;
+    h+='<div class="acs"><div class="acn">'+(isCox?5:4)+'</div><div class="acq"><strong>Score GTPS</strong> (Palpation + Trendelenburg + Compression + MRC)</div><div class="acr '+(g>=4?'ay':g>=2?'an':'aN')+'">'+g+'/5'+(g>=4?' \u2014 GTPS tr\u00e8s probable':g>=2?' \u2014 Probable':' \u2014 Insuffisant')+'</div></div>';
+    if(g>=4)h+='<div class="acc accd">Tendinopathie GTPS probable. Protocole charge progressive. \u00c9viter repos complet.</div>';
+  }
+  var sorted=Object.keys(pcts).sort(function(a,b){return pcts[b]-pcts[a];});
+  var top=sorted[0];
+  if(pcts[top]>=30){
+    h+='<div class="acc acca" style="margin-top:6px">&#127919; Hypoth\u00e8se principale : <strong>'+DLBL[top]+'</strong> ('+pcts[top]+'%)</div>';
+    if(top==='fai')h+='<div class="acw">FAI \u2192 \u00c9viter FADIR en phase aigu\u00eb. Renforcement coapteurs. Evaluation arthroscopique si r\u00e9fractaire >6 mois.</div>';
+    else if(top==='coxarthrose')h+='<div class="acw">Coxarthrose \u2192 Exercice en charge progressive. \u00c9ducation th\u00e9rapeutique. HOOS-12/Lequesne de suivi.</div>';
+    else if(top==='gtps')h+='<div class="acw">GTPS \u2192 Prot. isom\u00e9trique puis excentrique. Supprimer compression. \u00c9viter \u00e9tirements ADD.</div>';
+  }
+  h+='</div>';return h;
+}
+
+function calcAndShow(){
+  var res=calcScores();var pcts=res.pcts;var raisons=res.raisons;
+  var rf=getK('rf');var yf=getK('yf');
+  var sorted=Object.keys(pcts).sort(function(a,b){return pcts[b]-pcts[a];});
+  var topDiags=sorted.filter(function(k){return pcts[k]>=20;}).slice(0,5);
+  if(!topDiags.length)topDiags=sorted.slice(0,3);
+  var contras=EXCL.filter(function(p){return pcts[p[0]]>=35&&pcts[p[1]]>=35;}).map(function(p){return '<strong>'+DLBL[p[0]]+'</strong> vs <strong>'+DLBL[p[1]]+'</strong> \u2014 '+p[2];});
+  var html='<div class="disc">&#9877;&#65039; Outil d\'aide clinique \u2014 Yasser Ladraa MK. Les probabilit\u00e9s orientent la r\u00e9flexion et ne remplacent pas le jugement clinique.</div>';
+  if(rf.length>0)html+='<div class="al alr"><span>&#128680;</span><div><strong>'+rf.length+' drapeau(x) rouge(s)</strong> \u2014 Avis m\u00e9dical requis.</div></div>';
+  if(D.eva!==null&&D.eva>=7)html+='<div class="al ala"><span>&#9888;</span><div><strong>Douleur intense (EVA '+D.eva+'/10)</strong> \u2014 Techniques antalgiques prioritaires.</div></div>';
+  contras.forEach(function(w){html+='<div class="al alp"><span>&#9889;</span><div>'+w+'</div></div>';});
+  html+=buildAlgo(pcts);
+  html+='<div class="sc sa"><div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="#1A6FA8" stroke-width="1.5"/><path d="M6 9l2 2 4-4" stroke="#1A6FA8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Probabilit\u00e9s diagnostiques</div><div class="scs">Calcul\u00e9es sur l\'ensemble des donn\u00e9es</div></div></div></div><div class="scb o">';
+  topDiags.forEach(function(k){
+    var pct=pcts[k];var certLbl,certCls,fillCls,pctCls;
+    if(pct>=70){certLbl='Tr\u00e8s probable';certCls='ctp';fillCls='fh2';pctCls='ph';}
+    else if(pct>=45){certLbl='Probable';certCls='cp';fillCls='fm';pctCls='pm';}
+    else if(pct>=25){certLbl='Possible';certCls='cpo';fillCls='fl2';pctCls='pl';}
+    else{certLbl='Peu probable';certCls='cpp';fillCls='fv';pctCls='';}
+    var tags=(DTAGS[k]||[]).map(function(t){return '<span class="dtag '+t[0]+'">'+t[1]+'</span>';}).join('');
+    var why=raisons[k].length?raisons[k].join(' \u00b7 '):'Crit\u00e8res insuffisants.';
+    html+='<div class="dbar"><div class="dbrt"><div class="dbn"><span class="dc '+certCls+'">'+certLbl+'</span><br>'+DLBL[k]+'</div><div class="dbp '+pctCls+'">'+pct+'%</div></div><div class="dbt"><div class="dbf '+fillCls+'" data-w="'+pct+'%"></div></div><div class="dw '+((pct>=70)?'wh':(pct>=45)?'wm':'')+'">'+why+'</div>';
+    if(tags)html+='<div class="dtags">'+tags+'</div>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+  var objs=['R\u00e9duction de la douleur (EVA : '+(D.eva!==null?D.eva+'/10':'non renseign\u00e9')+')'];
+  if(D.amps.ri!==null&&D.amps.ri<15)objs.push('Restauration RI (actuel : '+D.amps.ri+'\u00b0 / objectif \u226535\u00b0)');
+  if(pcts.coxarthrose>=30)objs.push('Am\u00e9lioration marche et p\u00e9rim\u00e8tre');
+  if(pcts.gtps>=30)objs.push('Renforcement abducteurs (objectif MRC 5/5)');
+  if(pcts.fai>=30)objs.push('R\u00e9duction conflit en FADIR \u2014 renforcement coapteurs');
+  if(yf.length>0)objs.push('Approche biopsychosociale \u2014 '+yf.length+' facteur(s) psychosociaux');
+  if(D.objectifs)objs.push('Objectif patient : '+D.objectifs);
+  html+='<div class="sc sa" style="margin-top:10px"><div class="sch"><div class="schl"><div class="sci it"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3l1.8 4.5H15l-3.6 2.7 1.4 4.8L9 12.3 5.2 15l1.4-4.8L3 7.5h4.2L9 3z" stroke="#8B4513" stroke-width="1.5" stroke-linejoin="round"/></svg></div><div><div class="sct">Objectifs de r\u00e9\u00e9ducation</div></div></div></div><div class="scb o"><ul class="tl2">';
+  objs.forEach(function(o){html+='<li>'+o+'</li>';});html+='</ul></div></div>';
+  html+=buildPlan(topDiags,pcts);
+  document.getElementById('s6c').innerHTML=html;
+  document.getElementById('s6a').style.display='block';
+  setTimeout(function(){document.querySelectorAll('.dbf[data-w]').forEach(function(el){var w=el.getAttribute('data-w');el.removeAttribute('data-w');setTimeout(function(){el.style.width=w;},50);});},100);
+  buildCRs(topDiags,pcts,raisons);goS(6);
+}
+
+function buildPlan(topDiags,pcts){
+  var p1=['Cryoth\u00e9rapie post-s\u00e9ance','Education th\u00e9rapeutique \u2014 m\u00e9canismes douleur'];
+  var p2=[],p3=[],p4=['Programme domicile adapt\u00e9','Education posturale et ergonomie'];
+  if(D.eva!==null&&D.eva>=5)p1.push('TENS antalgique (80\u2013100 Hz, 20 min/j)');
+  if(pcts.coxarthrose>=30){p2.push('Mobilisations passives en d\u00e9charge (traction axiale douce)');p2.push('Gain progressif flexion et RI dans l\'amplitude indolore');p3.push('Renforcement quadriceps et IJ en cha\u00eene ferm\u00e9e');p3.push('V\u00e9lo/natation/aquagym \u2014 sport portant recommand\u00e9');p4.push('Hygi\u00e8ne articulaire \u2014 pauses r\u00e9guli\u00e8res debout');if(D.leq&&D.leq.score>=10)p4.push('Lequesne \u226510 \u2014 \u00e9valuation chirurgicale PTH \u00e0 envisager');}
+  if(pcts.fai>=30){p2.push('Mobilisations en d\u00e9coaptation \u2014 jamais en FADIR en aigu');p3.push('Renforcement coapteurs : grand fessier, IJ');p3.push('Contr\u00f4le moteur bassin \u2014 stabilisation lombo-pelvienne');p4.push('Arthroscopie si r\u00e9fractaire >6 mois et FAI morphologique confirm\u00e9');}
+  if(pcts.gtps>=30){p2.push('Isom\u00e9trie abducteurs en phase douloureuse (King protocol)');p2.push('Supprimer facteurs compressifs : d\u00e9cubitus lat\u00e9ral cot\u00e9 sain, \u00e9viter ADD crois\u00e9e');p3.push('Excentrique abducteurs (Alfredson adapt\u00e9) \u2014 8 semaines');p3.push('Renforcement grand fessier \u2014 d\u00e9charge insertional load');}
+  if(pcts.piriforme>=30){p2.push('Etirement doux piriforme en d\u00e9charge');p3.push('Renforcement pelvi-trochant\u00e9riens \u2014 \u00e9quilibre rotateurs');}
+  if(!p2.length)p2.push('Mobilisations douces dans toutes les amplitudes disponibles');
+  if(!p3.length)p3.push('Renforcement global musculature p\u00e9riarticulaire');
+  p3.push('Proprioception et \u00e9quilibre monopodal progressif');
+  var phases=[{t:'Phase 1 \u2014 Antalgique (J1\u2013J14)',items:p1,bg:'var(--redl)',c:'var(--red)'},{t:'Phase 2 \u2014 Mobilisation (S2\u2013S4)',items:p2,bg:'var(--ambl)',c:'var(--amb)'},{t:'Phase 3 \u2014 Renforcement (S3\u2013S8)',items:p3,bg:'var(--zl)',c:'var(--zd)'},{t:'Phase 4 \u2014 Fonctionnel (S6\u2013S16)',items:p4,bg:'var(--blul)',c:'var(--blu)'}];
+  var h='<div class="sc sa" style="margin-top:10px"><div class="sch"><div class="schl"><div class="sci it"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="5" height="5" rx="1" stroke="#8B4513" stroke-width="1.5"/><rect x="10" y="3" width="5" height="5" rx="1" stroke="#8B4513" stroke-width="1.5"/><rect x="3" y="10" width="5" height="5" rx="1" stroke="#8B4513" stroke-width="1.5"/><rect x="10" y="10" width="5" height="5" rx="1" stroke="#8B4513" stroke-width="1.5"/></svg></div><div><div class="sct">Plan de traitement</div></div></div></div><div class="scb o">';
+  phases.forEach(function(ph){h+='<div class="phase"><div class="phh" style="background:'+ph.bg+';color:'+ph.c+'">'+ph.t+'</div><div class="phb"><ul class="tl2">';ph.items.forEach(function(it){h+='<li>'+it+'</li>';});h+='</ul></div></div>';});
+  h+='</div></div>';return h;
+}
+
+function buildCRs(topDiags,pcts,raisons){
+  var rf=getK('rf');var yf=getK('yf');
+  var tPos=Object.keys(D.tests).filter(function(k){return D.tests[k]==='pos';});
+  var tNeg=Object.keys(D.tests).filter(function(k){return D.tests[k]==='neg';});
+  var age=getAge();var nom=(D.prenom||'\u2014')+' '+(D.nom||'');
+  function hdr(){
+    var h='<div class="crsh"><div class="crsn">'+nom+'</div><div class="crss">Bilan Hanche V2 \u2014 '+(D.datebilan?new Date(D.datebilan).toLocaleDateString('fr-FR'):'\u2014')+'</div><div class="crsp">';
+    if(age)h+='<span class="crspi"><strong>Age :</strong> '+age+' ans</span>';
+    if(D.sexe)h+='<span class="crspi"><strong>Sexe :</strong> '+D.sexe+'</span>';
+    if(D.eva!==null)h+='<span class="crspi"><strong>EVA :</strong> '+D.eva+'/10</span>';
+    if(D.medecin)h+='<span class="crspi"><strong>Prescripteur :</strong> '+D.medecin+'</span>';
+    h+='</div></div>';return h;
+  }
+  function diagBlocks(){return topDiags.map(function(k){var pct=pcts[k];var cls=pct>=70?'cdh':pct>=45?'cdm':'cdl';return '<div class="crdi '+cls+'"><span>'+DLBL[k]+'</span><span>'+pct+'%</span></div>';}).join('');}
+  function sig(){return '<div class="crsig"><div class="crsigl">Date et signature du kin\u00e9sith\u00e9rapeute</div><div style="font-size:10px;color:var(--tx3)">Outil d\'aide clinique \u2014 Yasser Ladraa MK</div></div>';}
+  var sh=hdr();
+  sh+='<div class="crbl"><div class="crbt">Donn\u00e9es cl\u00e9s</div>';
+  if(D.eva!==null)sh+='<div class="crrow"><span class="crk">EVA</span><span class="crval">'+D.eva+'/10</span></div>';
+  if(D.hoos)sh+='<div class="crrow"><span class="crk">HOOS-12</span><span class="crval">'+D.hoos.score+'/100</span></div>';
+  if(D.hos)sh+='<div class="crrow"><span class="crk">HOS</span><span class="crval">'+D.hos.score+'/100</span></div>';
+  if(D.leq)sh+='<div class="crrow"><span class="crk">Lequesne</span><span class="crval">'+D.leq.score+'/24'+(D.leq.score>=10?' \u26a0':'')+' </span></div>';
+  if(D.psfs)sh+='<div class="crrow"><span class="crk">PSFS</span><span class="crval">'+D.psfs.avg+'/10</span></div>';
+  if(D.amps.ri!==null)sh+='<div class="crrow"><span class="crk">Rotation interne</span><span class="crval">'+D.amps.ri+'\u00b0'+(D.amps.ri<15?' \u26a0 <15\u00b0':'')+' </span></div>';
+  if(tPos.length)sh+='<div class="crrow"><span class="crk">Tests positifs</span><span class="crval">'+tPos.join(', ')+'</span></div>';
+  if(rf.length>0)sh+='<div class="crrow"><span class="crk" style="color:var(--red)">Red flags</span><span class="crval" style="color:var(--red)">'+rf.length+' \u2014 avis m\u00e9dical</span></div>';
+  sh+='</div><div class="crbl"><div class="crbt">Diagnostic kin\u00e9sith\u00e9rapique</div>'+diagBlocks()+'</div>';
+  sh+='<div class="crbl"><div class="crbt">Plan propos\u00e9</div><ul style="padding-left:14px;font-size:12px;color:var(--tx2);line-height:2"><li>Phase antalgique : cryoth\u00e9rapie, d\u00e9charge si EVA \u22655</li><li>Mobilisation : traction axiale, RI/flexion progressive</li><li>Renforcement : abducteurs, grand fessier, coapteurs</li><li>Fonctionnel : proprioception, reprise activit\u00e9</li></ul></div>';
+  sh+=sig();
+  var fh=hdr();
+  fh+='<div class="crbl"><div class="crbt">Anamn\u00e8se &amp; contexte</div>';
+  [['ctx','Contexte'],['installation','Installation'],['localisation','Localisation'],['rythme','Rythme'],['declenchant','D\u00e9clenchants'],['avq','Difficult\u00e9s AVQ'],['perimetre','P\u00e9rim\u00e8tre']].forEach(function(f){var chips=getC(f[0]);if(chips.length)fh+='<div class="crrow"><span class="crk">'+f[1]+'</span><span class="crval">'+chips.join(', ')+'</span></div>';});
+  var atcd=getK('atcd');if(atcd.length)fh+='<div class="crrow"><span class="crk">Ant\u00e9c\u00e9dents</span><span class="crval">'+atcd.join(', ')+'</span></div>';
+  if(D.observations)fh+='<div class="crrow"><span class="crk">Imagerie/obs.</span><span class="crval">'+D.observations+'</span></div>';
+  fh+='</div><div class="crbl"><div class="crbt">Donn\u00e9es cliniques</div>';
+  if(D.eva!==null)fh+='<div class="crrow"><span class="crk">EVA</span><span class="crval">'+D.eva+'/10</span></div>';
+  if(D.hoos)fh+='<div class="crrow"><span class="crk">HOOS-12</span><span class="crval">'+D.hoos.score+'/100 ('+D.hoos.n+'/12)</span></div>';
+  if(D.hos)fh+='<div class="crrow"><span class="crk">HOS</span><span class="crval">'+D.hos.score+'/100 ('+D.hos.n+'/12)</span></div>';
+  if(D.leq)fh+='<div class="crrow"><span class="crk">Lequesne</span><span class="crval">'+D.leq.score+'/24'+(D.leq.score>=10?' \u2014 PTH \u00e0 envisager':'')+' </span></div>';
+  if(D.psfs)fh+='<div class="crrow"><span class="crk">PSFS</span><span class="crval">'+D.psfs.avg+'/10</span></div>';
+  var mv=[];var ampKeys2=['flex','ext','abd','add','ri','re'];var ampLbls={flex:'Flex',ext:'Ext',abd:'ABD',add:'ADD',ri:'RI',re:'RE'};
+  ampKeys2.forEach(function(k){if(D.amps[k]!==null)mv.push(ampLbls[k]+' '+D.amps[k]+'\u00b0');});
+  if(mv.length)fh+='<div class="crrow"><span class="crk">Amplitudes</span><span class="crval">'+mv.join(' \u00b7 ')+'</span></div>';
+  if(D.mrc.abd!==null)fh+='<div class="crrow"><span class="crk">MRC abducteurs</span><span class="crval">'+D.mrc.abd+'/5</span></div>';
+  if(D.mrc.grand_fessier!==null)fh+='<div class="crrow"><span class="crk">MRC grand fessier</span><span class="crval">'+D.mrc.grand_fessier+'/5</span></div>';
+  if(tPos.length)fh+='<div class="crrow"><span class="crk">Tests positifs</span><span class="crval">'+tPos.join(', ')+'</span></div>';
+  if(tNeg.length)fh+='<div class="crrow"><span class="crk">Tests n\u00e9gatifs</span><span class="crval">'+tNeg.join(', ')+'</span></div>';
+  if(rf.length>0)fh+='<div class="crrow"><span class="crk" style="color:var(--red)">Red flags</span><span class="crval" style="color:var(--red)">'+rf.join(', ')+'</span></div>';
+  if(yf.length>0)fh+='<div class="crrow"><span class="crk" style="color:var(--amb)">Yellow flags</span><span class="crval" style="color:var(--amb)">'+yf.join(', ')+'</span></div>';
+  fh+='</div><div class="crbl"><div class="crbt">Diagnostic kin\u00e9sith\u00e9rapique</div>'+diagBlocks()+'</div>';
+  fh+='<div class="crbl"><div class="crbt">Plan de r\u00e9\u00e9ducation</div><ul style="padding-left:14px;font-size:12px;color:var(--tx2);line-height:2"><li>Phase 1 (J1\u2013J14) : antalgique</li><li>Phase 2 (S2\u2013S4) : mobilisations</li><li>Phase 3 (S3\u2013S8) : renforcement</li><li>Phase 4 (S6\u2013S16) : fonctionnel</li></ul></div>';
+  if(D.objectifs)fh+='<div class="crbl"><div class="crbt">Objectifs patient</div><div style="font-size:12px;color:var(--tx2)">'+D.objectifs+'</div></div>';
+  fh+=sig();
+  document.getElementById('cr-s').innerHTML=sh;document.getElementById('cr-f').innerHTML=fh;
+}
+function switchCR(ver,btn){document.querySelectorAll('.crtab').forEach(function(t){t.classList.remove('on');});btn.classList.add('on');document.querySelectorAll('.crv').forEach(function(v){v.classList.remove('on');});document.getElementById('cr-'+ver).classList.add('on');}
+
+// PROGRAMME
+function openProg(){
+  var res=calcScores();var pcts=res.pcts;collectFields();
+  document.getElementById('p-name').textContent=(D.prenom||'Patient')+' '+(D.nom||'');
+  document.getElementById('p-sub').textContent='Programme hanche V2 \u2014 '+new Date().toLocaleDateString('fr-FR');
+  var EXOS=[
+  // ─── ANTALGIQUE ───────────────────────────────────────────────────────────
+  {id:'cryo',ph:'ant',nom:'Cryothérapie locale',mat:'Glace',mc:'mn',
+   j:'EVA élevée → la cryothérapie réduit l’inflammation locale et l’hyperalgésie périphérique.',
+   dc:'Glace enveloppée dans un tissu (jamais directement sur la peau) appliquée sur la zone douloureuse. Décubitus confortable.',
+   pr:'15–20 min × 3–4 fois/jour en phase aiguë. Après chaque séance de kiné.',
+   dt:'Ne jamais appliquer directement sur la peau. Si douleur trochantérienne : décubitus latéral côté sain, glace sur le grand trochanter.',
+   pg:null,c:function(p){return D.eva!==null&&D.eva>=4;}},
+  {id:'tens',ph:'ant',nom:'TENS antalgique — Hanche',mat:'TENS',mc:'mb',
+   j:'EVA élevée → neurostimulation transcutanée : gate control + libération d’endogènes (niveau A).',
+   dc:'Électrodes placées autour de la zone douloureuse (inguinale ou trochantérienne). Fréquence 80–100 Hz mode continu.',
+   pr:'20–30 min par séance. 1 fois/jour en phase aiguë. Intensité : picotement sans contraction musculaire.',
+   dt:'Ne pas placer sur cicatrice récente ou implant métallique. Éviter région cardiaque.',
+   pg:null,c:function(p){return D.eva!==null&&D.eva>=5;}},
+  {id:'thermotherapie',ph:'ant',nom:'Thermothérapie pré-mobilisation',mat:'Bouillotte',mc:'mn',
+   j:'Coxarthrose ou GTPS → la chaleur réduit la viscosité du liquide synovial et augmente l’extensibilité des tissus mous avant les exercices.',
+   dc:'Bouillotte ou coussin chauffant sur la hanche 15 min avant la séance de mobilisation.',
+   pr:'15 min avant chaque séance. Ne pas utiliser en phase inflammatoire aiguë.',
+   dt:'Contrôler la température (support tissu). Contre-indiqué si œdème chaud → utiliser glace.',
+   pg:null,c:function(p){return p.coxarthrose>=25||p.gtps>=25;}},
+  {id:'iso_abd',ph:'ant',nom:'Isométrie abducteurs (protocole King)',mat:'Aucun',mc:'mn',
+   j:'GTPS phase aiguë → antalgie immédiate (inhibition corticale) + charge tendineuse sans compression. Étape 1 obligatoire.',
+   dc:'Décubitus dorsal, jambe tendue. Appuyer la face externe de la cheville contre le bord de table ou un mur. Contraction ABD isométrique maximale soutenue.',
+   pr:'5 × 45 secondes. Repos 2 min entre chaque. Quotidien, matin et soir.',
+   dt:'Ne pas étirer l’adduction concomitamment (aggrave la compression tendineuse insertionnelle).',
+   pg:'Isométrique → isotonique lent → excentrique → pliométrique',
+   c:function(p){return p.gtps>=25;}},
+  // ─── MOBILISATION ─────────────────────────────────────────────────────────
+  {id:'traction',ph:'mob',nom:'Traction axiale douce',mat:'Aucun',mc:'mn',
+   j:'Coxarthrose / FAI → décoaptation articulaire, réduction de la compression intra-articulaire, amélioration de la mobilité.',
+   dc:'Décubitus dorsal. Le kiné saisit la cheville. Traction progressive et douce dans l’axe du membre inférieur. Maintien 5 secondes, relâchement progressif.',
+   pr:'10 tractions × 3 séries. 3 fois/semaine.',
+   dt:'Ne jamais réaliser en phase inflammatoire aiguë. Traction dans l’axe strict — pas en abduction.',
+   pg:'Statique → oscillatoire → mobilisation pendant la traction',
+   c:function(p){return p.coxarthrose>=25||p.fai>=25;}},
+  {id:'flex_genou_poitrine',ph:'mob',nom:'Flexion genou-poitrine',mat:'Aucun',mc:'mn',
+   j:'Coxarthrose / FAI → gain progressif de flexion de hanche dans l’amplitude indolore, entretien de la mobilité articulaire.',
+   dc:'Décubitus dorsal. Ramener un genou vers la poitrine avec les deux mains. Maintenir 5 secondes. Revenir lentement. Altérner les deux côtés.',
+   pr:'10 répétitions × 3 séries. Matin et soir.',
+   dt:'Amplitude disponible sans douleur. Ne jamais forcer le FADIR si FAI suspect. Arrêter si douleur inguinale vive.',
+   pg:'Passif aidé → actif libre → avec résistance douce',
+   c:function(p){return p.coxarthrose>=20||p.fai>=20;}},
+  {id:'mob_reri',ph:'mob',nom:'Mobilisation RE/RI en décharge',mat:'Aucun',mc:'mn',
+   j:'Limitation de la rotation interne (coxarthrose, FAI) → gain d’amplitude en décharge, sans compression articulaire.',
+   dc:'Décubitus dorsal, hanche et genou fléchis à 90°. Oscillations lentes de RI et RE dans l’amplitude disponible. Progresser jusqu’à la résistance.',
+   pr:'3 × 10 oscillations lentes. 2 fois/jour.',
+   dt:'Ne pas dépasser la limite de douleur. La RI est souvent plus limitée — insister progressivement sans forcer.',
+   pg:'Oscillatoire passif → actif aidé → actif libre → maintenu en fin d’amplitude',
+   c:function(p){return p.coxarthrose>=20||p.fai>=20||(D.amps.ri!==null&&D.amps.ri<35);}},
+  {id:'stretch_psoas',ph:'mob',nom:'Étirement psoas-iliaque (Thomas thérapeutique)',mat:'Table',mc:'mn',
+   j:'Rétraction psoas-iliaque → fréquente en coxarthrose et FAI, entretient le flexum de hanche et le conflit antérieur.',
+   dc:'Décubitus dorsal, fesses au bord de table. Ramener les deux genoux sur la poitrine pour effacer la lordose, puis laisser descendre lentement la jambe à étirer vers le sol. Maintenir.',
+   pr:'3 × 30 secondes chaque côté. 2 fois/jour.',
+   dt:'Ne pas creuser les lombaires pendant l’étirement. Réduire l’amplitude si douleur inguinale vive. Progresser sur 4–6 semaines.',
+   pg:'Passif en décharge → actif en décharge → debout en fente avant',
+   c:function(p){return isT('thomas','pos')||p.fai>=20||p.coxarthrose>=20;}},
+  {id:'stretch_ober',ph:'mob',nom:'Étirement bandelette ilio-tibiale (Ober)',mat:'Aucun',mc:'mn',
+   j:'GTPS / douleur latérale → rétraction BIT comprime la région trochantérienne. L’étirement réduit cette compression.',
+   dc:'Décubitus latéral, côté sain au-dessus. Abduire et étendre la hanche supérieure, genou à 90°. Laisser descendre la jambe par gravité en adduction. Maintenir.',
+   pr:'3 × 30 secondes. 2 fois/jour.',
+   dt:'L’étirement doit être modéré, pas forcé. Attention : ne pas croiser les jambes au repos (comprime le tendon).',
+   pg:'Passif par gravité → actif aidé → avec lest',
+   c:function(p){return isT('ober','pos')||p.gtps>=25;}},
+  {id:'stretch_piri',ph:'mob',nom:'Étirement piriforme — décubitus',mat:'Aucun',mc:'mn',
+   j:'Syndrome du piriforme → relâchement musculaire progressif, réduction de la compression du nerf sciatique.',
+   dc:'Décubitus dorsal. Croiser la jambe symptomatique (cheville sur genou opposé). Attirer le genou sain vers la poitrine avec les deux mains. Maintenir.',
+   pr:'3 × 30 secondes chaque côté. 2 fois/jour.',
+   dt:'Arrêter immédiatement si paresthésies sciatiques. La tension musculaire est normale, la douleur nerveuse ne l’est pas.',
+   pg:'Passif → actif → PNF contracté-relâché',
+   c:function(p){return p.piriforme>=25;}},
+  {id:'auto_traction',ph:'mob',nom:'Auto-traction en suspension',mat:'Barre fixe',mc:'mb',
+   j:'Coxarthrose avancée / raideur importante → décoaptation passive par le poids du corps, gain d’amplitude global.',
+   dc:'Suspendu à une barre fixe (barre de traction), jambes fléchies. Le poids du corps décoaptate les hanches doucement. Ne pas se laisser tomber brutalement.',
+   pr:'3 × 20–30 secondes. 2 fois/jour.',
+   dt:'Nécessite une barre stable et accessible. Déconseillé si instabilité de l’épaule ou pathologie lombaire associée.',
+   pg:'Suspension statique → oscillations douces → rotations en suspension',
+   c:function(p){return p.coxarthrose>=35||p.fai>=35;}},
+  // ─── RENFORCEMENT ─────────────────────────────────────────────────────────
+  {id:'iso_gf',ph:'ren',nom:'Isométrie grand fessier (phase aiguë / post-op)',mat:'Aucun',mc:'mn',
+   j:'Post-op PTH ou phase aiguë → activation précoce du grand fessier sans mouvement. Prévention de l’amyotrophie dès J1.',
+   dc:'Décubitus dorsal, jambes tendues. Contracter les deux fessiers simultanément fort et maintenir. Relâcher progressivement.',
+   pr:'3 × 20 contractions de 5 secondes. Quotidien dès J1 post-op.',
+   dt:'Très peu de contre-indications. Vérifier l’absence de douleur locale. Idéal en association avec la cryothérapie.',
+   pg:'Isométrique → pont bilatéral → pont unilatéral',
+   c:function(p){return hasC('ctx','Post-operatoire')||hasK('atcd','Chirurgie hanche');}},
+  {id:'clam',ph:'ren',nom:'Clam — Abducteurs / Rotateurs externes',mat:'Elastique',mc:'mn',
+   j:'Exercice fondamental du moyen fessier et des rotateurs externes en décharge. Preuve niveau A pour GTPS et FAI.',
+   dc:'Décubitus latéral, hanches à 60°, genoux fléchis. Ouvrir le genou du dessus (coquille) en gardant les pieds joints. Phase retour contrôlée 3 secondes.',
+   pr:'3 × 15 répétitions chaque côté. 4 fois/semaine.',
+   dt:'Bassin strictement stable — ne pas rouler en arrière. Progresser avec élastique autour des genoux.',
+   pg:'Sans résistance → élastique léger → fort → tempo excentrique 3 s',
+   c:function(p){return p.gtps>=25||p.fai>=25||p.coxarthrose>=25;}},
+  {id:'clam_avance',ph:'ren',nom:'Coquille debout (clam avancé)',mat:'Elastique',mc:'mn',
+   j:'Progression du clam → recrutement du moyen fessier en position fonctionnelle debout contre gravité.',
+   dc:'Debout, légèrement fléchi, élastique autour des genoux. Abduire et roter en externe la jambe testée sans incliner le bassin. Maintenir 2 secondes.',
+   pr:'3 × 12 répétitions chaque côté. 4 fois/semaine.',
+   dt:'Contrôler que le bassin reste horizontal (signe Trendelenburg). Miroir ou caméra utile pour le feedback.',
+   pg:'Debout statique → avec charge → surface instable',
+   c:function(p){return p.gtps>=35||p.fai>=35;}},
+  {id:'pont',ph:'ren',nom:'Pont fessier bilatéral',mat:'Aucun',mc:'mn',
+   j:'Grand fessier + ischio-jambiers en chaîne fermée. Exercice de référence pour le renforcement de l’extenseur de hanche.',
+   dc:'Décubitus dorsal, genoux fléchis à 90°, pieds à plat. Pousser sur les pieds pour soulever le bassin en alignement épaules-hanches-genoux. Maintenir 2 secondes en haut.',
+   pr:'3 × 12 répétitions. 4 fois/semaine.',
+   dt:'Éviter la rétroversion excessive du bassin. Descendre lentement en 3 secondes (phase excentrique).',
+   pg:'Bilatéral → unilatéral → surface instable → avec élastique aux genoux',
+   c:function(p){return D.eva!==null&&D.eva<=6&&(p.coxarthrose>=25||p.fai>=25||p.gtps>=25);}},
+  {id:'pont_unilateral',ph:'ren',nom:'Pont fessier unilatéral',mat:'Aucun',mc:'mn',
+   j:'Progression du pont bilatéral → double la charge sur le grand fessier et recrute les stabilisateurs du bassin.',
+   dc:'Décubitus dorsal, un pied à plat, l’autre jambe tendue en l’air. Monter le bassin sur un seul pied. Maintenir le bassin horizontal.',
+   pr:'3 × 10 répétitions chaque côté. 3 fois/semaine.',
+   dt:'S’assurer que le bassin reste horizontal (pas d’affaissement côté libre). Progresser avec poids sur le ventre.',
+   pg:'Unilatéral simple → pied sur surface élevée → avec poids → instable',
+   c:function(p){return D.eva!==null&&D.eva<=5&&(p.coxarthrose>=30||p.fai>=30||p.gtps>=30);}},
+  {id:'hip_thrust',ph:'ren',nom:'Hip Thrust — Grand fessier charge',mat:'Banc + barre',mc:'mb',
+   j:'Grand fessier → exercice roi de l’extension de hanche. Charge maximale en chaîne fermée. Preuve niveau A pour renforcement fessier.',
+   dc:'Dos appuyé contre un banc (omoplate au bord), barre ou poids sur les hanches protégés par un coussin, pieds à plat. Pousser les hanches vers le haut jusqu’à l’horizontale. Maintenir 1 seconde.',
+   pr:'3 × 10–12 répétitions. 2–3 fois/semaine.',
+   dt:'Commencer sans charge (corps seul) puis progresser. Coussin sous la barre. Contrôler la position lombaire — ne pas hyperextendre.',
+   pg:'Corps seul → avec poids → unilatéral → pause isométrique en haut',
+   c:function(p){return D.eva!==null&&D.eva<=4&&(p.coxarthrose>=25||p.fai>=25||p.gtps>=25);}},
+  {id:'excentrique',ph:'ren',nom:'Excentrique abducteurs (protocole Alfredson adapté)',mat:'Aucun',mc:'mn',
+   j:'Protocole de charge tendineuse progressive → remodele le tendon du moyen fessier. Preuve niveau B pour GTPS.',
+   dc:'Décubitus latéral. Soulever la jambe en ABD (concentrique rapide). Redescendre très lentement en 3–4 secondes (phase excentrique). Contrôler le mouvement.',
+   pr:'3 × 15 répétitions. Progression sur 8 semaines.',
+   dt:'EVA ≤5 pendant l’exercice acceptable. Règle des 24h : douleur accrue le lendemain → pas de progression cette semaine.',
+   pg:'Décubitus latéral → debout avec poids → machine abducteurs',
+   c:function(p){return p.gtps>=30;}},
+  {id:'abd_debout',ph:'ren',nom:'Abduction debout avec élastique',mat:'Elastique',mc:'mn',
+   j:'Moyen fessier en position fonctionnelle debout avec charge. Phase 3 GTPS, FAI, coxarthrose.',
+   dc:'Debout, élastique autour des chevilles. Écarter la jambe en ABD pure sans incliner le bassin. Maintenir 2 secondes. Revenir contrôlé.',
+   pr:'3 × 15 répétitions chaque jambe. 4 fois/semaine.',
+   dt:'Contrôler que le tronc ne s’incline pas du côté opposé. Élastique tendu dès le départ.',
+   pg:'Élastique léger → fort → avec poids à la cheville → machine',
+   c:function(p){return p.gtps>=30||p.fai>=30||p.coxarthrose>=30;}},
+  {id:'re_elastique',ph:'ren',nom:'Rotateurs externes debout élastique',mat:'Elastique',mc:'mn',
+   j:'Pelvi-trochantériens (piriforme, jumeaux, obturateurs) → équilibre rotateurs. Déficit de RE fréquent en coxarthrose et FAI.',
+   dc:'Debout, genou fléchi à 90°, élastique autour de la cheville. Rotation externe de la jambe contre l’élastique. Maintenir 2 secondes. Revenir lentement.',
+   pr:'3 × 12 répétitions chaque côté. 3 fois/semaine.',
+   dt:'Bassin stable, ne pas compenser par une inclinaison du tronc. Commencer élastique léger.',
+   pg:'Élastique léger → fort → début de course → fin de course',
+   c:function(p){return p.fai>=25||p.coxarthrose>=25||p.piriforme>=25;}},
+  {id:'psoas_decharge',ph:'ren',nom:'Renforcement psoas en décharge (45°)',mat:'Aucun',mc:'mn',
+   j:'Déficit des fléchisseurs de hanche fréquent en FAI et post-op → rééducation du psoas sans compression du labrum.',
+   dc:'Décubitus dorsal. Flexion active hanche à 45° (genou fléchi), maintenir 5 secondes, relâcher lentement. Ne pas dépasser 60° si FAI.',
+   pr:'3 × 12 répétitions. 3 fois/semaine.',
+   dt:'En FAI : ne pas dépasser 60° de flexion (risque de conflit). Arrêter si douleur inguinale vive.',
+   pg:'Isolé en décharge → avec poids à la cheville → machine',
+   c:function(p){return p.fai>=25||hasC('ctx','Post-operatoire');}},
+  {id:'adducteurs',ph:'ren',nom:'Renforcement adducteurs (ballon ou élastique)',mat:'Ballon',mc:'mn',
+   j:'Déséquilibre ABD/ADD fréquent → les adducteurs stabilisent la tête fémorale et participent au contrôle frontal en FAI.',
+   dc:'Décubitus dorsal ou assis. Ballon entre les genoux. Compression isométrique maximale maintenue 5 secondes. Ou élastique en ADD contrôlée.',
+   pr:'3 × 15 contractions. 3 fois/semaine.',
+   dt:'Éviter la compression excessive si gonalgie associée. Commencer par l’isométrique avant l’isotonique.',
+   pg:'Isométrique → isotonique en décharge → debout avec élastique',
+   c:function(p){return p.fai>=25||p.coxarthrose>=30;}},
+  {id:'dead_bug',ph:'ren',nom:'Dead Bug — Stabilisation lombo-pelvienne',mat:'Aucun',mc:'mn',
+   j:'Insuffisance des coapteurs → le dead bug recrute le transverse, le psoas et le grand fessier simultanément. Fondamental en FAI.',
+   dc:'Décubitus dorsal. Hanches et genoux à 90° en l’air. Étendre alternativement un bras et la jambe opposée en maintenant le dos plat. Revenir contrôlé.',
+   pr:'3 × 8 répétitions chaque côté. 3 fois/semaine.',
+   dt:'Le bas du dos doit rester en contact avec le sol. Si arche lombaire → réduire l’amplitude. Expirer sur l’effort.',
+   pg:'Bras seul → jambe seule → bras + jambe opposée → avec résistance',
+   c:function(p){return p.fai>=30||p.coxarthrose>=30||p.gtps>=30;}},
+  {id:'step_lateral_ela',ph:'ren',nom:'Step latéral avec élastique',mat:'Elastique',mc:'mn',
+   j:'Moyen fessier fonctionnel en plan frontal → contrôle du valgus dynamique, stabilité latérale hanche.',
+   dc:'Debout, élastique autour des chevilles. Pas latéraux contrôlés, genoux légèrement fléchis. Maintenir la tension élastique à chaque pas.',
+   pr:'3 × 10 mètres aller-retour. 3 fois/semaine.',
+   dt:'Genoux dans l’axe des pieds. Ne pas laisser les pieds se rejoindre complètement (garder la tension).',
+   pg:'Élastique léger → fort → en déclive → avec charges',
+   c:function(p){return D.eva!==null&&D.eva<=5&&(p.gtps>=30||p.fai>=30||p.coxarthrose>=30);}},
+  {id:'squat_mono',ph:'ren',nom:'Squat monopodal progressif',mat:'Aucun',mc:'mn',
+   j:'Chaîne fermée complète → recrute simultanément grand fessier, moyen fessier et quadriceps. Exercice fonctionnel de référence.',
+   dc:'Debout sur un pied. Fléchir le genou à 30–40°. Contrôler le bassin (pas d’affaissement). Revenir lentement.',
+   pr:'3 × 10 répétitions chaque jambe. 3 fois/semaine.',
+   dt:'Genou dans l’axe du pied. Bassin horizontal. Progresser en amplitude avant d’augmenter la charge. Miroir utile.',
+   pg:'Squat partiel → complet → avec charge → surface instable → yeux fermés',
+   c:function(p){return D.eva!==null&&D.eva<=5&&(p.coxarthrose>=20||p.fai>=20||p.gtps>=20);}},
+  {id:'fente',ph:'ren',nom:'Fente avant contrôlée',mat:'Aucun',mc:'mn',
+   j:'Chaîne complète unilatérale → grand fessier + quadriceps + psoas en allongement. Préparation fonctionnelle à la marche et aux escaliers.',
+   dc:'Debout. Grand pas en avant, descendre le genou arrière vers le sol sans toucher. Genou avant aligné sur le pied. Remonter en poussant sur le pied avant.',
+   pr:'3 × 10 répétitions chaque jambe. 3 fois/semaine.',
+   dt:'Genou avant ne dépasse pas la pointe du pied. Tronc droit. Commencer sans charge.',
+   pg:'Fente statique → marchée → avec haltères → lestée',
+   c:function(p){return D.eva!==null&&D.eva<=4&&(p.fai>=30||p.coxarthrose>=30);}},
+  {id:'leg_press',ph:'ren',nom:'Leg Press — Chaîne fermée avec charge',mat:'Machine',mc:'mb',
+   j:'Coxarthrose / GTPS / FAI → renforcement quadriceps + grand fessier avec charge maîtrisée. Alternative au squat si douleur à la mise en charge libre.',
+   dc:'Machine leg press, pieds à hauteur des hanches. Fléchir jusqu’à 90° (ou limite de confort). Pousser en extension complète sans verrouiller les genoux.',
+   pr:'3 × 12 répétitions. 2–3 fois/semaine.',
+   dt:'Ne jamais dépasser 90° de flexion si FAI. Pieds centrés, genoux dans l’axe. Progresser la charge sur plusieurs semaines.',
+   pg:'Charge légère bilatéral → bilatéral lesté → unilatéral',
+   c:function(p){return D.eva!==null&&D.eva<=5&&(p.coxarthrose>=30||p.fai>=25||p.gtps>=25);}},
+  // ─── FONCTIONNEL ──────────────────────────────────────────────────────────
+  {id:'escaliers',ph:'fon',nom:'Escaliers thérapeutiques',mat:'Escalier',mc:'mn',
+   j:'Montée/descente → recrutement grand fessier + contrôle Trendelenburg. Équivalent fonctionnel du squat monopodal, indispensable pour le retour domicile.',
+   dc:'Monter une marche à la fois (jambe forte en premier pour la montée). Descendre lentement en contrôlant l’excentrique. Observer le contrôle du bassin.',
+   pr:'3 × 10 montées/descentes. 3 fois/semaine.',
+   dt:'Contrôler que le bassin ne s’affaisse pas côté libre (signe Trendelenburg). Rampe autorisée initialement. Progresser vers libre.',
+   pg:'Avec rampe → sans rampe → pas altérnés → avec charge',
+   c:function(p){return D.eva!==null&&D.eva<=5&&(p.coxarthrose>=25||p.fai>=25||p.gtps>=25);}},
+  {id:'proprio',ph:'fon',nom:'Proprioception monopodal',mat:'Mousse',mc:'mn',
+   j:'Déficit proprioceptif fréquent en coxarthrose et post-PTH → rééducation de l’équilibre et du contrôle neuromusculaire.',
+   dc:'Appui monopodal sur mousse ou coussin instable. Maintenir l’équilibre 30 secondes. Progresser avec yeux fermés ou mouvements de bras.',
+   pr:'3 × 30 secondes chaque jambe. Quotidien.',
+   dt:'Près d’un support au début. Ne pas laisser le bassin s’affaisser. Arrêt immédiat si douleur articulaire.',
+   pg:'Surface stable → mousse → plateau instable → yeux fermés → avec mouvements',
+   c:function(p){return p.coxarthrose>=25||p.fai>=25||p.gtps>=25||hasC('ctx','Post-operatoire');}},
+  {id:'velo',ph:'fon',nom:'Vélo en selle haute (sport porté)',mat:'Vélo',mc:'mb',
+   j:'Coxarthrose → sport porté idéal : entretient la mobilité en flexion, cardiovasculaire, sans compression axiale douloureuse.',
+   dc:'Selle réglée haute (genou presque tendu en bas du pédalage). Rythme confortable, résistance faible initialement. Augmenter progressivement.',
+   pr:'3×/semaine. Débuter 15–20 min. +5 min/semaine jusqu’à 45 min.',
+   dt:'Selle trop basse → flexion excessive → douleur FAI. Selle trop haute → balancement du bassin. Réglage clé.',
+   pg:'Vélo stationnaire → vélo extérieur plat → côtes légères',
+   c:function(p){return p.coxarthrose>=25;}},
+  {id:'aquagym',ph:'fon',nom:'Aquagym / Natation',mat:'Piscine',mc:'mb',
+   j:'Coxarthrose → l’eau réduit le poids apparent de 80%. Mobilisation complète sans compression articulaire douloureuse.',
+   dc:'Marche dans l’eau, mouvements de hanche (ABD, flexion, RE). Natation dos ou crawl. Brasse déconseillée si FAI (trop de flexion-ABD-RE forcée).',
+   pr:'2–3 fois/semaine. 30–45 min de session.',
+   dt:'Température idéale 30°C. Brasse à éviter si FAI. Natation dos ou crawl préférés.',
+   pg:'Marche dans eau → exercices debout → natation → aquabike',
+   c:function(p){return p.coxarthrose>=30;}},
+  {id:'nordic',ph:'fon',nom:'Marche nordique',mat:'Bâtons',mc:'me',
+   j:'Coxarthrose → les bâtons réduisent la mise en charge sur la hanche de 25%. Maintient l’activité physique sans aggraver.',
+   dc:'Bâtons nordic walking (longueur = 68% de la taille). Rythme confortable. Démarrer terrain plat, augmenter progressivement la distance.',
+   pr:'3×/semaine. Débuter 20 min. +10 min/semaine.',
+   dt:'Terrain plat obligatoire initialement. Excellent pour maintien cardio.',
+   pg:'Terrain plat → vallonné → durée croissante',
+   c:function(p){return p.coxarthrose>=25;}},
+  {id:'retour_sport',ph:'fon',nom:'Protocole retour au sport — 4 étapes',mat:'Aucun',mc:'mn',
+   j:'FAI / pathologie sportive → reprise progressive et structurée pour éviter les rechutes. Indispensable pour les sportifs.',
+   dc:'Étape 1 (50%) : marche rapide, vélo. Étape 2 (75%) : jogging léger, natation. Étape 3 (90%) : course, changements de direction lents. Étape 4 (100%) : sport complet avec contact.',
+   pr:'2 semaines par étape minimum. Passage si EVA ≤2 pendant et après l’effort.',
+   dt:'Ne pas brûler les étapes. EVA >3 pendant l’effort = retour à l’étape précédente. Critère : pas de signe Trendelenburg à vitesse normale.',
+   pg:'Étape 1 → 2 → 3 → 4',
+   c:function(p){return (hasC('activite','pivot')||hasC('activite','Athletisme'))&&D.eva!==null&&D.eva<=4;}}
+];
+  var PHASES=[{ph:'ant',lbl:'Antalgique',cls:'epa'},{ph:'mob',lbl:'Mobilisation',cls:'epm'},{ph:'ren',lbl:'Renforcement',cls:'epr'},{ph:'fon',lbl:'Fonctionnel',cls:'epf'}];
+  var h='';
+  PHASES.forEach(function(ph){
+    var items=EXOS.filter(function(e){return e.ph===ph.ph&&e.c(pcts);});
+    if(!items.length)return;
+    h+='<div class="eplbl '+ph.cls+'">'+ph.lbl+'</div>';
+    items.forEach(function(ex){
+      h+='<div class="exc"><div class="exh" onclick="tgl(\'eb-'+ex.id+'\')"><div class="exn">'+ex.nom+'</div><span class="exm mn">'+ex.mat+'</span><span class="exch">&#9660;</span></div>';
+      h+='<div class="exbd" id="eb-'+ex.id+'"><div class="exw">'+ex.j+'</div><div class="exdc">'+ex.dc+'</div>';
+      h+='<div class="expo"><span class="expol">Prescription</span><span style="font-size:12px;color:var(--tx)">'+ex.pr+'</span></div>';
+      if(ex.dt)h+='<div class="exdt">'+ex.dt+'</div>';
+      if(ex.pg)h+='<div class="expg">Progression : '+ex.pg+'</div>';
+      h+='</div></div>';
+    });
+  });
+  document.getElementById('p-cont').innerHTML=h||'<div class="al alb"><span>&#8505;</span><div>Compl\u00e9tez le bilan pour g\u00e9n\u00e9rer les exercices.</div></div>';
+  document.getElementById('pov').classList.add('o');
+}
+function closeProg(){document.getElementById('pov').classList.remove('o');}
+
+function resetBilan(){if(!confirm('R\u00e9initialiser le bilan ?'))return;localStorage.removeItem('bilan-hanche-v2');location.reload();}
+
+document.getElementById('datebilan').valueAsDate=new Date();
+loadState();
+if(!D.datebilan)document.getElementById('datebilan').valueAsDate=new Date();
+goS(1);
+
+// ══════════════════════════════════════════════════════
+// EBP MODAL
+// ══════════════════════════════════════════════════════
+
+var EBP_DATA={
+  fadir:{title:'FADIR — Flexion-Adduction-Rotation Interne',ref:'Maslowski E et al. PM R. 2010 — Reiman MP et al. BJSM. 2015',stats:[{l:'Sensibilité',v:'87%',s:'FAI / labrum'},{l:'Spécificité',v:'58%',s:''},{l:'LR+',v:'2.1',s:''},{l:'LR−',v:'0.22',s:''}],note:'Test de dépistage du FAI et des lésions labrales. Sn élevée : un résultat négatif (LR- 0.22) écarte efficacement un FAI symptomatique. Sp modérée : beaucoup de sujets sains peuvent avoir un test positif. Ne jamais utiliser seul — confirmer par imagerie si positif.'},
+  faber:{title:'FABER (Patrick) — Flexion-Abduction-Rotation Externe',ref:'Cibere J et al. Arthritis Rheum. 2008 — Reiman MP et al. BJSM. 2015',stats:[{l:'Sensibilité',v:'60%',s:'coxarthrose/FAI'},{l:'Spécificité',v:'75%',s:''},{l:'LR+',v:'2.4',s:''},{l:'LR−',v:'0.53',s:''}],note:'Localisation de la douleur = clé diagnostique. Douleur inguinale → pathologie intra-articulaire (FAI, coxarthrose). Douleur postérieure → ASI. Douleur latérale → GTPS. Coter systématiquement la localisation.'},
+  scour:{title:'Scour Test (Quadrant Test)',ref:'Clohisy JC et al. Clin Orthop Relat Res. 2009',stats:[{l:'Sensibilité',v:'91%',s:'pathologie intra-art.'},{l:'Spécificité',v:'modérée',s:''}],note:'Compression axiale + circumduction en flexion (cercle quadrant). Reproduction d\'une douleur profonde inguinale = positif. Sn élevée pour pathologie intra-articulaire (cartilage, labrum). Manœuvre complète — ne pas arrêter au premier inconfort.'},
+  stinchfield:{title:'Test de Stinchfield',ref:'Stinchfield FE. 1977 — Reiman MP et al. BJSM. 2015',stats:[{l:'Sensibilité',v:'59%',s:''},{l:'Spécificité',v:'32%',s:''},{l:'LR+',v:'0.87',s:''}],note:'Flexion de hanche résistée à 30-45° genou tendu. Reproduction de la douleur inguinale = positif. Faible spécificité — valeur diagnostique limitée isolément. Utiliser pour confirmer la composante intra-articulaire en cluster avec FADIR et Scour.'},
+  ric:{title:'Rotation interne en charge debout',ref:'Description clinique — signe précoce FAI/coxarthrose',stats:[],note:'RI limitée et douloureuse debout en appui monopodal = signe précoce de FAI antérieur ou coxarthrose débutante. Pas de Se/Sp publiées pour ce test isolé en charge. Cohérence avec critère Altman (RI < 15°) et tests FAI (FADIR). À interpréter en cluster — ne pas utiliser seul comme critère diagnostique.'},
+  ri15:{title:'RI passive < 15° — Critère Altman #1',ref:'Altman R et al. Arthritis Rheum. 1991',stats:[{l:'Spécificité',v:'95%',s:'coxarthrose'},{l:'VPP',s:'cluster 3/3',v:'élevée'}],note:'Critère diagnostique majeur de la coxarthrose clinique (Altman 1991). RI < 15° + douleur inguinale à la RI + âge > 50 ans = 3/3 critères Altman → coxarthrose très probable sans imagerie. Sp 95% isolément.'},
+  doulri:{title:'Douleur inguinale à la RI passive — Altman #2',ref:'Altman R et al. Arthritis Rheum. 1991',stats:[],note:'Deuxième critère Altman pour la coxarthrose clinique. Douleur reproduite lors de la RI passive en décubitus dorsal. Pas de Se/Sp isolées pour ce critère seul — valeur en cluster : 3 critères Altman réunis (douleur hanche + RI < 15° + âge > 50 ans ou douleur RI + raideur matin) donnent Sn 86%, Sp 75% pour coxarthrose radiologique confirmée. Ne pas scorer ce critère isolément.'},
+  age50:{title:'Âge > 50 ans — Altman #3',ref:'Altman R et al. Arthritis Rheum. 1991',stats:[],note:'Facteur démographique du cluster Altman. Critère non modifiable — valeur uniquement en cluster. Cluster Altman 3 critères : Sn 86%, Sp 75% pour coxarthrose confirmée radiologiquement. Scorer uniquement en association avec douleur de hanche + RI < 15° ou douleur à la RI passive.'},
+  paltro:{title:'Palpation trochantérienne — GTPS #1',ref:'Grimaldi A et al. Br J Sports Med. 2017',stats:[{l:'Sensibilité',v:'élevée',s:'signe cardinal GTPS'}],note:'Douleur reproductible à la palpation directe du grand trochanter = signe le plus sensible du GTPS (tendinopathie des abducteurs / bursite). Localisation précise (antérieur = moyen fessier, latéral = petit fessier, postérieur = bursite). Indispensable dans le cluster GTPS.'},
+  comptro:{title:'Compression trochantérienne — GTPS #2',ref:'Fearon AM et al. Arthritis Care Res. 2010',stats:[],note:'Douleur à la pression directe sur le grand trochanter (patient en décubitus latéral). Étude descriptive Fearon 2010 — pas de Se/Sp isolées pour ce test. Cluster GTPS (douleur latérale + palpation positive + FABER ou Trendelenburg) : forte valeur orientatrice clinique. Aucune méta-analyse Se/Sp disponible pour la compression isolée.'},
+  trendelenburg:{title:'Trendelenburg — GTPS #3 / Insuffisance abducteurs',ref:'Bird PA et al. Ann Rheum Dis. 2001',stats:[{l:'Sensibilité',v:'72%',s:'insuffisance MF'},{l:'Spécificité',v:'77%',s:''},{l:'LR+',v:'3.1',s:''},{l:'LR−',v:'0.37',s:''}],note:'Appui unipodal : abaissement du bassin controlatéral > 2 sec = positif. Évalue le moyen fessier. Double valeur : diagnostic de GTPS (insuffisance abducteurs) ET évaluation fonctionnelle de la hanche (coxarthrose, PTH).'},
+  thomas:{title:'Test de Thomas',ref:'Reiman MP et al. Man Ther. 2012',stats:[{l:'Sensibilité',v:'89%',s:'raccourcissement psoas'},{l:'Spécificité',v:'92%',s:''},{l:'LR+',v:'11.1',s:''},{l:'LR−',v:'0.12',s:''}],note:'Décubitus dorsal, flexion maximale d\'une hanche. Décollement du membre controlatéral de la table = raccourcissement du psoas-iliaque (positif). Reiman 2012 (revue systématique) : LR+ 11.1 — résultat positif confirme fortement. LR− 0.12 — résultat négatif exclut raisonnablement. Comparer les deux côtés systématiquement.'},
+  ober:{title:'Test d\'Ober — rétraction TFL/bandelette',ref:'Ober FR. 1936 — Reese NB & Bandy WD. 2003',stats:[],note:'Décubitus latéral, genou à 90° : laisser le membre s\'abaisser passivement. Absence d\'abaissement = rétraction TFL/BIT positive. Pas de Se/Sp publiées pour le diagnostic du syndrome BIT. Fiabilité inter-examinateur excellente (ICC 0.97, Reese & Bandy 2003) — outil de mesure fiable, pas de seuil diagnostique validé. Utiliser comme mesure de souplesse et outil de suivi.'},
+  fair:{title:'FAIR Test (Flexion-Adduction-Rotation Interne)',ref:'Fishman LM et al. Am J Phys Med Rehabil. 2002',stats:[{l:'Sensibilité',v:'88%',s:'syndrome piriforme'},{l:'Spécificité',v:'83%',s:''},{l:'LR+',v:'5.2',s:''},{l:'LR−',v:'0.14',s:''}],note:'Décubitus dorsal, hanche en FAIR → compression du nerf sciatique par le piriforme. Reproduction de la sciatique = positif. Bonnes propriétés diagnostiques. Un résultat négatif (LR- 0.14) écarte efficacement le syndrome du piriforme.'},
+  pace:{title:'Test de Pace',ref:'Pace JB & Nagle D. West J Med. 1976',stats:[{l:'Sensibilité',v:'~70%',s:'syndrome piriforme'}],note:'Abduction et rotation externe résistées en position assise. Douleur ou faiblesse = positif. Données EBP limitées — description clinique originale. Utiliser en cluster avec FAIR pour renforcer le diagnostic de syndrome du piriforme.'},
+  lasegue:{title:'Lasègue (différentiel lombaire)',ref:'Deville WL et al. Spine. 2000',stats:[{l:'Sensibilité',v:'91%',s:'L4-S1'},{l:'Spécificité',v:'26%',s:''}],note:'Dans le contexte de la hanche : différentiel lombaire. Une radiculalgie L4-S1 peut mimer une douleur de hanche. Lasègue positif (<60°) + symptômes en face postérieure = composante lombaire à explorer. Orienter vers bilan lombaire complémentaire.'},
+  las_dist:{title:'Distraction (Gapping) — Laslett #1',ref:'Laslett M et al. Eur Spine J. 2005',stats:[{l:'Sensibilité',v:'60%',s:''},{l:'Spécificité',v:'81%',s:''},{l:'LR+',v:'3.2',s:''},{l:'LR−',v:'0.49',s:''}],note:'Pression bilatérale sur les EIAS vers l\'extérieur. Stress antérieur sacro-iliaque. Cluster Laslett ≥3/6 : Sn 94% Sp 78% pour douleur sacro-iliaque confirmée par bloc anesthésique. Indispensable dans l\'évaluation du syndrome lombo-pelvi-fémoral.'},
+  las_thigh:{title:'Thigh Thrust — Laslett #2',ref:'Laslett M et al. Eur Spine J. 2005',stats:[{l:'Sensibilité',v:'88%',s:'test le plus puissant'},{l:'Spécificité',v:'69%',s:''},{l:'LR+',v:'2.8',s:''},{l:'LR−',v:'0.17',s:''}],note:'Test le plus sensible et le plus informatif du cluster. LR- à 0.17 : un résultat négatif réduit fortement la probabilité d\'ASI. À réaliser en priorité dans le cluster.'},
+  las_comp:{title:'Compression — Laslett #3',ref:'Laslett M et al. Eur Spine J. 2005',stats:[{l:'Sensibilité',v:'69%',s:''},{l:'Spécificité',v:'69%',s:''},{l:'LR+',v:'2.2',s:''},{l:'LR−',v:'0.45',s:''}],note:'Compression transversale de l\'aile iliaque en décubitus latéral. Complémentaire du Thigh Thrust dans le cluster. Valeur modérée isolément.'},
+  las_sacral:{title:'Sacral Thrust — Laslett #4',ref:'Laslett M et al. Eur Spine J. 2005',stats:[{l:'Sensibilité',v:'63%',s:''},{l:'Spécificité',v:'75%',s:''},{l:'LR+',v:'2.5',s:''},{l:'LR−',v:'0.49',s:''}],note:'Pression antérieure sur le sacrum en décubitus ventral. Cisaillement bilatéral des ASI. Sensibilité inférieure au Thigh Thrust mais spécificité meilleure. Contribue au cluster.'},
+  las_gaenslen:{title:'Test de Gaenslen — Laslett #5',ref:'Laslett M et al. Eur Spine J. 2005',stats:[{l:'Sensibilité',v:'53%',s:''},{l:'Spécificité',v:'71%',s:''},{l:'LR+',v:'1.8',s:''},{l:'LR−',v:'0.66',s:''}],note:'Torsion pelvienne par extension passive d\'une hanche en débord de table. Valeur ajoutée limitée — réserver si cluster incomplet. Plus difficile à réaliser et moins informatif que le Thigh Thrust.'},
+  las_faber:{title:'FABER — composante ASI — Laslett #6',ref:'Laslett M et al. Eur Spine J. 2005',stats:[{l:'Sensibilité',v:'77%',s:''},{l:'Spécificité',v:'72%',s:''},{l:'LR+',v:'2.8',s:''},{l:'LR−',v:'0.32',s:''}],note:'Douleur postérieure (fesse/sacrum) en position FABER = composante ASI. Distinguer de la douleur inguinale (hanche) ou latérale (GTPS). Ce test est commun avec la section FAI — ne le réaliser qu\'une fois.'},
+  step_h:{title:'Step test (McGill)',ref:'McGill SM — Description clinique',stats:[],note:'Contrôle moteur lombo-pelvien dynamique en contexte hanche. Montée/descente de marche — observer le contrôle frontal du bassin (chute de Trendelenburg = insuffisance abducteurs). Pas de données Se/Sp standardisées. Outil d\'observation clinique : pertinent pour objectiver le déficit des abducteurs (GTPS, hanche dégénérative, post-PTH). Compléter par Trendelenburg statique pour confirmation.'},
+  gillet_h:{title:'Test de Gillet-Piedallu',ref:'Dreyfuss P et al. Spine. 1996',stats:[{l:'Fiabilité',v:'Faible',s:'kappa < 0.40'}],note:'Fiabilité inter-examinateur faible. Valeur diagnostique limitée — ne pas utiliser comme test isolé. Utiliser uniquement comme orientation dans le cluster ASI, confirmé par les 6 tests de Laslett.'}
+};
+
+
+function showEBP(key,event){
+  if(event)event.stopPropagation();
+  var d=EBP_DATA[key];
+  if(!d)return;
+  document.getElementById('ebp-title').textContent=d.title;
+  document.getElementById('ebp-ref').textContent=d.ref;
+  var sh=document.getElementById('ebp-stats');
+  sh.innerHTML='';
+  if(d.stats&&d.stats.length){
+    d.stats.forEach(function(s){
+      sh.innerHTML+='<div class="ebp-stat"><div class="ebp-stat-lbl">'+s.l+'</div><div class="ebp-stat-val">'+s.v+'</div>'+(s.s?'<div class="ebp-stat-sub">'+s.s+'</div>':'')+'</div>';
+    });
+    sh.style.display='grid';
+  }else{sh.style.display='none';}
+  var nb=document.getElementById('ebp-note');
+  if(d.note){nb.textContent=d.note;nb.style.display='block';}else{nb.style.display='none';}
+  document.getElementById('ebp-overlay').classList.add('o');
+}
+function closeEBP(event){
+  if(event&&event.target!==document.getElementById('ebp-overlay'))return;
+  document.getElementById('ebp-overlay').classList.remove('o');
+}
+
+</script>
+</body>
+</html>

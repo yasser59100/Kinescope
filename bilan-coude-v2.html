@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1B2A38">
+<title>Bilan Coude - Yasser Ladraa</title>
+<style>
+:root{
+  --bg:#F3F1ED;--surf:#FFF;--surf2:#EDEAE3;--brd:#DDD9CF;--brd2:#C2BCB0;
+  --tx:#1A1714;--tx2:#56524C;--tx3:#98948A;
+  --z:#8B5E3C;--zl:#F5EDE4;--zd:#5C3820;--zm:#9E6B45;
+  --red:#9C2B2B;--redl:#FAEAEA;--amb:#B56E10;--ambl:#FAF0DC;
+  --blu:#1550A0;--blul:#E3EEF9;--pur:#5A3898;--purl:#EDE8F8;
+  --grn:#177A5A;--grnl:#DAF0E6;--nvy:#1B2A38;
+  --r:10px;--rl:16px;--nh:64px;--hh:72px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;min-height:100vh;padding-bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 32px);padding-top:var(--hh)}
+.hdr{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nvy);height:var(--hh);display:flex;flex-direction:column;justify-content:center;padding:0 16px}
+.hr1{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hn{font-size:13px;font-weight:700;color:#fff}.hs{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
+.hbadge{background:var(--zm);color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.hprog{margin-top:8px}.hpbar{height:3px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+.hpfill{height:100%;background:var(--zm);border-radius:99px;transition:width .4s ease}
+.hplbls{display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:rgba(255,255,255,.4)}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:#fff;border-top:1px solid var(--brd);height:calc(var(--nh) + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;padding:0 12px;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 24px rgba(0,0,0,.08);gap:8px}
+.bni{font-size:11px;color:var(--tx3);text-align:center;flex:1;line-height:1.3;min-width:0}
+.bbt{display:flex;align-items:center;gap:5px;padding:12px 20px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;min-width:96px;min-height:48px;justify-content:center;flex-shrink:0}
+.bbt:active{opacity:.8}.bbk{background:var(--surf2);color:var(--tx2)}.bbn{background:var(--zm);color:#fff}.bbt:disabled{opacity:.3;pointer-events:none}
+.tb{font-size:13px;font-weight:700;padding:9px 14px;border-radius:99px;border:1.5px solid var(--brd);cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;white-space:nowrap;touch-action:manipulation;font-family:inherit;min-height:44px;display:inline-flex;align-items:center}
+.tb:active{transform:scale(.95)}.tb.pos{background:var(--redl);border-color:var(--red);color:var(--red)}.tb.neg{background:var(--zl);border-color:var(--z);color:var(--zd)}
+.app{max-width:680px;margin:0 auto;padding:16px 14px 0}
+.step{display:none}.step.active{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sc{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.sch{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;touch-action:manipulation;transition:background .15s;user-select:none;-webkit-user-select:none}
+.sch:active{background:var(--surf2)}.schl{display:flex;align-items:center;gap:10px}
+.sci{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.iz{background:var(--zl)}.ia{background:var(--ambl)}.ib{background:var(--blul)}.ir{background:var(--redl)}.ip{background:var(--purl)}.ig{background:var(--grnl)}
+.sct{font-size:13px;font-weight:600;color:var(--tx)}.scs{font-size:11px;color:var(--tx3);margin-top:1px}
+.scch{color:var(--tx3);font-size:11px;transition:transform .2s;flex-shrink:0}.scch.o{transform:rotate(180deg)}
+.scb{padding:14px 15px;border-top:1.5px solid var(--brd);display:none}.scb.o{display:block}
+.sa .sch{cursor:default}.sa .scch{display:none}.sa .scb{display:block}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+.fl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fh{font-size:11px;color:var(--tx3);font-weight:400;text-transform:none;letter-spacing:0}
+input[type=text],input[type=date],select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--tx);background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 13px;outline:none;transition:border .15s,background .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--zm);background:#fff}
+textarea{resize:vertical;min-height:60px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:380px){.g2{grid-template-columns:1fr}}
+.ssep{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin:16px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--brd)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1.5px solid var(--brd);border-radius:99px;padding:8px 14px;font-size:13px;cursor:pointer;color:var(--tx2);background:var(--surf2);transition:all .15s;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:40px;display:inline-flex;align-items:center}
+.chip:active{transform:scale(.97)}.chip.on{background:var(--zm);border-color:var(--zm);color:#fff;font-weight:600}
+.checks{display:flex;flex-direction:column;gap:7px}
+.crow{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1.5px solid var(--brd);border-radius:var(--r);cursor:pointer;transition:all .15s;background:var(--surf2);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.crow:active{transform:scale(.99)}.crow.on{background:var(--zl);border-color:#D4A882}
+.cbox{width:22px;height:22px;border:1.5px solid var(--brd2);border-radius:6px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .15s}
+.crow.on .cbox{background:var(--zm);border-color:var(--zm)}
+.cmk{display:none;color:#fff;font-size:12px;font-weight:800}.crow.on .cmk{display:block}
+.ctx2{font-size:13px;color:var(--tx);flex:1;line-height:1.4}.csb{font-size:11px;color:var(--tx3);margin-top:2px}
+.evaw{display:flex;gap:5px;flex-wrap:wrap}
+.evab{width:42px;height:48px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:14px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.evab:active{transform:scale(.93)}.evab.on{color:#fff;border-color:transparent}
+.e0.on,.e1.on,.e2.on,.e3.on{background:#177A5A}.e4.on,.e5.on,.e6.on{background:#B56E10}
+.e7.on,.e8.on{background:#C04A15}.e9.on,.e10.on{background:#9C2B2B}
+.mrc-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.mrc-label{font-size:12px;color:var(--tx2);min-width:140px;flex-shrink:0}
+.mrc-btns{display:flex;gap:4px;flex-wrap:wrap}
+.mrc-btn{width:38px;height:36px;border-radius:7px;border:1.5px solid var(--brd);background:var(--surf2);font-size:12px;font-weight:700;cursor:pointer;color:var(--tx2);transition:all .15s;font-family:inherit;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.mrc-btn:active{transform:scale(.93)}.mrc-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.al{padding:10px 13px;border-radius:var(--r);font-size:12px;line-height:1.5;margin-bottom:10px}
+.alr{background:var(--redl);border:1.5px solid #ECAAAA;color:var(--red)}
+.alb{background:var(--blul);border:1.5px solid #B0C8F0;color:var(--blu)}
+.ti{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);margin-bottom:10px;overflow:hidden}
+.th{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;gap:10px;cursor:pointer;touch-action:manipulation;transition:background .15s;user-select:none;-webkit-user-select:none}
+.th:active{background:var(--surf2)}.tl{flex:1;min-width:0}
+.tn{font-size:13px;font-weight:700;color:var(--tx)}.tsb{font-size:11px;color:var(--tx3);margin-top:2px}
+.tbs{display:flex;gap:7px;flex-shrink:0;flex-wrap:wrap;align-items:center}
+.tbody{display:none;padding:12px 14px;border-top:1.5px solid var(--brd);background:rgba(139,94,60,.03)}
+.tbody.o{display:block}
+.tstps{list-style:none;padding:0;margin-bottom:8px;counter-reset:step-counter}
+.tstps li{padding:5px 0;border-bottom:1px solid var(--brd);font-size:12px;color:var(--tx2);display:flex;gap:8px;line-height:1.4;counter-increment:step-counter}
+.tstps li:last-child{border-bottom:none;padding-bottom:0}
+.tstps li::before{content:counter(step-counter);background:var(--zm);color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px}
+.tint{font-size:11px;color:var(--tx3);background:var(--surf2);padding:8px 10px;border-radius:7px;line-height:1.5;margin-top:4px}
+.phase{border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.phh{padding:8px 13px;font-size:12px;font-weight:800}.phb{padding:10px 13px;background:var(--surf)}
+.tl2{list-style:none;padding:0}
+.tl2 li{padding:6px 0;border-bottom:1px solid var(--brd);font-size:13px;color:var(--tx2);display:flex;gap:8px;line-height:1.4}
+.tl2 li:last-child{border-bottom:none;padding-bottom:0}
+.tl2 li::before{content:"→";color:var(--zm);font-weight:800;flex-shrink:0}
+.disc{background:rgba(90,56,152,.07);border:1.5px solid rgba(90,56,152,.18);border-radius:var(--r);padding:10px 13px;font-size:11px;color:var(--pur);line-height:1.5;margin-bottom:12px}
+.ebp-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--brd2);background:#fff;color:var(--tx3);font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.ebp-btn:active{background:var(--blul);border-color:var(--blu);color:var(--blu)}
+.ebp-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.ebp-overlay.o{opacity:1;pointer-events:auto}
+.ebp-sheet{background:#fff;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-width:540px;width:100%;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.ebp-overlay.o .ebp-sheet{transform:translateY(0)}
+.ebp-drag{width:36px;height:4px;background:var(--brd2);border-radius:99px;margin:0 auto 16px}
+.ebp-title{font-size:15px;font-weight:800;color:var(--nvy);margin-bottom:4px}
+.ebp-ref{font-size:11px;color:var(--tx3);margin-bottom:14px;font-style:italic}
+.ebp-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.ebp-stat{background:var(--surf2);border-radius:10px;padding:10px 12px;border:1.5px solid var(--brd)}
+.ebp-stat-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.ebp-stat-val{font-size:18px;font-weight:800;color:var(--nvy)}
+.ebp-stat-sub{font-size:10px;color:var(--tx3);margin-top:2px}
+.ebp-note{font-size:12px;color:var(--tx2);background:var(--blul);border:1.5px solid #B0C8F0;border-radius:8px;padding:10px 12px;line-height:1.5;margin-bottom:14px;display:none}
+.ebp-close{width:100%;padding:13px;border-radius:var(--r);border:none;background:var(--nvy);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:flex-end;justify-content:center}
+.mov.o{display:flex}
+.modal{background:var(--surf);border-radius:20px 20px 0 0;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mhnd{width:40px;height:4px;background:var(--brd);border-radius:99px;margin:12px auto 0}
+.mhd{padding:12px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surf);z-index:1;border-bottom:1px solid var(--brd)}
+.mhd h2{font-size:16px;font-weight:800}
+.mcl{width:36px;height:36px;border-radius:50%;border:1px solid var(--brd);background:var(--surf2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tx2);font-family:inherit;touch-action:manipulation}
+.mbd{padding:16px 18px}
+.qdi{margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--brd)}.qdi:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.qdq{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:7px}
+.qdos{display:flex;gap:5px;flex-wrap:wrap}
+.qdo{flex:1;min-width:52px;padding:8px 4px;border:1.5px solid var(--brd);border-radius:8px;background:var(--surf2);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;touch-action:manipulation;text-align:center;color:var(--tx2);transition:all .15s;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+.qdo.on{background:var(--zl);border-color:#D4A882;color:var(--zd)}
+.qdsb{background:var(--zl);border:1.5px solid #D4A882;border-radius:var(--r);padding:12px 15px;margin-top:13px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.qdnum{font-size:28px;font-weight:800;color:var(--zm)}
+.pov{position:fixed;inset:0;z-index:400;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
+.pov.o{display:flex}
+.phdr{background:var(--nvy);padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px}
+.pclose{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;touch-action:manipulation;flex-shrink:0}
+.phinfo{flex:1}.phtitle{font-size:14px;font-weight:700;color:#fff}.phsub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.ppbtn{background:var(--zm);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;touch-action:manipulation;flex-shrink:0;min-height:44px}
+.pcont{padding:14px;flex:1;max-width:680px;margin:0 auto;width:100%}
+.eplbl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:5px;margin:10px 0 8px}
+.epa{background:var(--redl);color:var(--red)}.epm{background:var(--ambl);color:var(--amb)}.epr{background:var(--zl);color:var(--zd)}.epf{background:var(--blul);color:var(--blu)}
+.exc{border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:9px;overflow:hidden;background:var(--surf)}
+.exh{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 13px;background:var(--surf2);cursor:pointer;touch-action:manipulation;min-height:52px}
+.exh:active{background:#E5E0D8}.exn{font-size:13px;font-weight:600;color:var(--tx);flex:1;line-height:1.3}
+.exm{font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.mn{background:var(--zl);color:var(--zd)}.me{background:var(--ambl);color:var(--amb)}
+.exch{font-size:11px;color:var(--tx3);transition:transform .2s;flex-shrink:0;margin-top:2px}.exch.o{transform:rotate(180deg)}
+.exbd{display:none;padding:12px 13px;border-top:1.5px solid var(--brd)}.exbd.o{display:block}
+.expo{display:flex;align-items:center;gap:8px;padding:6px 9px;background:var(--surf2);border-radius:7px;margin-bottom:8px}
+.expol{font-size:11px;color:var(--tx3);font-weight:600}
+.exdc{font-size:12px;color:var(--tx2);line-height:1.5;margin-bottom:7px}
+.expr{font-size:12px;color:var(--tx);background:var(--surf2);border:1px solid var(--brd);padding:7px 10px;border-radius:7px;margin-bottom:7px;line-height:1.4}
+.expg{font-size:11px;color:var(--pur);background:var(--purl);padding:5px 8px;border-radius:6px;margin-top:6px;line-height:1.4}
+.explore-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:13px;border-radius:var(--r);border:1.5px dashed var(--brd2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;touch-action:manipulation;background:transparent;color:var(--tx3);margin-top:4px;min-height:48px}
+.explore-btn:active{background:var(--surf2)}.explore-btn.open{color:var(--zm);border-color:var(--zm);background:var(--zl)}
+.explore-section{display:none;margin-top:10px;padding:12px;background:rgba(139,94,60,.05);border:1.5px solid rgba(139,94,60,.2);border-radius:var(--r)}
+.explore-section.o{display:block}
+.crtabs{display:flex;gap:6px;margin-bottom:14px}
+.crtab{flex:1;padding:11px;border-radius:var(--r);border:1.5px solid var(--brd);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;touch-action:manipulation;text-align:center;min-height:48px}
+.crtab.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.crv{display:none}.crv.on{display:block}
+.crsh{background:var(--nvy);border-radius:var(--rl);padding:16px;margin-bottom:12px;color:#fff}
+.crsn{font-size:15px;font-weight:800}.crss{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.crsp{margin-top:10px;background:rgba(255,255,255,.08);border-radius:8px;padding:9px 12px;display:flex;flex-wrap:wrap;gap:10px}
+.crspi{font-size:12px;color:rgba(255,255,255,.75)}
+.crbl{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:12px 14px;margin-bottom:10px}
+.crbt{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--brd)}
+.crrow{display:flex;justify-content:space-between;padding:3px 0;flex-wrap:wrap;gap:4px}
+.crk{font-size:12px;color:var(--tx2)}.crval{font-size:12px;color:var(--tx);font-weight:500;text-align:right;max-width:60%}
+.crdi{padding:8px 11px;border-radius:8px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:700}
+.cdh{background:var(--redl);color:var(--red)}.cdm{background:var(--ambl);color:var(--amb)}.cdl{background:var(--zl);color:var(--zd)}
+.crsig{display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--brd);flex-wrap:wrap;gap:8px}
+.crsigl{border-bottom:1px solid var(--brd2);padding-bottom:2px;font-size:11px;color:var(--tx3);min-width:180px}
+.toast{position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 12px);left:50%;transform:translateX(-50%);background:var(--nvy);color:#fff;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:600;z-index:600;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.btf{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:var(--rl);border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;margin-top:10px}
+.btf:active{opacity:.85}.btz{background:var(--zm);color:#fff}.btn2{background:var(--nvy);color:#fff}.btg{background:var(--surf2);color:var(--tx2);border:1.5px solid var(--brd)!important}
+@media print{body{background:#fff;padding:0}.hdr,.bnav,.no-print,.btf,.crtabs,.explore-btn,.toast{display:none!important}.step{display:none!important}.crv{display:none!important}.crv.print-active{display:block!important}.step.print-cr{display:block!important}.sc,.crbl{border:1px solid #ddd;break-inside:avoid}.scb{display:block!important}.crsh{background:#1B2A38!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.psfs-item{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.psfs-btns{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
+.psfs-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--brd);font-size:11px;font-weight:700;cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;font-family:inherit;touch-action:manipulation}
+.psfs-btn:active{transform:scale(.9)}.psfs-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.hbtn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.12);border:none;color:#fff;cursor:pointer;touch-action:manipulation;flex-shrink:0;text-decoration:none;font-size:16px;}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hr1">
+    <div><div class="hn" id="hdr-name">Bilan Coude</div><div class="hs">Yasser Ladraa · Kinésithérapeute</div></div>
+    <a class="hbtn" href="index.html" title="Accueil">&#8962;</a>
+    <div class="hbadge" id="hdr-step">Étape 1/6</div>
+  </div>
+  <div class="hprog">
+    <div class="hpbar"><div class="hpfill" id="prog-fill" style="width:16.6%"></div></div>
+    <div class="hplbls"><span>Identité</span><span>Anamnèse</span><span>Examen</span><span>Tests</span><span>Scores</span><span>CR</span></div>
+  </div>
+</header>
+
+<div class="app">
+
+<!-- STEP 1 -->
+<div class="step active" id="s1">
+  <div class="sc sa">
+    <div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3.5" stroke="#8B5E3C" stroke-width="1.5"/><path d="M3 15c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Identité du patient</div></div></div></div>
+    <div class="scb o">
+      <div class="g2"><div class="field"><label class="fl">Nom</label><input type="text" id="nom" placeholder="Dupont" autocomplete="off"></div><div class="field"><label class="fl">Prénom</label><input type="text" id="prenom" placeholder="Marie" autocomplete="off"></div></div>
+      <div class="g2"><div class="field"><label class="fl">Date de naissance</label><input type="date" id="ddn"></div><div class="field"><label class="fl">Sexe</label><select id="sexe"><option value="">—</option><option>Homme</option><option>Femme</option></select></div></div>
+      <div class="g2"><div class="field"><label class="fl">Côté atteint</label><select id="cote"><option value="">—</option><option>Coude droit</option><option>Coude gauche</option><option>Bilatéral</option></select></div><div class="field"><label class="fl">Profession</label><input type="text" id="profession" placeholder="Ex: Menuisier" autocomplete="off"></div></div>
+      <div class="g2"><div class="field"><label class="fl">Date du bilan</label><input type="date" id="datebilan"></div><div class="field"><label class="fl">Médecin prescripteur</label><input type="text" id="medecin" placeholder="Dr Martin" autocomplete="off"></div></div>
+    </div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 4v5l3 3" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="6.5" stroke="#B56E10" stroke-width="1.5"/></svg></div><div><div class="sct">Contexte clinique</div><div class="scs">Pathologie suspectée</div></div></div><span class="scch">▼</span></div>
+    <div class="scb"><div class="field"><div class="fl">Pathologie suspectée</div><div class="chips" id="ctx">
+      <div class="chip" onclick="setCtx(this,'epic_lat')" data-ctx="epic_lat">Épicondylalgie lat.</div>
+      <div class="chip" onclick="setCtx(this,'epic_med')" data-ctx="epic_med">Épicondylalgie méd.</div>
+      <div class="chip" onclick="setCtx(this,'nerf_ulnaire')" data-ctx="nerf_ulnaire">Nerf ulnaire</div>
+      <div class="chip" onclick="setCtx(this,'nerf_radial')" data-ctx="nerf_radial">Nerf radial / Tunnel</div>
+      <div class="chip" onclick="setCtx(this,'instabilite')" data-ctx="instabilite">Instabilité ligam.</div>
+      <div class="chip" onclick="setCtx(this,'biceps_distal')" data-ctx="biceps_distal">Biceps distal</div>
+      <div class="chip" onclick="setCtx(this,'non_precise')" data-ctx="non_precise">Non précisé</div>
+    </div></div></div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 9h6M9 6v6" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="6.5" stroke="#8B5E3C" stroke-width="1.5"/></svg></div><div><div class="sct">Douleur (EVA)</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="field"><div class="fl">EVA repos</div><div class="evaw" id="eva-repos">
+        <button class="evab e0" onclick="setEVA('repos',0,this)" type="button">0</button><button class="evab e1" onclick="setEVA('repos',1,this)" type="button">1</button><button class="evab e2" onclick="setEVA('repos',2,this)" type="button">2</button><button class="evab e3" onclick="setEVA('repos',3,this)" type="button">3</button><button class="evab e4" onclick="setEVA('repos',4,this)" type="button">4</button><button class="evab e5" onclick="setEVA('repos',5,this)" type="button">5</button><button class="evab e6" onclick="setEVA('repos',6,this)" type="button">6</button><button class="evab e7" onclick="setEVA('repos',7,this)" type="button">7</button><button class="evab e8" onclick="setEVA('repos',8,this)" type="button">8</button><button class="evab e9" onclick="setEVA('repos',9,this)" type="button">9</button><button class="evab e10" onclick="setEVA('repos',10,this)" type="button">10</button>
+      </div></div>
+      <div class="field" style="margin-top:10px"><div class="fl">EVA effort / prise</div><div class="evaw" id="eva-effort">
+        <button class="evab e0" onclick="setEVA('effort',0,this)" type="button">0</button><button class="evab e1" onclick="setEVA('effort',1,this)" type="button">1</button><button class="evab e2" onclick="setEVA('effort',2,this)" type="button">2</button><button class="evab e3" onclick="setEVA('effort',3,this)" type="button">3</button><button class="evab e4" onclick="setEVA('effort',4,this)" type="button">4</button><button class="evab e5" onclick="setEVA('effort',5,this)" type="button">5</button><button class="evab e6" onclick="setEVA('effort',6,this)" type="button">6</button><button class="evab e7" onclick="setEVA('effort',7,this)" type="button">7</button><button class="evab e8" onclick="setEVA('effort',8,this)" type="button">8</button><button class="evab e9" onclick="setEVA('effort',9,this)" type="button">9</button><button class="evab e10" onclick="setEVA('effort',10,this)" type="button">10</button>
+      </div></div>
+    </div>
+  </div>
+  <button class="btf btz" onclick="navNext()" type="button">Suivant — Anamnèse →</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="step" id="s2">
+  <div class="al alr" style="margin-bottom:12px"><strong>Drapeaux rouges</strong> — Fracture · Compression médullaire · Tumeur · Infection · Thrombose axillaire</div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M9 3l6 6-6 6" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Mode d'installation</div></div></div><span class="scch">▼</span></div>
+    <div class="scb"><div class="chips" id="installation">
+      <div class="chip" onclick="TC(this,'installation')">Traumatisme direct</div><div class="chip" onclick="TC(this,'installation')">Entorse / chute MS</div><div class="chip" onclick="TC(this,'installation')">Post-chirurgical</div><div class="chip" onclick="TC(this,'installation')">Insidieux / progressif</div><div class="chip" onclick="TC(this,'installation')">Surmenage / répétitif</div><div class="chip" onclick="TC(this,'installation')">Reprise sportive</div><div class="chip" onclick="TC(this,'installation')">Récidive</div>
+    </div></div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="#8B5E3C" stroke-width="1.5"/><path d="M9 6v3l2 2" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Ancienneté et rythme</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="field"><div class="fl">Ancienneté</div><div class="chips" id="anciennete"><div class="chip" onclick="TC(this,'anciennete')">&lt;6 sem.</div><div class="chip" onclick="TC(this,'anciennete')">6 sem–3 mois</div><div class="chip" onclick="TC(this,'anciennete')">3–12 mois</div><div class="chip" onclick="TC(this,'anciennete')">&gt;1 an</div></div></div>
+      <div class="field" style="margin-top:10px"><div class="fl">Rythme</div><div class="chips" id="rythme"><div class="chip" onclick="TC(this,'rythme')">Mécanique</div><div class="chip" onclick="TC(this,'rythme')">Inflammatoire</div><div class="chip" onclick="TC(this,'rythme')">Mixte</div><div class="chip" onclick="TC(this,'rythme')">Nocturne</div><div class="chip" onclick="TC(this,'rythme')">Continu</div></div></div>
+    </div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M5 9H3M15 9h-2" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Localisation et irradiation</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="field"><div class="fl">Localisation</div><div class="chips" id="localisation"><div class="chip" onclick="TC(this,'localisation')">Épicondyle latéral</div><div class="chip" onclick="TC(this,'localisation')">Épicondyle médial</div><div class="chip" onclick="TC(this,'localisation')">Fosse olécranienne</div><div class="chip" onclick="TC(this,'localisation')">Gouttière cubitale</div><div class="chip" onclick="TC(this,'localisation')">Face antérieure</div><div class="chip" onclick="TC(this,'localisation')">Diffuse</div></div></div>
+      <div class="field" style="margin-top:10px"><div class="fl">Irradiation</div><div class="chips" id="irradiation"><div class="chip" onclick="TC(this,'irradiation')">Avant-bras latéral</div><div class="chip" onclick="TC(this,'irradiation')">Avant-bras médial</div><div class="chip" onclick="TC(this,'irradiation')">4e–5e doigt (ulnaire)</div><div class="chip" onclick="TC(this,'irradiation')">Pouce–index–majeur</div><div class="chip" onclick="TC(this,'irradiation')">Épaule / bras</div><div class="chip" onclick="TC(this,'irradiation')">Cervicale</div><div class="chip" onclick="TC(this,'irradiation')">Aucune</div></div></div>
+    </div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 14s0-4 4-4 4 4 4 4" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round"/><path d="M9 10V4" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Facteurs déclenchants</div></div></div><span class="scch">▼</span></div>
+    <div class="scb"><div class="chips" id="declenchant"><div class="chip" onclick="TC(this,'declenchant')">Serrage / prise</div><div class="chip" onclick="TC(this,'declenchant')">Ext. poignet résistée</div><div class="chip" onclick="TC(this,'declenchant')">Flex. poignet résistée</div><div class="chip" onclick="TC(this,'declenchant')">Supination / vissage</div><div class="chip" onclick="TC(this,'declenchant')">Pronation / dévissage</div><div class="chip" onclick="TC(this,'declenchant')">Flexion coude prolongée</div><div class="chip" onclick="TC(this,'declenchant')">Soulèvement charge</div><div class="chip" onclick="TC(this,'declenchant')">Frappe (tennis / golf)</div></div></div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 15l4-8 3 5 2-3 3 6" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Antécédents</div></div></div><span class="scch">▼</span></div>
+    <div class="scb"><div class="chips" id="atcd"><div class="chip" onclick="TC(this,'atcd')">Chirurgie coude</div><div class="chip" onclick="TC(this,'atcd')">Fracture / luxation</div><div class="chip" onclick="TC(this,'atcd')">Épicondylalgie récidivante</div><div class="chip" onclick="TC(this,'atcd')">Pathologie cervicale C5–C7</div><div class="chip" onclick="TC(this,'atcd')">Canal carpien ipsilatéral</div><div class="chip" onclick="TC(this,'atcd')">Diabète</div><div class="chip" onclick="TC(this,'atcd')">Corticothérapie prolongée</div><div class="chip" onclick="TC(this,'atcd')">Polyarthrite rhumatoïde</div></div></div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ig"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h2l2-5 3 10 2-7 2 2h3" stroke="#177A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Yellow Flags</div></div></div><span class="scch">▼</span></div>
+    <div class="scb"><div class="checks" id="yf">
+      <div class="crow" onclick="TCK(this,'yf','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Peur du mouvement / kinésiophobie</div></div>
+      <div class="crow" onclick="TCK(this,'yf','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Catastrophisme — anticipation douloureuse excessive</div></div>
+      <div class="crow" onclick="TCK(this,'yf','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Contexte professionnel conflictuel / arrêt prolongé</div></div>
+      <div class="crow" onclick="TCK(this,'yf','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Anxiété / dépression associée</div></div>
+    </div></div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#1550A0" stroke-width="1.5"/><path d="M6 9h6M9 6v6" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Observations libres</div></div></div><span class="scch">▼</span></div>
+    <div class="scb"><textarea id="observations" placeholder="Contexte, plainte principale, objectifs..." rows="3"></textarea></div>
+  </div>
+  <button class="btf btz" onclick="navNext()" type="button">Suivant — Examen physique →</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="step" id="s3">
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M4 6h6M4 12h8" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Amplitudes articulaires</div><div class="scs">Valeurs normatives indicatives</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ssep">Côté atteint</div>
+      <div class="g2"><div class="field"><label class="fl">Flexion <span class="fh">norme 145°</span></label><input type="text" id="flex_att" placeholder="ex: 120°" autocomplete="off"></div><div class="field"><label class="fl">Extension <span class="fh">norme 0°</span></label><input type="text" id="ext_att" placeholder="ex: −10°" autocomplete="off"></div></div>
+      <div class="g2"><div class="field"><label class="fl">Supination <span class="fh">norme 85°</span></label><input type="text" id="sup_att" placeholder="ex: 60°" autocomplete="off"></div><div class="field"><label class="fl">Pronation <span class="fh">norme 75°</span></label><input type="text" id="pro_att" placeholder="ex: 50°" autocomplete="off"></div></div>
+      <div class="ssep">Côté sain</div>
+      <div class="g2"><div class="field"><label class="fl">Flexion sain</label><input type="text" id="flex_sain" placeholder="ex: 145°" autocomplete="off"></div><div class="field"><label class="fl">Supination saine</label><input type="text" id="sup_sain" placeholder="ex: 85°" autocomplete="off"></div></div>
+    </div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 4v10M5 8l4-4 4 4" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Bilan musculaire (MRC)</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="mrc-row"><span class="mrc-label">Biceps (flex. + sup.)</span><div class="mrc-btns" id="mrc-biceps"><button class="mrc-btn" onclick="setMRC('biceps',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('biceps',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('biceps',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('biceps',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('biceps',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('biceps',5,this)" type="button">5</button></div></div>
+      <div class="mrc-row"><span class="mrc-label">Triceps (extension)</span><div class="mrc-btns" id="mrc-triceps"><button class="mrc-btn" onclick="setMRC('triceps',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('triceps',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('triceps',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('triceps',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('triceps',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('triceps',5,this)" type="button">5</button></div></div>
+      <div class="mrc-row"><span class="mrc-label">Ext. poignet (ECRB)</span><div class="mrc-btns" id="mrc-ext_poignet"><button class="mrc-btn" onclick="setMRC('ext_poignet',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('ext_poignet',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('ext_poignet',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('ext_poignet',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('ext_poignet',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('ext_poignet',5,this)" type="button">5</button></div></div>
+      <div class="mrc-row"><span class="mrc-label">Flex. poignet (FCR)</span><div class="mrc-btns" id="mrc-flex_poignet"><button class="mrc-btn" onclick="setMRC('flex_poignet',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('flex_poignet',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('flex_poignet',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('flex_poignet',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('flex_poignet',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('flex_poignet',5,this)" type="button">5</button></div></div>
+      <div class="mrc-row"><span class="mrc-label">Grip global (prise)</span><div class="mrc-btns" id="mrc-grip"><button class="mrc-btn" onclick="setMRC('grip',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('grip',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('grip',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('grip',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('grip',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('grip',5,this)" type="button">5</button></div></div>
+    </div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="#1550A0" stroke-width="1.5"/><path d="M9 6v4M9 13v.5" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Palpation et signes locaux</div></div></div><span class="scch">▼</span></div>
+    <div class="scb"><div class="checks" id="palpation">
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur épicondyle latéral</div><div class="csb">→ Signe cardinal épicondylalgie lat.</div></div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur épicondyle médial</div><div class="csb">→ Signe cardinal épicondylalgie méd.</div></div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur gouttière épitro-olécranienne</div><div class="csb">→ Compression nerf ulnaire</div></div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur arcade de Frohse (3 cm sous épicondyle lat.)</div><div class="csb">→ Syndrome du tunnel radial</div></div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur pli du coude / tendon biceps</div><div class="csb">→ Tendinopathie bicipitale distale</div></div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Crépitation / épanchement intra-articulaire</div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Tuméfaction / oedème localisé</div></div>
+    </div></div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ig"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M9 5l4 4-4 4" stroke="#177A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Bilan sensitif</div><div class="scs">Signes neurologiques</div></div></div><span class="scch">▼</span></div>
+    <div class="scb"><div class="checks" id="sensitif">
+      <div class="crow" onclick="TCK(this,'sensitif','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Paresthésies 4e–5e doigt</div><div class="csb">→ Territoire ulnaire (C8–T1)</div></div></div>
+      <div class="crow" onclick="TCK(this,'sensitif','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Paresthésies pouce–index–majeur</div><div class="csb">→ Territoire radial / médian</div></div></div>
+      <div class="crow" onclick="TCK(this,'sensitif','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Hypoesthésie bord interne avant-bras (C8)</div></div></div>
+      <div class="crow" onclick="TCK(this,'sensitif','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Déficit moteur intrinsèques main (interosseux)</div></div>
+      <div class="crow" onclick="TCK(this,'sensitif','on')"><div class="cbox"><span class="cmk">✓</span></div><div class="ctx2">Signe de Froment positif (pince pollici-digitale)</div></div>
+    </div></div>
+  </div>
+  <button class="btf btz" onclick="navNext()" type="button">Suivant — Tests cliniques →</button>
+</div>
+
+<!-- STEP 4 — TESTS EBP -->
+<div class="step" id="s4">
+  <div class="disc">Tests EBP — Interpréter en cluster, jamais isolément. Résultats sauvegardés automatiquement.</div>
+
+  <div class="ssep">Épicondylalgie latérale</div>
+  <div class="ti"><div class="th" onclick="tg('tb-cozen')"><div class="tl"><div class="tn">Test de Cozen</div><div class="tsb">Ext. poignet résistée · Sn 84% Sp 91%</div></div><button class="ebp-btn" onclick="showEBP('cozen',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'cozen','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'cozen','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-cozen"><ol class="tstps"><li>Coude à 90°, avant-bras en pronation, poing serré</li><li>Patient étend activement le poignet</li><li>Résistance à l'extension du poignet par l'examinateur</li><li>Positif : reproduction de la douleur à l'épicondyle latéral</li></ol><div class="tint">Test de référence pour l'épicondylalgie latérale. LR+ 9.3 — un résultat positif multiplie par 9 la probabilité pré-test. Comparer au côté sain. Utiliser en cluster avec Mill et Maudsley.</div></div></div>
+
+  <div class="ti"><div class="th" onclick="tg('tb-mill')"><div class="tl"><div class="tn">Test de Mill</div><div class="tsb">Étirement passif ECRB · Sn 53% Sp 83%</div></div><button class="ebp-btn" onclick="showEBP('mill',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'mill','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'mill','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-mill"><ol class="tstps"><li>Coude en extension complète</li><li>Avant-bras en pronation</li><li>Flexion passive du poignet + déviation ulnaire par l'examinateur</li><li>Positif : douleur reproduite à l'épicondyle latéral</li></ol><div class="tint">Étire spécifiquement l'ECRB. Sensibilité plus faible que Cozen mais spécificité correcte. Confirme la composante musculo-tendineuse par mise en tension.</div></div></div>
+
+  <div class="ti"><div class="th" onclick="tg('tb-maudsley')"><div class="tl"><div class="tn">Test de Maudsley (majeur résisté)</div><div class="tsb">Ext. majeur résistée · Sn 61% Sp 84%</div></div><button class="ebp-btn" onclick="showEBP('maudsley',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'maudsley','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'maudsley','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-maudsley"><ol class="tstps"><li>Coude en extension, avant-bras en pronation</li><li>Résistance à l'extension du 3e doigt (majeur) par l'examinateur</li><li>Positif : douleur reproduite à l'épicondyle latéral</li></ol><div class="tint">Double intérêt : (1) épicondylalgie latérale si douleur à l'épicondyle, (2) tunnel radial si douleur distale à l'arcade de Frohse. Clé du diagnostic différentiel.</div></div></div>
+
+  <div class="ssep">Épicondylalgie médiale</div>
+  <div class="ti"><div class="th" onclick="tg('tb-golfer')"><div class="tl"><div class="tn">Test de l'épicondyle médial</div><div class="tsb">Flex. poignet résistée · Sn 89% Sp 98%</div></div><button class="ebp-btn" onclick="showEBP('golfer',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'golfer','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'golfer','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-golfer"><ol class="tstps"><li>Coude en extension, avant-bras en supination</li><li>Résistance à la flexion du poignet par l'examinateur</li><li>Positif : douleur reproduite à l'épicondyle médial</li></ol><div class="tint">Excellentes propriétés diagnostiques (Descatha 2008). LR+ 44.5 — un résultat positif confirme fortement l'épicondylalgie médiale. Associer palpation directe de l'épitrochlée.</div></div></div>
+
+  <div class="ssep">Compression nerf ulnaire (canal cubital)</div>
+  <div class="ti"><div class="th" onclick="tg('tb-tinel-coude')"><div class="tl"><div class="tn">Tinel au coude (gouttière cubitale)</div><div class="tsb">Nerf ulnaire · Sn 70% Sp 98%</div></div><button class="ebp-btn" onclick="showEBP('tinel_coude',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'tinel_coude','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'tinel_coude','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-tinel-coude"><ol class="tstps"><li>Percussion légère sur la gouttière épitro-olécranienne</li><li>Positif : paresthésies irradiant vers les 4e–5e doigts</li></ol><div class="tint">LR+ 35 — très forte valeur prédictive positive. Un Tinel positif confirme quasi certaine la neuropathie ulnaire. Ne pas confondre avec la simple sensibilité à la palpation.</div></div></div>
+
+  <div class="ti"><div class="th" onclick="tg('tb-elbow-flex')"><div class="tl"><div class="tn">Elbow Flexion Test</div><div class="tsb">Nerf ulnaire · Sn 75% Sp 99%</div></div><button class="ebp-btn" onclick="showEBP('elbow_flex',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'elbow_flex','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'elbow_flex','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-elbow-flex"><ol class="tstps"><li>Flexion maximale du coude (&gt;90°) maintenue</li><li>Poignet en extension neutre</li><li>Maintenir 3 minutes</li><li>Positif : paresthésies 4e–5e doigts ou bord ulnaire main</li></ol><div class="tint">LR+ 75 — test le plus spécifique pour la compression ulnaire au canal cubital. La flexion maximale augmente la pression intra-canalaire de 7 fois. Cluster Tinel + Elbow Flex : VPP &gt; 95% (Novak 1994).</div></div></div>
+
+  <div class="ti"><div class="th" onclick="tg('tb-scratch')"><div class="tl"><div class="tn">Scratch Collapse Test (ulnaire)</div><div class="tsb">Nerf ulnaire · Sn 69% Sp 99%</div></div><button class="ebp-btn" onclick="showEBP('scratch_ulnaire',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'scratch_ulnaire','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'scratch_ulnaire','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-scratch"><ol class="tstps"><li>Patient coudes fléchis à 90°, résistance à la rotation externe des épaules</li><li>Gratter la peau sur le canal cubital</li><li>Positif : effondrement transitoire de la résistance ipsilatérale</li></ol><div class="tint">Sp 99% — très haute spécificité. Basé sur l'inhibition réflexe provoquée par la stimulation du site de compression (Cheng 2008).</div></div></div>
+
+  <div class="ssep">Tunnel radial / Nerf interosseux postérieur</div>
+  <div class="ti"><div class="th" onclick="tg('tb-sup-resiste')"><div class="tl"><div class="tn">Supination résistée (tunnel radial)</div><div class="tsb">NIO postérieur · Sn ~50% Sp ~80%</div></div><button class="ebp-btn" onclick="showEBP('sup_resiste',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'sup_resiste','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'sup_resiste','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-sup-resiste"><ol class="tstps"><li>Coude à 90°, avant-bras en pronation</li><li>Résistance à la supination active</li><li>Positif : douleur 3 cm distale à l'épicondyle latéral (arcade de Frohse)</li></ol><div class="tint">Données EBP limitées — pas de méta-analyse robuste (Roles et Maudsley 1972). Critère différentiel : douleur distale à l'épicondyle, pas à l'épicondyle lui-même. Associer Maudsley et palpation de l'arcade.</div></div></div>
+
+  <div class="ssep">Instabilité ligamentaire</div>
+  <div class="ti"><div class="th" onclick="tg('tb-valgus')"><div class="tl"><div class="tn">Valgus Stress Test à 30° (LCU)</div><div class="tsb">Lig. coll. ulnaire · Sn 75% Sp 93%</div></div><button class="ebp-btn" onclick="showEBP('valgus_stress',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'valgus_stress','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'valgus_stress','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-valgus"><ol class="tstps"><li>Coude fléchi à 30° (déverrouille l'olécrâne)</li><li>Avant-bras en légère supination</li><li>Stress valgus progressif appliqué par l'examinateur</li><li>Positif : douleur médiale ou laxité versus côté sain</li></ol><div class="tint">LR+ 10.7 — forte valeur si positif (Rijke 1994). Impérativement à 30°, pas à 0° où l'olécrâne compense. Gradation I/II/III. Fréquent chez lanceurs et tennismen.</div></div></div>
+
+  <div class="ti"><div class="th" onclick="tg('tb-mvst')"><div class="tl"><div class="tn">Moving Valgus Stress Test</div><div class="tsb">LCU · Sn 100% Sp 75%</div></div><button class="ebp-btn" onclick="showEBP('mvst',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'mvst','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'mvst','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-mvst"><ol class="tstps"><li>Épaule en abduction 90°, stress valgus maintenu sur le coude</li><li>Flexion-extension rapide du coude entre 70° et 120°</li><li>Positif : douleur maximale entre 70°–120° (zone critique)</li></ol><div class="tint">Sn 100% dans l'étude d'O'Driscoll (2005). LR− = 0 : un résultat négatif écarte totalement la lésion du LCU. Utiliser en cluster avec le Valgus Stress statique.</div></div></div>
+
+  <div class="ti"><div class="th" onclick="tg('tb-pivot-lat')"><div class="tl"><div class="tn">Lateral Pivot Shift (PLRI)</div><div class="tsb">LCL complexe · Sn 38% Sp ~100%</div></div><button class="ebp-btn" onclick="showEBP('pivot_lat',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'pivot_lat','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'pivot_lat','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-pivot-lat"><ol class="tstps"><li>Décubitus dorsal, bras au-dessus de la tête</li><li>Avant-bras en supination, stress varus + valgus appliqués</li><li>Extension progressive du coude depuis 90°</li><li>Positif : subluxation radio-humérale vers 40° puis réduction brusque</li></ol><div class="tint">Sp ~100% — un résultat positif confirme l'instabilité postéro-latérale rotatoire (PLRI). Sensibilité faible en cabinet. Un résultat négatif n'élimine pas le PLRI (O'Driscoll 1991).</div></div></div>
+
+  <div class="ssep">Tendinopathie / Rupture biceps distal</div>
+  <div class="ti"><div class="th" onclick="tg('tb-hook')"><div class="tl"><div class="tn">Hook Test (O'Driscoll)</div><div class="tsb">Biceps distal · Sn 100% Sp 100%</div></div><button class="ebp-btn" onclick="showEBP('hook',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'hook','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'hook','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-hook"><ol class="tstps"><li>Coude fléchi à 90°, avant-bras en supination active</li><li>Examinateur crochète latéralement le tendon du biceps avec l'index</li><li>Normal : tendon palpable et crochetable</li><li>Positif (rupture) : absence de structure crochetable</li></ol><div class="tint">Sn et Sp 100% dans l'étude originale (O'Driscoll 2007). Test de référence absolu pour la rupture distale du biceps. Un Hook Test positif impose une imagerie en urgence.</div></div></div>
+
+  <div class="ti"><div class="th" onclick="tg('tb-squeeze-bic')"><div class="tl"><div class="tn">Biceps Squeeze Test</div><div class="tsb">Rupture biceps · Sn 96% Sp 99%</div></div><button class="ebp-btn" onclick="showEBP('squeeze_bic',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'squeeze_bic','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'squeeze_bic','neg')" type="button">− Négatif</button></div></div>
+  <div class="tbody" id="tb-squeeze-bic"><ol class="tstps"><li>Coude fléchi entre 60° et 80°, avant-bras en position neutre</li><li>Compression ferme du ventre musculaire du biceps</li><li>Normal : flexion + supination de l'avant-bras</li><li>Positif (rupture) : absence de mouvement</li></ol><div class="tint">Analogue du Thompson Test pour le biceps. LR− 0.04 : un résultat négatif écarte quasi certaine la rupture totale. Compléter toujours avec le Hook Test (Ruland 2005).</div></div></div>
+
+  <button class="explore-btn" id="explore-toggle" onclick="toggleExplore()" type="button">Explorer d'autres pistes cliniques ▼</button>
+  <div class="explore-section" id="explore-section">
+    <div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--zm);margin-bottom:10px">Pistes complémentaires</div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-chair-pushup')"><div class="tl"><div class="tn">Chair Push-Up Sign</div><div class="tsb">PLRI · Spécificité élevée</div></div><button class="ebp-btn" onclick="showEBP('chair_pushup',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'chair_pushup','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'chair_pushup','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-chair-pushup"><ol class="tstps"><li>Patient assis, mains sur accoudoirs, avant-bras en supination</li><li>Se lever de la chaise en poussant sur les accoudoirs</li><li>Positif : appréhension ou impossibilité en supination, disparaît en pronation</li></ol><div class="tint">Reproduit la position de subluxation en PLRI. Données Se/Sp limitées mais haute valeur clinique fonctionnelle (Regan 1991).</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-ruqt')"><div class="tl"><div class="tn">RUQT (Résistance supination / pronation)</div><div class="tsb">Tendinopathie biceps · Sn 84% Sp 91%</div></div><button class="ebp-btn" onclick="showEBP('ruqt',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'ruqt','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'ruqt','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-ruqt"><ol class="tstps"><li>Coude à 90°, avant-bras en pronation</li><li>Résistance à la supination active puis à la pronation active</li><li>Positif : douleur au pli du coude en supination résistée</li></ol><div class="tint">Distingue la tendinopathie bicipitale distale d'une atteinte articulaire ou du tunnel radial. Compléter avec Hook Test et Squeeze Test (Chew 2013).</div></div></div>
+
+    <div class="ti"><div class="th" onclick="tg('tb-spurling-coude')"><div class="tl"><div class="tn">Spurling cervical (différentiel)</div><div class="tsb">Radiculopathie C5–C7 · Sn 50% Sp 86%</div></div><button class="ebp-btn" onclick="showEBP('spurling',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'spurling','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'spurling','neg')" type="button">− Négatif</button></div></div>
+    <div class="tbody" id="tb-spurling-coude"><ol class="tstps"><li>Inclinaison cervicale homolatérale + extension cervicale</li><li>Pression axiale descendante sur le crâne</li><li>Positif : reproduction de la douleur irradiant vers le membre supérieur</li></ol><div class="tint">C6 peut mimer une épicondylalgie latérale, C7 une épicondylalgie médiale. À réaliser si tableau atypique ou résistance au traitement. Bonne spécificité (Wainner 2003).</div></div></div>
+  </div>
+
+  <button class="btf btz" onclick="navNext()" type="button">Suivant — Scores fonctionnels →</button>
+</div>
+
+<!-- STEP 5 — SCORES -->
+<div class="step" id="s5">
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#8B5E3C" stroke-width="1.5"/><path d="M6 9h6M9 6v6" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">PRTEE — Patient-Rated Tennis Elbow Evaluation</div><div class="scs">15 items · Score /100 · ~3 min · Référence épicondylalgie</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alb" style="margin-bottom:12px">Score /100 — 0 = aucun symptôme, 100 = incapacité maximale. MCID : 11 points (Rompe 2007). Seuil retour travail manuel : &lt; 30 pts.</div>
+      <button class="btf btz" onclick="openPRTEE()" type="button">Remplir le PRTEE →</button>
+      <div id="prtee-result" style="display:none;margin-top:10px;padding:12px;background:var(--zl);border-radius:var(--r);border:1.5px solid #D4A882"><div style="font-size:12px;font-weight:700;color:var(--zd)">PRTEE : <span id="prtee-score">—</span>/100 — <span id="prtee-grade">—</span></div></div>
+    </div>
+  </div>
+  <div class="sc"><div class="sch" onclick="toggleSC(this)"><div class="schl"><div class="sci ib"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M4 6h10M4 12h7" stroke="#1550A0" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">QuickDASH — Membre supérieur global</div><div class="scs">11 items · Score /100 · ~2 min</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alb" style="margin-bottom:12px">Score /100 — 0 = pas de limitation, 100 = incapacité totale. MCID : 8 points (Beaton 2005).</div>
+      <button class="btf btz" onclick="openQuickDASH()" type="button">Remplir le QuickDASH →</button>
+      <div id="qdash-result" style="display:none;margin-top:10px;padding:12px;background:var(--zl);border-radius:var(--r);border:1.5px solid #D4A882"><div style="font-size:12px;font-weight:700;color:var(--zd)">QuickDASH : <span id="qdash-score">—</span>/100 — <span id="qdash-grade">—</span></div></div>
+    </div>
+  </div>
+  <button class="btf btz" onclick="navNext()" type="button">Suivant — Analyse &amp; CR →</button>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+<div class="sci" style="background:#8B5E3C1A;border-color:#8B5E3C33">
+<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#8B5E3C" stroke-width="1.5"/><path d="M6 9h6M6 6h3M6 12h4" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+<div><div class="sct">PSFS — Patient-Specific Functional Scale</div>
+<div class="scs">3 activités · Score 0–10 · MCID = 2 pts</div></div></div>
+<span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alb" style="margin-bottom:10px"><span>ℹ</span>
+<div><strong>PSFS</strong> (Stratford 1995 — validé en français). Demandez au patient d’identifier 3 activités limitées par votre coude et de les noter de 0 (impossible) à 10 (niveau normal). MCID = 2 points.</div></div>
+      <div id="psfs-items"></div>
+      <div id="psfs-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 6 — ANALYSE + CR -->
+<div class="step" id="s6">
+  <div class="sc sa"><div class="sch"><div class="schl"><div class="sci iz"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h2l2-5 3 10 2-7 2 2h3" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sct">Analyse clinique</div></div></div></div>
+    <div class="scb o" id="analyse-content"><div style="font-size:12px;color:var(--tx3);text-align:center;padding:20px 0">Compléter les étapes précédentes pour générer l'analyse</div></div>
+  </div>
+  <div class="sc sa"><div class="sch"><div class="schl"><div class="sci ia"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#B56E10" stroke-width="1.5"/><path d="M6 9h6M9 6v6" stroke="#B56E10" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="sct">Orientations thérapeutiques</div></div></div></div>
+    <div class="scb o" id="orient-content"><div style="font-size:12px;color:var(--tx3)">—</div></div>
+  </div>
+
+  <div class="crtabs">
+    <button class="crtab on" onclick="setCR('s')" type="button">CR Synthèse</button>
+    <button class="crtab" onclick="setCR('l')" type="button">CR Complet</button>
+  </div>
+
+  <div class="crv on" id="crv-s">
+    <div class="crsh"><div class="crsn" id="cr-nom-s">—</div><div class="crss" id="cr-info-s">—</div><div class="crsp" id="cr-eva-s"></div></div>
+    <div class="crbl"><div class="crbt">Diagnostic principal</div><div id="cr-diag-s">—</div></div>
+    <div class="crbl"><div class="crbt">Tests positifs</div><div id="cr-tests-s">—</div></div>
+    <div class="crbl"><div class="crbt">Scores</div><div id="cr-scores-s">—</div></div>
+    <div class="crbl"><div class="crbt">Orientations</div><div id="cr-orient-s">—</div></div>
+    <div class="crsig"><div class="crsigl">Signature / Tampon</div><div style="font-size:11px;color:var(--tx3)" id="cr-date-s">—</div></div>
+  </div>
+
+  <div class="crv" id="crv-l">
+    <div class="crsh"><div class="crsn" id="cr-nom-l">—</div><div class="crss" id="cr-info-l">—</div><div class="crsp" id="cr-eva-l"></div></div>
+    <div class="crbl"><div class="crbt">Identité &amp; Contexte</div><div id="cr-identity-l">—</div></div>
+    <div class="crbl"><div class="crbt">Anamnèse</div><div id="cr-anam-l">—</div></div>
+    <div class="crbl"><div class="crbt">Examen physique</div><div id="cr-exam-l">—</div></div>
+    <div class="crbl"><div class="crbt">Tests EBP</div><div id="cr-tests-l">—</div></div>
+    <div class="crbl"><div class="crbt">Scores fonctionnels</div><div id="cr-scores-l">—</div></div>
+    <div class="crbl"><div class="crbt">Diagnostic &amp; Orientations</div><div id="cr-diag-l">—</div></div>
+    <div class="crsig"><div class="crsigl">Signature / Tampon</div><div style="font-size:11px;color:var(--tx3)" id="cr-date-l">—</div></div>
+  </div>
+
+  <button class="btf btn2" onclick="window.print()" type="button" style="margin-top:8px">🖨 Imprimer le CR</button>
+  <button class="btf btn1" onclick="copyCR()" type="button" style="margin-top:8px">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="#fff" stroke-width="1.3"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="#fff" stroke-width="1.3"/></svg>
+    Copier le compte-rendu
+  </button>
+  <button class="btf btz" onclick="openProgram()" type="button">Programme d'exercices →</button>
+  <button class="btf btg" onclick="resetBilan()" type="button" style="margin-top:8px">Nouveau bilan</button>
+</div>
+
+</div><!-- /app -->
+
+<nav class="bnav no-print">
+  <button class="bbt bbk" id="btn-back" onclick="navBack()" type="button" disabled>← Retour</button>
+  <div class="bni" id="bni">Étape 1/6 — Identité</div>
+  <button class="bbt bbn" id="btn-next" onclick="navNext()" type="button">Suivant →</button>
+</nav>
+
+<!-- EBP OVERLAY -->
+<div class="ebp-overlay" id="ebp-overlay" onclick="closeEBP()">
+  <div class="ebp-sheet" onclick="event.stopPropagation()">
+    <div class="ebp-drag"></div>
+    <div class="ebp-title" id="ebp-title">—</div>
+    <div class="ebp-ref" id="ebp-ref">—</div>
+    <div class="ebp-stats" id="ebp-stats"></div>
+    <div class="ebp-note" id="ebp-note" style="display:none"></div>
+    <button class="ebp-close" onclick="closeEBP()" type="button">Fermer</button>
+  </div>
+</div>
+
+<!-- MODAL PRTEE -->
+<div class="mov" id="prtee-modal">
+  <div class="modal"><div class="mhnd"></div><div class="mhd"><h2>PRTEE</h2><button class="mcl" onclick="closePRTEE()" type="button">✕</button></div><div class="mbd" id="prtee-qs"></div></div>
+</div>
+
+<!-- MODAL QuickDASH -->
+<div class="mov" id="qdash-modal">
+  <div class="modal"><div class="mhnd"></div><div class="mhd"><h2>QuickDASH</h2><button class="mcl" onclick="closeQuickDASH()" type="button">✕</button></div><div class="mbd" id="qdash-qs"></div></div>
+</div>
+
+<!-- PROGRAMME -->
+<div class="pov" id="prog-overlay">
+  <div class="phdr">
+    <button class="pclose" onclick="closeProgram()" type="button">✕</button>
+    <div class="phinfo"><div class="phtitle" id="prog-patient-name">Programme</div><div class="phsub" id="prog-patient-info">Coude</div></div>
+    <button class="ppbtn" onclick="window.print()" type="button">PDF</button>
+  </div>
+  <div class="pcont" id="prog-content"></div>
+</div>
+
+<div class="toast" id="toast">Bilan sauvegardé</div>
+<script>
+var D={nom:'',prenom:'',ddn:'',sexe:'',cote:'',profession:'',datebilan:'',medecin:'',observations:'',eva:{repos:null,effort:null},ctx:null,amps:{flex_att:'',ext_att:'',sup_att:'',pro_att:'',flex_sain:'',sup_sain:''},mrc:{biceps:null,triceps:null,ext_poignet:null,flex_poignet:null,grip:null}};
+var CUR=1,TESTS={},CHIPS={},CHECKS={},prteeData={},qdashData={},activeCR='s';
+var NAV_LABELS=['Identité & Contexte','Anamnèse','Examen physique','Tests cliniques EBP','Scores fonctionnels','Analyse & Compte-rendu'];
+
+function saveState(){try{localStorage.setItem('bilan-coude-v1',JSON.stringify({D:D,TESTS:TESTS,CHIPS:CHIPS,CHECKS:CHECKS,prteeData:prteeData,qdashData:qdashData,psfsSt:psfsSt}));showToast('Bilan sauvegardé');}catch(e){}}
+function loadState(){
+  try{var raw=localStorage.getItem('bilan-coude-v1');if(!raw)return;var s=JSON.parse(raw);
+  if(s.D)D=s.D;if(s.TESTS)TESTS=s.TESTS;if(s.CHIPS)CHIPS=s.CHIPS;if(s.CHECKS)CHECKS=s.CHECKS;if(s.prteeData)prteeData=s.prteeData;if(s.qdashData)qdashData=s.qdashData;if(s.psfsSt)psfsSt=s.psfsSt;restoreUI();}catch(e){}
+}
+function restoreUI(){
+  ['nom','prenom','ddn','sexe','cote','profession','datebilan','medecin','observations'].forEach(function(f){var el=document.getElementById(f);if(el&&D[f]!==undefined)el.value=D[f];  buildPSFS();
+});
+  ['flex_att','ext_att','sup_att','pro_att','flex_sain','sup_sain'].forEach(function(f){var el=document.getElementById(f);if(el&&D.amps&&D.amps[f]!==undefined)el.value=D.amps[f];});
+  if(D.eva.repos!==null)document.querySelectorAll('#eva-repos .evab').forEach(function(b,i){if(i===D.eva.repos)b.classList.add('on');});
+  if(D.eva.effort!==null)document.querySelectorAll('#eva-effort .evab').forEach(function(b,i){if(i===D.eva.effort)b.classList.add('on');});
+  if(D.ctx)document.querySelectorAll('#ctx .chip').forEach(function(c){if(c.dataset.ctx===D.ctx)c.classList.add('on');});
+  Object.keys(CHIPS).forEach(function(g){var cont=document.getElementById(g);if(!cont)return;(CHIPS[g]||[]).forEach(function(v){cont.querySelectorAll('.chip').forEach(function(c){if(c.textContent.trim()===v)c.classList.add('on');});});});
+  Object.keys(CHECKS).forEach(function(g){var el=document.getElementById(g);if(!el)return;el.querySelectorAll('.crow').forEach(function(row){var t=row.querySelector('.ctx2');if(t&&(CHECKS[g]||[]).indexOf(t.textContent.trim())!==-1)row.classList.add('on');});});
+  Object.keys(D.mrc).forEach(function(k){if(D.mrc[k]!==null)document.querySelectorAll('#mrc-'+k+' .mrc-btn').forEach(function(b,i){if(i===D.mrc[k])b.classList.add('on');});});
+  Object.keys(TESTS).forEach(function(k){document.querySelectorAll('[onclick*="ST(this,\''+k+'\'"]').forEach(function(b){b.classList.remove('pos','neg');if(TESTS[k]==='pos'&&b.textContent.indexOf('Positif')!==-1)b.classList.add('pos');if(TESTS[k]==='neg'&&b.textContent.indexOf('Négatif')!==-1)b.classList.add('neg');});});
+  updateScoreDisplays();
+}
+function showStep(n){
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  var el=document.getElementById('s'+n);if(el)el.classList.add('active');
+  document.getElementById('prog-fill').style.width=Math.round((n/6)*100)+'%';
+  document.getElementById('hdr-step').textContent='Étape '+n+'/6';
+  document.getElementById('bni').textContent='Étape '+n+'/6 — '+NAV_LABELS[n-1];
+  document.getElementById('btn-back').disabled=(n===1);
+  document.getElementById('btn-next').disabled=(n===6);
+  document.getElementById('hdr-name').textContent=(D.prenom||D.nom)?(D.prenom+' '+(D.nom||'')).trim():'Bilan Coude';
+  if(n===6)buildAnalyse();
+  window.scrollTo(0,0);
+}
+function navNext(){if(CUR<6){CUR++;showStep(CUR);saveState();}}
+function navBack(){if(CUR>1){CUR--;showStep(CUR);}}
+function setCtx(el,ctx){document.querySelectorAll('#ctx .chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');D.ctx=ctx;saveState();}
+function setEVA(type,val,btn){document.getElementById('eva-'+type).querySelectorAll('.evab').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');D.eva[type]=val;saveState();}
+function TC(el,group){el.classList.toggle('on');if(!CHIPS[group])CHIPS[group]=[];var txt=el.textContent.trim();var idx=CHIPS[group].indexOf(txt);if(idx===-1)CHIPS[group].push(txt);else CHIPS[group].splice(idx,1);saveState();}
+function TCK(el,group,cls){el.classList.toggle(cls);if(!CHECKS[group])CHECKS[group]=[];var t=el.querySelector('.ctx2');if(!t)return;var txt=t.textContent.trim();var idx=CHECKS[group].indexOf(txt);if(idx===-1)CHECKS[group].push(txt);else CHECKS[group].splice(idx,1);saveState();}
+function setMRC(muscle,val,btn){document.querySelectorAll('#mrc-'+muscle+' .mrc-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');D.mrc[muscle]=val;saveState();}
+function ST(btn,test,val){btn.closest('.tbs').querySelectorAll('.tb').forEach(function(b){b.classList.remove('pos','neg');});btn.classList.add(val);TESTS[test]=val;saveState();}
+function tg(id){var el=document.getElementById(id);if(el)el.classList.toggle('o');}
+function toggleSC(hdr){var body=hdr.parentElement.querySelector('.scb');var arrow=hdr.querySelector('.scch');if(!body)return;var open=body.classList.toggle('o');if(arrow)arrow.classList.toggle('o',open);}
+function toggleExplore(){var btn=document.getElementById('explore-toggle');var sec=document.getElementById('explore-section');btn.classList.toggle('open');sec.classList.toggle('o');var open=sec.classList.contains('o');btn.textContent=open?'Masquer les pistes complémentaires ▲':'Explorer d\'autres pistes cliniques ▼';}
+
+var EBP_DATA={
+  cozen:{title:'Test de Cozen',ref:'Stratford PW et al. J Hand Ther. 1993 — Cozen L. 1954',stats:[{l:'Sensibilité',v:'84%',s:'épicondylalgie lat.'},{l:'Spécificité',v:'91%',s:''},{l:'LR+',v:'9.3',s:''},{l:'LR−',v:'0.18',s:''}],note:'Test de référence pour l\'épicondylalgie latérale. LR+ 9.3 : un résultat positif multiplie par 9 la probabilité pré-test. Toujours comparer au côté sain. Utiliser en cluster avec Mill et Maudsley. La douleur doit être reproduite à l\'épicondyle latéral, pas au poignet.'},
+  mill:{title:'Test de Mill',ref:'Verhaar JA et al. J Bone Joint Surg Br. 1993',stats:[{l:'Sensibilité',v:'53%',s:'épicondylalgie lat.'},{l:'Spécificité',v:'83%',s:''},{l:'LR+',v:'3.1',s:''},{l:'LR−',v:'0.57',s:''}],note:'Étirement passif de l\'ECRB. Sensibilité plus faible que Cozen mais spécificité correcte. Confirme la composante musculo-tendineuse par mise en tension.'},
+  maudsley:{title:'Test de Maudsley (majeur résisté)',ref:'Roles NC & Maudsley RH. J Bone Joint Surg Br. 1972',stats:[{l:'Sensibilité',v:'61%',s:'épicondylalgie lat.'},{l:'Spécificité',v:'84%',s:''},{l:'LR+',v:'3.8',s:''},{l:'LR−',v:'0.46',s:''}],note:'Double intérêt : (1) épicondylalgie latérale si douleur à l\'épicondyle, (2) tunnel radial si douleur distale à l\'arcade de Frohse. Clé du diagnostic différentiel.'},
+  golfer:{title:'Test de l\'épicondyle médial',ref:'Descatha A et al. Ann Phys Rehabil Med. 2008',stats:[{l:'Sensibilité',v:'89%',s:'épicondylalgie méd.'},{l:'Spécificité',v:'98%',s:''},{l:'LR+',v:'44.5',s:''},{l:'LR−',v:'0.11',s:''}],note:'Excellentes propriétés diagnostiques. LR+ 44.5 : un résultat positif confirme quasi certaine l\'épicondylalgie médiale. LR− 0.11 : un résultat négatif l\'écarte efficacement.'},
+  tinel_coude:{title:'Tinel au coude (gouttière cubitale)',ref:'Novak CB et al. J Hand Surg Am. 1994',stats:[{l:'Sensibilité',v:'70%',s:'neuropathie ulnaire'},{l:'Spécificité',v:'98%',s:''},{l:'LR+',v:'35',s:''},{l:'LR−',v:'0.31',s:''}],note:'LR+ 35 — très forte valeur prédictive positive. Un Tinel positif confirme quasi certaine la neuropathie ulnaire. Percussion douce et progressive — paresthésies dans le territoire ulnaire = positif.'},
+  elbow_flex:{title:'Elbow Flexion Test',ref:'Novak CB et al. J Hand Surg Am. 1994',stats:[{l:'Sensibilité',v:'75%',s:'neuropathie ulnaire'},{l:'Spécificité',v:'99%',s:''},{l:'LR+',v:'75',s:''},{l:'LR−',v:'0.25',s:''}],note:'LR+ 75 — test le plus spécifique pour la compression ulnaire au canal cubital. La flexion maximale augmente la pression intra-canalaire de 7 fois. Cluster Tinel + Elbow Flex : VPP > 95%.'},
+  scratch_ulnaire:{title:'Scratch Collapse Test — ulnaire',ref:'Cheng CJ et al. J Hand Surg Am. 2008',stats:[{l:'Sensibilité',v:'69%',s:'neuropathie ulnaire'},{l:'Spécificité',v:'99%',s:''},{l:'LR+',v:'69',s:''}],note:'Sp 99% — très haute spécificité. Basé sur l\'inhibition réflexe transitoire provoquée par la stimulation cutanée sur le site de compression. Utile lorsque Tinel et Elbow Flex sont équivoques.'},
+  sup_resiste:{title:'Supination résistée (tunnel radial)',ref:'Roles NC & Maudsley RH. J Bone Joint Surg Br. 1972',stats:[{l:'Sensibilité',v:'~50%',s:'estimée'},{l:'Spécificité',v:'~80%',s:'estimée'}],note:'Données EBP limitées. Critère différentiel principal : douleur localisée à l\'arcade de Frohse (3 cm distale à l\'épicondyle). Associer palpation de l\'arcade et Maudsley pour un cluster cohérent.'},
+  valgus_stress:{title:'Valgus Stress Test à 30°',ref:'Rijke AM et al. Am J Sports Med. 1994',stats:[{l:'Sensibilité',v:'75%',s:'lésion LCU'},{l:'Spécificité',v:'93%',s:''},{l:'LR+',v:'10.7',s:''},{l:'LR−',v:'0.27',s:''}],note:'LR+ 10.7 — forte valeur diagnostique si positif. Impérativement à 30° de flexion pour déverrouiller l\'olécrâne. Gradation I (0–5 mm), II (5–10 mm), III (>10 mm). Fréquent chez lanceurs, tennismen, gymnastes.'},
+  mvst:{title:'Moving Valgus Stress Test',ref:'O\'Driscoll SW et al. Am J Sports Med. 2005',stats:[{l:'Sensibilité',v:'100%',s:'lésion LCU'},{l:'Spécificité',v:'75%',s:''},{l:'LR+',v:'4.0',s:''},{l:'LR−',v:'0',s:''}],note:'Sn 100% dans l\'étude originale. LR− = 0 : un résultat négatif écarte totalement la lésion du LCU. Douleur maximale dans la zone critique 70°–120° pour être diagnostique.'},
+  pivot_lat:{title:'Lateral Pivot Shift Test',ref:'O\'Driscoll SW et al. J Bone Joint Surg Am. 1991',stats:[{l:'Sensibilité',v:'38%',s:'PLRI'},{l:'Spécificité',v:'~100%',s:''},{l:'LR+',v:'∞',s:'rupture LCLC'},{l:'LR−',v:'0.62',s:''}],note:'Sp ~100% — un résultat positif confirme l\'instabilité postéro-latérale rotatoire (PLRI). Sensibilité faible en cabinet. Un résultat négatif n\'élimine pas le PLRI.'},
+  hook:{title:'Hook Test',ref:'O\'Driscoll SW et al. J Bone Joint Surg Am. 2007',stats:[{l:'Sensibilité',v:'100%',s:'rupture biceps distal'},{l:'Spécificité',v:'100%',s:''},{l:'LR+',v:'∞',s:''},{l:'LR−',v:'0',s:''}],note:'Test de référence absolu pour la rupture distale du biceps brachial. Sn et Sp 100% dans l\'étude originale. Un Hook Test positif impose une imagerie en urgence et une discussion chirurgicale rapide.'},
+  squeeze_bic:{title:'Biceps Squeeze Test',ref:'Ruland RT et al. J Bone Joint Surg Am. 2005',stats:[{l:'Sensibilité',v:'96%',s:'rupture biceps distal'},{l:'Spécificité',v:'99%',s:''},{l:'LR+',v:'96',s:''},{l:'LR−',v:'0.04',s:''}],note:'Analogue du Thompson Test pour le biceps. LR− 0.04 : un résultat négatif écarte quasi certaine la rupture totale. Compléter toujours avec le Hook Test.'},
+  chair_pushup:{title:'Chair Push-Up Sign',ref:'Regan WD et al. Am J Sports Med. 1991',stats:[],note:'Test fonctionnel pour le PLRI. Appréhension ou impossibilité en supination qui disparaît en pronation = signe pathognomonique de PLRI. Données Se/Sp limitées — valeur clinique principalement qualitative.'},
+  ruqt:{title:'RUQT — Resisted Supination/Pronation Test',ref:'Chew ML & Espinosa N. J Shoulder Elbow Surg. 2013',stats:[{l:'Sensibilité',v:'84%',s:'tendinopathie biceps'},{l:'Spécificité',v:'91%',s:''}],note:'Distingue la tendinopathie bicipitale distale d\'une atteinte articulaire ou du tunnel radial. Douleur en supination résistée localisée au pli du coude = atteinte du biceps distal.'},
+  spurling:{title:'Spurling cervical (différentiel)',ref:'Wainner RS et al. J Orthop Sports Phys Ther. 2003',stats:[{l:'Sensibilité',v:'50%',s:'radiculopathie C'},{l:'Spécificité',v:'86%',s:''},{l:'LR+',v:'3.5',s:''},{l:'LR−',v:'0.58',s:''}],note:'C6 peut mimer une épicondylalgie latérale, C7 une épicondylalgie médiale. À réaliser si irradiation proximale ou tableau atypique. Bonne spécificité : si positif, origine cervicale très probable.'}
+};
+
+function showEBP(key,ev){
+  if(ev)ev.stopPropagation();
+  var d=EBP_DATA[key];if(!d)return;
+  document.getElementById('ebp-title').textContent=d.title;
+  document.getElementById('ebp-ref').textContent=d.ref;
+  var sh='';d.stats.forEach(function(s){sh+='<div class="ebp-stat"><div class="ebp-stat-lbl">'+s.l+'</div><div class="ebp-stat-val">'+s.v+'</div>'+(s.s?'<div class="ebp-stat-sub">'+s.s+'</div>':'')+'</div>';});
+  document.getElementById('ebp-stats').innerHTML=sh;
+  var noteEl=document.getElementById('ebp-note');
+  if(d.note){noteEl.textContent=d.note;noteEl.style.display='block';}else{noteEl.style.display='none';}
+  document.getElementById('ebp-overlay').classList.add('o');
+  document.body.style.overflow='hidden';
+}
+function closeEBP(){document.getElementById('ebp-overlay').classList.remove('o');document.body.style.overflow='';}
+
+var PRTEE_Q=[
+  {id:'p1',label:'Niveau de douleur actuel'},{id:'p2',label:'Douleur au repos'},{id:'p3',label:'Douleur à répéter le même mouvement'},
+  {id:'p4',label:'Douleur lors d\'une prise ferme'},{id:'p5',label:'Douleur lors d\'une activité de pointe (sport, travail)'},
+  {id:'p6',label:'Soulever une bouteille pleine'},{id:'p7',label:'Tourner une poignée de porte ou un robinet'},
+  {id:'p8',label:'Porter un sac de provisions'},{id:'p9',label:'Utiliser des outils ou équipements'},
+  {id:'p10',label:'Ouvrir des bocaux'},{id:'p11',label:'Tâches ménagères lourdes (frotter le sol)'},
+  {id:'p12',label:'Essorer une serpillière ou une serviette'},{id:'p13',label:'Tâches professionnelles légères'},
+  {id:'p14',label:'Tâches professionnelles lourdes'},{id:'p15',label:'Activités sportives ou de loisir habituelles'}
+];
+function openPRTEE(){
+  var html='';
+  PRTEE_Q.forEach(function(q,i){html+='<div class="qdi"><div class="qdq">'+(i+1)+'. '+q.label+'</div><div class="qdos">';for(var v=0;v<=10;v++){var on=prteeData[q.id]===v?' on':'';html+='<button class="qdo'+on+'" onclick="setPRTEE(\''+q.id+'\','+v+',this)" type="button">'+v+'</button>';}html+='</div></div>';});
+  html+='<div class="qdsb"><div><div style="font-size:11px;color:var(--tx3)">Score PRTEE</div><div class="qdnum" id="prtee-modal-score">—</div></div><div style="font-size:12px;font-weight:700;color:var(--zd)" id="prtee-modal-grade">—</div></div>';
+  html+='<button class="btf btz" onclick="closePRTEE()" type="button" style="margin-top:12px">Valider</button>';
+  document.getElementById('prtee-qs').innerHTML=html;
+  document.getElementById('prtee-modal').classList.add('o');
+  document.body.style.overflow='hidden';
+  calcPRTEE();
+}
+function setPRTEE(id,val,btn){prteeData[id]=val;btn.closest('.qdos').querySelectorAll('.qdo').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');calcPRTEE();}
+function calcPRTEE(){
+  var pain=0,func=0,np=0,nf=0;
+  ['p1','p2','p3','p4','p5'].forEach(function(k){if(prteeData[k]!==undefined){pain+=prteeData[k];np++;}});
+  ['p6','p7','p8','p9','p10','p11','p12','p13','p14','p15'].forEach(function(k){if(prteeData[k]!==undefined){func+=prteeData[k];nf++;}});
+  var scoreEl=document.getElementById('prtee-modal-score'),gradeEl=document.getElementById('prtee-modal-grade');
+  if(np===5&&nf===10){var total=Math.round(pain+(func/2));var grade=total<=20?'Léger':total<=40?'Modéré':total<=60?'Sévère':'Très sévère';if(scoreEl)scoreEl.textContent=total+'/100';if(gradeEl)gradeEl.textContent=grade;prteeData.score=total;prteeData.grade=grade;updateScoreDisplays();}else{if(scoreEl)scoreEl.textContent='—';if(gradeEl)gradeEl.textContent='Compléter';}
+  saveState();
+}
+function closePRTEE(){document.getElementById('prtee-modal').classList.remove('o');document.body.style.overflow='';updateScoreDisplays();}
+
+var QDASH_Q=[
+  {id:'q1',label:'Ouvrir un bocal serré'},{id:'q2',label:'Effectuer des tâches ménagères lourdes'},
+  {id:'q3',label:'Porter un sac à provisions ou une mallette'},{id:'q4',label:'Se laver le dos'},
+  {id:'q5',label:'Utiliser un couteau pour couper de la nourriture'},{id:'q6',label:'Activités de loisirs nécessitant un effort au bras'},
+  {id:'q7',label:'Activités sociales (cartes, loisirs)'},{id:'q8',label:'Limitation dans votre travail ou activités quotidiennes'},
+  {id:'q9',label:'Douleur dans l\'épaule, le bras ou la main'},{id:'q10',label:'Picotements dans le bras ou la main'},
+  {id:'q11',label:'Difficulté à dormir en raison de la douleur au bras'}
+];
+var QDASH_OPTS=['Aucune','Légère','Modérée','Grande','Impossible'];
+function openQuickDASH(){
+  var html='';
+  QDASH_Q.forEach(function(q,i){html+='<div class="qdi"><div class="qdq">'+(i+1)+'. '+q.label+'</div><div class="qdos">';for(var v=1;v<=5;v++){var on=qdashData[q.id]===v?' on':'';html+='<button class="qdo'+on+'" onclick="setQDASH(\''+q.id+'\','+v+',this)" type="button" style="flex-direction:column">'+v+'<span style="font-size:9px;margin-top:1px">'+QDASH_OPTS[v-1]+'</span></button>';}html+='</div></div>';});
+  html+='<div class="qdsb"><div><div style="font-size:11px;color:var(--tx3)">Score QuickDASH</div><div class="qdnum" id="qdash-modal-score">—</div></div><div style="font-size:12px;font-weight:700;color:var(--zd)" id="qdash-modal-grade">—</div></div>';
+  html+='<button class="btf btz" onclick="closeQuickDASH()" type="button" style="margin-top:12px">Valider</button>';
+  document.getElementById('qdash-qs').innerHTML=html;
+  document.getElementById('qdash-modal').classList.add('o');
+  document.body.style.overflow='hidden';
+  calcQDASH();
+}
+function setQDASH(id,val,btn){qdashData[id]=val;btn.closest('.qdos').querySelectorAll('.qdo').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');calcQDASH();}
+function calcQDASH(){
+  var sum=0,n=0;QDASH_Q.forEach(function(q){if(qdashData[q.id]!==undefined){sum+=qdashData[q.id];n++;}});
+  var scoreEl=document.getElementById('qdash-modal-score'),gradeEl=document.getElementById('qdash-modal-grade');
+  if(n===11){var score=Math.round(((sum/11)-1)*25);var grade=score<=20?'Léger':score<=40?'Modéré':score<=60?'Sévère':'Très sévère';if(scoreEl)scoreEl.textContent=score+'/100';if(gradeEl)gradeEl.textContent=grade;qdashData.score=score;qdashData.grade=grade;updateScoreDisplays();}else{if(scoreEl)scoreEl.textContent='—';if(gradeEl)gradeEl.textContent='Compléter';}
+  saveState();
+}
+function closeQuickDASH(){document.getElementById('qdash-modal').classList.remove('o');document.body.style.overflow='';updateScoreDisplays();}
+function updateScoreDisplays(){
+  var pr=document.getElementById('prtee-result');if(pr&&prteeData.score!==undefined){pr.style.display='block';document.getElementById('prtee-score').textContent=prteeData.score;document.getElementById('prtee-grade').textContent=prteeData.grade||'—';}
+  var qr=document.getElementById('qdash-result');if(qr&&qdashData.score!==undefined){qr.style.display='block';document.getElementById('qdash-score').textContent=qdashData.score;document.getElementById('qdash-grade').textContent=qdashData.grade||'—';}
+}
+
+function hasC(g,v){return(CHIPS[g]||[]).some(function(x){return x.indexOf(v)!==-1;});}
+function hasK(g,v){return(CHECKS[g]||[]).some(function(x){return x.toLowerCase().indexOf(v.toLowerCase())!==-1;});}
+function isT(k,v){return TESTS[k]===v;}
+
+function buildAnalyse(){
+  var s={epic_lat:0,epic_med:0,ulnaire:0,tunnel_rad:0,biceps:0,instab_lcu:0,instab_plri:0};
+  var r={epic_lat:[],epic_med:[],ulnaire:[],tunnel_rad:[],biceps:[],instab_lcu:[],instab_plri:[]};
+
+  if(isT('cozen','pos')){s.epic_lat+=60;r.epic_lat.push('Cozen positif — LR+ 9.3 (+60)');}
+  if(isT('mill','pos')){s.epic_lat+=25;r.epic_lat.push('Mill positif — Sp 83% (+25)');}
+  if(isT('maudsley','pos')){s.epic_lat+=25;r.epic_lat.push('Maudsley positif — Sp 84% (+25)');}
+  if(hasK('palpation','latéral')){s.epic_lat+=30;r.epic_lat.push('Palpation épicondyle latéral (+30)');}
+  if(hasC('localisation','latéral')){s.epic_lat+=20;r.epic_lat.push('Localisation épicondyle latéral (+20)');}
+  if(hasC('declenchant','Ext.')||hasC('declenchant','poignet')){s.epic_lat+=15;r.epic_lat.push('Ext. poignet résistée déclenchante (+15)');}
+  if(hasC('declenchant','Serrage')){s.epic_lat+=10;r.epic_lat.push('Serrage déclenchant (+10)');}
+  var latClust=[isT('cozen','pos'),isT('mill','pos'),isT('maudsley','pos')].filter(Boolean).length;
+  if(latClust>=2){s.epic_lat+=20;r.epic_lat.push('Cluster ≥2/3 tests latéraux (+20 bonus)');}
+
+  if(isT('golfer','pos')){s.epic_med+=70;r.epic_med.push('Test médial positif — LR+ 44.5 (+70)');}
+  if(hasK('palpation','médial')){s.epic_med+=30;r.epic_med.push('Palpation épicondyle médial (+30)');}
+  if(hasC('localisation','médial')){s.epic_med+=20;r.epic_med.push('Localisation épicondyle médial (+20)');}
+  if(hasC('declenchant','Flex.')||hasC('declenchant','Flexion poignet')){s.epic_med+=15;r.epic_med.push('Flex. poignet résistée déclenchante (+15)');}
+
+  if(isT('tinel_coude','pos')){s.ulnaire+=50;r.ulnaire.push('Tinel coude positif — LR+ 35 (+50)');}
+  if(isT('elbow_flex','pos')){s.ulnaire+=50;r.ulnaire.push('Elbow Flexion Test positif — LR+ 75 (+50)');}
+  if(isT('scratch_ulnaire','pos')){s.ulnaire+=35;r.ulnaire.push('Scratch Collapse Test positif — Sp 99% (+35)');}
+  if(hasK('sensitif','4e')||hasK('sensitif','5e')){s.ulnaire+=30;r.ulnaire.push('Paresthésies 4e–5e doigts (+30)');}
+  if(hasK('sensitif','Froment')){s.ulnaire+=25;r.ulnaire.push('Signe de Froment positif (+25)');}
+  if(hasK('palpation','cubitale')){s.ulnaire+=20;r.ulnaire.push('Douleur gouttière cubitale (+20)');}
+  if(hasC('rythme','Nocturne')){s.ulnaire+=15;r.ulnaire.push('Rythme nocturne (+15)');}
+  if(hasC('declenchant','Flexion coude')){s.ulnaire+=15;r.ulnaire.push('Flexion coude prolongée déclenchante (+15)');}
+
+  if(isT('sup_resiste','pos')){s.tunnel_rad+=40;r.tunnel_rad.push('Supination résistée positive — arcade de Frohse (+40)');}
+  if(isT('maudsley','pos')&&!isT('cozen','pos')){s.tunnel_rad+=30;r.tunnel_rad.push('Maudsley positif sans Cozen (+30)');}
+  if(hasK('palpation','Frohse')||hasK('palpation','arcade')){s.tunnel_rad+=30;r.tunnel_rad.push('Palpation arcade de Frohse (+30)');}
+  if(hasC('irradiation','antéro')||hasC('irradiation','latéral')){s.tunnel_rad+=15;r.tunnel_rad.push('Irradiation avant-bras latéral (+15)');}
+
+  if(isT('hook','pos')){s.biceps+=80;r.biceps.push('Hook Test positif — Sn/Sp 100% (+80)');}
+  if(isT('squeeze_bic','pos')){s.biceps+=60;r.biceps.push('Biceps Squeeze Test positif — LR+ 96 (+60)');}
+  if(isT('ruqt','pos')){s.biceps+=30;r.biceps.push('RUQT positif (+30)');}
+  if(hasK('palpation','biceps')||hasK('palpation','pli du coude')){s.biceps+=25;r.biceps.push('Douleur palpation tendon biceps (+25)');}
+  if(hasC('installation','Traumatisme')||hasC('installation','chute')){s.biceps+=15;r.biceps.push('Installation traumatique (+15)');}
+
+  if(isT('valgus_stress','pos')){s.instab_lcu+=60;r.instab_lcu.push('Valgus Stress positif — LR+ 10.7 (+60)');}
+  if(isT('mvst','pos')){s.instab_lcu+=50;r.instab_lcu.push('Moving Valgus Stress positif — Sn 100% (+50)');}
+  if(hasC('installation','Entorse')){s.instab_lcu+=20;r.instab_lcu.push('Mécanisme entorse / chute (+20)');}
+
+  if(isT('pivot_lat','pos')){s.instab_plri+=80;r.instab_plri.push('Lateral Pivot Shift positif — Sp ~100% (+80)');}
+  if(isT('chair_pushup','pos')){s.instab_plri+=30;r.instab_plri.push('Chair Push-Up positif (+30)');}
+  if(hasC('atcd','Chirurgie')){s.instab_plri+=20;r.instab_plri.push('ATCD chirurgie coude (+20)');}
+
+  var diags=[
+    {key:'epic_lat',label:'Épicondylalgie latérale',score:s.epic_lat,raisons:r.epic_lat},
+    {key:'epic_med',label:'Épicondylalgie médiale',score:s.epic_med,raisons:r.epic_med},
+    {key:'ulnaire',label:'Compression nerf ulnaire',score:s.ulnaire,raisons:r.ulnaire},
+    {key:'tunnel_rad',label:'Tunnel radial (NIO post.)',score:s.tunnel_rad,raisons:r.tunnel_rad},
+    {key:'biceps',label:'Pathologie biceps distal',score:s.biceps,raisons:r.biceps},
+    {key:'instab_lcu',label:'Instabilité LCU (médiale)',score:s.instab_lcu,raisons:r.instab_lcu},
+    {key:'instab_plri',label:'Instabilité PLRI (lat.)',score:s.instab_plri,raisons:r.instab_plri}
+  ].sort(function(a,b){return b.score-a.score;});
+
+  var html='';
+  diags.forEach(function(d,i){if(d.score===0)return;var cls=i===0?'cdh':d.score>=40?'cdm':'cdl';html+='<div class="crdi '+cls+'"><span>'+d.label+'</span><span>'+d.score+' pts</span></div>';if(d.raisons.length){html+='<ul style="list-style:none;padding:0 0 8px 0;margin:0">';d.raisons.forEach(function(rx){html+='<li style="font-size:11px;color:var(--tx3);padding:2px 0 2px 10px;border-left:2px solid var(--brd2)">'+rx+'</li>';});html+='</ul>';}});
+  if(!html)html='<div style="font-size:12px;color:var(--tx3);padding:8px 0">Données insuffisantes — compléter les étapes précédentes</div>';
+  document.getElementById('analyse-content').innerHTML=html;
+
+  var top=diags[0];
+  var ori={
+    epic_lat:'Excentriques ECRB (Tyler protocol 8 sem) · Isométrie 45 sec en antalgie immédiate · Physiothérapie manuelle (Mulligan Lateral Glide) · Éducation charge · Ondes de choc si chronique &gt; 3 mois · MCID PRTEE : 11 pts',
+    epic_med:'Excentriques fléchisseurs poignet · Protection nerf ulnaire si irritation associée · Éducation biomécanique frappe · Reprise progressive charges',
+    ulnaire:'Orthèse nocturne coude en extension · Éducation posturale (éviter flexion prolongée) · Renforcement intrinsèques main · Mobilisation neurodynamique · Avis neurologique si déficit moteur',
+    tunnel_rad:'Repos relatif supination forcée · Physiothérapie arcade de Frohse · EMG si doute · Différentiel épicondylalgie latérale à clarifier',
+    biceps:'URGENCE orthopédique si rupture totale (Hook Test positif) · IRM / échographie de confirmation · Chirurgie si &lt; 3 semaines et sujet actif · Rééducation conservatrice si partielle',
+    instab_lcu:'Immobilisation initiale si grade III · Renforcement musculature stabilisatrice médiale · Avis chirurgical si instabilité fonctionnelle',
+    instab_plri:'Avis chirurgical (ligamentoplastie selon sévérité) · Renforcement stabilisateurs dynamiques · Programme proprioception · Éviction valgus + supination combinés'
+  };
+  var orHtml='';
+  if(top&&top.score>0){orHtml='<div class="phase"><div class="phh" style="background:var(--zl);color:var(--zd)">'+top.label+'</div><div class="phb"><ul class="tl2">';(ori[top.key]||'').split('·').forEach(function(o){if(o.trim())orHtml+='<li>'+o.trim()+'</li>';});orHtml+='</ul></div></div>';}
+  document.getElementById('orient-content').innerHTML=orHtml||'<div style="font-size:12px;color:var(--tx3)">—</div>';
+  buildCR(diags);
+}
+
+function setCR(v){activeCR=v;document.querySelectorAll('.crtab').forEach(function(t,i){t.classList.toggle('on',i===(v==='s'?0:1));});document.querySelectorAll('.crv').forEach(function(el){el.classList.remove('on');});document.getElementById('crv-'+v).classList.add('on');}
+function buildCR(diags){
+  var nom=(D.prenom||'')+' '+(D.nom||'');
+  var age='';if(D.ddn){var diff=new Date()-new Date(D.ddn);age=Math.floor(diff/31557600000)+' ans';}
+  var info=[D.sexe,age,D.cote,D.profession].filter(Boolean).join(' · ');
+  var dateStr=D.datebilan?(new Date(D.datebilan)).toLocaleDateString('fr-FR'):(new Date()).toLocaleDateString('fr-FR');
+  var top=diags&&diags[0]&&diags[0].score>0?diags[0].label:'Diagnostic non déterminé';
+  var testsPos=Object.keys(TESTS).filter(function(k){return TESTS[k]==='pos';}).map(function(k){var d=EBP_DATA[k];return d?d.title:k;});
+  var evaStr='';if(D.eva.repos!==null)evaStr+='EVA repos: '+D.eva.repos+'/10';if(D.eva.effort!==null)evaStr+=(evaStr?' · ':'')+'EVA effort: '+D.eva.effort+'/10';
+  var scStr='';if(prteeData.score!==undefined)scStr+='PRTEE: '+prteeData.score+'/100 ('+prteeData.grade+')';if(qdashData.score!==undefined)scStr+=(scStr?' · ':'')+'QuickDASH: '+qdashData.score+'/100 ('+qdashData.grade+')';
+  if(D.psfs)scStr+=(scStr?' · ':'')+'PSFS: '+D.psfs.avg+'/10 ('+D.psfs.vals.filter(function(v){return v!==null;}).length+' act.)';
+  ['s','l'].forEach(function(v){var suf='-'+v;document.getElementById('cr-nom'+suf).textContent=nom.trim()||'Patient';document.getElementById('cr-info'+suf).textContent=info||'—';var evaEl=document.getElementById('cr-eva'+suf);if(evaEl)evaEl.innerHTML=evaStr?'<div class="crspi">'+evaStr+'</div>':'';document.getElementById('cr-date'+suf).textContent='Bilan du '+dateStr;});
+  document.getElementById('cr-diag-s').innerHTML='<div class="crdi cdh">'+top+'</div>';
+  document.getElementById('cr-tests-s').innerHTML=testsPos.length?testsPos.map(function(t){return '<div class="crrow"><span class="crk">✓</span><span class="crval">'+t+'</span></div>';}).join(''):'<span style="font-size:12px;color:var(--tx3)">Aucun test positif</span>';
+  document.getElementById('cr-scores-s').innerHTML=scStr||'<span style="font-size:12px;color:var(--tx3)">Non renseigné</span>';
+  document.getElementById('cr-orient-s').innerHTML='<div style="font-size:12px;color:var(--tx2)">'+top+'</div>';
+  var identStr='<div class="crrow"><span class="crk">Côté</span><span class="crval">'+(D.cote||'—')+'</span></div><div class="crrow"><span class="crk">Médecin</span><span class="crval">'+(D.medecin||'—')+'</span></div>';
+  document.getElementById('cr-identity-l').innerHTML=identStr;
+  var anamStr='';if((CHIPS.installation||[]).length)anamStr+='<div class="crrow"><span class="crk">Installation</span><span class="crval">'+(CHIPS.installation||[]).join(', ')+'</span></div>';if((CHIPS.localisation||[]).length)anamStr+='<div class="crrow"><span class="crk">Localisation</span><span class="crval">'+(CHIPS.localisation||[]).join(', ')+'</span></div>';if(D.observations)anamStr+='<div class="crrow"><span class="crk">Observations</span><span class="crval">'+D.observations+'</span></div>';
+  document.getElementById('cr-anam-l').innerHTML=anamStr||'<span style="font-size:12px;color:var(--tx3)">—</span>';
+  var examStr='';var ampMap={flex_att:'Flexion',ext_att:'Extension',sup_att:'Supination',pro_att:'Pronation'};if(D.amps)Object.keys(ampMap).forEach(function(f){if(D.amps[f])examStr+='<div class="crrow"><span class="crk">'+ampMap[f]+'</span><span class="crval">'+D.amps[f]+'</span></div>';});
+  var mrcStr=Object.keys(D.mrc).filter(function(k){return D.mrc[k]!==null;}).map(function(k){return k+': '+D.mrc[k]+'/5';}).join(' · ');if(mrcStr)examStr+='<div class="crrow"><span class="crk">MRC</span><span class="crval">'+mrcStr+'</span></div>';
+  document.getElementById('cr-exam-l').innerHTML=examStr||'<span style="font-size:12px;color:var(--tx3)">—</span>';
+  document.getElementById('cr-tests-l').innerHTML=testsPos.length?testsPos.map(function(t){return '<div class="crrow"><span class="crk">✓</span><span class="crval">'+t+'</span></div>';}).join(''):'<span style="font-size:12px;color:var(--tx3)">Aucun test positif</span>';
+  document.getElementById('cr-scores-l').innerHTML=scStr||'<span style="font-size:12px;color:var(--tx3)">Non renseigné</span>';
+  document.getElementById('cr-diag-l').innerHTML='<div class="crdi cdh">'+top+'</div>';
+}
+
+var EXOS=[
+  {id:"cryo",phase:"ant",nom:"Cryothérapie coude",mat:"poche de froid",p:"assis",desc:"Application froid sur la zone douloureuse, coude en confort.",proto:"15 min x 3-4/j. Protection cutanée.",just:"Antalgie locale — réduction de la réaction inflammatoire en phase aiguë."},
+  {id:"mob_douce",phase:"ant",nom:"Mobilisation douce flexion-extension",mat:"aucun",p:"assis",desc:"Flexion-extension passive du coude dans les amplitudes indolores.",proto:"10 rép lentes x 3. Stopper si EVA > 3/10.",just:"Maintien de la mobilité articulaire en phase antalgique. Prévention de la raideur secondaire."},
+  {id:"pron_sup_passif",phase:"ant",nom:"Prono-supination passive",mat:"aucun",p:"assis",desc:"Avant-bras en déclive, rotation douce en pronation et supination dans les amplitudes confortables.",proto:"10 rép x 3. Amplitude progressivement augmentée.",just:"Maintien de la mobilité radio-ulnaire en phase aiguë. Prévient les adhérences."},
+  {id:"iso_extenseurs",phase:"ant",nom:"Isométrie extenseurs poignet (antalgie)",mat:"aucun",p:"assis",desc:"Contraction isométrique des extenseurs du poignet à haute charge, sans mouvement articulaire.",proto:"Contraction 45 sec x 3 séries. 2/j.",just:"Isométrique à haute charge — effet antalgie immédiate démontré dans l'épicondylalgie latérale (Vicenzino 2007). EVA ≤ 4/10 pendant la contraction."},
+  {id:"iso_biceps",phase:"ant",nom:"Isométrie biceps",mat:"aucun",p:"assis",desc:"Contraction isométrique du biceps, coude à 90°. Main contre table ou cuisse.",proto:"5 sec contraction · 5 sec repos · 10 rép x 3. EVA ≤ 3/10.",just:"Maintien du tonus musculaire sans charge tendineuse. Indiqué en phase aiguë ou post-op biceps distal."},
+  {id:"etirement_ecrb",phase:"mob",nom:"Étirement ECRB (Mill stretch)",mat:"aucun",p:"assis ou debout",desc:"Coude en extension, avant-bras en pronation, flexion passive du poignet + déviation ulnaire. Maintenir.",proto:"3 x 45 sec. Tension sans douleur aiguë. 2/j.",just:"Étirement spécifique de l'ECRB — composante essentielle du traitement conservateur de l'épicondylalgie latérale (Vicenzino 2003)."},
+  {id:"etirement_fcr",phase:"mob",nom:"Étirement fléchisseurs du poignet",mat:"aucun",p:"assis",desc:"Coude en extension, avant-bras en supination, extension passive du poignet par la main controlatérale.",proto:"3 x 45 sec. Maintenir sans douleur aiguë.",just:"Étirement des fléchisseurs — indiqué dans l'épicondylalgie médiale. Réduit la tension sur l'épitrochlée."},
+  {id:"foam_avant_bras",phase:"mob",nom:"Foam roller avant-bras",mat:"foam roller",p:"assis",desc:"Massage lent de l'avant-bras (face dorsale puis ventrale) en appui sur le foam roller. Pression progressive.",proto:"2 min par face x 2/j.",just:"Libération myofasciale des avant-bras. Améliore la compliance tissulaire et complète les étirements."},
+  {id:"mob_neuro_ulnaire",phase:"mob",nom:"Mobilisation neurodynamique nerf ulnaire",mat:"aucun",p:"assis",desc:"Dépression scapulaire + abduction épaule 90° + extension coude progressive + supination + extension poignet. Oscillations douces.",proto:"10 oscillations x 3. Légère tension sans paresthésies intenses. 1/j.",just:"Mobilisation du nerf ulnaire — réduit l'adhérence périneurale et améliore la glisse nerveuse (Coppieters 2007). Indiqué dans la neuropathie ulnaire au canal cubital."},
+  {id:"pron_sup_actif",phase:"mob",nom:"Prono-supination active contre pesanteur",mat:"marteau léger (200 g)",p:"assis coude sur table",desc:"Avant-bras en appui, marteau tenu à la main. Prono-supination lente et contrôlée.",proto:"3 x 15 rép. Progression de 200 g à 500 g.",just:"Réentraîne le biceps en supinateur sans charge excessive. Indiqué phase intermédiaire post-tendinopathie bicipitale."},
+  {id:"mob_mulligan",phase:"mob",nom:"Mobilisation latérale Mulligan (Lateral Glide)",mat:"sangle (optionnel)",p:"assis",desc:"Glissement latéral du radius sur l'humérus par l'examinateur, puis réalisation du test de Cozen en position mobilisée.",proto:"6 x 10 rép en mobilisation + mouvement test.",just:"Technique Mulligan démontrée efficace dans l'épicondylalgie latérale — amélioration immédiate douleur et force de préhension (Vicenzino 2003, Bisset 2006)."},
+  {id:"excentrique_ext",phase:"ren",nom:"Excentriques extenseurs poignet (Tyler protocol)",mat:"haltère léger",p:"assis coude fléchi",desc:"Position de départ : poignet en extension (côté sain lève). Descente lente en flexion (côté atteint travaille en excentrique). Retour passif.",proto:"3 x 15 rép. Charge progressée. 7/7j pendant 8 semaines.",just:"Gold standard rééducation épicondylalgie latérale — Tyler Twist protocol (Tyler 2010). EVA autorisé ≤ 5/10 pendant l'exercice."},
+  {id:"excentrique_flex",phase:"ren",nom:"Excentriques fléchisseurs poignet",mat:"haltère léger",p:"assis coude sur table",desc:"Position de départ : poignet en flexion maximale. Descente lente en extension (excentrique).",proto:"3 x 15 rép. 5/7j pendant 8 semaines.",just:"Équivalent excentrique pour l'épicondylalgie médiale. Stimule la synthèse de collagène ténoïde."},
+  {id:"grip_isotonique",phase:"ren",nom:"Renforcement isotonique progressif grip",mat:"dynamomètre ou balle",p:"assis",desc:"Compression progressive de la balle ou du dynamomètre, maintien 3 sec, relâchement contrôlé.",proto:"3 x 15 rép. 3/7j. Progression hebdomadaire.",just:"Renforcement global de la prise — améliore l'endurance et la proprioception de la chaîne distale."},
+  {id:"bicep_curl",phase:"ren",nom:"Biceps curl concentrique-excentrique",mat:"haltère léger",p:"assis coude fixé",desc:"Flexion du coude avec charge légère. Phase excentrique lente (3 sec de descente).",proto:"3 x 12 rép. Charge départ 1 kg. Progression +0.5 kg/semaine. EVA ≤ 4/10.",just:"Réentraînement progressif du biceps brachial — indiqué post-tendinopathie distale ou post-opératoire."},
+  {id:"supination_resist",phase:"ren",nom:"Supination résistée progressive",mat:"haltère ou élastique",p:"assis coude sur table",desc:"Avant-bras en pronation, rotation en supination contre résistance (haltère vertical ou élastique).",proto:"3 x 12 rép. Progression charge selon tolérance.",just:"Renforcement spécifique de la fonction supinatrice du biceps — indiqué après tendinopathie distale ou reprise post-chirurgicale."},
+  {id:"renf_stab_medial",phase:"ren",nom:"Renforcement stabilisateurs médiaux (valgus)",mat:"élastique",p:"assis",desc:"Résistance en valgus sur l'avant-bras, patient maintient le coude centré. Progression vers résistances dynamiques.",proto:"3 x 12 rép. Progression résistance. Indiqué instabilité LCU.",just:"Renforcement de la musculature protectrice du LCU (fléchisseurs-pronateurs). Améliore la stabilité dynamique médiale."},
+  {id:"prono_sup_resist",phase:"ren",nom:"Prono-supination résistée progressive",mat:"marteau 500 g à 1 kg",p:"assis coude sur table",desc:"Avant-bras en appui, marteau tenu à extrémité (bras de levier maximal). Prono-supination lente en amplitude complète.",proto:"3 x 15 rép. Progression vers marteau plus lourd ou prise plus distale.",just:"Renforcement de toute la chaîne de rotation de l'avant-bras. Indiqué épicondylalgie (lat/méd), tunnel radial et reprise fonctionnelle globale."},
+  {id:"pompes_inclinees",phase:"ren",nom:"Pompes inclinées (chaîne cinétique)",mat:"mur ou table",p:"debout",desc:"Pompes contre mur ou table inclinée. Coudes proches du corps, descente contrôlée.",proto:"3 x 10 rép. Progression vers appui sol selon tolérance.",just:"Réintégration de la chaîne cinétique proximale-distale. La stabilité scapulaire influence la charge sur les tendons latéraux et médiaux (Kibler 1995)."},
+  {id:"grip_fonctionnel",phase:"fon",nom:"Travail progressif prise fonctionnelle",mat:"objets quotidiens",p:"debout",desc:"Manipulation progressive d'objets de la vie quotidienne — ouvrir bocaux, utiliser outils, soulever charges légères puis lourdes.",proto:"Progression graduée selon PRTEE. Objectif : PRTEE < 30 pts pour reprise travail manuel.",just:"Réentraînement fonctionnel — finalité du programme. MCID PRTEE : 11 pts. Retour travail si EVA ≤ 3/10 en charge."},
+  {id:"lancer_progressif",phase:"fon",nom:"Programme retour aux lancers / frappe",mat:"balle, raquette",p:"debout",desc:"Progression : distance réduite → amplitude réduite → charge complète. Programme sur 6-8 semaines.",proto:"1/7j en alternance avec repos. Stopper si EVA > 3/10.",just:"Spécifique sportifs (tennis, golf, lancers). Sécurité ligamentaire (LCU) prime — test valgus négatif avant reprise."},
+  {id:"integration_chaine",phase:"fon",nom:"Intégration chaîne épaule-coude-poignet",mat:"élastique ou haltère",p:"debout",desc:"Exercices combinés épaule + coude : rotation externe épaule + extension coude résistée, ou diagonales PNF D2.",proto:"3 x 12 rép. Fréquence 3/7j.",just:"Un déficit de rotation externe d'épaule augmente la charge sur le LCU en lancer (Kibler 1995). Toujours intégrer la scapula dans la rééducation avancée."},
+  {id:"endurance_circuit",phase:"fon",nom:"Circuit endurance musculaire membre supérieur",mat:"élastiques, haltères légers",p:"debout",desc:"Circuit : extensions poignet + flexions poignet + prono-supination + biceps curl. 45 sec travail / 15 sec repos x 4 tours.",proto:"3/7j. Progression intensité et nombre de tours.",just:"Endurance musculaire spécifique MS — facteur prédictif du retour aux activités professionnelles et sportives."},
+  {id:"proprio_ms",phase:"fon",nom:"Proprioception membre supérieur",mat:"boule mousse ou plateau instable",p:"appui MS",desc:"Appui ouvert MS sur surface instable en quadrupédie ou mains sur table. Transferts de poids progressifs.",proto:"3 x 30 sec. Progression vers appui unilatéral.",just:"Réentraînement proprioceptif du coude — indiqué après instabilité ligamentaire et post-chirurgical (Lephart 1997)."},
+  {id:"retour_criteres",phase:"fon",nom:"Critères retour sport / travail",mat:"évaluation",p:"évaluation",desc:"Évaluation critères de sortie : grip symétrique LSI ≥ 90%, PRTEE < 25 pts, QuickDASH < 20 pts, EVA ≤ 2/10 en charge.",proto:"Évaluation à 8-12 semaines selon pathologie.",just:"Critères fonctionnels validés. LSI grip ≥ 90% (Bisset 2011). PRTEE < 25 pts = résultat acceptable (Rompe 2007). QuickDASH MCID : 8 pts."}
+];
+
+function openProgram(){
+  var patName=(D.prenom||'')+' '+(D.nom||'');
+  document.getElementById('prog-patient-name').textContent=patName.trim()||'Programme';
+  document.getElementById('prog-patient-info').textContent='Coude \u00b7 '+(D.cote||'C\u00f4t\u00e9 non pr\u00e9cis\u00e9');
+
+  // Determine active diagnoses from test results
+  var diagMap={};
+  ['cozen','mill','maudsley'].forEach(function(k){if(TESTS[k]==='pos')diagMap.epic_lat=true;});
+  if(TESTS.golfer==='pos')diagMap.epic_med=true;
+  if(TESTS.tinel_coude==='pos'||TESTS.elbow_flex==='pos'||TESTS.scratch_ulnaire==='pos')diagMap.ulnaire=true;
+  if(TESTS.sup_resiste==='pos'||(TESTS.maudsley==='pos'&&TESTS.cozen!=='pos'))diagMap.tunnel_rad=true;
+  if(TESTS.hook==='pos'||TESTS.squeeze_bic==='pos'||TESTS.ruqt==='pos')diagMap.biceps=true;
+  if(TESTS.valgus_stress==='pos'||TESTS.mvst==='pos')diagMap.instab_lcu=true;
+  if(TESTS.pivot_lat==='pos'||TESTS.chair_pushup==='pos')diagMap.instab_plri=true;
+  var isSport=hasC('activite','Sport')||hasC('activite','sport')||hasC('installation','Reprise sportive');
+  var isChirurg=hasC('installation','Post-chirurgical');
+  var noDiag=Object.keys(diagMap).length===0;
+
+  // ID filter per diagnosis
+  var DIAG_IDS={
+    epic_lat:['cryo','mob_douce','iso_extenseurs','etirement_ecrb','foam_avant_bras','mob_mulligan','excentrique_ext','grip_isotonique','prono_sup_resist','grip_fonctionnel','retour_criteres'],
+    epic_med:['cryo','mob_douce','iso_extenseurs','etirement_fcr','excentrique_flex','grip_isotonique','prono_sup_resist','grip_fonctionnel','retour_criteres'],
+    ulnaire:['cryo','mob_douce','mob_neuro_ulnaire','grip_isotonique','prono_sup_resist','grip_fonctionnel','proprio_ms','retour_criteres'],
+    tunnel_rad:['cryo','mob_douce','pron_sup_passif','etirement_ecrb','prono_sup_resist','grip_isotonique','grip_fonctionnel','retour_criteres'],
+    biceps:['cryo','pron_sup_passif','iso_biceps','pron_sup_actif','bicep_curl','supination_resist','prono_sup_resist','integration_chaine','grip_fonctionnel','retour_criteres'],
+    instab_lcu:['cryo','mob_douce','iso_extenseurs','renf_stab_medial','grip_isotonique','pompes_inclinees','integration_chaine','proprio_ms','lancer_progressif','retour_criteres'],
+    instab_plri:['cryo','mob_douce','pompes_inclinees','grip_isotonique','renf_stab_medial','proprio_ms','integration_chaine','retour_criteres']
+  };
+
+  // Build active ID set
+  var activeIds={};
+  // Always include generic exos if no diagnosis
+  if(noDiag){
+    EXOS.forEach(function(e){activeIds[e.id]=true;});
+  } else {
+    Object.keys(diagMap).forEach(function(dk){
+      (DIAG_IDS[dk]||[]).forEach(function(id){activeIds[id]=true;});
+    });
+    // Add sport-specific if relevant
+    if(isSport){activeIds.lancer_progressif=true;activeIds.endurance_circuit=true;activeIds.integration_chaine=true;}
+    // Add post-chirurgical extras
+    if(isChirurg){activeIds.pron_sup_passif=true;activeIds.iso_biceps=true;}
+    // Always include general phase 4
+    activeIds.grip_fonctionnel=true;activeIds.retour_criteres=true;
+  }
+
+  var PNAMES={ant:'Phase 1 \u2014 Antalgique / Protection',mob:'Phase 2 \u2014 Mobilisation & \u00c9tirements',ren:'Phase 3 \u2014 Renforcement progressif',fon:'Phase 4 \u2014 Fonctionnel & Retour activit\u00e9'};
+  var PCLS={ant:'epa',mob:'epm',ren:'epr',fon:'epf'};
+  var html='';
+
+  // Diagnostic badge
+  if(!noDiag){
+    var diagLabels={epic_lat:'Épicondylalgie latérale',epic_med:'Épicondylalgie médiale',ulnaire:'Compression ulnaire',tunnel_rad:'Tunnel radial',biceps:'Pathologie biceps distal',instab_lcu:'Instabilité LCU',instab_plri:'Instabilité PLRI'};
+    var activeDiagNames=Object.keys(diagMap).map(function(k){return diagLabels[k]||k;});
+    html+='<div style="background:var(--zl);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--zd)"><strong>Programme adapt\u00e9 pour\u00a0:</strong> '+activeDiagNames.join(' + ')+'</div>';
+  }
+
+  ['ant','mob','ren','fon'].forEach(function(phase){
+    var exosP=EXOS.filter(function(e){return e.phase===phase&&activeIds[e.id];});
+    if(!exosP.length)return;
+    html+='<div class="eplbl '+PCLS[phase]+'">'+PNAMES[phase]+'</div>';
+    exosP.forEach(function(ex){
+      html+='<div class="exc"><div class="exh" onclick="toggleEx(this)"><span class="exn">'+ex.nom+'</span>';
+      if(ex.mat&&ex.mat!=='aucun'&&ex.mat!=='\u00e9valuation')html+='<span class="exm mn">'+ex.mat+'</span>';
+      html+='<span class="exch">\u25bc</span></div>';
+      html+='<div class="exbd">';
+      if(ex.p&&ex.p!=='\u00e9valuation')html+='<div class="expo"><span class="expol">Position\u00a0:</span><span style="font-size:11px;color:var(--tx2)">'+ex.p+'</span></div>';
+      if(ex.desc)html+='<div class="exdc">'+ex.desc+'</div>';
+      if(ex.proto)html+='<div class="expr">'+ex.proto+'</div>';
+      if(ex.just)html+='<div class="expg">EBP \u2014 '+ex.just+'</div>';
+      html+='</div></div>';
+    });
+  });
+
+  html+='<div class="phase" style="margin-top:12px"><div class="phh" style="background:var(--purl);color:var(--pur)">Conseils g\u00e9n\u00e9raux</div><div class="phb"><ul class="tl2">';
+  ['Respecter EVA \u2264 3/10 pendant les exercices en phase initiale','Iso\u00e9trie 45 sec\u00a0: utiliser comme antalgie imm\u00e9diate avant s\u00e9ance','Le programme excentrique doit \u00eatre maintenu 8 semaines minimum','Progresser la charge hebdomadairement \u2014 ne pas sauter les phases','Consulter si EVA > 6/10 persistant plus de 48h apr\u00e8s exercice'].forEach(function(c){html+='<li>'+c+'</li>';});
+  html+='</ul></div></div>';
+
+  document.getElementById('prog-content').innerHTML=html;
+  document.getElementById('prog-overlay').classList.add('o');
+  document.body.style.overflow='hidden';
+}
+function closeProgram(){document.getElementById('prog-overlay').classList.remove('o');document.body.style.overflow='';}
+function toggleEx(hdr){var bd=hdr.nextElementSibling;var arr=hdr.querySelector('.exch');if(!bd)return;var open=bd.classList.toggle('o');if(arr)arr.classList.toggle('o',open);}
+
+function initListeners(){
+  ['nom','prenom','ddn','sexe','cote','profession','datebilan','medecin','observations'].forEach(function(f){var el=document.getElementById(f);if(el)el.addEventListener('input',function(){D[f]=this.value;saveState();});});
+  ['flex_att','ext_att','sup_att','pro_att','flex_sain','sup_sain'].forEach(function(f){var el=document.getElementById(f);if(el)el.addEventListener('input',function(){if(!D.amps)D.amps={};D.amps[f]=this.value;saveState();});});
+}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2000);}
+function copyCR(){var a=document.querySelector('.crv.on');if(!a)return;var txt=a.innerText||a.textContent;if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){showToast('Compte-rendu copié ✓');});}else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copié ✓');}}
+function resetBilan(){if(!confirm('Réinitialiser le bilan ? Les données seront effacées.'))return;localStorage.removeItem('bilan-coude-v1');location.reload();}
+
+document.addEventListener('DOMContentLoaded',function(){initListeners();loadState();showStep(1);});
+
+var psfsSt={texts:['','',''],vals:[null,null,null]};
+function buildPSFS(){
+  var h='<div style="font-size:12px;color:var(--tx2);margin-bottom:10px">Identifiez 3 activités limitées par votre coude — notez chacune de 0 (impossible) à 10 (normal).</div>';
+  for(var j=0;j<3;j++){
+    h+='<div class="psfs-item">';
+    h+='<input type="text" placeholder="Activité '+(j+1)+' (ex: monter les escaliers, conduire...)" value="'+(psfsSt.texts[j]||'')+'" oninput="setPsfsText('+j+',this.value)" style="margin-bottom:7px">';
+    h+='<div class="psfs-btns">';
+    for(var v=0;v<=10;v++){
+      h+='<button class="psfs-btn'+(psfsSt.vals[j]===v?' on':'')+'" onclick="setPsfsVal('+j+','+v+',this)" type="button">'+v+'</button>';
+    }
+    h+='</div></div>';
+  }
+  document.getElementById('psfs-items').innerHTML=h;
+  calcPSFS();
+}
+function setPsfsText(j,v){psfsSt.texts[j]=v;}
+function setPsfsVal(j,v,btn){btn.closest('.psfs-btns').querySelectorAll('.psfs-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');psfsSt.vals[j]=v;calcPSFS();}
+function calcPSFS(){
+  var vals=psfsSt.vals.filter(function(v){return v!==null;});if(!vals.length){document.getElementById('psfs-result').innerHTML='';return;}
+  var avg=(vals.reduce(function(s,v){return s+v;},0)/vals.length).toFixed(1);D.psfs={avg:parseFloat(avg),texts:psfsSt.texts,vals:psfsSt.vals};
+  var cls=parseFloat(avg)>=7?'sco-g':parseFloat(avg)>=4?'sco-m':'sco-r';
+  document.getElementById('psfs-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+avg+'<span style="font-size:14px;font-weight:600">/10</span></div><div class="score-info">PSFS<br>Moyenne activités<br><span style="font-weight:400;font-size:10px">'+vals.length+' item(s) · MCID=2</span></div></div>';
+}
+</script>
+</body>
+</html>

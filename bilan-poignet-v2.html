@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1B2A38">
+<title>Bilan Poignet — Yasser Ladraa</title>
+<style>
+:root{
+  --bg:#F3F1ED;--surf:#FFF;--surf2:#EDEAE3;--brd:#DDD9CF;--brd2:#C2BCB0;
+  --tx:#1A1714;--tx2:#56524C;--tx3:#98948A;
+  --z:#6B3FA0;--zl:#F0EAF9;--zd:#3D1F6B;--zm:#6B3FA0;
+  --red:#9C2B2B;--redl:#FAEAEA;--amb:#B56E10;--ambl:#FAF0DC;
+  --blu:#1550A0;--blul:#E3EEF9;--pur:#5A3898;--purl:#EDE8F8;
+  --grn:#177A5A;--grnl:#DAF0E6;--nvy:#1B2A38;
+  --r:10px;--rl:16px;--nh:64px;--hh:72px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;min-height:100vh;padding-bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 120px);padding-top:var(--hh)}
+.hdr{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nvy);height:var(--hh);display:flex;flex-direction:column;justify-content:center;padding:0 16px}
+.hr1{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hn{font-size:13px;font-weight:700;color:#fff}.hs{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
+.hbadge{background:var(--zm);color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.hprog{margin-top:8px}.hpbar{height:3px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+.hpfill{height:100%;background:var(--zm);border-radius:99px;transition:width .4s ease}
+.hplbls{display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:rgba(255,255,255,.4)}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:#fff;border-top:1px solid var(--brd);height:calc(var(--nh) + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;padding:0 12px;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 24px rgba(0,0,0,.08);gap:8px}
+.bni{font-size:11px;color:var(--tx3);text-align:center;flex:1;line-height:1.3;min-width:0}
+.bbt{display:flex;align-items:center;gap:5px;padding:12px 20px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;touch-action:manipulation;min-width:96px;min-height:48px;justify-content:center;flex-shrink:0}
+.bbt:active{opacity:.8}.bbk{background:var(--surf2);color:var(--tx2)}.bbn{background:var(--zm);color:#fff}.bbt:disabled{opacity:.3;pointer-events:none}
+.tb{font-size:13px;font-weight:700;padding:9px 14px;border-radius:99px;border:1.5px solid var(--brd);cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;white-space:nowrap;touch-action:manipulation;font-family:inherit;min-height:44px;display:inline-flex;align-items:center}
+.tb:active{transform:scale(.95)}.tb.pos{background:var(--redl);border-color:var(--red);color:var(--red)}.tb.neg{background:var(--zl);border-color:var(--z);color:var(--zd)}
+.app{max-width:680px;margin:0 auto;padding:16px 14px 0}
+.step{display:none}.step.active{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sc{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.sch{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;touch-action:manipulation;transition:background .15s;user-select:none;-webkit-user-select:none}
+.sch:active{background:var(--surf2)}.schl{display:flex;align-items:center;gap:10px}
+.sci{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.iz{background:var(--zl)}.ia{background:var(--ambl)}.ib{background:var(--blul)}.ir{background:var(--redl)}.ip{background:var(--purl)}.ig{background:var(--grnl)}
+.sct{font-size:13px;font-weight:600;color:var(--tx)}.scs{font-size:11px;color:var(--tx3);margin-top:1px}
+.scch{color:var(--tx3);font-size:11px;transition:transform .2s;flex-shrink:0}.scch.o{transform:rotate(180deg)}
+.scb{padding:14px 15px;border-top:1.5px solid var(--brd);display:none}.scb.o{display:block}
+.sa .sch{cursor:default}.sa .scch{display:none}.sa .scb{display:block}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+.fl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fh{font-size:11px;color:var(--tx3);font-weight:400;text-transform:none;letter-spacing:0}
+input[type=text],input[type=date],select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--tx);background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 13px;outline:none;transition:border .15s,background .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--zm);background:#fff}
+textarea{resize:vertical;min-height:72px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ssep{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin:16px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--brd)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--brd);border-radius:99px;padding:8px 14px;font-size:13px;cursor:pointer;color:var(--tx2);background:var(--surf2);transition:all .15s;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:40px;display:inline-flex;align-items:center}
+.chip:active{transform:scale(.97)}.chip.on{background:var(--zm);border-color:var(--zm);color:#fff;font-weight:600}
+.crow{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border:1.5px solid var(--brd);border-radius:var(--r);background:var(--surf2);cursor:pointer;touch-action:manipulation;transition:all .15s;user-select:none;-webkit-user-select:none;margin-bottom:8px}
+.crow:active{transform:scale(.99)}.crow.on{background:var(--zl);border-color:#C9A8E0}
+.crow.on-red{background:var(--redl);border-color:#ECAAAA}
+.cbox{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--brd2);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s}
+.crow.on .cbox{background:var(--zm);border-color:var(--zm)}
+.crow.on-red .cbox{background:var(--red);border-color:var(--red)}
+.cmk{display:none;color:#fff;font-size:12px;font-weight:800}.crow.on .cmk,.crow.on-red .cmk{display:block}
+.ctx2{font-size:13px;color:var(--tx);flex:1;line-height:1.4}.csb{font-size:11px;color:var(--tx3);margin-top:2px}
+.evab{width:42px;height:48px;border-radius:var(--r);border:1.5px solid var(--brd);font-size:14px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.evab:active{transform:scale(.95)}.evab.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.eva-row{display:flex;gap:6px;flex-wrap:wrap}
+.mrc-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--brd)}
+.mrc-row:last-child{border-bottom:none}
+.mrc-label{font-size:13px;color:var(--tx);flex:1;line-height:1.3}
+.mrc-btns{display:flex;gap:4px}
+.mrc-btn{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--brd);font-size:13px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;font-family:inherit}
+.mrc-btn:active{transform:scale(.95)}.mrc-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.tstps{list-style:none;padding:0;margin-bottom:8px;counter-reset:step-counter}
+.tstps li{padding:5px 0;border-bottom:1px solid var(--brd);font-size:12px;color:var(--tx2);display:flex;gap:8px;line-height:1.4;counter-increment:step-counter}
+.tstps li:last-child{border-bottom:none}
+.tstps li::before{content:counter(step-counter);background:var(--zm);color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px}
+.tint{font-size:12px;color:var(--tx3);font-style:italic;padding-top:6px;line-height:1.5}
+.ti{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
+.th{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.th:active{background:var(--surf2)}
+.tl{flex:1;min-width:0}
+.tn{font-size:13px;font-weight:700;color:var(--tx)}.tsb{font-size:11px;color:var(--tx3);margin-top:1px}
+.tbs{display:flex;gap:6px;flex-shrink:0;margin-left:8px}
+.tbody{padding:10px 13px 12px;border-top:1.5px solid var(--brd);display:none}
+.tbody.o{display:block}
+.ebp-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--brd2);background:#fff;color:var(--tx3);font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.ebp-btn:active{background:var(--zl);border-color:var(--z);color:var(--z)}
+.ebp-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.ebp-overlay.o{opacity:1;pointer-events:auto}
+.ebp-sheet{background:#fff;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-width:540px;width:100%;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.ebp-overlay.o .ebp-sheet{transform:translateY(0)}
+.ebp-drag{width:36px;height:4px;background:var(--brd2);border-radius:99px;margin:0 auto 16px}
+.ebp-title{font-size:15px;font-weight:800;color:var(--nvy);margin-bottom:4px}
+.ebp-ref{font-size:11px;color:var(--tx3);margin-bottom:14px;font-style:italic}
+.ebp-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.ebp-stat{background:var(--surf2);border-radius:10px;padding:10px 12px;border:1.5px solid var(--brd)}
+.ebp-stat-lbl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.ebp-stat-val{font-size:18px;font-weight:800;color:var(--nvy)}
+.ebp-stat-sub{font-size:10px;color:var(--tx3);margin-top:2px}
+.ebp-note{font-size:12px;color:var(--tx2);background:var(--zl);border:1.5px solid #C9A8E0;border-radius:8px;padding:10px 12px;line-height:1.5;margin-bottom:14px}
+.ebp-close{width:100%;padding:13px;border-radius:var(--r);border:none;background:var(--nvy);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.score-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;font-size:13px;font-weight:700;border:1.5px solid;margin-top:8px}
+.alr{background:var(--redl);border:1.5px solid #ECAAAA;color:#5A1515}
+.rflag{background:var(--redl);border:1.5px solid #ECAAAA;border-radius:var(--r);padding:10px 13px;font-size:13px;font-weight:700;color:#5A1515;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.pbar-wrap{margin-top:8px}
+.pbar-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin-bottom:4px}
+.pbar{height:8px;background:var(--surf2);border-radius:99px;overflow:hidden;border:1px solid var(--brd)}
+.pbar-fill{height:100%;border-radius:99px;transition:width .5s ease}
+.pbar-fill.high{background:var(--red)}
+.pbar-fill.med{background:var(--amb)}
+.pbar-fill.low{background:var(--grn)}
+.cluster-lr{font-size:13px;font-weight:700;color:var(--zd);margin-top:6px}
+.stab-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
+.cr-block{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:13px 15px;margin-bottom:10px}
+.cr-label{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:6px}
+.cr-value{font-size:13px;color:var(--tx);line-height:1.6}
+.crtabs{display:flex;gap:8px;margin-bottom:14px}
+.crtab{flex:1;padding:10px;border-radius:var(--r);border:1.5px solid var(--brd);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;background:var(--surf2);color:var(--tx2);text-align:center;touch-action:manipulation}
+.crtab.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.crv{display:none}.crv.on{display:block}
+.crsh{background:var(--nvy);color:#fff;border-radius:var(--r);padding:13px 15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.crsh-name{font-size:16px;font-weight:800}.crsh-date{font-size:11px;color:rgba(255,255,255,.6)}
+.crsh-badge{background:var(--zm);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.08em}
+.btf{width:100%;padding:14px;border-radius:var(--r);border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation;margin-top:10px}
+.btn1{background:var(--zm);color:#fff}
+.btn2{background:var(--nvy);color:#fff}
+.btz{background:var(--zl);color:var(--zd);border:1.5px solid #C9A8E0}
+.btg{background:var(--surf2);color:var(--tx2);border:1.5px solid var(--brd)}
+.mov{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.mov.o{opacity:1;pointer-events:auto}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding-bottom:env(safe-area-inset-bottom);max-width:540px;width:100%;max-height:85vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.mov.o .modal{transform:translateY(0)}
+.mhnd{width:36px;height:4px;background:var(--brd2);border-radius:99px;margin:12px auto 0}
+.mhd{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--brd)}
+.mhd h2{font-size:16px;font-weight:800;color:var(--nvy)}
+.mcl{background:none;border:none;font-size:20px;color:var(--tx3);cursor:pointer;padding:4px;touch-action:manipulation}
+.mbd{overflow-y:auto;padding:14px 18px 20px;-webkit-overflow-scrolling:touch}
+.qdi{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--brd)}
+.qdi:last-child{border-bottom:none}
+.qdq{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:10px}
+.qdos{display:flex;gap:6px;flex-wrap:wrap}
+.qdo{padding:8px 12px;border-radius:99px;border:1.5px solid var(--brd);font-size:12px;cursor:pointer;background:var(--surf2);color:var(--tx2);text-align:center;touch-action:manipulation;min-height:40px;display:inline-flex;align-items:center}
+.qdo.on{background:var(--zm);border-color:var(--zm);color:#fff;font-weight:700}
+.score-res{background:var(--zl);border:1.5px solid #C9A8E0;border-radius:var(--r);padding:12px 15px;margin-top:12px}
+.pov{position:fixed;inset:0;z-index:450;background:#fff;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.pov.o{transform:translateX(0)}
+.eplbl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:5px;margin:10px 0 8px}
+.epa{background:var(--redl);color:var(--red)}.epm{background:var(--ambl);color:var(--amb)}.epv{background:var(--grnl);color:var(--grn)}.epr{background:var(--zl);color:var(--zd)}.epf{background:var(--blul);color:var(--blu)}
+.exc{background:#fff;border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
+.exh{display:flex;align-items:center;gap:8px;padding:12px 14px;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.exh:active{background:var(--surf2)}.exn{font-size:13px;font-weight:600;color:var(--tx);flex:1}.exm{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--zl);color:var(--zd);white-space:nowrap}
+.exch{color:var(--tx3);font-size:10px;transition:transform .2s;flex-shrink:0}.exch.o{transform:rotate(180deg)}
+.exbd{display:none;padding:0 14px 14px;border-top:1px solid var(--brd)}.exbd.o{display:block}
+.expo{display:flex;align-items:baseline;gap:6px;padding:8px 0 4px;font-size:11px}.expol{font-weight:700;color:var(--tx2);min-width:40px}
+.exdc{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:6px}
+.expr{font-size:11px;color:var(--tx2);background:var(--surf2);border-radius:6px;padding:7px 10px;margin-bottom:6px}
+.expg{font-size:11px;color:var(--tx3);font-style:italic;border-left:2px solid var(--brd2);padding-left:8px}
+.phdr{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1.5px solid var(--brd);background:var(--nvy);flex-shrink:0}
+.pclose{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation}
+.phinfo{flex:1;min-width:0}.phtitle{font-size:14px;font-weight:700;color:#fff}.phsub{font-size:11px;color:rgba(255,255,255,.6);margin-top:1px}
+.ppbtn{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;font-size:12px;font-weight:700;padding:8px 14px;border-radius:8px;cursor:pointer;touch-action:manipulation;font-family:inherit}
+.pcont{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px;padding-bottom:calc(env(safe-area-inset-bottom)+60px)}
+.eplbl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:5px;margin:10px 0 8px}
+.epa{background:var(--redl);color:var(--red)}.epm{background:var(--ambl);color:var(--amb)}.epv{background:var(--grnl);color:var(--grn)}.epr{background:var(--zl);color:var(--zd)}.epf{background:var(--blul);color:var(--blu)}
+.exc{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
+.exh{display:flex;align-items:center;gap:8px;padding:11px 14px;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.exh:active{background:var(--surf2)}.exn{font-size:13px;font-weight:600;color:var(--tx);flex:1;line-height:1.3}
+.exm{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap}.mn{background:var(--zl);color:var(--zd)}
+.exch{color:var(--tx3);font-size:10px;transition:transform .2s;flex-shrink:0}.exch.o{transform:rotate(180deg)}
+.exbd{display:none;padding:12px 14px;border-top:1.5px solid var(--brd);background:var(--surf2)}.exbd.o{display:block}
+.expo{display:flex;align-items:baseline;gap:6px;margin-bottom:6px}.expol{font-size:10px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.exdc{font-size:12px;color:var(--tx);line-height:1.5;margin-bottom:6px}
+.expr{font-size:11px;color:var(--tx2);background:var(--surf);border-radius:6px;padding:6px 10px;margin-bottom:6px;border-left:3px solid var(--z)}
+.expg{font-size:11px;color:var(--tx3);font-style:italic;line-height:1.4}
+.btz{background:var(--z);color:#fff}
+.phdr{background:var(--nvy);padding:calc(16px + env(safe-area-inset-top)) 16px 14px;display:flex;align-items:center;gap:12px}
+.pclose{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:18px;width:36px;height:36px;border-radius:50%;cursor:pointer;touch-action:manipulation;flex-shrink:0}
+.phinfo{flex:1}.phtitle{font-size:15px;font-weight:800;color:#fff}.phsub{font-size:11px;color:rgba(255,255,255,.6)}
+.ppbtn{background:var(--zm);border:none;color:#fff;font-size:12px;font-weight:700;padding:8px 14px;border-radius:var(--r);cursor:pointer;touch-action:manipulation;font-family:inherit}
+.pcont{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
+.toast{position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom) + 12px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--nvy);color:#fff;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;z-index:600;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media print{body{background:#fff;padding:0}.hdr,.bnav,.no-print,.btf,.crtabs,.toast,.ebp-overlay,.pov,.mov{display:none!important}.step{display:none!important}.crv{display:none!important}.crv.print-active{display:block!important}.step.print-cr{display:block!important}.sc,.crbl{border:1px solid #ddd;break-inside:avoid}.scb{display:block!important}.crsh{background:#1B2A38!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.psfs-item{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.psfs-btns{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
+.psfs-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--brd);font-size:11px;font-weight:700;cursor:pointer;background:#fff;color:var(--tx2);transition:all .15s;display:flex;align-items:center;justify-content:center;font-family:inherit;touch-action:manipulation}
+.psfs-btn:active{transform:scale(.9)}.psfs-btn.on{background:var(--zm);border-color:var(--zm);color:#fff}
+.hbtn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.12);border:none;color:#fff;cursor:pointer;touch-action:manipulation;flex-shrink:0;text-decoration:none;font-size:16px;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hr1">
+    <div><div class="hn" id="hdr-name">Bilan Poignet/Main</div><div class="hs">Yasser Ladraa · Kinésithérapeute</div></div>
+    <a class="hbtn" href="index.html" title="Accueil">&#8962;</a>
+    <div class="hbadge" id="hdr-step">Étape 1/6</div>
+  </div>
+  <div class="hprog">
+    <div class="hpbar"><div class="hpfill" id="prog-fill" style="width:16.7%"></div></div>
+    <div class="hplbls"><span>Identité</span><span>Anamnèse</span><span>Examen</span><span>Tests EBP</span><span>Scores</span><span>Analyse</span></div>
+  </div>
+</div>
+
+<div class="app">
+
+<!-- ═══════════════════ STEP 1 — IDENTITÉ ═══════════════════ -->
+<div class="step active" id="s1">
+  <div class="sc sa">
+    <div class="sch"><div class="schl"><div class="sci iz">👤</div><div><div class="sct">Identité du patient</div></div></div></div>
+    <div class="scb o">
+      <div class="g2">
+        <div class="field"><label class="fl">Nom</label><input type="text" id="nom" placeholder="Dupont" autocomplete="off" oninput="D.nom=this.value"></div>
+        <div class="field"><label class="fl">Prénom</label><input type="text" id="prenom" placeholder="Marie" autocomplete="off" oninput="D.prenom=this.value"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Date de naissance</label><input type="date" id="ddn" oninput="D.ddn=this.value"></div>
+        <div class="field"><label class="fl">Sexe</label>
+          <select id="sexe" onchange="D.sexe=this.value">
+            <option value="">—</option><option>Femme</option><option>Homme</option>
+          </select>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Côté atteint</label>
+          <select id="cote" onchange="D.cote=this.value">
+            <option value="">—</option><option>Poignet droit</option><option>Poignet gauche</option><option>Bilatéral</option>
+          </select>
+        </div>
+        <div class="field"><label class="fl">Profession</label><input type="text" id="profession" placeholder="Ex: Pianiste" autocomplete="off" oninput="D.profession=this.value"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label class="fl">Date du bilan</label><input type="date" id="datebilan" oninput="D.datebilan=this.value"></div>
+        <div class="field"><label class="fl">Médecin référent</label><input type="text" id="medecin" placeholder="Dr. Martin" autocomplete="off" oninput="D.medecin=this.value"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc sa">
+    <div class="sch"><div class="schl"><div class="sci ir">🚨</div><div><div class="sct">Red flags — Drapeaux rouges</div><div class="scs">À évaluer en premier — orienter si présent</div></div></div></div>
+    <div class="scb o">
+      <div class="crow" onclick="TCK(this,'rf','on-red')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Traumatisme récent (chute, AVP, écrasement)</div><div class="csb">→ Fracture scaphoïde / radius à éliminer</div></div></div>
+      <div class="crow" onclick="TCK(this,'rf','on-red')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur tabatière anatomique post-trauma</div><div class="csb">→ Radio ± IRM urgente (fracture scaphoïde)</div></div></div>
+      <div class="crow" onclick="TCK(this,'rf','on-red')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Douleur disproportionnée + gonflement dur post-trauma</div><div class="csb">→ Syndrome des loges — urgence chirurgicale</div></div></div>
+      <div class="crow" onclick="TCK(this,'rf','on-red')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Impossibilité d'extension active pouce (extens. pollicis longus)</div><div class="csb">→ Rupture tendineuse — chirurgie urgente</div></div></div>
+      <div class="crow" onclick="TCK(this,'rf','on-red')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Signes systémiques (fièvre, AEG, arthrite multiple)</div><div class="csb">→ Arthrite septique / rhumatismale — bilan biologique</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ STEP 2 — ANAMNÈSE ═══════════════════ -->
+<div class="step" id="s2">
+  <div class="sc sa">
+    <div class="sch"><div class="schl"><div class="sci ia">📋</div><div><div class="sct">Contexte clinique</div></div></div></div>
+    <div class="scb o">
+      <div class="field"><label class="fl">Contexte principal</label>
+        <div class="chips" id="ctx">
+          <div class="chip" data-ctx="douleur" onclick="setCtx(this,'douleur')">Douleur poignet</div>
+          <div class="chip" data-ctx="paresthesie" onclick="setCtx(this,'paresthesie')">Fourmillements / engourdissements</div>
+          <div class="chip" data-ctx="deformite" onclick="setCtx(this,'deformite')">Déformation</div>
+          <div class="chip" data-ctx="instabilite" onclick="setCtx(this,'instabilite')">Instabilité / claquement</div>
+          <div class="chip" data-ctx="faiblesse" onclick="setCtx(this,'faiblesse')">Faiblesse de préhension</div>
+          <div class="chip" data-ctx="trauma" onclick="setCtx(this,'trauma')">Post-traumatique</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci iz">📍</div><div><div class="sct">Localisation de la douleur</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="field"><label class="fl">Zone douloureuse principale</label>
+        <div class="chips" id="localisation">
+          <div class="chip" onclick="TC(this,'localisation')">Tabatière anatomique (radial)</div>
+          <div class="chip" onclick="TC(this,'localisation')">Bord radial (pouce / base)</div>
+          <div class="chip" onclick="TC(this,'localisation')">Bord ulnaire (5e doigt)</div>
+          <div class="chip" onclick="TC(this,'localisation')">Face palmaire centrale</div>
+          <div class="chip" onclick="TC(this,'localisation')">Face palmaire doigts (médian)</div>
+          <div class="chip" onclick="TC(this,'localisation')">Face dorsale centrale</div>
+          <div class="chip" onclick="TC(this,'localisation')">Styloïde ulnaire</div>
+          <div class="chip" onclick="TC(this,'localisation')">Trapézo-métacarpienne (pouce)</div>
+          <div class="chip" onclick="TC(this,'localisation')">Diffuse</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ia">⚡</div><div><div class="sct">Mode d'installation &amp; facteurs déclenchants</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="field"><label class="fl">Installation</label>
+        <div class="chips" id="installation">
+          <div class="chip" onclick="TC(this,'installation')">Progressive / insidieuse</div>
+          <div class="chip" onclick="TC(this,'installation')">Post-traumatique</div>
+          <div class="chip" onclick="TC(this,'installation')">Surcharge professionnelle</div>
+          <div class="chip" onclick="TC(this,'installation')">Sport / loisir (hypersollicitation)</div>
+          <div class="chip" onclick="TC(this,'installation')">Post-partum / allaitement</div>
+          <div class="chip" onclick="TC(this,'installation')">Grossesse</div>
+        </div>
+      </div>
+      <div class="field"><label class="fl">Facteurs déclenchants</label>
+        <div class="chips" id="declenchant">
+          <div class="chip" onclick="TC(this,'declenchant')">Préhension / serrage</div>
+          <div class="chip" onclick="TC(this,'declenchant')">Pince pouce-index</div>
+          <div class="chip" onclick="TC(this,'declenchant')">Extension poignet</div>
+          <div class="chip" onclick="TC(this,'declenchant')">Flexion poignet</div>
+          <div class="chip" onclick="TC(this,'declenchant')">Pronation / supination</div>
+          <div class="chip" onclick="TC(this,'declenchant')">Charge axiale pouce</div>
+          <div class="chip" onclick="TC(this,'declenchant')">Nuit / repos</div>
+          <div class="chip" onclick="TC(this,'declenchant')">Clavier / souris</div>
+          <div class="chip" onclick="TC(this,'declenchant')">Activités ménagères</div>
+        </div>
+      </div>
+      <div class="field"><label class="fl">Horaire</label>
+        <div class="chips" id="rythme">
+          <div class="chip" onclick="TC(this,'rythme')">Dérouillage matinal</div>
+          <div class="chip" onclick="TC(this,'rythme')">Mécanique (effort)</div>
+          <div class="chip" onclick="TC(this,'rythme')">Nocturne (réveille)</div>
+          <div class="chip" onclick="TC(this,'rythme')">Continu</div>
+          <div class="chip" onclick="TC(this,'rythme')">Fourmillements nocturnes</div>
+          <div class="chip" onclick="TC(this,'rythme')">Fourmillements diurnes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ib">🏥</div><div><div class="sct">Antécédents &amp; imagerie</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="field"><label class="fl">Antécédents</label>
+        <div class="chips" id="atcd">
+          <div class="chip" onclick="TC(this,'atcd')">Fracture du scaphoïde</div>
+          <div class="chip" onclick="TC(this,'atcd')">Fracture radius distal</div>
+          <div class="chip" onclick="TC(this,'atcd')">Chirurgie poignet</div>
+          <div class="chip" onclick="TC(this,'atcd')">Canal carpien traité</div>
+          <div class="chip" onclick="TC(this,'atcd')">Polyarthrite rhumatoïde</div>
+          <div class="chip" onclick="TC(this,'atcd')">Diabète</div>
+          <div class="chip" onclick="TC(this,'atcd')">Hypothyroïdie</div>
+          <div class="chip" onclick="TC(this,'atcd')">Hyperlaxité constitutionnelle</div>
+          <div class="chip" onclick="TC(this,'atcd')">Goutte</div>
+          <div class="chip" onclick="TC(this,'atcd')">Dupuytren connu</div>
+        </div>
+      </div>
+      <div class="field"><label class="fl">Imagerie disponible</label>
+        <div class="chips" id="imagerie">
+          <div class="chip" onclick="TC(this,'imagerie')">Radio standard normale</div>
+          <div class="chip" onclick="TC(this,'imagerie')">Radio — arthrose TM</div>
+          <div class="chip" onclick="TC(this,'imagerie')">Radio — fracture scaphoïde</div>
+          <div class="chip" onclick="TC(this,'imagerie')">IRM — lésion TFCC</div>
+          <div class="chip" onclick="TC(this,'imagerie')">EMG — SCC confirmé</div>
+          <div class="chip" onclick="TC(this,'imagerie')">Écho — De Quervain</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc sa">
+    <div class="sch"><div class="schl"><div class="sci iz">🔢</div><div><div class="sct">Évaluation de la douleur (EVA)</div></div></div></div>
+    <div class="scb o">
+      <div class="field"><label class="fl">Douleur au repos <span class="fh">— cliquer la valeur</span></label>
+        <div class="eva-row" id="eva-repos">
+          <div class="evab" onclick="setEVA('repos',0,this)">0</div><div class="evab" onclick="setEVA('repos',1,this)">1</div><div class="evab" onclick="setEVA('repos',2,this)">2</div><div class="evab" onclick="setEVA('repos',3,this)">3</div><div class="evab" onclick="setEVA('repos',4,this)">4</div><div class="evab" onclick="setEVA('repos',5,this)">5</div><div class="evab" onclick="setEVA('repos',6,this)">6</div><div class="evab" onclick="setEVA('repos',7,this)">7</div><div class="evab" onclick="setEVA('repos',8,this)">8</div><div class="evab" onclick="setEVA('repos',9,this)">9</div><div class="evab" onclick="setEVA('repos',10,this)">10</div>
+        </div>
+      </div>
+      <div class="field"><label class="fl">Douleur à l'effort <span class="fh">— cliquer la valeur</span></label>
+        <div class="eva-row" id="eva-effort">
+          <div class="evab" onclick="setEVA('effort',0,this)">0</div><div class="evab" onclick="setEVA('effort',1,this)">1</div><div class="evab" onclick="setEVA('effort',2,this)">2</div><div class="evab" onclick="setEVA('effort',3,this)">3</div><div class="evab" onclick="setEVA('effort',4,this)">4</div><div class="evab" onclick="setEVA('effort',5,this)">5</div><div class="evab" onclick="setEVA('effort',6,this)">6</div><div class="evab" onclick="setEVA('effort',7,this)">7</div><div class="evab" onclick="setEVA('effort',8,this)">8</div><div class="evab" onclick="setEVA('effort',9,this)">9</div><div class="evab" onclick="setEVA('effort',10,this)">10</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ STEP 3 — EXAMEN PHYSIQUE ═══════════════════ -->
+<div class="step" id="s3">
+  <div class="sc sa">
+    <div class="sch"><div class="schl"><div class="sci iz">👁</div><div><div class="sct">Inspection</div></div></div></div>
+    <div class="scb o">
+      <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Œdème du poignet</div></div></div>
+      <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Ténosynovite visible (bord radial — 1er compartiment)</div></div></div>
+      <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Atrophie thénar (espace palmaire radial)</div><div class="csb">→ SCC évolué — signe de gravité</div></div></div>
+      <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Nodule / bride palmaire (Dupuytren)</div></div></div>
+      <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Déformation trapézo-métacarpienne (rhizarthrose)</div></div></div>
+      <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Saillie styloïde ulnaire (piano key)</div></div></div>
+      <div class="crow" onclick="TCK(this,'inspection','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Cicatrice / déformation post-fracture</div></div></div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ia">🤚</div><div><div class="sct">Palpation</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Tabatière anatomique douloureuse</div><div class="csb">→ Fracture scaphoïde / instabilité SL</div></div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Styloïde radiale / 1er compartiment douloureux</div><div class="csb">→ De Quervain</div></div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Fovéa ulnaire douloureuse</div><div class="csb">→ Lésion TFCC</div></div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Trapézo-métacarpienne douloureuse à la compression</div><div class="csb">→ Rhizarthrose</div></div></div>
+      <div class="crow" onclick="TCK(this,'palpation','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Canal carpien douloureux à la pression</div><div class="csb">→ SCC</div></div></div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ib">📐</div><div><div class="sct">Amplitudes articulaires</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ssep">Poignet atteint</div>
+      <div class="g2">
+        <div class="field"><label class="fl">Flexion</label><input type="text" id="flex_att" placeholder="80°" oninput="D.amps.flex_att=this.value"></div>
+        <div class="field"><label class="fl">Extension</label><input type="text" id="ext_att" placeholder="70°" oninput="D.amps.ext_att=this.value"></div>
+        <div class="field"><label class="fl">Incl. radiale</label><input type="text" id="incl_rad_att" placeholder="20°" oninput="D.amps.incl_rad_att=this.value"></div>
+        <div class="field"><label class="fl">Incl. ulnaire</label><input type="text" id="incl_uln_att" placeholder="30°" oninput="D.amps.incl_uln_att=this.value"></div>
+        <div class="field"><label class="fl">Pronation</label><input type="text" id="pro_att" placeholder="85°" oninput="D.amps.pro_att=this.value"></div>
+        <div class="field"><label class="fl">Supination</label><input type="text" id="sup_att" placeholder="90°" oninput="D.amps.sup_att=this.value"></div>
+      </div>
+      <div class="ssep">Poignet sain (référence)</div>
+      <div class="g2">
+        <div class="field"><label class="fl">Flexion</label><input type="text" id="flex_sain" placeholder="80°" oninput="D.amps.flex_sain=this.value"></div>
+        <div class="field"><label class="fl">Extension</label><input type="text" id="ext_sain" placeholder="70°" oninput="D.amps.ext_sain=this.value"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ig">💪</div><div><div class="sct">Bilan musculaire (MRC)</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="mrc-row"><span class="mrc-label">Extenseurs poignet (ECRB/ECRL)</span><div class="mrc-btns" id="mrc-ext_poignet"><button class="mrc-btn" onclick="setMRC('ext_poignet',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('ext_poignet',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('ext_poignet',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('ext_poignet',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('ext_poignet',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('ext_poignet',5,this)" type="button">5</button></div></div>
+      <div class="mrc-row"><span class="mrc-label">Fléchisseurs poignet (FCR/FCU)</span><div class="mrc-btns" id="mrc-flex_poignet"><button class="mrc-btn" onclick="setMRC('flex_poignet',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('flex_poignet',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('flex_poignet',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('flex_poignet',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('flex_poignet',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('flex_poignet',5,this)" type="button">5</button></div></div>
+      <div class="mrc-row"><span class="mrc-label">Abducteur long pouce (APL)</span><div class="mrc-btns" id="mrc-apl"><button class="mrc-btn" onclick="setMRC('apl',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('apl',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('apl',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('apl',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('apl',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('apl',5,this)" type="button">5</button></div></div>
+      <div class="mrc-row"><span class="mrc-label">Force de préhension (grip) — comparatif</label></span><div class="mrc-btns" id="mrc-grip"><button class="mrc-btn" onclick="setMRC('grip',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('grip',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('grip',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('grip',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('grip',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('grip',5,this)" type="button">5</button></div></div>
+      <div class="mrc-row"><span class="mrc-label">Opposition pouce (thénar)</span><div class="mrc-btns" id="mrc-thenar"><button class="mrc-btn" onclick="setMRC('thenar',0,this)" type="button">0</button><button class="mrc-btn" onclick="setMRC('thenar',1,this)" type="button">1</button><button class="mrc-btn" onclick="setMRC('thenar',2,this)" type="button">2</button><button class="mrc-btn" onclick="setMRC('thenar',3,this)" type="button">3</button><button class="mrc-btn" onclick="setMRC('thenar',4,this)" type="button">4</button><button class="mrc-btn" onclick="setMRC('thenar',5,this)" type="button">5</button></div></div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ip">🧠</div><div><div class="sct">Signes fonctionnels &amp; neurologie</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="crow" onclick="TCK(this,'signes_fonc','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Fourmillements 3 premiers doigts (distribution médiane)</div></div></div>
+      <div class="crow" onclick="TCK(this,'signes_fonc','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Fourmillements bord ulnaire (4e–5e doigts)</div></div></div>
+      <div class="crow" onclick="TCK(this,'signes_fonc','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Flick sign positif (secouer la main soulage)</div><div class="csb">→ Pathognomonique SCC — Se 93%</div></div></div>
+      <div class="crow" onclick="TCK(this,'signes_fonc','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Atrophie thénar visible</div><div class="csb">→ SCC avancé — pronostic réservé</div></div></div>
+      <div class="crow" onclick="TCK(this,'signes_fonc','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Claquement / ressaut au poignet</div><div class="csb">→ Instabilité SL / TFCC</div></div></div>
+      <div class="crow" onclick="TCK(this,'signes_fonc','on')"><div class="cbox"><span class="cmk">✓</span></div><div><div class="ctx2">Limitation progressive extension 4e–5e doigts</div><div class="csb">→ Dupuytren</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ STEP 4 — TESTS EBP ═══════════════════ -->
+<div class="step" id="s4">
+
+  <!-- DE QUERVAIN -->
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci iz">👍</div><div><div class="sct">De Quervain — 1er compartiment</div><div class="scs">Ténosynovite APL + EPB</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ti"><div class="th" onclick="tg('tb-eichhoff')"><div class="tl"><div class="tn">Test d'Eichhoff</div><div class="tsb">De Quervain · Sn 81% Sp 50% (Goubau, 2014)</div></div><button class="ebp-btn" onclick="showEBP('eichhoff',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'eichhoff','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'eichhoff','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-eichhoff"><ol class="tstps"><li>Patient ferme le poing avec le pouce à l'intérieur des doigts</li><li>Déviation ulnaire passive du poignet par l'examinateur</li><li>Positif : douleur reproduite à la styloïde radiale / 1er compartiment</li></ol><div class="tint">Distinct du Finkelstein original (qui étire passivement le pouce). Goubau 2014 montre Sn 81% avec LR− 0.38 — un résultat négatif réduit raisonnablement la probabilité. Comparer systématiquement au WHAT test pour confirmer.</div></div></div>
+      <div class="ti"><div class="th" onclick="tg('tb-what')"><div class="tl"><div class="tn">WHAT test (résistance pouce)</div><div class="tsb">De Quervain · Sn 99% LR− 0.03 (Goubau, 2014)</div></div><button class="ebp-btn" onclick="showEBP('what',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'what','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'what','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-what"><ol class="tstps"><li>Wrist Hyperflexion and Abduction of the Thumb</li><li>Hyperflexion du poignet + abduction résistée du pouce</li><li>Positif : douleur reproduite au 1er compartiment</li></ol><div class="tint">LR− 0.03 — un résultat négatif écarte quasi-certai­nement le De Quervain. Sn 99% en fait le meilleur test de screening disponible pour cette pathologie. À utiliser en premier si suspicion.</div></div></div>
+    </div>
+  </div>
+
+  <!-- CANAL CARPIEN -->
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ib">🖐</div><div><div class="sct">Syndrome du canal carpien (SCC)</div><div class="scs">Cluster Wainner — nerf médian</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ssep" style="margin-top:0">Cluster Wainner (≥4 critères positifs sur 6 = LR+ 16.6)</div>
+      <div class="cluster-lr" id="wainner-lr" style="margin-bottom:12px">0/4 — SCC peu probable</div>
+      <div class="ti"><div class="th" onclick="tg('tb-durkan')"><div class="tl"><div class="tn">Carpal Compression Test (Durkan)</div><div class="tsb">SCC · Sn 87% Sp 90% — meilleur test isolé</div></div><button class="ebp-btn" onclick="showEBP('durkan',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();setWainner(this,'durkan','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();setWainner(this,'durkan','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-durkan"><ol class="tstps"><li>Compression directe du canal carpien avec les deux pouces pendant 30 secondes</li><li>Positif : reproduction des paresthésies dans le territoire médian (1er–3e doigts)</li></ol><div class="tint">LR+ 8.7, LR− 0.14 — le meilleur test isolé pour le SCC (Durkan 1991). Pression directe plus reproductible que le Phalen. Résultat négatif réduit fortement la probabilité. Référence du cluster Wainner.</div></div></div>
+      <div class="ti"><div class="th" onclick="tg('tb-phalen')"><div class="tl"><div class="tn">Phalen</div><div class="tsb">SCC · Sn 68% Sp 73% (Massy-Westropp, 2017)</div></div><button class="ebp-btn" onclick="showEBP('phalen',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();setWainner(this,'phalen','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();setWainner(this,'phalen','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-phalen"><ol class="tstps"><li>Flexion maximale des deux poignets dos à dos, maintenue 60 secondes</li><li>Positif : paresthésies dans les 3 premiers doigts avant 60 secondes</li></ol><div class="tint">LR+ 2.5, LR− 0.44 — valeur modérée en test isolé. La reproduction des symptômes habituels est plus significative qu'une simple paresthésie. Apparition précoce (&lt;30 sec) = probabilité plus élevée. Elément du cluster Wainner.</div></div></div>
+      <div class="ti"><div class="th" onclick="tg('tb-tinel-carpien')"><div class="tl"><div class="tn">Tinel au poignet (canal carpien)</div><div class="tsb">SCC · Sn 50% Sp 77% (Massy-Westropp, 2017)</div></div><button class="ebp-btn" onclick="showEBP('tinel_carpien',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();setWainner(this,'tinel_carpien','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();setWainner(this,'tinel_carpien','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-tinel-carpien"><ol class="tstps"><li>Percussion légère sur le ligament transverse du carpe (face palmaire poignet)</li><li>Positif : paresthésies irradiant vers les 3 premiers doigts</li></ol><div class="tint">LR+ 2.1, LR− 0.64 — valeur diagnostique modeste en test isolé. Utiliser en complément du Durkan et Phalen. Ne pas confondre avec la simple sensibilité à la pression (faux positif fréquent).</div></div></div>
+      <div class="ti"><div class="th" onclick="tg('tb-flick')"><div class="tl"><div class="tn">Flick Sign (signe du secouement)</div><div class="tsb">SCC · Sn 93% — quasi-pathognomonique</div></div><button class="ebp-btn" onclick="showEBP('flick',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();setWainner(this,'flick','pos')" type="button">+ Présent</button><button class="tb" onclick="event.stopPropagation();setWainner(this,'flick','neg')" type="button">− Absent</button></div></div>
+      <div class="tbody" id="tb-flick"><ol class="tstps"><li>Demander au patient : secouez-vous la main pour soulager vos symptômes nocturnes ?</li><li>Positif (présent) : le patient mime le geste de secouer la main comme pour faire tomber un thermomètre</li></ol><div class="tint">Sn 93% dans la méta-analyse Wainner 2005. Simple question anamnestique à valeur diagnostique élevée. Quasi-pathognomonique du SCC — peu d'autres affections donnent ce soulagement au secouement de la main. Toujours interroger en anamnèse.</div></div></div>
+    </div>
+  </div>
+
+  <!-- TFCC -->
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ip">🔩</div><div><div class="sct">TFCC — Complexe triangulaire fibrocartilagineux</div><div class="scs">Radio-ulnaire distal · bord ulnaire</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ti"><div class="th" onclick="tg('tb-fovea')"><div class="tl"><div class="tn">Fovea Sign</div><div class="tsb">TFCC · Sn 95% Sp 87% — test de référence</div></div><button class="ebp-btn" onclick="showEBP('fovea',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'fovea','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'fovea','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-fovea"><ol class="tstps"><li>Pression directe dans la fovéa ulnaire : dépression entre le tendon FCU et la styloïde ulnaire</li><li>Poignet en position neutre, légère déviation ulnaire</li><li>Positif : douleur profonde reproduisant la plainte</li></ol><div class="tint">LR+ 7.3, LR− 0.06 — excellentes propriétés diagnostiques (Tay 2007). Test de référence pour les lésions du TFCC périphérique et les lésions de la tête ulnaire (fovéal attachments). Un résultat négatif écarte efficacement une lésion TFCC significative.</div></div></div>
+      <div class="ti"><div class="th" onclick="tg('tb-press')"><div class="tl"><div class="tn">Press Test (appui sur chaise)</div><div class="tsb">TFCC · Sn 100% Sp 80% (Lester, 1995)</div></div><button class="ebp-btn" onclick="showEBP('press',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'press','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'press','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-press"><ol class="tstps"><li>Patient assis, mains sur les accoudoirs de la chaise</li><li>Demander de se soulever en prenant appui sur les poignets (extension + charge axiale)</li><li>Positif : douleur au bord ulnaire du poignet</li></ol><div class="tint">Sn 100% mais spécificité limitée (80%) — excellent test de screening, tout TFCC symptomatique sera douloureux. Associer impérativement au Fovea sign pour confirmer. La douleur doit être localisée au bord ulnaire, pas diffuse.</div></div></div>
+      <div class="ti"><div class="th" onclick="tg('tb-pianokey')"><div class="tl"><div class="tn">Piano Key Test (instabilité RUD)</div><div class="tsb">Radio-ulnaire distale · instabilité ulnaire</div></div><button class="ebp-btn" onclick="showEBP('pianokey',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'pianokey','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'pianokey','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-pianokey"><ol class="tstps"><li>Avant-bras en pronation, poignet neutre</li><li>Stabiliser le radius, appuyer vers le bas sur la tête ulnaire (comme une touche de piano)</li><li>Comparer au côté sain</li><li>Positif : hypermobilité + douleur par rapport au côté controlatéral</li></ol><div class="tint">Données EBP limitées pour le LR — test essentiellement comparatif. Mobilité excessive de la tête ulnaire vers le bas = instabilité RUD par lésion du TFCC ou des ligaments radio-ulnaires. Toujours bilatéral. Associer Fovea sign.</div></div></div>
+    </div>
+  </div>
+
+  <!-- RHIZARTHROSE -->
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ia">🦴</div><div><div class="sct">Rhizarthrose (arthrose trapézo-métacarpienne)</div><div class="scs">Articulation TM du pouce</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ti"><div class="th" onclick="tg('tb-grind')"><div class="tl"><div class="tn">Grind Test (compression axiale rotation)</div><div class="tsb">Rhizarthrose · Sn 53% Sp 80% (Merritt, 2010)</div></div><button class="ebp-btn" onclick="showEBP('grind',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'grind','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'grind','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-grind"><ol class="tstps"><li>Stabiliser le carpe d'une main</li><li>Compression axiale du 1er métacarpien + rotation (mouvement de meulage)</li><li>Positif : douleur et/ou craquements à l'articulation TM</li></ol><div class="tint">LR+ 2.6 — test de référence pour la rhizarthrose malgré une sensibilité modeste (53%). Aucun test isolé n'est suffisant — toujours combiner avec la clinique (déformation, douleur à la pince, imagerie). Un grind négatif (LR− 0.59) ne suffit pas à exclure.</div></div></div>
+      <div class="ti"><div class="th" onclick="tg('tb-shear')"><div class="tl"><div class="tn">Distraction / Shear Test TM</div><div class="tsb">Rhizarthrose · Sn 69% Sp 66% (Merritt, 2010)</div></div><button class="ebp-btn" onclick="showEBP('shear_tm',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'shear_tm','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'shear_tm','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-shear"><ol class="tstps"><li>Stabiliser le trapèze d'une main</li><li>Traction axiale puis cisaillement du 1er métacarpien dans les différents plans</li><li>Positif : douleur reproduite à l'articulation TM</li></ol><div class="tint">Meilleure sensibilité que le Grind (69%). LR+ 2.0 — valeur additionnelle en cluster avec le Grind. Également utile pour évaluer la laxité TM (instabilité ligamentaire associée). Comparer bilatéralement.</div></div></div>
+    </div>
+  </div>
+
+  <!-- SCAPHOÏDE / INSTABILITÉ -->
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ir">🦴</div><div><div class="sct">Scaphoïde &amp; Instabilité carpienne</div><div class="scs">Fracture · Instabilité SL</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ti"><div class="th" onclick="tg('tb-tabatiere')"><div class="tl"><div class="tn">Palpation tabatière anatomique</div><div class="tsb">Fracture scaphoïde · Sn 87–100% (Grover, 1996)</div></div><button class="ebp-btn" onclick="showEBP('tabatiere',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'tabatiere','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'tabatiere','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-tabatiere"><ol class="tstps"><li>Déviation ulnaire du poignet (ouvre la tabatière)</li><li>Palpation directe dans la dépression entre APL et EPB (bord radial)</li><li>Positif : douleur exquise reproduisant la plainte</li></ol><div class="tint">Sn 87–100% pour fracture du scaphoïde — excellent test de dépistage post-trauma. LR− ~0.05 : un résultat négatif élimine pratiquement la fracture. Spécificité limitée (74%) — nombreux faux positifs. Sensibilité maximale si palpation en position de déviation ulnaire.</div></div></div>
+      <div class="ti"><div class="th" onclick="tg('tb-comp-pouce')"><div class="tl"><div class="tn">Compression axiale du pouce</div><div class="tsb">Fracture scaphoïde · Sn 48% Sp 98% (Grover, 1996)</div></div><button class="ebp-btn" onclick="showEBP('comp_pouce',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'comp_pouce','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'comp_pouce','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-comp-pouce"><ol class="tstps"><li>Compression axiale dans l'axe du pouce (vers le poignet)</li><li>Positif : douleur à la tabatière anatomique</li></ol><div class="tint">LR+ 24 — très haute spécificité (98%). Un résultat positif confirme fortement la fracture du scaphoïde. Sensibilité faible (48%) — ne pas utiliser seul en dépistage. Complémentaire de la palpation tabatière : Sn haute + Sp haute = cluster puissant.</div></div></div>
+      <div class="ti"><div class="th" onclick="tg('tb-watson')"><div class="tl"><div class="tn">Watson (Scaphoid Shift Test)</div><div class="tsb">Instabilité SL (scapho-lunaire) · Sn 69% Sp 66%</div></div><button class="ebp-btn" onclick="showEBP('watson',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'watson','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'watson','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-watson"><ol class="tstps"><li>Examinateur stabilise le scaphoïde par pression sur le tubercule (face palmaire) avec le pouce</li><li>Déviation du poignet d'ulnaire vers radiale (mobilisation passive)</li><li>Positif : clunk + douleur = subluxation dorsale du scaphoïde</li></ol><div class="tint">LR+ 2.0 — test de référence pour l'instabilité scapho-lunaire chronique (Watson 1988). Distingue l'instabilité ligamentaire de la séquelle de fracture. Comparer bilatéralement — laxité constitutionnelle fréquente. Un clunk sans douleur peut être normal.</div></div></div>
+    </div>
+  </div>
+
+  <!-- DUPUYTREN -->
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci ig">✋</div><div><div class="sct">Maladie de Dupuytren</div><div class="scs">Diagnostic clinique — nodules + brides palmaires</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="ti"><div class="th" onclick="tg('tb-tabletop')"><div class="tl"><div class="tn">Tabletop Test (Hueston)</div><div class="tsb">Dupuytren — critère chirurgical classique</div></div><button class="ebp-btn" onclick="showEBP('tabletop',event)" type="button">ⓘ</button><div class="tbs"><button class="tb" onclick="event.stopPropagation();ST(this,'tabletop','pos')" type="button">+ Positif</button><button class="tb" onclick="event.stopPropagation();ST(this,'tabletop','neg')" type="button">− Négatif</button></div></div>
+      <div class="tbody" id="tb-tabletop"><ol class="tstps"><li>Patient pose la main à plat sur une surface plane</li><li>Positif : impossibilité de placer la main entièrement à plat (déficit d'extension)</li><li>Mesurer l'angle de déformation (contracture) par doigt</li></ol><div class="tint">Pas de données Se/Sp formelles — test critère chirurgical classique (Hueston 1984). Un tabletop positif (déficit d'extension &gt; 30°) est traditionnellement le seuil d'indication opératoire. Documenter doigt par doigt. La décision chirurgicale intègre aussi vitesse de progression et impact fonctionnel.</div></div></div>
+      <div class="ssep">Stade clinique (classification Tubiana)</div>
+      <div class="chips" id="dupuytren_stade">
+        <div class="chip" onclick="TC(this,'dupuytren_stade')">Stade N — Nodule sans déformation</div>
+        <div class="chip" onclick="TC(this,'dupuytren_stade')">Stade 1 — Déformation 0–45°</div>
+        <div class="chip" onclick="TC(this,'dupuytren_stade')">Stade 2 — Déformation 45–90°</div>
+        <div class="chip" onclick="TC(this,'dupuytren_stade')">Stade 3 — Déformation 90–135°</div>
+        <div class="chip" onclick="TC(this,'dupuytren_stade')">Stade 4 — Déformation &gt;135°</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ STEP 5 — SCORES ═══════════════════ -->
+<div class="step" id="s5">
+  <div class="sc sa">
+    <div class="sch"><div class="schl"><div class="sci ib">📊</div><div><div class="sct">PRWE — Patient-Rated Wrist Evaluation</div><div class="scs">Score poignet-spécifique · 15 items · ~3 min</div></div></div></div>
+    <div class="scb o">
+      <div style="font-size:12px;color:var(--tx3);margin-bottom:12px">Validé en français (Forget et al., Chir Main 2010). Score /150 — 0 = aucune limitation, 150 = incapacité maximale.</div>
+      <button class="btf btn1" onclick="openPRWE()" type="button">Compléter le PRWE →</button>
+      <div id="prwe-result" style="display:none;margin-top:10px"></div>
+    </div>
+  </div>
+
+  <div class="sc sa">
+    <div class="sch"><div class="schl"><div class="sci ip">📈</div><div><div class="sct">QuickDASH — Membre supérieur</div><div class="scs">11 items · Score /100 · ~2 min</div></div></div></div>
+    <div class="scb o">
+      <div style="font-size:12px;color:var(--tx3);margin-bottom:12px">Validé (Beaton 2005 — Veehof 2006 pour VF). Continuité avec le bilan coude. Score /100 — 0 = pas de handicap.</div>
+      <button class="btf btn1" onclick="openQDASH()" type="button">Compléter le QuickDASH →</button>
+      <div id="qdash-result" style="display:none;margin-top:10px"></div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="tog(this)"><div class="schl"><div class="sci iz">📝</div><div><div class="sct">Observations complémentaires</div></div></div><span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="field"><textarea id="observations" placeholder="Observations cliniques, contexte social, objectifs du patient..." rows="4" oninput="D.observations=this.value"></textarea></div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div class="sch" onclick="toggleSC(this)"><div class="schl">
+<div class="sci" style="background:#6B3FA01A;border-color:#6B3FA033">
+<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#6B3FA0" stroke-width="1.5"/><path d="M6 9h6M6 6h3M6 12h4" stroke="#6B3FA0" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+<div><div class="sct">PSFS — Patient-Specific Functional Scale</div>
+<div class="scs">3 activités · Score 0–10 · MCID = 2 pts</div></div></div>
+<span class="scch">▼</span></div>
+    <div class="scb">
+      <div class="al alb" style="margin-bottom:10px"><span>ℹ</span>
+<div><strong>PSFS</strong> (Stratford 1995 — validé en français). Demandez au patient d’identifier 3 activités limitées par votre poignet et de les noter de 0 (impossible) à 10 (niveau normal). MCID = 2 points.</div></div>
+      <div id="psfs-items"></div>
+      <div id="psfs-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ STEP 6 — ANALYSE ═══════════════════ -->
+<div class="step" id="s6">
+  <div class="crtabs no-print">
+    <button class="crtab on" onclick="showCR('s')" type="button">Synthèse</button>
+    <button class="crtab" onclick="showCR('c')" type="button">Compte-rendu</button>
+  </div>
+
+  <!-- SYNTHÈSE -->
+  <div class="crv on" id="crv-s">
+    <div class="sc sa" id="analyse-wrap">
+      <div class="sch"><div class="schl"><div class="sci iz">🔍</div><div><div class="sct">Analyse clinique</div></div></div></div>
+      <div class="scb o" id="analyse-content">
+        <div style="font-size:12px;color:var(--tx3);text-align:center;padding:20px 0">Compléter les étapes précédentes pour générer l'analyse</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPTE-RENDU -->
+  <div class="crv" id="crv-c">
+    <div class="crsh">
+      <div><div class="crsh-name" id="cr-patient-name">Patient</div><div class="crsh-date" id="cr-date">—</div></div>
+      <div class="crsh-badge">Poignet/Main</div>
+    </div>
+    <div id="cr-content"></div>
+  </div>
+
+  <button class="btf btn2" onclick="window.print()" type="button">🖨 Imprimer le CR</button>
+  <button class="btf btn1" onclick="openProgram()" type="button" style="margin-top:8px">🏋 Voir le programme de rééducation</button>
+  <button class="btf btn1" onclick="copyCR()" type="button" style="margin-top:8px">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="#fff" stroke-width="1.3"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="#fff" stroke-width="1.3"/></svg>
+    Copier le compte-rendu
+  </button>
+  <button class="btf btg" onclick="resetBilan()" type="button" style="margin-top:8px">Nouveau bilan</button>
+</div>
+
+</div><!-- /app -->
+
+<nav class="bnav no-print">
+  <button class="bbt bbk" id="btn-back" onclick="navBack()" type="button" disabled>← Retour</button>
+  <div class="bni" id="bni">Étape 1/6 — Identité</div>
+  <button class="bbt bbn" id="btn-next" onclick="navNext()" type="button">Suivant →</button>
+</nav>
+
+<!-- PROGRAMME OVERLAY -->
+<div class="pov" id="prog-overlay">
+  <div class="phdr">
+    <button class="pclose" onclick="closeProgram()" type="button">✕</button>
+    <div class="phinfo">
+      <div class="phtitle" id="prog-patient-name">Programme</div>
+      <div class="phsub" id="prog-patient-info">Poignet / Main</div>
+    </div>
+    <button class="ppbtn" onclick="window.print()" type="button">PDF</button>
+  </div>
+  <div class="pcont" id="prog-content"></div>
+</div>
+
+<!-- EBP OVERLAY -->
+<div class="ebp-overlay" id="ebp-overlay" onclick="closeEBP()">
+  <div class="ebp-sheet" onclick="event.stopPropagation()">
+    <div class="ebp-drag"></div>
+    <div class="ebp-title" id="ebp-title">—</div>
+    <div class="ebp-ref" id="ebp-ref">—</div>
+    <div class="ebp-stats" id="ebp-stats"></div>
+    <div class="ebp-note" id="ebp-note" style="display:none"></div>
+    <button class="ebp-close" onclick="closeEBP()" type="button">Fermer</button>
+  </div>
+</div>
+
+<!-- MODAL PRWE -->
+<div class="mov" id="prwe-modal">
+  <div class="modal"><div class="mhnd"></div><div class="mhd"><h2>PRWE — Douleur &amp; Fonction</h2><button class="mcl" onclick="closePRWE()" type="button">✕</button></div><div class="mbd" id="prwe-qs"></div></div>
+</div>
+
+<!-- MODAL QUICKDASH -->
+<div class="mov" id="qdash-modal">
+  <div class="modal"><div class="mhnd"></div><div class="mhd"><h2>QuickDASH</h2><button class="mcl" onclick="closeQDASH()" type="button">✕</button></div><div class="mbd" id="qdash-qs"></div></div>
+</div>
+
+<div class="toast" id="toast">Bilan sauvegardé</div>
+
+<script>
+var D={nom:'',prenom:'',ddn:'',sexe:'',cote:'',profession:'',datebilan:'',medecin:'',observations:'',eva:{repos:null,effort:null},ctx:null,amps:{flex_att:'',ext_att:'',incl_rad_att:'',incl_uln_att:'',pro_att:'',sup_att:'',flex_sain:'',ext_sain:''}};
+var CUR=1,TESTS={},CHIPS={},CHECKS={},prweData={},qdashData={},activeCR='s';
+var WAINNER_KEYS=['durkan','phalen','tinel_carpien','flick'];
+var NAV_LABELS=['Identité & Contexte','Anamnèse','Examen physique','Tests cliniques EBP','Scores fonctionnels','Analyse & Compte-rendu'];
+
+// ── MRC
+var MRC={ext_poignet:null,flex_poignet:null,apl:null,grip:null,thenar:null};
+
+function setMRC(k,v,el){
+  MRC[k]=v;
+  el.closest('.mrc-btns').querySelectorAll('.mrc-btn').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');
+}
+
+// ── EVA
+function setEVA(t,v,el){
+  D.eva[t]=v;
+  el.closest('.eva-row').querySelectorAll('.evab').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');
+}
+
+// ── CHIPS
+function TC(el,g){
+  el.classList.toggle('on');
+  if(!CHIPS[g])CHIPS[g]=[];
+  var v=el.textContent.trim();
+  var i=CHIPS[g].indexOf(v);
+  if(i===-1)CHIPS[g].push(v);else CHIPS[g].splice(i,1);
+}
+
+function setCtx(el,v){
+  document.querySelectorAll('#ctx .chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+  D.ctx=v;
+}
+
+// ── CHECKBOXES
+function TCK(el,g,cls){
+  el.classList.toggle(cls||'on');
+  if(!CHECKS[g])CHECKS[g]=[];
+  var t=el.querySelector('.ctx2');if(!t)return;
+  var v=t.textContent.trim();
+  var i=CHECKS[g].indexOf(v);
+  if(i===-1)CHECKS[g].push(v);else CHECKS[g].splice(i,1);
+}
+
+// ── TESTS
+function ST(el,k,v){
+  TESTS[k]=v;
+  el.closest('.tbs').querySelectorAll('.tb').forEach(function(b){b.classList.remove('pos','neg');});
+  el.classList.add(v);
+  updateWainner();
+}
+
+// ── WAINNER CLUSTER
+function setWainner(el,k,v){
+  TESTS[k]=v;
+  el.closest('.tbs').querySelectorAll('.tb').forEach(function(b){b.classList.remove('pos','neg');});
+  el.classList.add(v);
+  updateWainner();
+}
+
+function updateWainner(){
+  var pos=WAINNER_KEYS.filter(function(k){return TESTS[k]==='pos';}).length;
+  var el=document.getElementById('wainner-lr');
+  if(!el)return;
+  if(pos>=4)el.textContent=pos+'/4 — SCC très probable (LR+ 16.6)';
+  else if(pos===3)el.textContent='3/4 — SCC probable';
+  else if(pos===2)el.textContent='2/4 — Suspicion modérée';
+  else if(pos===1)el.textContent='1/4 — Insuffisant';
+  else el.textContent='0/4 — SCC peu probable';
+}
+
+// ── SECTIONS ACCORDION
+function tog(hdr){
+  var scb=hdr.nextElementSibling;
+  var ch=hdr.querySelector('.scch');
+  scb.classList.toggle('o');
+  if(ch)ch.classList.toggle('o');
+}
+function tg(id){
+  var el=document.getElementById(id);if(!el)return;
+  el.classList.toggle('o');
+}
+
+// ── NAV
+function showStep(n){
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  var el=document.getElementById('s'+n);if(el)el.classList.add('active');
+  document.getElementById('prog-fill').style.width=Math.round((n/6)*100)+'%';
+  document.getElementById('hdr-step').textContent='Étape '+n+'/6';
+  document.getElementById('bni').textContent='Étape '+n+'/6 — '+NAV_LABELS[n-1];
+  document.getElementById('btn-back').disabled=(n===1);
+  document.getElementById('btn-next').disabled=(n===6);
+  document.getElementById('hdr-name').textContent=(D.prenom||D.nom)?(D.prenom+' '+(D.nom||'')).trim():'Bilan Poignet/Main';
+  if(n===6)buildAnalyse();
+  window.scrollTo(0,0);
+}
+function navNext(){if(CUR<6){CUR++;showStep(CUR);saveState();}}
+function navBack(){if(CUR>1){CUR--;showStep(CUR);}}
+
+// ── CR TABS
+function showCR(t){
+  activeCR=t;
+  document.querySelectorAll('.crtab').forEach(function(b){b.classList.remove('on');});
+  document.querySelectorAll('.crv').forEach(function(v){v.classList.remove('on');});
+  if(t==='s'){document.querySelectorAll('.crtab')[0].classList.add('on');document.getElementById('crv-s').classList.add('on');}
+  else{document.querySelectorAll('.crtab')[1].classList.add('on');document.getElementById('crv-c').classList.add('on');buildCR();}
+}
+
+// ── SAVE / LOAD
+function saveState(){
+  try{
+    localStorage.setItem('bilan-poignet-v1',JSON.stringify({D:D,TESTS:TESTS,CHIPS:CHIPS,CHECKS:CHECKS,MRC:MRC,prweData:prweData,qdashData:qdashData,psfsSt:psfsSt}));
+    showToast('Bilan sauvegardé');
+  }catch(e){}
+}
+function loadState(){
+  try{
+    var raw=localStorage.getItem('bilan-poignet-v1');if(!raw)return;
+    var s=JSON.parse(raw);
+    if(s.D)D=s.D;if(s.TESTS)TESTS=s.TESTS;if(s.CHIPS)CHIPS=s.CHIPS;if(s.CHECKS)CHECKS=s.CHECKS;
+    if(s.MRC)MRC=s.MRC;if(s.prweData)prweData=s.prweData;if(s.qdashData)qdashData=s.qdashData;if(s.psfsSt)psfsSt=s.psfsSt;
+    restoreUI();
+  }catch(e){}
+}
+function restoreUI(){
+  ['nom','prenom','ddn','sexe','cote','profession','datebilan','medecin','observations'].forEach(function(f){
+    var el=document.getElementById(f);if(el&&D[f]!==undefined)el.value=D[f];
+    buildPSFS();
+});
+  ['flex_att','ext_att','incl_rad_att','incl_uln_att','pro_att','sup_att','flex_sain','ext_sain'].forEach(function(f){
+    var el=document.getElementById(f);if(el&&D.amps&&D.amps[f]!==undefined)el.value=D.amps[f];
+  });
+  if(D.eva.repos!==null)document.querySelectorAll('#eva-repos .evab').forEach(function(b,i){if(i===D.eva.repos)b.classList.add('on');});
+  if(D.eva.effort!==null)document.querySelectorAll('#eva-effort .evab').forEach(function(b,i){if(i===D.eva.effort)b.classList.add('on');});
+  if(D.ctx)document.querySelectorAll('#ctx .chip').forEach(function(c){if(c.dataset.ctx===D.ctx)c.classList.add('on');});
+  Object.keys(CHIPS).forEach(function(g){
+    var cont=document.getElementById(g);if(!cont)return;
+    (CHIPS[g]||[]).forEach(function(v){cont.querySelectorAll('.chip').forEach(function(c){if(c.textContent.trim()===v)c.classList.add('on');});});
+  });
+  Object.keys(CHECKS).forEach(function(g){
+    var el=document.getElementById(g);if(!el)return;
+    el.querySelectorAll('.crow').forEach(function(row){
+      var t=row.querySelector('.ctx2');
+      if(t&&(CHECKS[g]||[]).indexOf(t.textContent.trim())!==-1)row.classList.add('on');
+    });
+  });
+  Object.keys(MRC).forEach(function(k){
+    if(MRC[k]!==null)document.querySelectorAll('#mrc-'+k+' .mrc-btn').forEach(function(b,i){if(i===MRC[k])b.classList.add('on');});
+  });
+  Object.keys(TESTS).forEach(function(k){
+    document.querySelectorAll('[onclick*="\''+k+'\'"]').forEach(function(b){
+      b.classList.remove('pos','neg');
+      if(TESTS[k]==='pos'&&b.textContent.indexOf('Positif')!==-1)b.classList.add('pos');
+      if(TESTS[k]==='pos'&&b.textContent.indexOf('Présent')!==-1)b.classList.add('pos');
+      if(TESTS[k]==='neg'&&b.textContent.indexOf('Négatif')!==-1)b.classList.add('neg');
+      if(TESTS[k]==='neg'&&b.textContent.indexOf('Absent')!==-1)b.classList.add('neg');
+    });
+  });
+  updateWainner();
+  updateScoreDisplays();
+}
+// ── PROGRAMME DE RÉÉDUCATION ─────────────────────────────────────────────
+var EXOS_POIGNET=[
+  // ── PHASE 1 — Antalgique / Protection ───────────────────────────────────
+  {id:'cryo',phase:'ant',diags:['scc','dequervain','tfcc','rhizarthrose','scaphoide','dupuytren'],
+    nom:'Cryoth\u00e9rapie / thermoth\u00e9rapie',mat:'poche froid ou chaleur douce',
+    desc:'Froid en phase aigu\u00eb inflammatoire (De Quervain, post-traumatique). Chaleur douce en phase chronique (rhizarthrose, SCC chronique). 15-20 min, protection cutan\u00e9e.',
+    proto:'3-4 applications/jour. Ne pas appliquer directement sur la peau.',
+    just:'Antalgie locale adjuvante. Le froid r\u00e9duit l\u2019inflammation locale ; la chaleur am\u00e9liore la compliance tissulaire et le seuil douloureux.'},
+  {id:'ortho_nuit',phase:'ant',diags:['scc'],
+    nom:'Orthèse nocturne poignet en position neutre (SCC)',mat:'orthèse thermoform\u00e9e ou semi-rigide',
+    desc:'Orthèse de poignet maintenant la position neutre (0-2\u00b0 extension). Port nocturne strict. \u00c9viter la flexion nocturne qui augmente la pression intra-canalaire.',
+    proto:'Port toutes les nuits, 6-8 semaines minimum. Retrait progressif selon \u00e9volution.',
+    just:'Traitement conservateur de r\u00e9f\u00e9rence du SCC mod\u00e9r\u00e9 (Shi 2011 — Cochrane 2012). LR+ de succ\u00e8s conservateur corr\u00e9l\u00e9 \u00e0 la dur\u00e9e de port. Alternative : infiltration corticoïde.'},
+  {id:'protection_dq',phase:'ant',diags:['dequervain'],
+    nom:'Protection et \u00e9ducation gestuelle (De Quervain)',mat:'bande de pouce ou orthèse de pouce',
+    desc:'Orthèse englobant le pouce en position de repos. \u00c9viter les gestes de pince pouce-index r\u00e9p\u00e9t\u00e9s, le porte-b\u00e9b\u00e9, le tennis. Modifier les prises d\u2019objets.',
+    proto:'Port de l\u2019orthèse 4-6 semaines en phase aig\u00fce. \u00c9ducation gestuelle permanente.',
+    just:'La r\u00e9duction de la charge m\u00e9canique est le premier levier th\u00e9rapeutique dans la t\u00e9nosynovite de De Quervain. L\u2019orthèse seule r\u00e9duit la douleur de 60% \u00e0 4 semaines (Backstrom 2002).'},
+  {id:'immob_scaphoide',phase:'ant',diags:['scaphoide'],
+    nom:'Immobilisation poignet-pouce (fracture scaphoïde)',mat:'orthèse ou pl\u00e2tre',
+    desc:'URGENCE : en cas de suspicion de fracture du scaphoïde, immobilisation imm\u00e9diate du poignet en position neutre avec inclusion du pouce en opposition. Orientation radiologie + traumatologie.',
+    proto:'Ne pas d\u00e9buter de r\u00e9\u00e9ducation sans confirmation de consolidation osseuse (scanner ou IRM). D\u00e9lai moyen : 8-12 semaines.',
+    just:'La fracture du scaphoïde non reconnue est la 1\u00e8re cause de pseudarthrose du poignet. La mobilisation pr\u00e9coce sans consolidation est contre-indiqu\u00e9e (Dias 2008).'},
+  {id:'mob_douce',phase:'ant',diags:['scc','dequervain','tfcc','rhizarthrose','dupuytren'],
+    nom:'Mobilisations douces poignet en amplitude indolore',mat:'aucun',
+    desc:'Flexion-extension et inclinaisons rad-uln du poignet dans les amplitudes confortables. \u00c9viter la flexion extr\u00eame (SCC). Vitesse lente, sans for\u00e7age.',
+    proto:'10 r\u00e9p \u00d7 3 s\u00e9ries. 2\u00d7/jour. Stopper si EVA > 3/10.',
+    just:'Maintien de la mobilit\u00e9 articulaire en phase aig\u00fce. Pr\u00e9vention des r\u00e9tractions capsulo-ligamentaires. Grad\u00e9 A dans les CPG de la r\u00e9\u00e9ducation du membre sup\u00e9rieur.'},
+  // ── PHASE 2 — Mobilisation / Assouplissement ────────────────────────────
+  {id:'etirement_canal',phase:'mob',diags:['scc'],
+    nom:'Mobilisation du nerf m\u00e9dian (neurodynamique)',mat:'aucun',
+    desc:'Technique de glissement nerveux m\u00e9dian : d\u00e9pression scapulaire + abduction \u00e9paule 90\u00b0 + extension coude + supination + extension poignet + inclinaison cervicale controlat\u00e9rale. Oscillations douces en fin de course.',
+    proto:'10 oscillations \u00d7 3 s\u00e9ries. 1-2\u00d7/jour. Intensit\u00e9 : tension sans paresthésies intenses.',
+    just:'Mobilisation du nerf m\u00e9dian dans le canal carpien. R\u00e9duit la sensibilisation centrale et l\u2019adh\u00e9rence p\u00e9rineurale (Nee 2012 — Sim\u00f5es 2023). Compl\u00e9mentaire de l\u2019orthèse nocturne.'},
+  {id:'etirement_dq',phase:'mob',diags:['dequervain'],
+    nom:'\u00c9tirement progressif court extenseur-long abducteur pouce',mat:'aucun',
+    desc:'Poignet en d\u00e9viation ulnaire douce, pouce en flexion passive dans la paume (position d\u2019Eichhoff modifi\u00e9e — sans forcer). Maintenir la tension en dessous du seuil douloureux.',
+    proto:'3 \u00d7 30 sec. 2\u00d7/jour. Ne pas reproduire la douleur exquis\u00e8.',
+    just:'\u00c9tirement sp\u00e9cifique du 1er compartiment. Utilis\u00e9 progressivement une fois la phase aig\u00fce pass\u00e9e (EVA < 4/10 au repos). Accompagne le retour \u00e0 la charge tendineuse.'},
+  {id:'mob_tfcc',phase:'mob',diags:['tfcc'],
+    nom:'Mobilisation radio-ulnaire distale (technique Mulligan)',mat:'sangle (optionnel)',
+    desc:'Stabiliser l\u2019ulna d\u2019une main, glissement radio-ulnaire doux en direction dors-palm. Mouvement actif de prono-supination en position mobilisée. Amplitude confortable.',
+    proto:'6 \u00d7 10 r\u00e9p. En s\u00e9ance uniquement. Réévaluer les amplitudes imm\u00e9diatement apr\u00e8s.',
+    just:'Technique Mulligan appliqu\u00e9e \u00e0 la RUD. Restaure le glissement physiologique radio-ulnaire. Efficacit\u00e9 d\u00e9montr\u00e9e dans les dysfonctions de la RUD (Vicenzino 2003).'},
+  {id:'pron_sup',phase:'mob',diags:['tfcc','scaphoide','scc'],
+    nom:'Prono-supination active progressive',mat:'marteau 200 g',
+    desc:'Coude flech\u00e9 \u00e0 90\u00b0, en appui sur table. Marteau tenu \u00e0 la main. Rotation lente en pronation et supination. Progression du bras de levier (prise de plus en plus distale sur le manche).',
+    proto:'3 \u00d7 15 r\u00e9p. 3\u00d7/semaine. Progression h\u00e9bdomadaire.',
+    just:'R\u00e9entra\u00eene le couple biceps-pronateur rond. Restaure la mobilit\u00e9 de rotation de l\u2019avant-bras. Indiqué post-traumatique et post-immobilisation.'},
+  {id:'mob_tm',phase:'mob',diags:['rhizarthrose'],
+    nom:'Mobilisations trapézo-m\u00e9tacarpienne en traction-glissement',mat:'aucun',
+    desc:'Traction axiale douce de la trapézo-m\u00e9tacarpienne. Puis glissements en toutes directions (ant-post, rad-uln). Amplitude infra-douleur. Tissu mou d\u2019abord.',
+    proto:'3 min de mobilisations douces. En s\u00e9ance, 2-3\u00d7/semaine.',
+    just:'Mobilisation passive de la TM am\u00e9liore les amplitudes et r\u00e9duit la douleur dans la rhizarthrose (Berggren 2001 — Hochberg 2012 CPG EULAR). Compl\u00e9mentaire des exercices actifs.'},
+  {id:'assouplissement_dupuytren',phase:'mob',diags:['dupuytren'],
+    nom:'\u00c9tirements passifs doigts (Dupuytren)',mat:'bande d\u2019extension ou orthèse d\u2019extension nocturne',
+    desc:'Extension passive douce de chaque doigt affect\u00e9 jusqu\u2019\u00e0 la limite \u00e9lastique de la bride. Maintien 2-3 min. Orthèse d\u2019extension nocturne : position maximale d\u2019extension tolerable.',
+    proto:'3 s\u00e9ances/jour de 5 min. Orthèse nocturne si possible. Efficacit\u00e9 pr\u00e9ventive surtout en post-op\u00e9ratoire.',
+    just:'Les \u00e9tirements seuls n\u2019inversent pas le Dupuytren mais ralentissent la progression et pr\u00e9parent les tissus \u00e0 la chirurgie. Post-op\u00e9ratoire : indispensable pour \u00e9viter la r\u00e9cidive (Leclercq 2012).'},
+  // ── PHASE 3 — Renforcement progressif ───────────────────────────────────
+  {id:'renf_thenar',phase:'ren',diags:['scc'],
+    nom:'Renforcement musculature th\u00e9nar (SCC avanc\u00e9)',mat:'pâte \u00e0 modeler ou grip ring',
+    desc:'Opposition pouce-index, pouce-majeur, pouce-annulaire. Abduction active du pouce contre r\u00e9sistance \u00e9lastique. Pincement progressif sur pâte \u00e0 mod\u00e9ler.',
+    proto:'3 \u00d7 15 r\u00e9p. 3\u00d7/semaine. Progression charge mensuelle.',
+    just:'L\u2019atrophie th\u00e9nar est le signe d\u2019un SCC avanc\u00e9 avec d\u00e9nervation partielle. Le renforcement compensatoire ralentit la perte fonctionnelle en attente de chirurgie (Atroshi 2008).'},
+  {id:'renf_dq',phase:'ren',diags:['dequervain'],
+    nom:'Renforcement excentrique-conc\u00e9ntrique court ext. / long abd.',mat:'\u00e9lastique fin',
+    desc:'Phase 1 (J14-J30) : isométrie pouce en position fonctionnelle, 45 sec \u00d7 3. Phase 2 (S4-S8) : \u00e9lastique en r\u00e9sistance \u00e0 l\u2019abduction et \u00e0 l\u2019extension du pouce. Phase excentrique lente (3 sec).',
+    proto:'3 \u00d7 12 r\u00e9p. 5\u00d7/semaine. EVA autoris\u00e9e \u2264 4/10 pendant l\u2019excentrique.',
+    just:'Exercice excentrique = gold standard pour les tendinopathies (Alfredson 1998 \u2014 adapt\u00e9 De Quervain). Stimule la synth\u00e8se de collag\u00e8ne type I et la r\u00e9organisation fibrillaire.'},
+  {id:'renf_grip',phase:'ren',diags:['scc','tfcc','rhizarthrose','scaphoide'],
+    nom:'Renforcement pr\u00e9hension globale progressive',mat:'dynamom\u00e8tre ou balle de r\u00e9\u00e9ducation',
+    desc:'Serrage progressif de la balle ou du dynamom\u00e8tre. Maintenir 3 sec, rel\u00e2cher contr\u00f4l\u00e9. D\u00e9buter avec une balle souple, progresser vers plus rigide. Comparer \u00e0 la main saine (objectif LSI \u2265 90%).',
+    proto:'3 \u00d7 15 r\u00e9p. 3\u00d7/semaine. Test dynamom\u00e9trique mensuel.',
+    just:'La force de prise est le principal indicateur fonctionnel de retour aux activit\u00e9s. LSI (Limb Symmetry Index) \u2265 90% = crit\u00e8re de sortie \u00e9tabli (Bisset 2011).'},
+  {id:'renf_tm',phase:'ren',diags:['rhizarthrose'],
+    nom:'Renforcement stabilisateurs TM (3 plans)',mat:'\u00e9lastique fin',
+    desc:'1. Abduction pouce r\u00e9sist\u00e9e (plan frontal). 2. Extension pouce r\u00e9sist\u00e9e (plan sagittal). 3. Opposition progressive pouce contre chaque doigt avec r\u00e9sistance. Priorit\u00e9 aux muscles intrins\u00e8ques.',
+    proto:'3 \u00d7 15 r\u00e9p. 3\u00d7/semaine. EVA \u2264 3/10.',
+    just:'Les muscles intrins\u00e8ques du pouce (opp., abd., add.) sont les premiers stabilisateurs dynamiques de la TM. Leur renforcement ralentit la progression de l\u2019arthrose et r\u00e9duit la douleur (Berggren 2001 \u2014 Hochberg 2012).'},
+  {id:'renf_scaphoide',phase:'ren',diags:['scaphoide'],
+    nom:'Renforcement poignet post-consolidation',mat:'\u00e9lastique ou haltère léger',
+    desc:'Apr\u00e8s accord m\u00e9dical (scanner de consolidation). Flex-ext poignet avec \u00e9lastique : 3 \u00d7 15. Inclinaisons rad-uln : 3 \u00d7 15. Prono-supination r\u00e9sist\u00e9e au marteau. EVA \u2264 3/10.',
+    proto:'Commencer 3\u00d7/semaine. Progression mensuelle. Test grip sym\u00e9trique \u00e0 3 mois.',
+    just:'Le d\u00e9lard de r\u00e9\u00e9ducation post-scaphoïde est li\u00e9 \u00e0 la consolidation, non \u00e0 l\u2019intensit\u00e9. Le renforcement progressif r\u00e9tablit la force et pr\u00e9vient la rigidité r\u00e9siduelle (Dias 2008).'},
+  {id:'renf_dupuytren',phase:'ren',diags:['dupuytren'],
+    nom:'Renforcement flexion-extension active doigts (Dupuytren post-op)',mat:'pâte \u00e0 modeler',
+    desc:'Flexion compl\u00e8te puis extension maximale des doigts sur pâte \u00e0 modeler. Progression de la r\u00e9sistance. Travail individuel de chaque doigt concern\u00e9. Extension active priorit\u00e9.',
+    proto:'5 min \u00d7 3\u00d7/jour. Commencer J3 post-op selon protocole chirurgical.',
+    just:'La r\u00e9\u00e9ducation post-ap\u00e9v\u00e9rotomie est indispensable pour maintenir les gains d\u2019extension. Sans r\u00e9\u00e9ducation, taux de r\u00e9cidive > 50% \u00e0 2 ans (Leclercq 2012).'},
+  // ── PHASE 4 — Fonctionnel & Retour activité ─────────────────────────────
+  {id:'proprio_poignet',phase:'fon',diags:['tfcc','scaphoide','rhizarthrose'],
+    nom:'Proprioception poignet \u2014 appui sur plan instable',mat:'plateau instable ou boule mousse',
+    desc:'Appui ouvert sur plan instable (table oscillante, boule). Transferts de poids progressifs. Yeux ouverts puis ferm\u00e9s. Progression vers appui unilat\u00e9ral.',
+    proto:'3 \u00d7 30 sec. 3\u00d7/semaine. Progression mensuelle.',
+    just:'R\u00e9entra\u00eenement proprioceptif du poignet — indispensable apr\u00e8s instabilit\u00e9 ligamentaire et fracture. D\u00e9ficit proprioceptif d\u00e9montr\u00e9 post-entorse et post-TFCC (Hagert 2010).'},
+  {id:'retour_fonc',phase:'fon',diags:['scc','dequervain','tfcc','rhizarthrose','scaphoide','dupuytren'],
+    nom:'Entra\u00eenement fonctionnel progressif AVQ',mat:'objets du quotidien',
+    desc:'Manipulation progressive : tourner une cl\u00e9, ouvrir un bocal, soulever un verre, pr\u00e9hension cylindrique, prise lat\u00e9rale. Puis charges progressives. Objectif : PRWE < 25 pts, QuickDASH < 20 pts.',
+    proto:'Progression selon tol\u00e9rance (EVA \u2264 3/10). S\u00e9ance fonctionnelle 20 min, 3\u00d7/semaine.',
+    just:'Le r\u00e9entra\u00eenement fonctionnel est la finalit\u00e9 du programme. MCID PRWE = 14 pts. QuickDASH MCID = 8 pts. Crit\u00e8res de sortie : scores validés + force symétrique \u2265 90%.'},
+  {id:'ergonomie',phase:'fon',diags:['scc','dequervain'],
+    nom:'\u00c9ducation gestuelle et ergonomie (SCC / De Quervain)',mat:'aucun',
+    desc:'SCC : \u00e9viter la flexion prolongée du poignet, lever nocturne, travail vibrant. Pauses actives toutes les 45 min. Poste de travail : poignet en position neutre, souris ergonomique. De Quervain : modifier les prises (pouce \u00e9vit\u00e9), porter les b\u00e9b\u00e9s avec les doigts en \u00e9ventail.',
+    proto:'1 session d\u2019\u00e9ducation + fiche patient remise.',
+    just:'L\u2019\u00e9ducation gestuelle r\u00e9duit les r\u00e9cidives dans le SCC et le De Quervain. La r\u00e9citation de la plainte est souvent multifactorielle (posture + charge + stress) (Atroshi 2008).'},
+  {id:'criteres_sortie',phase:'fon',diags:['scc','dequervain','tfcc','rhizarthrose','scaphoide','dupuytren'],
+    nom:'Crit\u00e8res de sortie et retour activit\u00e9',mat:'\u00e9valuation',
+    desc:'PRWE < 25 pts · QuickDASH < 20 pts · Force grip LSI \u2265 90% · EVA \u2264 2/10 en charge · ROM \u2265 80% vs. c\u00f4t\u00e9 sain. \u00c9valuation \u00e0 8-12 semaines selon pathologie.',
+    proto:'\u00c9valuation compl\u00e8te \u00e0 6-8 semaines (tendinopathie), 12 semaines (fracture, TFCC), 6 mois (Dupuytren post-op).',
+    just:'Crit\u00e8res fonctionnels valid\u00e9s. PRWE MCID = 14 pts (MacDermid 2000). QuickDASH MCID = 8 pts (Beaton 2005). LSI \u2265 90% = retour sport / travail manuel (Bisset 2011).'}
+];
+
+function openProgram(){
+  var patName=(D.prenom||'')+' '+(D.nom||'');
+  document.getElementById('prog-patient-name').textContent=patName.trim()||'Programme';
+  document.getElementById('prog-patient-info').textContent='Poignet / Main \u00b7 '+(D.cote||'C\u00f4t\u00e9 non pr\u00e9cis\u00e9');
+
+  // D\u00e9termine les diagnostics actifs via scores
+  var s={scc:0,dequervain:0,tfcc:0,rhizarthrose:0,scaphoide:0,dupuytren:0};
+  var wPos=WAINNER_KEYS.filter(function(k){return TESTS[k]==='pos';}).length;
+  if(wPos>=4)s.scc+=85;else if(wPos>=3)s.scc+=60;else if(wPos>=2)s.scc+=35;
+  if(isT('durkan','pos'))s.scc+=20;
+  if(hasC('rythme','Fourmillements nocturnes'))s.scc+=20;
+  if(isT('what','pos'))s.dequervain+=50;
+  if(isT('eichhoff','pos'))s.dequervain+=35;
+  if(isT('fovea','pos'))s.tfcc+=65;
+  if(isT('press','pos'))s.tfcc+=30;
+  if(isT('grind','pos'))s.rhizarthrose+=45;
+  if(isT('shear_tm','pos'))s.rhizarthrose+=35;
+  if(isT('tabatiere','pos'))s.scaphoide+=55;
+  if(isT('comp_pouce','pos'))s.scaphoide+=65;
+  if(isT('tabletop','pos'))s.dupuytren+=70;
+  if(hasK('inspection','Nodule / bride palmaire'))s.dupuytren+=60;
+
+  var activeDiags=[];
+  var DIAG_LABELS={scc:'Canal carpien',dequervain:'De Quervain',tfcc:'TFCC / RUD',rhizarthrose:'Rhizarthrose TM',scaphoide:'Scaphoïde / Instabilit\u00e9 SL',dupuytren:'Dupuytren'};
+  Object.keys(s).forEach(function(k){if(s[k]>=30)activeDiags.push(k);});
+  var noDiag=activeDiags.length===0;
+  if(noDiag)activeDiags=Object.keys(s); // fallback : tout afficher
+
+  var PNAMES={ant:'Phase 1 \u2014 Antalgique / Protection',mob:'Phase 2 \u2014 Mobilisation & \u00c9tirements',ren:'Phase 3 \u2014 Renforcement progressif',fon:'Phase 4 \u2014 Fonctionnel & Retour activit\u00e9'};
+  var PCLS={ant:'epa',mob:'epm',ren:'epv',fon:'epr'};
+  var html='';
+
+  if(!noDiag){
+    var names=activeDiags.map(function(k){return DIAG_LABELS[k];});
+    html+='<div style="background:var(--zl);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--zd)"><strong>Programme adapt\u00e9 pour\u00a0:</strong> '+names.join(' + ')+'</div>';
+  }
+
+  ['ant','mob','ren','fon'].forEach(function(phase){
+    var exosP=EXOS_POIGNET.filter(function(e){
+      if(e.phase!==phase)return false;
+      return e.diags.some(function(d){return activeDiags.indexOf(d)!==-1;});
+    });
+    if(!exosP.length)return;
+    html+='<div class="eplbl '+PCLS[phase]+'">'+PNAMES[phase]+'</div>';
+    exosP.forEach(function(ex){
+      html+='<div class="exc"><div class="exh" onclick="toggleEx(this)"><span class="exn">'+ex.nom+'</span>';
+      if(ex.mat&&ex.mat!=='aucun'&&ex.mat!=='\u00e9valuation')html+='<span class="exm mn">'+ex.mat+'</span>';
+      html+='<span class="exch">\u25bc</span></div>';
+      html+='<div class="exbd">';
+      if(ex.desc)html+='<div class="exdc">'+ex.desc+'</div>';
+      if(ex.proto)html+='<div class="expr">'+ex.proto+'</div>';
+      if(ex.just)html+='<div class="expg">EBP \u2014 '+ex.just+'</div>';
+      html+='</div></div>';
+    });
+  });
+
+  html+='<div style="background:var(--purl);border-radius:var(--r);padding:10px 14px;margin-top:12px"><div style="font-size:10px;font-weight:800;color:var(--pur);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Conseils g\u00e9n\u00e9raux</div><ul style="padding-left:16px;margin:0;font-size:12px;color:var(--tx2);line-height:1.8">';
+  ['EVA \u2264 3/10 pendant les exercices en phase initiale','Ne pas sauter les phases \u2014 la progression est cl\u00e9','Consulter si EVA > 6/10 persistant > 48h apr\u00e8s exercice','PRWE et QuickDASH \u00e0 r\u00e9\u00e9valuer toutes les 4 semaines'].forEach(function(c){html+='<li>'+c+'</li>';});
+  html+='</ul></div>';
+
+  document.getElementById('prog-content').innerHTML=html;
+  document.getElementById('prog-overlay').classList.add('o');
+}
+function closeProgram(){document.getElementById('prog-overlay').classList.remove('o');}
+function toggleEx(h){var b=h.nextElementSibling;if(!b)return;b.classList.toggle('o');var a=h.querySelector('.exch');if(a)a.classList.toggle('o');}
+
+function resetBilan(){
+  if(!confirm('Réinitialiser le bilan ?'))return;
+  localStorage.removeItem('bilan-poignet-v1');
+  location.reload();
+}
+
+// ── TOAST
+function showToast(msg){
+  var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');
+  setTimeout(function(){t.classList.remove('on');},1800);
+}
+function copyCR(){var a=document.querySelector('.crv.on');if(!a)return;var txt=a.innerText||a.textContent;if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){showToast('Compte-rendu copié ✓');});}else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copié ✓');}}
+
+// ── EBP DATA
+var EBP_DATA={
+  eichhoff:{title:'Test d\'Eichhoff (De Quervain)',ref:'Goubau JF et al. J Hand Surg Eur Vol. 2014',stats:[{l:'Sensibilité',v:'81%',s:'De Quervain'},{l:'Spécificité',v:'50%',s:''},{l:'LR+',v:'1.6',s:''},{l:'LR−',v:'0.38',s:''}],note:'Distinct du Finkelstein original. Le patient ferme le poing avec le pouce inclus, l\'examinateur dévie le poignet en ulnaire passivement. Reproduit la contrainte sur le 1er compartiment. Toujours combiner avec le WHAT test pour améliorer la valeur diagnostique.'},
+  what:{title:'WHAT Test — Wrist Hyperflexion & Abduction of the Thumb',ref:'Goubau JF et al. J Hand Surg Eur Vol. 2014',stats:[{l:'Sensibilité',v:'99%',s:'De Quervain'},{l:'LR−',v:'0.03',s:'valeur clé'}],note:'LR− 0.03 — un résultat négatif écarte quasi-certainement le De Quervain. Test de screening de référence : hyperflexion du poignet + abduction résistée du pouce reproduit la contrainte maximale sur l\'APL et l\'EPB. À réaliser en premier si suspicion clinique.'},
+  durkan:{title:'Carpal Compression Test (Durkan)',ref:'Durkan JA. J Bone Joint Surg Am. 1991',stats:[{l:'Sensibilité',v:'87%',s:'SCC'},{l:'Spécificité',v:'90%',s:''},{l:'LR+',v:'8.7',s:''},{l:'LR−',v:'0.14',s:''}],note:'Meilleur test isolé pour le syndrome du canal carpien. Compression directe du canal carpien avec les deux pouces pendant 30 secondes. Plus reproductible que le Phalen. LR− 0.14 — un résultat négatif réduit fortement la probabilité. Référence du cluster Wainner.'},
+  phalen:{title:'Test de Phalen',ref:'Massy-Westropp NM et al. Cochrane Database Syst Rev. 2017',stats:[{l:'Sensibilité',v:'68%',s:'SCC'},{l:'Spécificité',v:'73%',s:''},{l:'LR+',v:'2.5',s:''},{l:'LR−',v:'0.44',s:''}],note:'Méta-analyse Cochrane 2017. Flexion maximale des deux poignets dos à dos, maintenue 60 secondes. Valeur modérée en test isolé — utiliser systématiquement en cluster avec Durkan et Tinel. Apparition des paresthésies avant 30 sec augmente la probabilité.'},
+  tinel_carpien:{title:'Tinel au poignet (canal carpien)',ref:'Massy-Westropp NM et al. Cochrane Database Syst Rev. 2017',stats:[{l:'Sensibilité',v:'50%',s:'SCC'},{l:'Spécificité',v:'77%',s:''},{l:'LR+',v:'2.1',s:''},{l:'LR−',v:'0.64',s:''}],note:'Méta-analyse Cochrane 2017. Percussion légère sur le ligament transverse du carpe. Valeur diagnostique modeste seul — complément du cluster Wainner. Ne pas confondre avec la simple sensibilité à la pression (faux positif). Irradiation vers les 3 premiers doigts = positif.'},
+  flick:{title:'Flick Sign (signe du secouement)',ref:'Wainner RS et al. J Orthop Sports Phys Ther. 2005',stats:[{l:'Sensibilité',v:'93%',s:'SCC'},{l:'Spécificité',v:'23%',s:''}],note:'Simple question anamnestique quasi-pathognomonique du SCC. Le patient secoue spontanément la main pour soulager les paresthésies nocturnes. Sn 93% — quasi-toujours présent si SCC. Spécificité faible. Inclus dans le cluster Wainner (≥4/6 = LR+ 16.6).'},
+  fovea:{title:'Fovea Sign',ref:'Tay SC et al. J Hand Surg Am. 2007',stats:[{l:'Sensibilité',v:'95%',s:'lésion TFCC'},{l:'Spécificité',v:'87%',s:''},{l:'LR+',v:'7.3',s:''},{l:'LR−',v:'0.06',s:''}],note:'Test de référence pour les lésions du TFCC et des insertions fovéales ulnaires. Pression dans la fovéa (entre FCU et styloïde ulnaire). LR− 0.06 — un résultat négatif écarte efficacement une lésion TFCC significative. Toujours associer au Press test.'},
+  press:{title:'Press Test (appui sur chaise)',ref:'Lester B et al. J Hand Surg Am. 1995',stats:[{l:'Sensibilité',v:'100%',s:'TFCC sympto.'},{l:'Spécificité',v:'80%',s:''}],note:'Sn 100% — tout TFCC symptomatique donne une douleur à ce test. Charge axiale en extension du poignet par appui sur les accoudoirs. Spécificité limitée (80%). Excellent screening — si négatif, lésion TFCC symptomatique peu probable. Confirmer avec Fovea sign si positif.'},
+  pianokey:{title:'Piano Key Test (instabilité RUD)',ref:'Examen clinique comparatif — données EBP limitées',stats:[],note:'Test comparatif bilatéral de la mobilité de la tête ulnaire en charge. Hypermobilité + douleur par rapport au côté sain = instabilité radio-ulnaire distale. Absence de méta-analyse robuste. Valeur principalement orientatrice — confirmer par imagerie (IRM, arthroscanner) si positif.'},
+  grind:{title:'Grind Test (rhizarthrose TM)',ref:'Merritt MM et al. J Hand Surg Am. 2010',stats:[{l:'Sensibilité',v:'53%',s:'rhizarthrose'},{l:'Spécificité',v:'80%',s:''},{l:'LR+',v:'2.6',s:''},{l:'LR−',v:'0.59',s:''}],note:'Test de référence clinique pour la rhizarthrose malgré une sensibilité modeste. LR+ 2.6 — valeur additionnelle en cluster avec imagerie et clinique. Aucun test isolé suffisant pour exclure la rhizarthrose. La radio standard (arthrose TM) reste le gold standard diagnostic.'},
+  shear_tm:{title:'Distraction / Shear Test TM',ref:'Merritt MM et al. J Hand Surg Am. 2010',stats:[{l:'Sensibilité',v:'69%',s:'rhizarthrose'},{l:'Spécificité',v:'66%',s:''},{l:'LR+',v:'2.0',s:''}],note:'Meilleure sensibilité que le Grind (69%). Traction axiale + cisaillement du 1er métacarpien. Complémentaire du Grind dans l\'évaluation de la rhizarthrose. Évalue également la laxité ligamentaire TM. Comparer bilatéralement.'},
+  tabatiere:{title:'Palpation tabatière anatomique',ref:'Grover R. J Bone Joint Surg Br. 1996',stats:[{l:'Sensibilité',v:'87–100%',s:'fracture scaphoïde'},{l:'Spécificité',v:'74%',s:''},{l:'LR−',v:'~0.05',s:''}],note:'Excellent test de dépistage post-trauma pour la fracture du scaphoïde. LR− ~0.05 — un résultat négatif élimine pratiquement la fracture. Spécificité limitée (74%) — nombreux faux positifs. Palpation en déviation ulnaire maximise la sensibilité. Imagerie systématique si positif après trauma.'},
+  comp_pouce:{title:'Compression axiale du pouce',ref:'Grover R. J Bone Joint Surg Br. 1996',stats:[{l:'Sensibilité',v:'48%',s:'fracture scaphoïde'},{l:'Spécificité',v:'98%',s:''},{l:'LR+',v:'24',s:''}],note:'LR+ 24 — très haute valeur confirmative. Un résultat positif confirme fortement la fracture du scaphoïde. Sensibilité faible (48%) — ne pas utiliser seul en screening. Complémentaire de la palpation tabatière : les deux positifs = probabilité de fracture très élevée, imagerie urgente.'},
+  watson:{title:'Watson Scaphoid Shift Test',ref:'Watson HK & Brenner LH. Clin Orthop. 1988 — Zarkadas PC et al. J Hand Surg Am. 2007',stats:[{l:'Sensibilité',v:'69%',s:'instabilité SL'},{l:'Spécificité',v:'66%',s:''},{l:'LR+',v:'2.0',s:''},{l:'LR−',v:'0.47',s:''}],note:'Test de référence pour l\'instabilité scapho-lunaire chronique. Un clunk + douleur = subluxation dorsale du scaphoïde. Comparer bilatéralement — laxité constitutionnelle fréquente. Clunk sans douleur peut être normal. Confirmer par IRM ou arthroscanner si positif symptomatique.'},
+  tabletop:{title:'Tabletop Test (Hueston)',ref:'Hueston JT. Dupuytren\'s Contracture. 1963 — Critère clinique classique',stats:[],note:'Critère chirurgical classique de Dupuytren. Déficit d\'extension > 30° = indication opératoire traditionnelle. Pas de données Se/Sp formelles — pur critère clinique. Documenter doigt par doigt. La décision intègre aussi la vitesse de progression et l\'impact fonctionnel (profession, loisirs).'}
+};
+
+function showEBP(key,event){
+  if(event)event.stopPropagation();
+  var d=EBP_DATA[key];if(!d)return;
+  document.getElementById('ebp-title').textContent=d.title;
+  document.getElementById('ebp-ref').textContent=d.ref;
+  var sc=document.getElementById('ebp-stats');sc.innerHTML='';
+  (d.stats||[]).forEach(function(s){
+    sc.innerHTML+='<div class="ebp-stat"><div class="ebp-stat-lbl">'+s.l+'</div><div class="ebp-stat-val">'+s.v+'</div>'+(s.s?'<div class="ebp-stat-sub">'+s.s+'</div>':'')+'</div>';
+  });
+  var noteEl=document.getElementById('ebp-note');
+  if(d.note){noteEl.textContent=d.note;noteEl.style.display='block';}else{noteEl.style.display='none';}
+  document.getElementById('ebp-overlay').classList.add('o');
+}
+function closeEBP(){document.getElementById('ebp-overlay').classList.remove('o');}
+
+// ── PRWE
+var PRWE_PAIN=[
+  'Douleur au repos',
+  'Douleur lors de mouvements répétés du poignet',
+  'Douleur lors de ports de charges lourdes',
+  'Douleur lors d\'efforts au maximum',
+  'Douleur lors de tâches habituelles'
+];
+var PRWE_SPEC=[
+  'Tourner le bouton d\'une porte ou démarrer une voiture',
+  'Couper de la viande avec un couteau',
+  'Boutonner des vêtements',
+  'Tenir un verre d\'eau',
+  'Laver ou essuyer la vaisselle',
+  'Tirer un objet lourd',
+  'Monter ou descendre d\'une voiture',
+  'Porter un sac de 5 kg (en tenant l\'anse)',
+  'Utiliser un ordinateur',
+  'Ouvrir un bocal'
+];
+var PRWE_USUAL=[
+  'Vos activités professionnelles habituelles',
+  'Vos tâches ménagères habituelles'
+];
+var prweAnswers={pain:new Array(5).fill(null),spec:new Array(10).fill(null),usual:new Array(2).fill(null)};
+
+function openPRWE(){
+  buildPRWEModal();
+  var m=document.getElementById('prwe-modal');m.classList.add('o');
+}
+function closePRWE(){document.getElementById('prwe-modal').classList.remove('o');calcPRWE();}
+function buildPRWEModal(){
+  var c=document.getElementById('prwe-qs');c.innerHTML='';
+  var html='<div class="ssep" style="margin-top:0">DOULEUR (0 = aucune, 10 = maximale)</div>';
+  PRWE_PAIN.forEach(function(q,i){
+    html+='<div class="qdi"><div class="qdq">'+(i+1)+'. '+q+'</div><div class="qdos">';
+    for(var v=0;v<=10;v++){html+='<div class="qdo'+(prweAnswers.pain[i]===v?' on':'')+'" onclick="prweSel(\'pain\','+i+','+v+',this)">'+v+'</div>';}
+    html+='</div></div>';
+  });
+  html+='<div class="ssep">FONCTION — Tâches spécifiques (0 = sans difficulté, 10 = impossible)</div>';
+  PRWE_SPEC.forEach(function(q,i){
+    html+='<div class="qdi"><div class="qdq">'+(i+1)+'. '+q+'</div><div class="qdos">';
+    for(var v=0;v<=10;v++){html+='<div class="qdo'+(prweAnswers.spec[i]===v?' on':'')+'" onclick="prweSel(\'spec\','+i+','+v+',this)">'+v+'</div>';}
+    html+='</div></div>';
+  });
+  html+='<div class="ssep">FONCTION — Activités habituelles (0 = aucune difficulté, 10 = impossible)</div>';
+  PRWE_USUAL.forEach(function(q,i){
+    html+='<div class="qdi"><div class="qdq">'+(i+1)+'. '+q+'</div><div class="qdos">';
+    for(var v=0;v<=10;v++){html+='<div class="qdo'+(prweAnswers.usual[i]===v?' on':'')+'" onclick="prweSel(\'usual\','+i+','+v+',this)">'+v+'</div>';}
+    html+='</div></div>';
+  });
+  html+='<button class="btf btn1" onclick="closePRWE()" type="button" style="margin-top:8px">Valider</button>';
+  c.innerHTML=html;
+}
+function prweSel(section,idx,val,el){
+  prweAnswers[section][idx]=val;
+  el.closest('.qdos').querySelectorAll('.qdo').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');
+}
+function calcPRWE(){
+  var painFilled=prweAnswers.pain.filter(function(v){return v!==null;}).length;
+  var specFilled=prweAnswers.spec.filter(function(v){return v!==null;}).length;
+  var usualFilled=prweAnswers.usual.filter(function(v){return v!==null;}).length;
+  if(painFilled<3)return;
+  var painScore=prweAnswers.pain.reduce(function(a,v){return a+(v||0);},0);
+  var specScore=prweAnswers.spec.reduce(function(a,v){return a+(v||0);},0);
+  var usualScore=prweAnswers.usual.reduce(function(a,v){return a+(v||0);},0);
+  var funcScore=(specScore+usualScore*2)/2;
+  var total=Math.round(painScore+funcScore);
+  prweData={pain:painScore,func:Math.round(funcScore),total:total};
+  updateScoreDisplays();
+  saveState();
+}
+function getPRWEGrade(t){
+  if(t<=25)return{label:'Léger',color:'var(--grn)'};
+  if(t<=50)return{label:'Modéré',color:'var(--amb)'};
+  if(t<=75)return{label:'Sévère',color:'var(--red)'};
+  return{label:'Très sévère',color:'var(--red)'};
+}
+
+// ── QUICKDASH
+var QD_Q=[
+  {q:'Ouvrir un bocal bien fermé',o:['Aucune difficulté','Légère','Modérée','Grande','Impossible']},
+  {q:'Faire des tâches ménagères lourdes',o:['Aucune','Légère','Modérée','Grande','Impossible']},
+  {q:'Porter un sac à provisions ou une mallette',o:['Aucune','Légère','Modérée','Grande','Impossible']},
+  {q:'Se laver le dos',o:['Aucune','Légère','Modérée','Grande','Impossible']},
+  {q:'Utiliser un couteau pour couper la nourriture',o:['Aucune','Légère','Modérée','Grande','Impossible']},
+  {q:'Activités de loisirs peu intenses (cartes, tricot...)',o:['Pas limité','Légèrement','Modérément','Très limité','Impossible']},
+  {q:'Activités de loisirs douloureuses au niveau du bras/poignet',o:['Pas du tout','Légèrement','Modérément','Très limité','Impossible']},
+  {q:'Douleur dans le bras, le poignet ou la main (semaine passée)',o:['Aucune','Légère','Modérée','Forte','Très forte']},
+  {q:'Fourmillements dans le bras, le poignet ou la main',o:['Aucun','Légers','Modérés','Forts','Très forts']},
+  {q:'Difficulté à dormir à cause de douleur au poignet/main',o:['Aucune','Légère','Modérée','Grande','Impossible de dormir']},
+  {q:'Sentiment d\'être moins capable à cause de votre poignet/main',o:['Pas du tout','Légèrement','Modérément','Beaucoup','Extrêmement']}
+];
+var qdA=new Array(11).fill(null);
+
+function openQDASH(){buildQDModal();document.getElementById('qdash-modal').classList.add('o');}
+function closeQDASH(){document.getElementById('qdash-modal').classList.remove('o');calcQD();}
+function buildQDModal(){
+  var c=document.getElementById('qdash-qs');c.innerHTML='';
+  QD_Q.forEach(function(q,qi){
+    var h='<div class="qdi"><div class="qdq">'+(qi+1)+'. '+q.q+'</div><div class="qdos">';
+    q.o.forEach(function(opt,oi){h+='<div class="qdo'+(qdA[qi]===oi?' on':'')+'" onclick="qdSel('+qi+','+oi+',this)">'+(oi+1)+'<br><span style="font-size:9px;font-weight:400">'+opt+'</span></div>';});
+    h+='</div></div>';c.innerHTML+=h;
+  });
+  c.innerHTML+='<button class="btf btn1" onclick="closeQDASH()" type="button" style="margin-top:8px">Valider</button>';
+}
+function qdSel(qi,oi,el){
+  qdA[qi]=oi;
+  el.closest('.qdos').querySelectorAll('.qdo').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');
+}
+function calcQD(){
+  var ans=qdA.filter(function(a){return a!==null;});
+  if(ans.length<11)return;
+  var sum=qdA.reduce(function(a,v){return a+(v+1);},0);
+  var score=Math.round(((sum/11)-1)*25);
+  qdashData={score:score};
+  updateScoreDisplays();
+  saveState();
+}
+function getQDGrade(s){
+  if(s<=25)return{label:'Handicap léger',color:'var(--grn)'};
+  if(s<=50)return{label:'Handicap modéré',color:'var(--amb)'};
+  if(s<=75)return{label:'Handicap sévère',color:'var(--red)'};
+  return{label:'Handicap très sévère',color:'var(--red)'};
+}
+
+function updateScoreDisplays(){
+  var pe=document.getElementById('prwe-result');
+  if(pe&&prweData.total!==undefined){
+    var g=getPRWEGrade(prweData.total);
+    pe.style.display='block';
+    pe.innerHTML='<div class="score-res"><b>PRWE : '+prweData.total+'/150</b> — <span style="color:'+g.color+'">'+g.label+'</span><br><span style="font-size:11px;color:var(--tx3)">Douleur : '+prweData.pain+'/50 · Fonction : '+prweData.func+'/100</span></div>';
+  }
+  var qe=document.getElementById('qdash-result');
+  if(qe&&qdashData.score!==undefined){
+    var gq=getQDGrade(qdashData.score);
+    qe.style.display='block';
+    qe.innerHTML='<div class="score-res"><b>QuickDASH : '+qdashData.score+'/100</b> — <span style="color:'+gq.color+'">'+gq.label+'</span></div>';
+  }
+}
+
+// ── HELPERS
+function hasC(g,v){return (CHIPS[g]||[]).some(function(c){return c.indexOf(v)!==-1});}
+function hasK(g,v){return (CHECKS[g]||[]).some(function(c){return c.indexOf(v)!==-1});}
+function isT(k,v){return TESTS[k]===v;}
+function getAge(){
+  if(!D.ddn)return null;
+  var d=new Date(D.ddn),n=new Date();
+  var a=n.getFullYear()-d.getFullYear();
+  if(n.getMonth()<d.getMonth()||(n.getMonth()===d.getMonth()&&n.getDate()<d.getDate()))a--;
+  return a;
+}
+
+// ── ALGORITHME ANALYSE
+function buildAnalyse(){
+  var age=getAge();
+  var s={scc:0,dequervain:0,tfcc:0,rhizarthrose:0,scaphoide:0,dupuytren:0};
+  var r={scc:[],dequervain:[],tfcc:[],rhizarthrose:[],scaphoide:[],dupuytren:[]};
+
+  // SCC
+  var wainnerPos=WAINNER_KEYS.filter(function(k){return TESTS[k]==='pos';}).length;
+  if(wainnerPos>=4){s.scc+=85;r.scc.push('Cluster Wainner ≥4/4 — LR+ 16.6 (+85 pts)');}
+  else if(wainnerPos===3){s.scc+=60;r.scc.push('Cluster Wainner 3/4 — SCC probable (+60 pts)');}
+  else if(wainnerPos===2){s.scc+=35;r.scc.push('Cluster Wainner 2/4 — suspicion modérée (+35 pts)');}
+  if(isT('durkan','pos')){s.scc+=20;r.scc.push('Durkan positif — LR+ 8.7 (+20 pts)');}
+  if(hasK('signes_fonc','fourmillements 3 premiers')){s.scc+=20;r.scc.push('Distribution médiane (+20 pts)');}
+  if(hasK('signes_fonc','Flick sign positif')){s.scc+=25;r.scc.push('Flick sign — quasi-pathognomonique (+25 pts)');}
+  if(hasK('inspection','Atrophie thénar')){s.scc+=30;r.scc.push('Atrophie thénar — SCC avancé (+30 pts)');}
+  if(hasC('rythme','Fourmillements nocturnes')){s.scc+=20;r.scc.push('Paresthésies nocturnes (+20 pts)');}
+  if(hasC('atcd','Canal carpien traité')){s.scc+=15;r.scc.push('ATCD canal carpien (+15 pts)');}
+  if(hasC('imagerie','EMG — SCC confirmé')){s.scc+=60;r.scc.push('EMG confirmatoire (+60 pts)');}
+  if(hasC('atcd','Diabète')||hasC('atcd','Hypothyroïdie')){s.scc+=15;r.scc.push('Facteur systémique (diabète/hypothyroïdie) (+15 pts)');}
+  if(D.sexe==='Femme'&&age&&age>40){s.scc+=10;r.scc.push('Femme >40 ans — épidémiologie SCC (+10 pts)');}
+
+  // DE QUERVAIN
+  if(isT('what','neg')){s.dequervain-=40;r.dequervain.push('WHAT négatif — LR− 0.03 : De Quervain très peu probable (−40 pts)');}
+  if(isT('what','pos')){s.dequervain+=50;r.dequervain.push('WHAT positif — Sn 99% (+50 pts)');}
+  if(isT('eichhoff','pos')){s.dequervain+=35;r.dequervain.push('Eichhoff positif (+35 pts)');}
+  if(hasC('palpation','Styloïde radiale')||hasC('palpation','1er compartiment')){s.dequervain+=30;r.dequervain.push('Palpation 1er compartiment douloureuse (+30 pts)');}
+  if(hasK('inspection','Ténosynovite visible')){s.dequervain+=25;r.dequervain.push('Ténosynovite visible bord radial (+25 pts)');}
+  if(hasC('localisation','Bord radial')||hasC('localisation','Styloïde radiale')){s.dequervain+=20;r.dequervain.push('Localisation bord radial (+20 pts)');}
+  if(hasC('installation','Post-partum')||hasC('installation','Grossesse')){s.dequervain+=25;r.dequervain.push('Post-partum / grossesse — facteur de risque majeur (+25 pts)');}
+  if(hasC('imagerie','Écho — De Quervain')){s.dequervain+=50;r.dequervain.push('Échographie confirmée (+50 pts)');}
+
+  // TFCC
+  if(isT('fovea','pos')){s.tfcc+=65;r.tfcc.push('Fovea sign positif — LR+ 7.3 (+65 pts)');}
+  if(isT('press','pos')){s.tfcc+=30;r.tfcc.push('Press test positif — Sn 100% (+30 pts)');}
+  if(isT('pianokey','pos')){s.tfcc+=25;r.tfcc.push('Piano Key positif — instabilité RUD (+25 pts)');}
+  if(hasC('palpation','Fovéa ulnaire')){s.tfcc+=30;r.tfcc.push('Fovéa ulnaire douloureuse (+30 pts)');}
+  if(hasC('localisation','Styloïde ulnaire')||hasC('localisation','Bord ulnaire')){s.tfcc+=20;r.tfcc.push('Localisation bord ulnaire (+20 pts)');}
+  if(hasK('signes_fonc','Claquement / ressaut')){s.tfcc+=20;r.tfcc.push('Claquement au poignet (+20 pts)');}
+  if(hasC('imagerie','IRM — lésion TFCC')){s.tfcc+=60;r.tfcc.push('IRM confirmée (+60 pts)');}
+
+  // RHIZARTHROSE
+  if(isT('grind','pos')){s.rhizarthrose+=45;r.rhizarthrose.push('Grind test positif — LR+ 2.6 (+45 pts)');}
+  if(isT('shear_tm','pos')){s.rhizarthrose+=35;r.rhizarthrose.push('Shear TM positif (+35 pts)');}
+  if(hasC('palpation','Trapézo-métacarpienne')){s.rhizarthrose+=30;r.rhizarthrose.push('TM douloureuse à la compression (+30 pts)');}
+  if(hasK('inspection','Déformation trapézo-métacarpienne')){s.rhizarthrose+=25;r.rhizarthrose.push('Déformation TM visible (+25 pts)');}
+  if(hasC('localisation','Trapézo-métacarpienne')){s.rhizarthrose+=20;r.rhizarthrose.push('Localisation TM (+20 pts)');}
+  if(hasC('imagerie','Radio — arthrose TM')){s.rhizarthrose+=55;r.rhizarthrose.push('Arthrose TM radiologique (+55 pts)');}
+  if(age&&age>50&&D.sexe==='Femme'){s.rhizarthrose+=20;r.rhizarthrose.push('Femme >50 ans — profil rhizarthrose (+20 pts)');}
+
+  // SCAPHOÏDE / INSTABILITÉ
+  if(isT('tabatiere','pos')){s.scaphoide+=55;r.scaphoide.push('Tabatière positive — Sn ~100% post-trauma (+55 pts)');}
+  if(isT('comp_pouce','pos')){s.scaphoide+=65;r.scaphoide.push('Compression axiale pouce — LR+ 24 (+65 pts)');}
+  if(isT('watson','pos')){s.scaphoide+=35;r.scaphoide.push('Watson positif — instabilité SL (+35 pts)');}
+  if(hasC('palpation','Tabatière anatomique')){s.scaphoide+=25;r.scaphoide.push('Tabatière anatomique sensible (+25 pts)');}
+  if(hasC('atcd','Fracture du scaphoïde')){s.scaphoide+=30;r.scaphoide.push('ATCD fracture scaphoïde (+30 pts)');}
+  if(hasC('installation','Post-traumatique')){s.scaphoide+=20;r.scaphoide.push('Installation post-traumatique (+20 pts)');}
+
+  // DUPUYTREN
+  if(isT('tabletop','pos')){s.dupuytren+=70;r.dupuytren.push('Tabletop positif — critère chirurgical (+70 pts)');}
+  if(hasK('inspection','Nodule / bride palmaire')){s.dupuytren+=60;r.dupuytren.push('Nodule / bride palmaire visible (+60 pts)');}
+  if(hasK('signes_fonc','Limitation progressive extension')){s.dupuytren+=40;r.dupuytren.push('Déficit extension 4e–5e doigts (+40 pts)');}
+  if(hasC('atcd','Dupuytren connu')){s.dupuytren+=50;r.dupuytren.push('Dupuytren connu (+50 pts)');}
+  if(D.sexe==='Homme'&&age&&age>50){s.dupuytren+=15;r.dupuytren.push('Homme >50 ans — profil épidémiologique (+15 pts)');}
+  if((CHIPS['dupuytren_stade']||[]).length>0){s.dupuytren+=20;}
+
+  // Trier par score
+  var pathos=[
+    {k:'scc',label:'Syndrome du canal carpien',score:s.scc,raisons:r.scc},
+    {k:'dequervain',label:'De Quervain (1er compartiment)',score:s.dequervain,raisons:r.dequervain},
+    {k:'tfcc',label:'Lésion TFCC / Instabilité RUD',score:s.tfcc,raisons:r.tfcc},
+    {k:'rhizarthrose',label:'Rhizarthrose TM',score:s.rhizarthrose,raisons:r.rhizarthrose},
+    {k:'scaphoide',label:'Fracture scaphoïde / Instabilité SL',score:s.scaphoide,raisons:r.scaphoide},
+    {k:'dupuytren',label:'Maladie de Dupuytren',score:s.dupuytren,raisons:r.dupuytren}
+  ].sort(function(a,b){return b.score-a.score;});
+
+  var html='';
+
+  // Red flags
+  if((CHECKS['rf']||[]).length>0){
+    html+='<div class="rflag">🚨 Red flag détecté — Orientation médicale à envisager</div>';
+  }
+
+  pathos.forEach(function(p,i){
+    if(p.score<=0&&i>0)return;
+    var pct=Math.min(100,Math.max(0,p.score));
+    var cls=pct>=70?'high':pct>=40?'med':'low';
+    var label=pct>=70?'Très probable':pct>=40?'Probable':pct>=20?'Possible':'Peu probable';
+    html+='<div class="cr-block">';
+    html+='<div class="cr-label">'+(i===0?'🎯 Diagnostic principal':'Diagnostic différentiel')+'</div>';
+    html+='<div style="font-size:14px;font-weight:800;color:var(--nvy);margin-bottom:4px">'+p.label+'</div>';
+    html+='<div class="pbar-wrap"><div class="pbar-lbl"><span>'+label+'</span><span>Score : '+p.score+'</span></div><div class="pbar"><div class="pbar-fill '+cls+'" style="width:'+pct+'%"></div></div></div>';
+    if(p.raisons.length>0){
+      html+='<ul style="margin-top:8px;padding-left:0;list-style:none">';
+      p.raisons.forEach(function(rr){html+='<li style="font-size:11px;color:var(--tx3);padding:2px 0">• '+rr+'</li>';});
+      html+='</ul>';
+    }
+    html+='</div>';
+  });
+
+  // Scores
+  if(prweData.total!==undefined||qdashData.score!==undefined){
+    html+='<div class="cr-block"><div class="cr-label">Scores fonctionnels</div>';
+    if(prweData.total!==undefined){
+      var gp=getPRWEGrade(prweData.total);
+      html+='<div style="margin-bottom:6px"><b>PRWE : '+prweData.total+'/150</b> — <span style="color:'+gp.color+'">'+gp.label+'</span></div>';
+    }
+    if(qdashData.score!==undefined){
+      var gq=getQDGrade(qdashData.score);
+      html+='<div><b>QuickDASH : '+qdashData.score+'/100</b> — <span style="color:'+gq.color+'">'+gq.label+'</span></div>';
+    }
+    html+='</div>';
+  }
+
+  document.getElementById('analyse-content').innerHTML=html||'<div style="font-size:12px;color:var(--tx3);padding:8px 0">Données insuffisantes — compléter les étapes précédentes</div>';
+}
+
+// ── COMPTE-RENDU
+function buildCR(){
+  var nom=(D.prenom+' '+D.nom).trim()||'—';
+  var age=getAge();
+  document.getElementById('cr-patient-name').textContent=nom;
+  document.getElementById('cr-date').textContent=D.datebilan?new Date(D.datebilan).toLocaleDateString('fr-FR'):'—';
+
+  var html='';
+
+  // Identité
+  html+='<div class="cr-block"><div class="cr-label">Identité</div><div class="cr-value">';
+  html+=nom+(age?' — '+age+' ans':'')+(D.sexe?', '+D.sexe:'')+(D.profession?', '+D.profession:'')+'<br>';
+  html+='Côté atteint : '+(D.cote||'—');
+  if(D.medecin)html+='<br>Médecin référent : '+D.medecin;
+  html+='</div></div>';
+
+  // Motif
+  html+='<div class="cr-block"><div class="cr-label">Motif de consultation</div><div class="cr-value">';
+  var ctx={douleur:'Douleur du poignet',paresthesie:'Fourmillements / paresthésies',deformite:'Déformation',instabilite:'Instabilité / claquement',faiblesse:'Faiblesse de préhension',trauma:'Contexte post-traumatique'};
+  html+=(ctx[D.ctx]||'Non précisé');
+  if(D.eva.repos!==null)html+='<br>EVA repos : '+D.eva.repos+'/10';
+  if(D.eva.effort!==null)html+=' — EVA effort : '+D.eva.effort+'/10';
+  html+='</div></div>';
+
+  // Anamnèse
+  var decl=(CHIPS['declenchant']||[]);var loca=(CHIPS['localisation']||[]);var ryt=(CHIPS['rythme']||[]);
+  if(decl.length||loca.length||ryt.length){
+    html+='<div class="cr-block"><div class="cr-label">Anamnèse</div><div class="cr-value">';
+    if(loca.length)html+='Localisation : '+loca.join(', ')+'<br>';
+    if(decl.length)html+='Facteurs déclenchants : '+decl.join(', ')+'<br>';
+    if(ryt.length)html+='Horaire : '+ryt.join(', ');
+    html+='</div></div>';
+  }
+
+  // Examen physique
+  html+='<div class="cr-block"><div class="cr-label">Examen physique</div><div class="cr-value">';
+  var insp=(CHECKS['inspection']||[]);var palp=(CHECKS['palpation']||[]);
+  if(insp.length)html+='Inspection : '+insp.join(', ')+'<br>';
+  if(palp.length)html+='Palpation : '+palp.join(', ')+'<br>';
+  var amps=[];
+  if(D.amps.flex_att)amps.push('Flex '+D.amps.flex_att);
+  if(D.amps.ext_att)amps.push('Ext '+D.amps.ext_att);
+  if(D.amps.pro_att)amps.push('Pro '+D.amps.pro_att);
+  if(D.amps.sup_att)amps.push('Sup '+D.amps.sup_att);
+  if(amps.length)html+='Amplitudes : '+amps.join(' / ');
+  html+='</div></div>';
+
+  // Tests EBP positifs
+  var testsPos=Object.keys(TESTS).filter(function(k){return TESTS[k]==='pos';});
+  if(testsPos.length){
+    html+='<div class="cr-block"><div class="cr-label">Tests cliniques positifs</div><div class="cr-value">';
+    html+=testsPos.map(function(k){
+      var names={eichhoff:'Eichhoff',what:'WHAT test',durkan:'Durkan',phalen:'Phalen',tinel_carpien:'Tinel canal carpien',flick:'Flick sign',fovea:'Fovea sign',press:'Press test',pianokey:'Piano Key',grind:'Grind test',shear_tm:'Shear TM',tabatiere:'Tabatière anatomique',comp_pouce:'Compression axiale pouce',watson:'Watson',tabletop:'Tabletop (Dupuytren)'};
+      return names[k]||k;
+    }).join(', ');
+    html+='</div></div>';
+  }
+
+  // Scores
+  if(prweData.total!==undefined||qdashData.score!==undefined){
+    html+='<div class="cr-block"><div class="cr-label">Scores fonctionnels</div><div class="cr-value">';
+    if(prweData.total!==undefined){var gp=getPRWEGrade(prweData.total);html+='PRWE : '+prweData.total+'/150 ('+gp.label+')<br>';}
+    if(qdashData.score!==undefined){var gq=getQDGrade(qdashData.score);html+='QuickDASH : '+qdashData.score+'/100 ('+gq.label+')';}
+    html+='</div></div>';
+  }
+
+  // Observations
+  if(D.observations){html+='<div class="cr-block"><div class="cr-label">Observations</div><div class="cr-value">'+D.observations+'</div></div>';}
+
+  document.getElementById('cr-content').innerHTML=html;
+}
+
+// ── INIT
+document.addEventListener('DOMContentLoaded',function(){
+  var today=new Date().toISOString().split('T')[0];
+  var db=document.getElementById('datebilan');if(db&&!db.value)db.value=today;
+  loadState();
+});
+
+var psfsSt={texts:['','',''],vals:[null,null,null]};
+function buildPSFS(){
+  var h='<div style="font-size:12px;color:var(--tx2);margin-bottom:10px">Identifiez 3 activités limitées par votre poignet — notez chacune de 0 (impossible) à 10 (normal).</div>';
+  for(var j=0;j<3;j++){
+    h+='<div class="psfs-item">';
+    h+='<input type="text" placeholder="Activité '+(j+1)+' (ex: monter les escaliers, conduire...)" value="'+(psfsSt.texts[j]||'')+'" oninput="setPsfsText('+j+',this.value)" style="margin-bottom:7px">';
+    h+='<div class="psfs-btns">';
+    for(var v=0;v<=10;v++){
+      h+='<button class="psfs-btn'+(psfsSt.vals[j]===v?' on':'')+'" onclick="setPsfsVal('+j+','+v+',this)" type="button">'+v+'</button>';
+    }
+    h+='</div></div>';
+  }
+  document.getElementById('psfs-items').innerHTML=h;
+  calcPSFS();
+}
+function setPsfsText(j,v){psfsSt.texts[j]=v;}
+function setPsfsVal(j,v,btn){btn.closest('.psfs-btns').querySelectorAll('.psfs-btn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');psfsSt.vals[j]=v;calcPSFS();}
+function calcPSFS(){
+  var vals=psfsSt.vals.filter(function(v){return v!==null;});if(!vals.length){document.getElementById('psfs-result').innerHTML='';return;}
+  var avg=(vals.reduce(function(s,v){return s+v;},0)/vals.length).toFixed(1);D.psfs={avg:parseFloat(avg),texts:psfsSt.texts,vals:psfsSt.vals};
+  var cls=parseFloat(avg)>=7?'sco-g':parseFloat(avg)>=4?'sco-m':'sco-r';
+  document.getElementById('psfs-result').innerHTML='<div class="score-res '+cls+'"><div class="score-num">'+avg+'<span style="font-size:14px;font-weight:600">/10</span></div><div class="score-info">PSFS<br>Moyenne activités<br><span style="font-weight:400;font-size:10px">'+vals.length+' item(s) · MCID=2</span></div></div>';
+}
+function openProgram(){
+  var patName=(D.prenom||'')+' '+(D.nom||'');
+  document.getElementById('prog-patient-name').textContent=patName.trim()||'Programme';
+  document.getElementById('prog-patient-info').textContent='Poignet/Main \u00b7 '+(D.cote||'C\u00f4t\u00e9 non pr\u00e9cis\u00e9');
+
+  var diagScc=isT('durkan','pos')||isT('phalen','pos')||isT('flick','pos')||(CHECKS['signes_fonc']||[]).some(function(c){return c.indexOf('fourmillements')!==-1;});
+  var diagDq=isT('what','pos')||isT('eichhoff','pos');
+  var diagTfcc=isT('fovea','pos')||isT('press','pos')||isT('pianokey','pos');
+  var diagRhiz=isT('grind','pos')||isT('shear_tm','pos');
+  var diagScaph=isT('tabatiere','pos')||isT('comp_pouce','pos');
+  var diagInstSL=isT('watson','pos');
+  var diagDup=isT('tabletop','pos')||(CHECKS['inspection']||[]).some(function(c){return c.indexOf('Nodule')!==-1;});
+  var isPostTrauma=hasC('installation','Post-traumatique')||hasC('installation','Chute');
+  var isSport=hasC('activite','Sport')||hasC('activite','sport');
+  var noDiag=!diagScc&&!diagDq&&!diagTfcc&&!diagRhiz&&!diagScaph&&!diagInstSL&&!diagDup;
+
+  var p1=[],p2=[],p3=[],p4=[];
+
+  // ── PHASE 1 — Antalgique / Protection ───────────────────────────────────
+  p1.push({n:'Cryoth\u00e9rapie locale',dur:'15 min \u00d7 3-4/jour',meta:'Antalgique phase aigu\u00eb',
+    proto:'Application de glace envelopp\u00e9e dans un linge humide sur la zone douloureuse. Protection cutan\u00e9e obligatoire. Coude ou poignet en position de confort.',
+    just:'R\u00e9duction de la r\u00e9action inflammatoire locale et de l\u2019\u0153d\u00e8me. Indiqu\u00e9 en phase aigu\u00eb et post-traumatique.'});
+
+  if(diagScc){
+    p1.push({n:'Orthèse nocturne poignet neutre (SCC)',dur:'Chaque nuit — 4 à 12 semaines',meta:'Neuro-protection — canal carpien',
+      proto:'Orthèse thermoformée maintenant le poignet en position neutre (0-10° extension). Port nocturne systématique. Éviter la position en flexion/extension extrême.',
+      just:'Réduit la pression intra-canalaire et prévient la compression nocturne du nerf médian. Traitement conservateur de référence SCC (Gelberman 1988 — CPG AAOS 2016). MCID PRWE : 14 pts.'});
+    p1.push({n:'Mobilisations de glisse du nerf médian',dur:'10 rép. \u00d7 2 — 2\u00d7/jour',meta:'Neurodynamique — nerf médian',
+      proto:'Assis. Position 1 : coude fléchi, poignet neutre, doigts fléchis. Position 2 : coude en extension progressive + extension poignet + doigts. Mouvement lent et oscillatoire. Arrêt si paresthésies intenses.',
+      just:'Améliore la mobilité du nerf médian dans le canal carpien. Réduit l\u2019adhérence périneurale et la sensibilisation (Tal-Akabi 2000). À distinguer de la tension nerveuse franche.'});
+  }
+
+  if(diagDq){
+    p1.push({n:'Orthèse pouce — immobilisation 1er compartiment',dur:'3 à 6 semaines — en continu',meta:'Protection tendineuse — De Quervain',
+      proto:'Orthèse courte immobilisant le pouce (CMC et MCP), poignet libre. Porter en continu sauf hygiène. Éviter les mouvements d\u2019abduction-extension du pouce contre résistance.',
+      just:'Repos relatif du 1er compartiment extensorien (APL et EPB). Traitement conservateur de première intention — taux de succès 50-80% si < 6 mois d\u2019évolution (De Quervain 1895 — Ilyas 2007).'});
+    p1.push({n:'Cryothérapie styloïde radiale',dur:'15 min \u00d7 3/jour',meta:'Antalgique local — 1er compartiment',
+      proto:'Glace sur la styloïde radiale après les activités. Massage froid avec glaçon (1 min). Protection cutanée.',
+      just:'Réduction de la ténosynovite. Antalgie locale complémentaire à l\u2019immobilisation.'});
+  }
+
+  if(diagTfcc){
+    p1.push({n:'Orthèse radio-ulnaire distale — TFCC',dur:'4 à 8 semaines selon gravité',meta:'Protection TFCC / RUD',
+      proto:'Orthèse courte stabilisant l\u2019articulation radio-ulnaire distale, poignet en légère déviation radiale. Autoriser la flexion-extension modérée. Éviter les mouvements de prono-supination en charge.',
+      just:'Stabilisation de la RUD et protection du TFCC en phase aiguë. Nécessaire avant tout renforcement (Lindau 2000). Réévaluation à 4-6 semaines.'});
+  }
+
+  if(diagScaph||isPostTrauma){
+    p1.push({n:'URGENCE — Fracture du scaphoïde : protocole immobilisation',dur:'Immédiatement — orientation médicale',meta:'Fracture scaphoïde suspectée',
+      proto:'Immobiliser en attelle plâtrée ou résine pouce-avant-bras. Orientation aux urgences pour radio (incidence scaphoïdienne) ou IRM si radio négative. NE PAS mobiliser sans confirmation radiologique.',
+      just:'La fracture du scaphoïde est sous-diagnostiquée aux urgences (20-30% des radios négatives). IRM = gold standard précoce. Retard de diagnostic = pseudarthrose (Grover 1996).'});
+  }
+
+  // ── PHASE 2 — Mobilisation et récupération ──────────────────────────────
+  p2.push({n:'Mobilisations actives poignet en amplitude libre',dur:'5 mouvements \u00d7 10 rép. — 2\u00d7/jour',meta:'Entretien mobilité articulaire',
+    proto:'Flexion, extension, déviation radiale, déviation ulnaire, circumduction. Amplitude indolore. Coude en appui. Lent et contrôlé. Arrêt si douleur > EVA 3/10.',
+    just:'Maintien des amplitudes articulaires et prévention de la raideur post-immobilisation. Mobilisation précoce = meilleur pronostic fonctionnel (PRWE).'});
+
+  p2.push({n:'Prono-supination active progressive',dur:'3 \u00d7 15 rép. — 2\u00d7/jour',meta:'Mobilité radio-ulnaire',
+    proto:'Assis, coude fléchi à 90° contre le corps, avant-bras en appui. Rotation paume-ciel puis paume-sol. Amplitude complète indolore. Progresser vers résistance légère (marteau, cuillère).',
+    just:'Récupération de la prono-supination — fonction clé du membre supérieur. Déficit > 30° impacte significativement les AVQ (DASH).'});
+
+  if(diagScc){
+    p2.push({n:'Exercices de tendon gliding (SCC)',dur:'5 positions \u00d7 10 rép. — 3\u00d7/jour',meta:'Glisse tendineuse — canal carpien',
+      proto:'5 positions progressives : main droite → crochet (PIP fléchis) → poing plat (MCP fléchis) → poing fermé → poing serré. Chaque position tenue 5 sec. Doux et lent.',
+      just:'Favorise la glisse différentielle des tendons fléchisseurs dans le canal carpien, réduisant la pression sur le nerf médian (Totten 1994). Complète la neurodynamique.'});
+  }
+
+  if(diagDq){
+    p2.push({n:'Étirement progressif 1er compartiment',dur:'3 \u00d7 30 sec — 2\u00d7/jour (phase subaiguë)',meta:'Extensibilité APL/EPB',
+      proto:'Poignet en déviation ulnaire douce + flexion du pouce dans la paume (comme Eichhoff mais passif et doux). Tension sans douleur aiguë. Uniquement après régression de la phase inflammatoire.',
+      just:'Améliore l\u2019extensibilité tendineuse du 1er compartiment et réduit la tension au repos. À débuter uniquement après 3-4 semaines d\u2019immobilisation et régression de la douleur.'});
+  }
+
+  if(diagTfcc){
+    p2.push({n:'Mobilisations radio-ulnaires distales — glissement dorsal/palmaire',dur:'3 \u00d7 10 rép. — en séance',meta:'Mobilité RUD — TFCC',
+      proto:'Patient assis, avant-bras fixé. Mobilisation passive de la tête ulnaire en glissement dorsal puis palmaire (technique de choix du thérapeute). Amplitude progressivement augmentée. Ne pas dépasser EVA 3/10.',
+      just:'Récupération de la mobilité radio-ulnaire distale après lésion TFCC. Précède tout travail en charge.'});
+  }
+
+  if(diagRhiz){
+    p2.push({n:'Mobilisations trapézo-métacarpiennes en traction',dur:'3 \u00d7 10 rép. — en séance',meta:'Décompression TM — rhizarthrose',
+      proto:'Traction axiale douce du 1er métacarpien dans l\u2019axe, pouce en légère abduction. Tenir 30 sec. Glissements latéraux en fin de traction. Effet antalgique recherché.',
+      just:'La traction articulaire réduit la compression et améliore la nutrition du cartilage. Complément à la prise en charge conservatrice de la rhizarthrose (Sonne-Holm 2007).'});
+  }
+
+  // ── PHASE 3 — Renforcement progressif ───────────────────────────────────
+  if(diagScc){
+    p3.push({n:'Renforcement thenar — opposition progressive',dur:'3 \u00d7 15 rép. — 3\u00d7/semaine',meta:'Muscles thénariens — SCC avancé',
+      proto:'Opposition du pouce contre chaque doigt avec résistance croissante (élastique mince). Progresser vers la pince fine avec poids. Si atrophie thénar sévère : electrostimulation en complément.',
+      just:'Rééducation du court abducteur du pouce (branche thénarienne du nerf médian). Indiqué si atrophie thénar ou déficit d\u2019opposition (SCC avancé). Complète le traitement conservateur ou post-chirurgical.'});
+  }
+
+  if(diagDq){
+    p3.push({n:'Renforcement excentrique APL/EPB — De Quervain',dur:'3 \u00d7 15 rép. — 5\u00d7/semaine — 8 semaines',meta:'Excentrique 1er compartiment',
+      proto:'Élastique en abduction du pouce. Phase concentrique assistée par la main contro-latérale. Phase excentrique lente (3 sec de retour) réalisée par le côté atteint seul. EVA autorisé ≤ 5/10 pendant l\u2019effort.',
+      just:'Programme excentrique — stimule la synthèse de collagène de type 1. Efficacité démontrée dans les tendinopathies en charge (Alfredson 1998 — extrapolé au 1er compartiment).'});
+    p3.push({n:'Renforcement fonctionnel prise pouce-index',dur:'3 \u00d7 20 rép. — 3\u00d7/semaine',meta:'Pince latérale et pointe',
+      proto:'Pince papier entre pouce et index avec résistance croissante (papier → livre → pince-linge → pinces). Progresser en force de résistance toutes les 2 semaines. EVA ≤ 3/10.',
+      just:'Récupération de la force de pince — fonction essentielle impactée par le De Quervain. Objectif retour activités professionnelles (QuickDASH < 20 pts).'});
+  }
+
+  if(diagTfcc){
+    p3.push({n:'Stabilisation active RUD — co-contraction',dur:'3 \u00d7 15 rép. — 3\u00d7/semaine',meta:'Stabilisateurs RUD — TFCC',
+      proto:'Coude fléchi, avant-bras en position neutre. Alterner contractions isométriques pronation/supination sans mouvement (co-contraction). Progresser vers prono-supination contre résistance légère (marteau vertical).',
+      just:'Renforcement des pronateurs/supinateurs qui stabilisent dynamiquement la RUD. Compensation musculaire d\u2019une lésion TFCC partielle (Lindau 2000).'});
+    p3.push({n:'Prono-supination résistée progressive',dur:'3 \u00d7 15 rép. — 3\u00d7/semaine',meta:'Renforcement RUD dynamique',
+      proto:'Marteau tenu à l\u2019extrémité (bras de levier). Prono-supination lente et contrôlée en amplitude complète. Progresser vers marteau plus lourd. EVA ≤ 3/10.',
+      just:'Réentraîne la stabilité dynamique de la RUD sous charge progressive. Précède le retour fonctionnel.'});
+  }
+
+  if(diagRhiz){
+    p3.push({n:'Renforcement isométrique opposition pouce — rhizarthrose',dur:'6 directions \u00d7 10 sec \u00d7 5 rép. — 3\u00d7/semaine',meta:'Renforcement sans contrainte TM',
+      proto:'Pince isométrique pouce contre chaque doigt (pas de mouvement). Main stabilisée. Intensité sous-maximale. NE PAS réaliser de mouvements de circumduction ou de grind actif.',
+      just:'Renforcement sans compression articulaire. Adapté aux stades I-II de rhizarthrose. Maintient la force de pince sans aggraver les lésions cartilagineuses.'});
+    p3.push({n:'Orthèse thermoformée TM — port activité',dur:'Port lors des activités douloureuses',meta:'Décharge TM — rhizarthrose',
+      proto:'Orthèse courte moulée maintenant le 1er rayon en légère abduction et opposition. Port lors des activités en charge (cuisine, jardinage, outil). Retrait pour exercices de mobilité.',
+      just:'Protection de l\u2019articulation trapézo-métacarpienne en charge. Réduit la douleur et améliore la fonction (DASH) à court terme (Becker 2019). Traitement conservateur de référence stades II-III.'});
+  }
+
+  p3.push({n:'Renforcement global grip — préhension progressive',dur:'3 \u00d7 20 rép. — 3\u00d7/semaine',meta:'Force de préhension globale',
+    proto:'Balle antistress → extenseur de doigts élastique → hand gripper progressif. Progresser en résistance toutes les 2 semaines. Mesurer la force de grip (dynamomètre) comme indicateur.',
+    just:'La force de grip est le principal indicateur fonctionnel du membre supérieur. Objectif de retour : grip symétrique LSI ≥ 85% (DASH < 20 pts, PRWE < 30 pts).'});
+
+  if(diagInstSL||diagScaph){
+    p3.push({n:'Proprioception poignet — repositionnement actif',dur:'3 \u00d7 10 rép. — 2\u00d7/jour',meta:'Proprioception — instabilité carpe',
+      proto:'Yeux fermés, mémoriser la position neutre du poignet. Déplacer en flexion-extension puis revenir exactement à la position initiale. Progresser en vitesse et en charge. Évaluer l\u2019erreur de repositionnement.',
+      just:'Rééducation proprioceptive du poignet après instabilité scapho-lunaire. Améliore le contrôle neuro-musculaire et réduit le risque de nouvelle entorse (Safran 2001).'});
+  }
+
+  // ── PHASE 4 — Fonctionnel et retour activité ────────────────────────────
+  p4.push({n:'Travail progressif des AVQ — simulation activités',dur:'3\u00d7/semaine — progression guidée par PRWE',meta:'Retour activités quotidiennes',
+    proto:'Progression graduée : ouvrir/fermer robinet → couper légumes → soulever objet 500g → soulever 2kg → activités professionnelles. PRWE < 30 pts = objectif retour travail bureau. PRWE < 20 pts = travail manuel.',
+    just:'Réentraînement fonctionnel progressif. Le PRWE est le score de référence pour le suivi (MCID = 14 pts). Retour travail bureau visé à 6-8 semaines, travail manuel 10-12 semaines.'});
+
+  if(isSport){
+    p4.push({n:'Programme retour sport — poignet/main',dur:'6 à 12 semaines post phase 3',meta:'Retour sport progressif',
+      proto:'Phase sport : 1) Gestes techniques sans charge → 2) Gestes avec charge réduite (50%) → 3) Charge complète sans match → 4) Reprise compétition. Critère de passage : EVA ≤ 2/10 en charge + grip ≥ 85% contro-latéral.',
+      just:'Retour progressif et sécurisé au sport. Critères objectifs évitent les récidives. Valgus stress négatif exigé avant retour aux sports de lancer (Kibler 1995).'});
+  }
+
+  p4.push({n:'Éducation et prévention récidive',dur:'1 session 20 min + fiche écrite',meta:'Prévention — ergonomie',
+    proto:'Travail sur écran : souris verticale, repose-poignet en position neutre. Clavier bas. Éviter la flexion prolongée (SCC). Échauffement avant activité répétitive. Micro-pauses toutes les 45 min.',
+    just:'Les facteurs ergonomiques sont les principaux déterminants de la chronicisation et de la récidive des pathologies du poignet en milieu professionnel (Côté 2009).'});
+
+  p4.push({n:'Critères de sortie et MCID',dur:'\u00c9valuation à 8-12 semaines',meta:'Retour activité — critères objectifs',
+    proto:'PRWE < 25 pts (retour activité), PRWE < 15 pts (asymptomatique). QuickDASH < 20 pts. Grip LSI ≥ 85%. EVA ≤ 2/10 en charge. ROM symétrique (flex/ext ≥ 80% contro-latéral).',
+    just:'PRWE MCID = 14 pts (MacDermid 2000). QuickDASH MCID = 8 pts (Beaton 2005). Critères objectifs de reprise — évitent les décisions subjectives.'});
+
+  var PNAMES={epa:'Phase 1 \u2014 Antalgique & Protection',epm:'Phase 2 \u2014 Mobilisation & R\u00e9cup\u00e9ration',epv:'Phase 3 \u2014 Renforcement progressif',epr:'Phase 4 \u2014 Fonctionnel & Retour activit\u00e9'};
+  var phases=[{cls:'epa',exos:p1},{cls:'epm',exos:p2},{cls:'epv',exos:p3},{cls:'epr',exos:p4}];
+
+  var html='';
+  if(!noDiag){
+    var diagLabels={scc:'Canal carpien',dequervain:'De Quervain',tfcc:'TFCC/RUD',rhizarthrose:'Rhizarthrose TM',scaphoide:'Scaphoïde/instabilité SL',dupuytren:'Dupuytren'};
+    var dnames=[];
+    if(diagScc)dnames.push(diagLabels.scc);if(diagDq)dnames.push(diagLabels.dequervain);
+    if(diagTfcc)dnames.push(diagLabels.tfcc);if(diagRhiz)dnames.push(diagLabels.rhizarthrose);
+    if(diagScaph)dnames.push(diagLabels.scaphoide);if(diagDup)dnames.push(diagLabels.dupuytren);
+    html+='<div style="background:var(--zl);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--zd)"><strong>Programme adapt\u00e9 pour\u00a0:</strong> '+dnames.join(' + ')+'</div>';
+  }
+
+  phases.forEach(function(ph){
+    if(!ph.exos.length)return;
+    html+='<div class="eplbl '+ph.cls+'">'+PNAMES[ph.cls]+'</div>';
+    ph.exos.forEach(function(ex){
+      html+='<div class="exc"><div class="exh" onclick="toggleEx(this)"><span class="exn">'+ex.n+'</span><span class="exm">'+ex.meta+'</span><span class="exch">\u25bc</span></div>';
+      html+='<div class="exbd"><div class="expo"><span class="expol">Dose</span><span style="font-size:12px;color:var(--tx)">'+ex.dur+'</span></div>';
+      html+='<div class="exdc">'+ex.proto+'</div><div class="expg">'+ex.just+'</div></div></div>';
+    });
+  });
+
+  html+='<div style="background:var(--purl);border-radius:var(--r);padding:10px 14px;margin-top:12px"><div style="font-size:11px;font-weight:800;color:var(--pur);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Conseils g\u00e9n\u00e9raux</div><ul style="list-style:none;padding:0;margin:0;font-size:12px;color:var(--tx2)">';
+  ['EVA \u2264 3/10 pendant tous les exercices en phase 1-2','Progresser la charge hebdomadairement — ne jamais sauter les phases','Consulter si EVA > 6/10 persistant > 48h apr\u00e8s exercice','Porter l\u2019orthèse aux heures indiquées sans l\u2019enlever pour soulagement','Objectif : PRWE < 25 pts pour retour activit\u00e9s quotidiennes'].forEach(function(c){html+='<li style="padding:3px 0;border-bottom:1px solid var(--brd)">\u2022 '+c+'</li>';});
+  html+='</ul></div>';
+
+  document.getElementById('prog-content').innerHTML=html;
+  document.getElementById('prog-overlay').classList.add('o');
+}
+function closeProgram(){document.getElementById('prog-overlay').classList.remove('o');}
+function toggleEx(h){var bd=h.nextElementSibling;var open=bd.classList.toggle('o');h.querySelector('.exch').classList.toggle('o',open);}
+
+</script>
+</body>
+</html>
