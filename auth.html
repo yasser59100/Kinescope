@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0F1923">
+<title>KinéScope — Espace Kiné</title>
+<style>
+:root{
+  --bg:#0F1923;--surf:#16222E;--surf2:#1E2F40;--surf3:#243647;
+  --tx:#E8EDF2;--tx2:#8FA3B4;--tx3:#5A7080;
+  --acc:#2DD4BF;--acc2:#0EA5E9;--acc3:#F59E0B;
+  --red:#F87171;--green:#34D399;--brd:#243647;
+  --r:14px;--rs:10px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+  --safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--font);}
+.screen{display:none;flex-direction:column;min-height:100vh;padding:calc(var(--safe-t)+24px) 24px calc(var(--safe-b)+32px);max-width:420px;margin:0 auto;}
+.screen.active{display:flex;}
+.bg-deco{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.bg-deco::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.1) 0%,transparent 70%);top:-150px;left:-150px;}
+.bg-deco::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.07) 0%,transparent 70%);bottom:-100px;right:-100px;}
+.screen>*{position:relative;z-index:1;}
+.logo-wrap{display:flex;align-items:center;gap:14px;margin-bottom:6px;margin-top:20px;}
+.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(45,212,191,.3);flex-shrink:0;}
+.logo-title{font-size:28px;font-weight:800;letter-spacing:-.5px;}
+.logo-title em{font-style:normal;color:var(--acc);}
+.logo-sub{font-size:13px;color:var(--tx3);margin-bottom:12px;}
+.logo-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--acc);letter-spacing:.5px;text-transform:uppercase;margin-bottom:28px;width:fit-content;}
+.auth-tabs{display:flex;background:var(--surf2);border-radius:var(--r);padding:4px;gap:4px;margin-bottom:28px;}
+.auth-tab{flex:1;padding:11px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;color:var(--tx2);background:transparent;transition:all .2s;}
+.auth-tab.on{background:var(--surf3);color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.fl{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.8px;text-transform:uppercase;display:block;margin-bottom:6px;}
+.fi{width:100%;background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--rs);padding:14px 16px;font-size:16px;color:var(--tx);font-family:var(--font);outline:none;-webkit-appearance:none;margin-bottom:16px;transition:border-color .15s;color-scheme:dark;}
+.fi:focus{border-color:var(--acc);}
+.fi::placeholder{color:var(--tx3);}
+.fi-row{display:flex;gap:10px;margin-bottom:16px;}
+.fi-row .fi{margin-bottom:0;}
+.form-section{font-size:11px;font-weight:700;color:var(--acc);letter-spacing:1px;text-transform:uppercase;margin:8px 0 16px;display:flex;align-items:center;gap:8px;}
+.form-section::after{content:'';flex:1;height:1px;background:var(--brd);}
+.fi-pw-wrap{position:relative;margin-bottom:16px;}
+.fi-pw-wrap .fi{margin-bottom:0;padding-right:50px;}
+.pw-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--tx3);font-size:18px;cursor:pointer;padding:4px;}
+.field-hint{font-size:11px;color:var(--tx3);margin-top:-10px;margin-bottom:14px;padding-left:2px;}
+.btn-main{width:100%;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:var(--r);padding:16px;font-size:16px;font-weight:700;font-family:var(--font);cursor:pointer;box-shadow:0 4px 20px rgba(45,212,191,.35);transition:transform .1s,box-shadow .1s;margin-top:8px;}
+.btn-main:active{transform:scale(.97);}
+.btn-main:disabled{opacity:.4;pointer-events:none;}
+.err-msg{background:rgba(248,113,113,.12);border:1.5px solid rgba(248,113,113,.3);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--red);margin-bottom:16px;display:none;line-height:1.5;}
+.err-msg.show{display:block;}
+.ok-msg{background:rgba(52,211,153,.1);border:1.5px solid rgba(52,211,153,.3);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--green);margin-bottom:16px;display:none;line-height:1.5;}
+.ok-msg.show{display:block;}
+.forgot-link{text-align:center;font-size:13px;color:var(--tx3);margin-top:14px;cursor:pointer;text-decoration:none;display:block;}
+.forgot-link:active{color:var(--acc);}
+.divider-or{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--tx3);font-size:12px;font-weight:600;}
+.divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--brd);}
+.btn-google{width:100%;background:var(--surf2);color:var(--tx);border:1.5px solid var(--brd);border-radius:var(--r);padding:14px 20px;font-size:15px;font-weight:600;font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:border-color .15s,transform .1s;}
+.btn-google:active{transform:scale(.97);border-color:var(--acc);}
+.back-link{text-align:center;font-size:13px;color:var(--tx3);margin-top:20px;cursor:pointer;display:block;padding:8px;}
+.back-link:active{color:var(--acc);}
+/* PIN */
+#sc-pin{align-items:center;justify-content:center;background:var(--bg);}
+.pin-inner{display:flex;flex-direction:column;align-items:center;gap:22px;padding:24px;width:100%;max-width:320px;}
+.pin-logo{width:64px;height:64px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(45,212,191,.3);}
+.pin-title{font-size:24px;font-weight:800;text-align:center;}
+.pin-title em{font-style:normal;color:var(--acc);}
+.pin-user{font-size:13px;color:var(--acc);font-weight:600;text-align:center;min-height:18px;}
+.pin-sub{font-size:14px;color:var(--tx2);text-align:center;max-width:260px;line-height:1.5;}
+.pin-dots{display:flex;gap:16px;}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--tx3);transition:all .15s;}
+.pin-dot.filled{background:var(--acc);border-color:var(--acc);transform:scale(1.1);}
+.pin-dot.error{background:var(--red);border-color:var(--red);}
+.pin-setup-info{font-size:12px;color:var(--tx3);text-align:center;max-width:260px;line-height:1.6;background:var(--surf2);border-radius:var(--rs);padding:12px 16px;}
+.pinpad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:280px;}
+.pinkey{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);height:64px;font-size:24px;font-weight:600;color:var(--tx);font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .08s,transform .08s,border-color .08s;}
+.pinkey:active,.pinkey.tapped{background:var(--acc)!important;color:#fff!important;border-color:var(--acc)!important;transform:scale(.88)!important;}
+.pinkey.del{font-size:18px;color:var(--tx2);}
+.pinkey.empty{background:transparent;border-color:transparent;pointer-events:none;}
+.pin-decon{font-size:13px;color:var(--tx3);cursor:pointer;padding:10px;text-align:center;}
+.pin-decon:active{color:var(--red);}
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px;}
+.spin{width:36px;height:36px;border:3px solid var(--surf3);border-top-color:var(--acc);border-radius:50%;animation:sp .8s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+<div class="bg-deco"></div>
+<div id="loading"><div class="spin"></div><p style="color:var(--tx2);font-size:14px">Chargement\u2026</p></div>
+
+<!-- AUTH -->
+<div class="screen active" id="sc-auth">
+  <div class="logo-wrap">
+    <div class="logo-icon">
+      <svg viewBox="0 0 40 40" fill="none" width="28" height="28"><path d="M20 6C20 6 8 14 8 24a12 12 0 0024 0C32 14 20 6 20 6z" fill="white" fill-opacity=".9"/><path d="M20 14v12M14 20h12" stroke="#0F1923" stroke-width="2.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="logo-title">Kin&#233;<em>Scope</em></div>
+  </div>
+  <div class="logo-sub">Plateforme EBP &middot; Kin&#233;sith&#233;rapeutes</div>
+  <div class="logo-badge">
+    <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><rect x="1" y="5" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M4 5V3.5a2 2 0 014 0V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Espace professionnel
+  </div>
+  <div class="auth-tabs">
+    <button class="auth-tab on" id="tab-login" onclick="switchTab('login')">Connexion</button>
+    <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Inscription</button>
+  </div>
+  <div class="err-msg" id="err-msg"></div>
+  <div class="ok-msg" id="ok-msg"></div>
+  <!-- CONNEXION -->
+  <div id="form-login">
+    <label class="fl">Adresse e-mail</label>
+    <input class="fi" type="email" id="login-email" placeholder="votre@email.com" autocomplete="email">
+    <label class="fl">Mot de passe</label>
+    <div class="fi-pw-wrap">
+      <input class="fi" type="password" id="login-pw" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password">
+      <button class="pw-toggle" onclick="togglePw('login-pw',this)" type="button">&#128065;</button>
+    </div>
+    <button class="btn-main" onclick="doLogin()">Se connecter</button>
+    <a class="forgot-link" onclick="doReset()">Mot de passe oubli&#233; ?</a>
+    <div class="divider-or">ou</div>
+    <button class="btn-google" onclick="doGoogle()">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Continuer avec Google
+    </button>
+    <a class="back-link" onclick="window.location.href='index.html'">&#8592; Retour &#224; l&#8217;accueil</a>
+  </div>
+  <!-- INSCRIPTION -->
+  <div id="form-signup" style="display:none">
+    <div class="form-section">Compte</div>
+    <label class="fl">Adresse e-mail</label>
+    <input class="fi" type="email" id="su-email" placeholder="votre@email.com" autocomplete="email">
+    <label class="fl">Mot de passe</label>
+    <div class="fi-pw-wrap">
+      <input class="fi" type="password" id="su-pw" placeholder="8 caract&#232;res minimum" autocomplete="new-password">
+      <button class="pw-toggle" onclick="togglePw('su-pw',this)" type="button">&#128065;</button>
+    </div>
+    <div class="field-hint">Minimum 8 caract&#232;res</div>
+    <label class="fl">Confirmer le mot de passe</label>
+    <div class="fi-pw-wrap">
+      <input class="fi" type="password" id="su-pw2" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="new-password">
+      <button class="pw-toggle" onclick="togglePw('su-pw2',this)" type="button">&#128065;</button>
+    </div>
+    <div class="form-section">Identit&#233; professionnelle</div>
+    <div class="fi-row">
+      <div style="flex:1"><label class="fl">Pr&#233;nom</label><input class="fi" type="text" id="su-prenom" placeholder="Marie" autocomplete="given-name"></div>
+      <div style="flex:1"><label class="fl">Nom</label><input class="fi" type="text" id="su-nom" placeholder="Dupont" autocomplete="family-name"></div>
+    </div>
+    <label class="fl">Titre / Sp&#233;cialit&#233;</label>
+    <input class="fi" type="text" id="su-titre" placeholder="Kin&#233;sith&#233;rapeute">
+    <label class="fl">Cabinet / Structure</label>
+    <input class="fi" type="text" id="su-cabinet" placeholder="Cabinet Dupont">
+    <label class="fl">Adresse</label>
+    <input class="fi" type="text" id="su-adresse" placeholder="12 rue de la Sant&#233;, Paris">
+    <label class="fl">T&#233;l&#233;phone</label>
+    <input class="fi" type="tel" id="su-tel" placeholder="+33 6 00 00 00 00">
+    <label class="fl">N&#176; RPPS (optionnel)</label>
+    <input class="fi" type="text" id="su-rpps" placeholder="10 chiffres">
+    <button class="btn-main" onclick="doSignup()">Cr&#233;er mon compte</button>
+    <a class="back-link" onclick="window.location.href='index.html'">&#8592; Retour &#224; l&#8217;accueil</a>
+  </div>
+</div>
+
+<!-- PIN -->
+<div class="screen" id="sc-pin">
+  <div class="pin-inner">
+    <div class="pin-logo">
+      <svg viewBox="0 0 40 40" fill="none" width="28" height="28"><path d="M20 6C20 6 8 14 8 24a12 12 0 0024 0C32 14 20 6 20 6z" fill="white" fill-opacity=".9"/><path d="M20 14v12M14 20h12" stroke="#0F1923" stroke-width="2.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="pin-title">Kin&#233;<em>Scope</em></div>
+    <div class="pin-user" id="pin-user"></div>
+    <div class="pin-sub" id="pin-sub">Entrez votre code &#224; 4 chiffres</div>
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+    </div>
+    <div class="pin-setup-info" id="pin-setup-info" style="display:none">
+      Premier acc&#232;s &#8212; d&#233;finissez un code &#224; 4 chiffres.<br>Il vous sera demand&#233; &#224; chaque session.
+    </div>
+    <div class="pinpad">
+      <button class="pinkey" onclick="pk(1)">1</button><button class="pinkey" onclick="pk(2)">2</button><button class="pinkey" onclick="pk(3)">3</button>
+      <button class="pinkey" onclick="pk(4)">4</button><button class="pinkey" onclick="pk(5)">5</button><button class="pinkey" onclick="pk(6)">6</button>
+      <button class="pinkey" onclick="pk(7)">7</button><button class="pinkey" onclick="pk(8)">8</button><button class="pinkey" onclick="pk(9)">9</button>
+      <button class="pinkey empty"></button><button class="pinkey" onclick="pk(0)">0</button><button class="pinkey del" onclick="pkdel()">&#9003;</button>
+    </div>
+    <span class="pin-decon" onclick="doDeconnect()">Se d&#233;connecter</span>
+  </div>
+</div>
+
+<!-- PROFIL INCOMPLET -->
+<div class="screen" id="sc-profil">
+  <div class="logo-wrap" style="margin-top:20px">
+    <div class="logo-icon"><svg viewBox="0 0 40 40" fill="none" width="28" height="28"><path d="M20 6C20 6 8 14 8 24a12 12 0 0024 0C32 14 20 6 20 6z" fill="white" fill-opacity=".9"/><path d="M20 14v12M14 20h12" stroke="#0F1923" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+    <div class="logo-title">Kin&#233;<em>Scope</em></div>
+  </div>
+  <div class="logo-sub">Compl&#233;tez votre profil pour continuer</div>
+  <div class="err-msg" id="err-profil"></div>
+  <div class="form-section">Identit&#233; professionnelle</div>
+  <div class="fi-row">
+    <div style="flex:1"><label class="fl">Pr&#233;nom</label><input class="fi" type="text" id="p-prenom" placeholder="Marie"></div>
+    <div style="flex:1"><label class="fl">Nom</label><input class="fi" type="text" id="p-nom" placeholder="Dupont"></div>
+  </div>
+  <label class="fl">Titre</label><input class="fi" type="text" id="p-titre" placeholder="Kin&#233;sith&#233;rapeute">
+  <label class="fl">Cabinet</label><input class="fi" type="text" id="p-cabinet" placeholder="Cabinet Dupont">
+  <label class="fl">Adresse</label><input class="fi" type="text" id="p-adresse" placeholder="12 rue de la Sant&#233;">
+  <label class="fl">T&#233;l&#233;phone</label><input class="fi" type="tel" id="p-tel" placeholder="+33 6 00 00 00 00">
+  <label class="fl">N&#176; RPPS</label><input class="fi" type="text" id="p-rpps" placeholder="Optionnel">
+  <button class="btn-main" onclick="saveProfil()">Enregistrer et continuer</button>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import{getFirestore,doc,getDoc,setDoc}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+import{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail,sendEmailVerification,signOut,GoogleAuthProvider,signInWithPopup}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+const FB={apiKey:"AIzaSyBxb76bIaud6w8iE4dZL2x_XGaUeDDImMc",authDomain:"kinescope-9df37.firebaseapp.com",projectId:"kinescope-9df37",storageBucket:"kinescope-9df37.firebasestorage.app",messagingSenderId:"279167842820",appId:"1:279167842820:web:86e0bf2f726fbaee531351"};
+const app=initializeApp(FB);const db=getFirestore(app);const auth=getAuth(app);
+
+let pinBuf='',pinSetup=false,pinStep=0,pinFirst='';
+
+const ss=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');};
+const loading=on=>{document.getElementById('loading').style.display=on?'flex':'none';};
+const showErr=(id,msg)=>{const el=document.getElementById(id);el.textContent=msg;el.classList.add('show');};
+const hideErr=id=>{document.getElementById(id).classList.remove('show');};
+const showOk=(id,msg)=>{const el=document.getElementById(id);el.textContent=msg;el.classList.add('show');};
+
+window.switchTab=tab=>{
+  document.getElementById('form-login').style.display=tab==='login'?'block':'none';
+  document.getElementById('form-signup').style.display=tab==='signup'?'block':'none';
+  document.getElementById('tab-login').classList.toggle('on',tab==='login');
+  document.getElementById('tab-signup').classList.toggle('on',tab==='signup');
+  hideErr('err-msg');document.getElementById('ok-msg').classList.remove('show');
+};
+
+window.togglePw=(id,btn)=>{const el=document.getElementById(id);el.type=el.type==='password'?'text':'password';btn.textContent=el.type==='password'?'\u{1F441}':'\u{1F648}';};
+
+// ── PIN ──
+function udots(n,err=false){
+  document.querySelectorAll('#pin-dots .pin-dot').forEach((d,i)=>{d.classList.toggle('filled',!err&&i<n);d.classList.toggle('error',err);});
+}
+window.pk=d=>{
+  if(pinBuf.length>=4)return;
+  pinBuf+=String(d);udots(pinBuf.length);
+  if(navigator.vibrate)navigator.vibrate(8);
+  if(pinBuf.length===4)setTimeout(()=>pinSetup?handleSetup():handleVerify(),120);
+};
+window.pkdel=()=>{pinBuf=pinBuf.slice(0,-1);udots(pinBuf.length);};
+
+function handleSetup(){
+  if(pinStep===0){
+    pinFirst=pinBuf;pinBuf='';udots(0);
+    document.getElementById('pin-sub').textContent='Confirmez votre code';
+    pinStep=1;
+  } else {
+    if(pinBuf===pinFirst){
+      const uid=auth.currentUser?.uid;
+      if(uid){
+        localStorage.setItem('ks-pin-'+uid,pinBuf);
+        setDoc(doc(db,'therapists',uid),{pin:pinBuf},{merge:true}).catch(()=>{});
+      }
+      pinSetup=false;pinStep=0;pinFirst='';pinBuf='';udots(0);
+      window.location.href='index.html';
+    } else {
+      udots(0,true);
+      setTimeout(()=>{pinBuf='';pinStep=0;pinFirst='';udots(0);document.getElementById('pin-sub').textContent='Codes diff\u00e9rents \u2014 recommencez';},600);
+    }
+  }
+}
+function handleVerify(){
+  const uid=auth.currentUser?.uid;if(!uid){pinBuf='';udots(0);return;}
+  const saved=localStorage.getItem('ks-pin-'+uid);
+  if(pinBuf===saved){pinBuf='';udots(0);window.location.href='index.html';}
+  else{udots(0,true);setTimeout(()=>{pinBuf='';udots(0);},600);}
+}
+window.doDeconnect=async()=>{await signOut(auth).catch(()=>{});pinBuf='';pinSetup=false;pinStep=0;pinFirst='';ss('sc-auth');};
+
+function showPin(user,therapist){
+  const uid=user.uid;
+  const saved=localStorage.getItem('ks-pin-'+uid);
+  const name=therapist?.prenom?(therapist.prenom+' '+therapist.nom):'';
+  document.getElementById('pin-user').textContent=name?'\uD83D\uDC64 '+name:'';
+  pinBuf='';udots(0);
+  if(!saved){
+    pinSetup=true;pinStep=0;pinFirst='';
+    document.getElementById('pin-sub').textContent='Choisissez un code \u00e0 4 chiffres';
+    document.getElementById('pin-setup-info').style.display='block';
+  } else {
+    pinSetup=false;
+    document.getElementById('pin-sub').textContent='Entrez votre code \u00e0 4 chiffres';
+    document.getElementById('pin-setup-info').style.display='none';
+  }
+  loading(false);ss('sc-pin');
+}
+
+async function checkProfil(user){
+  const snap=await getDoc(doc(db,'therapists',user.uid));
+  if(snap.exists()&&snap.data().nom){showPin(user,snap.data());}
+  else{loading(false);ss('sc-profil');}
+}
+
+onAuthStateChanged(auth,user=>{
+  loading(false);
+  if(user&&!user.isAnonymous){checkProfil(user).catch(()=>{ss('sc-auth');});}
+});
+
+window.doLogin=async()=>{
+  hideErr('err-msg');document.getElementById('ok-msg').classList.remove('show');
+  const email=document.getElementById('login-email').value.trim();
+  const pw=document.getElementById('login-pw').value;
+  if(!email||!pw){showErr('err-msg','Veuillez remplir tous les champs.');return;}
+  loading(true);
+  try{await signInWithEmailAndPassword(auth,email,pw);}
+  catch(e){
+    loading(false);
+    const msgs={'auth/user-not-found':'Aucun compte trouv\u00e9.','auth/wrong-password':'Mot de passe incorrect.','auth/invalid-email':'E-mail invalide.','auth/too-many-requests':'Trop de tentatives, r\u00e9essayez plus tard.','auth/invalid-credential':'E-mail ou mot de passe incorrect.'};
+    showErr('err-msg',msgs[e.code]||'Erreur de connexion.');
+  }
+};
+
+window.doSignup=async()=>{
+  hideErr('err-msg');
+  const email=document.getElementById('su-email').value.trim();
+  const pw=document.getElementById('su-pw').value;
+  const pw2=document.getElementById('su-pw2').value;
+  const prenom=document.getElementById('su-prenom').value.trim();
+  const nom=document.getElementById('su-nom').value.trim();
+  if(!email||!pw||!pw2){showErr('err-msg','E-mail et mot de passe requis.');return;}
+  if(pw.length<8){showErr('err-msg','8 caract\u00e8res minimum.');return;}
+  if(pw!==pw2){showErr('err-msg','Les mots de passe ne correspondent pas.');return;}
+  if(!prenom||!nom){showErr('err-msg','Pr\u00e9nom et nom requis.');return;}
+  loading(true);
+  try{
+    const cred=await createUserWithEmailAndPassword(auth,email,pw);
+    const uid=cred.user.uid;
+    await setDoc(doc(db,'therapists',uid),{
+      email,prenom,nom,
+      titre:document.getElementById('su-titre').value.trim()||'Kin\u00e9sith\u00e9rapeute',
+      cabinet:document.getElementById('su-cabinet').value.trim(),
+      adresse:document.getElementById('su-adresse').value.trim(),
+      tel:document.getElementById('su-tel').value.trim(),
+      rpps:document.getElementById('su-rpps').value.trim(),
+      pin:'',createdAt:new Date().toISOString(),uid
+    });
+    try{await sendEmailVerification(cred.user);}catch(_){}
+    loading(false);
+    showOk('ok-msg','\u2713 Compte cr\u00e9\u00e9 ! Un e-mail de confirmation vous a \u00e9t\u00e9 envoy\u00e9. Connectez-vous pour continuer.');
+    switchTab('login');
+    document.getElementById('login-email').value=email;
+  }catch(e){
+    loading(false);
+    const msgs={'auth/email-already-in-use':'Un compte existe d\u00e9j\u00e0 avec cet e-mail.','auth/invalid-email':'E-mail invalide.','auth/weak-password':'Mot de passe trop faible.'};
+    showErr('err-msg',msgs[e.code]||'Erreur lors de la cr\u00e9ation du compte.');
+  }
+};
+
+window.doReset=async()=>{
+  hideErr('err-msg');document.getElementById('ok-msg').classList.remove('show');
+  const email=document.getElementById('login-email').value.trim();
+  if(!email){showErr('err-msg','Entrez votre e-mail d\u2019abord.');return;}
+  loading(true);
+  try{await sendPasswordResetEmail(auth,email);loading(false);showOk('ok-msg','E-mail de r\u00e9initialisation envoy\u00e9.');}
+  catch(e){loading(false);showErr('err-msg','Impossible d\u2019envoyer l\u2019e-mail.');}
+};
+
+window.doGoogle=async()=>{
+  hideErr('err-msg');loading(true);
+  try{
+    const cred=await signInWithPopup(auth,new GoogleAuthProvider());
+    const user=cred.user;
+    const snap=await getDoc(doc(db,'therapists',user.uid));
+    if(snap.exists()&&snap.data().nom){showPin(user,snap.data());}
+    else{
+      const parts=(user.displayName||'').split(' ');
+      const prenom=parts[0]||'';const nom=parts.slice(1).join(' ')||'';
+      if(prenom&&nom){
+        await setDoc(doc(db,'therapists',user.uid),{email:user.email,prenom,nom,titre:'Kin\u00e9sith\u00e9rapeute',cabinet:'',adresse:'',tel:'',rpps:'',pin:'',createdAt:new Date().toISOString(),uid:user.uid});
+        showPin(user,{prenom,nom});
+      } else {loading(false);ss('sc-profil');}
+    }
+  }catch(e){loading(false);if(e.code!=='auth/popup-closed-by-user')showErr('err-msg','Erreur Google.');}
+};
+
+window.saveProfil=async()=>{
+  hideErr('err-profil');
+  const prenom=document.getElementById('p-prenom').value.trim();
+  const nom=document.getElementById('p-nom').value.trim();
+  if(!prenom||!nom){showErr('err-profil','Pr\u00e9nom et nom requis.');return;}
+  const user=auth.currentUser;if(!user)return;
+  loading(true);
+  try{
+    const data={prenom,nom,titre:document.getElementById('p-titre').value.trim()||'Kin\u00e9sith\u00e9rapeute',cabinet:document.getElementById('p-cabinet').value.trim(),adresse:document.getElementById('p-adresse').value.trim(),tel:document.getElementById('p-tel').value.trim(),rpps:document.getElementById('p-rpps').value.trim(),email:user.email,pin:'',uid:user.uid,createdAt:new Date().toISOString()};
+    await setDoc(doc(db,'therapists',user.uid),data,{merge:true});
+    showPin(user,data);
+  }catch(e){loading(false);showErr('err-profil','Erreur. R\u00e9essayez.');}
+};
+</script>
+</body>
+</html>
