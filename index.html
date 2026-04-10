@@ -285,6 +285,7 @@ window.resetPatPin=()=>{S.ppBuf='';S.ppFound=null;updots(0);ss('sc-pin-pat');};
 
 async function verifyPatPin(pin){
   try{
+    console.log('[verifyPatPin] PIN cherché:', JSON.stringify(pin), 'longueur:', pin.length);
     // Chercher dans patients_index (collection globale)
     const snap=await getDoc(doc(db,'patients_index',pin));
     if(snap.exists()){
@@ -304,6 +305,7 @@ async function verifyPatPin(pin){
     updots(0,true);
     setTimeout(()=>{S.ppBuf='';updots(0);},600);
   }catch(e){
+    console.error('[verifyPatPin] ERREUR:', e.code, e.message, e);
     updots(0,true);
     setTimeout(()=>{S.ppBuf='';updots(0);},600);
   }
