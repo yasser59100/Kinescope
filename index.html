@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0F1923">
+<link rel="manifest" href="manifest.json">
+<title>KinéScope</title>
+<style>
+:root{
+  --bg:#0F1923;--surf:#16222E;--surf2:#1E2F40;--surf3:#243647;
+  --tx:#E8EDF2;--tx2:#8FA3B4;--tx3:#5A7080;
+  --acc:#2DD4BF;--acc2:#0EA5E9;--acc3:#F59E0B;
+  --red:#F87171;--green:#34D399;
+  --brd:#243647;--r:14px;--rs:10px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+  --safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--font);overflow:hidden;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s,transform .25s cubic-bezier(.4,0,.2,1);}
+.screen.active{opacity:1;pointer-events:all;}
+
+/* SPLASH */
+#sc-splash{background:var(--bg);align-items:center;justify-content:center;}
+.splash-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.splash-bg::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.12) 0%,transparent 70%);top:-100px;left:-100px;}
+.splash-bg::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.08) 0%,transparent 70%);bottom:-80px;right:-80px;}
+.splash-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;padding:0 28px;}
+.splash-logo{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+.splash-icon{width:60px;height:60px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 36px rgba(45,212,191,.35);}
+.splash-title{font-size:34px;font-weight:800;letter-spacing:-.5px;}
+.splash-title em{font-style:normal;color:var(--acc);}
+.splash-sub{font-size:13px;color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:52px;}
+.splash-btns{width:100%;max-width:340px;display:flex;flex-direction:column;gap:14px;}
+.btn-kine{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:var(--r);padding:20px 24px;font-size:16px;font-weight:700;font-family:var(--font);cursor:pointer;display:flex;align-items:center;gap:14px;box-shadow:0 8px 28px rgba(45,212,191,.3);transition:transform .1s;}
+.btn-kine:active{transform:scale(.97);}
+.btn-patient{background:var(--surf);color:var(--tx);border:1.5px solid var(--brd);border-radius:var(--r);padding:20px 24px;font-size:16px;font-weight:700;font-family:var(--font);cursor:pointer;display:flex;align-items:center;gap:14px;transition:transform .1s,border-color .15s;}
+.btn-patient:active{transform:scale(.97);border-color:rgba(196,98,29,.5);}
+.btn-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.btn-kine .btn-icon{background:rgba(255,255,255,.2);}
+.btn-patient .btn-icon{background:rgba(196,98,29,.2);}
+.btn-txt{text-align:left;flex:1;}
+.btn-txt-main{font-size:16px;font-weight:700;display:block;}
+.btn-txt-sub{font-size:12px;font-weight:400;opacity:.65;display:block;margin-top:2px;}
+.splash-foot{position:absolute;bottom:calc(var(--safe-b) + 20px);font-size:11px;color:var(--tx3);text-align:center;}
+
+/* PIN PATIENT */
+#sc-pin-pat,#sc-ddn-pat{background:var(--bg);align-items:center;justify-content:center;}
+.pin-wrap{display:flex;flex-direction:column;align-items:center;gap:22px;padding:24px;width:100%;max-width:320px;}
+.pin-logo-pat{width:64px;height:64px;background:linear-gradient(135deg,#8B4A6B,#C4621D);border-radius:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(196,98,29,.3);}
+.pin-title{font-size:24px;font-weight:800;text-align:center;}
+.pin-sub{font-size:14px;color:var(--tx2);text-align:center;max-width:260px;line-height:1.5;}
+.pin-dots{display:flex;gap:12px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--tx3);transition:all .15s;}
+.pin-dot.filled{background:#C4621D;border-color:#C4621D;transform:scale(1.1);}
+.pin-dot.error{background:var(--red);border-color:var(--red);}
+.pinpad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:280px;}
+.pinkey{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);height:64px;font-size:24px;font-weight:600;color:var(--tx);font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .08s,transform .08s;}
+.pinkey:active,.pinkey.tapped{background:#C4621D!important;color:#fff!important;border-color:#C4621D!important;transform:scale(.88)!important;}
+.pinkey.del{font-size:18px;color:var(--tx2);}
+.pinkey.empty{background:transparent;border-color:transparent;pointer-events:none;}
+.pin-back{background:none;border:none;color:var(--tx3);font-size:13px;font-family:var(--font);cursor:pointer;padding:8px 16px;}
+/* DDN */
+.ddn-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;padding:24px;width:100%;max-width:320px;}
+.ddn-input{width:100%;background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--rs);padding:16px;font-size:18px;color:var(--tx);font-family:var(--font);outline:none;-webkit-appearance:none;text-align:center;color-scheme:dark;}
+.ddn-input:focus{border-color:#C4621D;}
+.ddn-error{color:var(--red);font-size:13px;font-weight:600;text-align:center;display:none;}
+.ddn-error.show{display:block;}
+.btn-confirm{width:100%;background:linear-gradient(135deg,#8B4A6B,#C4621D);color:#fff;border:none;border-radius:var(--r);padding:16px;font-size:16px;font-weight:700;font-family:var(--font);cursor:pointer;box-shadow:0 4px 20px rgba(196,98,29,.35);transition:transform .1s;}
+.btn-confirm:active{transform:scale(.97);}
+
+/* DASHBOARD KINÉ */
+#sc-dash{background:var(--bg);}
+.dash-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(var(--safe-t)+16px) 16px calc(var(--safe-b)+24px);}
+.dash-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.dash-logo{font-size:22px;font-weight:800;letter-spacing:-.3px;}
+.dash-logo em{font-style:normal;color:var(--acc);}
+.dash-hdr-right{display:flex;align-items:center;gap:8px;}
+.btn-decon{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--rs);padding:8px 12px;font-size:12px;font-weight:600;color:var(--tx2);font-family:var(--font);cursor:pointer;transition:transform .1s;}
+.btn-decon:active{transform:scale(.94);}
+.btn-patients{background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;border-radius:var(--rs);padding:9px 16px;font-size:13px;font-weight:700;color:#fff;font-family:var(--font);cursor:pointer;display:flex;align-items:center;gap:6px;transition:transform .1s;}
+.btn-patients:active{transform:scale(.96);}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.stat-card{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:14px 12px;}
+.stat-val{font-size:26px;font-weight:800;line-height:1;}
+.stat-lbl{font-size:11px;color:var(--tx2);margin-top:4px;line-height:1.3;}
+.stat-card.acc .stat-val{color:var(--acc);}
+.stat-card.blu .stat-val{color:var(--acc2);}
+.stat-card.amb .stat-val{color:var(--acc3);}
+.sec-title{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+.patients-banner{background:linear-gradient(135deg,rgba(45,212,191,.12),rgba(14,165,233,.08));border:1.5px solid rgba(45,212,191,.3);border-radius:var(--r);padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:24px;text-decoration:none;color:inherit;transition:transform .1s;}
+.patients-banner:active{transform:scale(.98);}
+.pb-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.pb-txt{flex:1;}
+.pb-title{font-size:16px;font-weight:700;}
+.pb-sub{font-size:12px;color:var(--tx2);margin-top:3px;}
+.pb-arr{color:var(--acc);font-size:20px;}
+.bilans-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+.bilan-card{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:16px 14px;cursor:pointer;transition:border-color .15s,transform .1s;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;}
+.bilan-card:active{transform:scale(.97);}
+.bilan-dot{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.bilan-name{font-size:14px;font-weight:700;line-height:1.2;}
+.bilan-sub{font-size:11px;color:var(--tx2);margin-top:2px;}
+.bilan-arr{font-size:11px;color:var(--tx3);margin-top:auto;}
+.dash-name{font-size:15px;font-weight:600;color:var(--tx);}
+.dash-cabinet{font-size:12px;color:var(--tx3);}
+.toast{position:fixed;bottom:calc(var(--safe-b)+24px);left:50%;transform:translateX(-50%) translateY(10px);background:var(--surf3);color:var(--tx);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;transition:all .25s;z-index:999;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px;}
+.spin{width:36px;height:36px;border:3px solid var(--surf3);border-top-color:var(--acc);border-radius:50%;animation:sp .8s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+<div id="loading"><div class="spin"></div><p style="color:var(--tx2);font-size:14px">Chargement\u2026</p></div>
+
+<!-- SPLASH -->
+<div class="screen" id="sc-splash">
+  <div class="splash-bg"></div>
+  <div class="splash-inner">
+    <div class="splash-logo">
+      <div class="splash-icon">
+        <svg viewBox="0 0 40 40" fill="none" width="30" height="30"><path d="M20 6C20 6 8 14 8 24a12 12 0 0024 0C32 14 20 6 20 6z" fill="white" fill-opacity=".9"/><path d="M20 14v12M14 20h12" stroke="#0F1923" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="splash-title">Kin&#233;<em>Scope</em></div>
+    </div>
+    <div class="splash-sub">Plateforme EBP &middot; Kin&#233;sith&#233;rapeutes</div>
+    <div class="splash-btns">
+      <button class="btn-kine" onclick="goKine()">
+        <div class="btn-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 5 7 5 13a7 7 0 0014 0C19 7 12 2 12 2z" fill="white" fill-opacity=".9"/><path d="M12 8v6M9 11h6" stroke="#0F1923" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="btn-txt">
+          <span class="btn-txt-main">Espace Kin&#233;</span>
+          <span class="btn-txt-sub">Connexion professionnelle</span>
+        </div>
+        <span style="font-size:20px;opacity:.7">&#8250;</span>
+      </button>
+      <button class="btn-patient" onclick="goPatient()">
+        <div class="btn-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#C4621D" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#C4621D" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="btn-txt">
+          <span class="btn-txt-main">Mon programme</span>
+          <span class="btn-txt-sub">Acc&#232;s patient</span>
+        </div>
+        <span style="font-size:20px;opacity:.5">&#8250;</span>
+      </button>
+    </div>
+  </div>
+  <div class="splash-foot">Kin&#233;Scope &middot; EBP &middot; v3.0</div>
+</div>
+
+<!-- PIN PATIENT (6 chiffres) -->
+<div class="screen" id="sc-pin-pat">
+  <div class="pin-wrap">
+    <div class="pin-logo-pat">
+      <svg viewBox="0 0 24 24" fill="none" width="30" height="30"><circle cx="12" cy="8" r="4" fill="white" fill-opacity=".9"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="pin-title">Mon programme</div>
+    <div class="pin-sub">Entrez votre code &agrave; 6 chiffres</div>
+    <div class="pin-dots" id="pp-dots">
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+    </div>
+    <div class="pinpad">
+      <button class="pinkey" onclick="pp(1)">1</button><button class="pinkey" onclick="pp(2)">2</button><button class="pinkey" onclick="pp(3)">3</button>
+      <button class="pinkey" onclick="pp(4)">4</button><button class="pinkey" onclick="pp(5)">5</button><button class="pinkey" onclick="pp(6)">6</button>
+      <button class="pinkey" onclick="pp(7)">7</button><button class="pinkey" onclick="pp(8)">8</button><button class="pinkey" onclick="pp(9)">9</button>
+      <button class="pinkey empty"></button><button class="pinkey" onclick="pp(0)">0</button><button class="pinkey del" onclick="ppdel()">&#9003;</button>
+    </div>
+    <button class="pin-back" onclick="ss('sc-splash')">&#8592; Retour</button>
+  </div>
+</div>
+
+<!-- DDN PATIENT -->
+<div class="screen" id="sc-ddn-pat">
+  <div class="ddn-wrap">
+    <div class="pin-logo-pat">
+      <svg viewBox="0 0 24 24" fill="none" width="30" height="30"><rect x="3" y="4" width="18" height="18" rx="3" stroke="white" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="pin-title">V&#233;rification</div>
+    <div class="pin-sub">Confirmez votre date de naissance</div>
+    <input type="date" class="ddn-input" id="pat-ddn-input">
+    <div class="ddn-error" id="ddn-error">Date incorrecte, r&#233;essayez.</div>
+    <button class="btn-confirm" onclick="confirmDDN()">Confirmer &#8594;</button>
+    <button class="pin-back" onclick="resetPatPin()">&#8592; Retour</button>
+  </div>
+</div>
+
+<!-- DASHBOARD KINÉ -->
+<div class="screen" id="sc-dash">
+  <div class="dash-scroll">
+    <div class="dash-hdr">
+      <div>
+        <div class="dash-logo">Kin&#233;<em>Scope</em></div>
+        <div class="dash-name" id="dash-name"></div>
+        <div class="dash-cabinet" id="dash-cabinet"></div>
+      </div>
+      <div class="dash-hdr-right">
+        <button class="btn-decon" onclick="decon()">D&#233;co.</button>
+        <button class="btn-patients" onclick="goPatients()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="7" r="4" stroke="white" stroke-width="2"/><path d="M2 19c0-4 3.1-7 7-7h4c3.9 0 7 3 7 7" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+          Patients
+        </button>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card acc"><div class="stat-val" id="stat-patients">&#8230;</div><div class="stat-lbl">Patients actifs</div></div>
+      <div class="stat-card blu"><div class="stat-val" id="stat-exos">&#8230;</div><div class="stat-lbl">Exercices prescrits</div></div>
+      <div class="stat-card amb"><div class="stat-val" id="stat-adh">&#8230;</div><div class="stat-lbl">Adh&#233;rence moy.</div></div>
+    </div>
+    <a class="patients-banner" id="patients-link" href="patients.html">
+      <div class="pb-icon">&#129658;</div>
+      <div class="pb-txt">
+        <div class="pb-title">Dossiers patients</div>
+        <div class="pb-sub">Programmes, bilans, suivi d&#8217;adh&#233;rence</div>
+      </div>
+      <div class="pb-arr">&#8250;</div>
+    </a>
+    <div class="sec-title">Bilans EBP</div>
+    <div class="bilans-grid" id="bilans-grid"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import{getFirestore,collection,getDocs,doc,getDoc}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+import{getAuth,onAuthStateChanged,signOut,signInAnonymously}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+const FB={apiKey:"AIzaSyBxb76bIaud6w8iE4dZL2x_XGaUeDDImMc",authDomain:"kinescope-9df37.firebaseapp.com",projectId:"kinescope-9df37",storageBucket:"kinescope-9df37.firebasestorage.app",messagingSenderId:"279167842820",appId:"1:279167842820:web:86e0bf2f726fbaee531351"};
+const app=initializeApp(FB);const db=getFirestore(app);const auth=getAuth(app);
+
+const BILANS=[
+  {name:'Lombaire',sub:'V2 \u00b7 EBP',icon:'\uD83E\uDDB4',color:'#177A5A',bg:'rgba(23,122,90,.15)',url:'bilan-lombaire-v2.html'},
+  {name:'\u00c9paule',sub:'V3 \u00b7 EBP',icon:'\uD83D\uDCAA',color:'#1A6FA8',bg:'rgba(26,111,168,.15)',url:'bilan-epaule-v3.html'},
+  {name:'Genou',sub:'V3 \u00b7 EBP',icon:'\uD83E\uDDB5',color:'#C4621D',bg:'rgba(196,98,29,.15)',url:'bilan-genou-v3.html'},
+  {name:'Hanche',sub:'V2 \u00b7 EBP',icon:'\uD83E\uDDB4',color:'#8B4A6B',bg:'rgba(139,74,107,.15)',url:'bilan-hanche-v2.html'},
+  {name:'Cheville',sub:'V1 \u00b7 EBP',icon:'\uD83E\uDDB6',color:'#8B2635',bg:'rgba(139,38,53,.15)',url:'bilan-cheville-v1.html'},
+  {name:'Cervical',sub:'V2 \u00b7 EBP',icon:'\uD83E\uDDB7',color:'#5C7A9E',bg:'rgba(92,122,158,.15)',url:'bilan-cervical-v2.html'},
+  {name:'Coude',sub:'V2 \u00b7 EBP',icon:'\uD83D\uDCAA',color:'#8B5E3C',bg:'rgba(139,94,60,.15)',url:'bilan-coude-v2.html'},
+  {name:'Poignet',sub:'V2 \u00b7 EBP',icon:'\u270B',color:'#6B3FA0',bg:'rgba(107,63,160,.15)',url:'bilan-poignet-v2.html'},
+];
+
+const S={therapist:null,ppBuf:'',ppFound:null};
+
+function ss(id){
+  const screens=document.querySelectorAll('.screen');
+  const cur=[...screens].find(s=>s.classList.contains('active'));
+  const nxt=document.getElementById(id);
+  if(!nxt||cur===nxt)return;
+  if(cur){cur.style.transition='opacity .22s';cur.style.opacity='0';setTimeout(()=>{cur.classList.remove('active');cur.style.opacity='';cur.style.transition='';},220);}
+  nxt.classList.add('active');
+  if(navigator.vibrate)navigator.vibrate(6);
+}
+window.ss=ss;
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+// ── KINÉ ──
+window.goKine=()=>{window.location.href='auth.html';};
+window.goPatients=()=>{if(auth.currentUser)window.location.href='patients.html?uid='+auth.currentUser.uid;};
+window.decon=async()=>{await signOut(auth).catch(()=>{});window.location.href='auth.html';};
+
+// ── PATIENT PIN 6 chiffres ──
+window.goPatient=()=>{S.ppBuf='';updots(0);ss('sc-pin-pat');};
+
+function updots(n,err=false){
+  document.querySelectorAll('#pp-dots .pin-dot').forEach((d,i)=>{d.classList.toggle('filled',!err&&i<n);d.classList.toggle('error',err);});
+}
+
+window.pp=d=>{
+  if(S.ppBuf.length>=6)return;
+  S.ppBuf+=String(d);updots(S.ppBuf.length);
+  if(navigator.vibrate)navigator.vibrate(8);
+  if(S.ppBuf.length===6)setTimeout(()=>verifyPatPin(S.ppBuf),120);
+};
+window.ppdel=()=>{S.ppBuf=S.ppBuf.slice(0,-1);updots(S.ppBuf.length);};
+window.resetPatPin=()=>{S.ppBuf='';S.ppFound=null;updots(0);ss('sc-pin-pat');};
+
+async function verifyPatPin(pin){
+  try{
+    console.log('[verifyPatPin] PIN cherché:', JSON.stringify(pin), 'longueur:', pin.length);
+    // Chercher dans patients_index (collection globale)
+    const snap=await getDoc(doc(db,'patients_index',pin));
+    if(snap.exists()){
+      const idx=snap.data();
+      // Charger les données du patient
+      const pSnap=await getDoc(doc(db,'therapists',idx.uid_kine,'patients',idx.patient_id));
+      if(pSnap.exists()){
+        S.ppFound={id:idx.patient_id,uid_kine:idx.uid_kine,...pSnap.data()};
+        S.ppBuf='';updots(0);
+        document.getElementById('pat-ddn-input').value='';
+        document.getElementById('ddn-error').classList.remove('show');
+        ss('sc-ddn-pat');
+        return;
+      }
+    }
+    // PIN non trouvé
+    updots(0,true);
+    setTimeout(()=>{S.ppBuf='';updots(0);},600);
+  }catch(e){
+    console.error('[verifyPatPin] ERREUR:', e.code, e.message, e);
+    updots(0,true);
+    setTimeout(()=>{S.ppBuf='';updots(0);},600);
+  }
+}
+
+window.confirmDDN=()=>{
+  const val=document.getElementById('pat-ddn-input').value;
+  if(!val){showToast('Entrez votre date de naissance');return;}
+  const p=S.ppFound;if(!p){ss('sc-pin-pat');return;}
+  const norm=s=>(s||'').replace(/\//g,'-').trim();
+  if(norm(p.ddn)===norm(val)){
+    // Accès accordé → rediriger vers patients.html en mode patient
+    window.location.href='patients.html?mode=patient&pid='+p.id+'&uid='+p.uid_kine;
+  } else {
+    document.getElementById('ddn-error').classList.add('show');
+    setTimeout(()=>document.getElementById('ddn-error').classList.remove('show'),2500);
+  }
+};
+
+// ── DASHBOARD ──
+async function loadDash(){
+  ss('sc-dash');
+  renderBilans();
+  await loadStats();
+  if(S.therapist){
+    const el=document.getElementById('dash-name');if(el)el.textContent=S.therapist.prenom+' '+S.therapist.nom;
+    const el2=document.getElementById('dash-cabinet');if(el2)el2.textContent=S.therapist.cabinet||'';
+  }
+  const user=auth.currentUser;
+  if(user){
+    document.querySelectorAll('#patients-link,a[href="patients.html"]').forEach(a=>{a.href='patients.html?uid='+user.uid;});
+  }
+}
+
+function renderBilans(){
+  const grid=document.getElementById('bilans-grid');grid.innerHTML='';
+  BILANS.forEach(b=>{
+    const a=document.createElement('a');a.className='bilan-card';a.href=b.url;
+    a.innerHTML=`<div class="bilan-dot" style="background:${b.bg}">${b.icon}</div><div><div class="bilan-name">${b.name}</div><div class="bilan-sub">${b.sub}</div></div><div class="bilan-arr" style="color:${b.color}">Ouvrir \u2192</div>`;
+    grid.appendChild(a);
+  });
+}
+
+async function loadStats(){
+  ['stat-patients','stat-exos','stat-adh'].forEach(id=>{document.getElementById(id).textContent='\u2026';});
+  try{
+    if(!S.therapist)return;
+    const snap=await getDocs(collection(db,'therapists',S.therapist.uid,'patients'));
+    let total=0,totalExos=0,adhSum=0,adhCount=0;
+    snap.forEach(d=>{
+      total++;const data=d.data();
+      totalExos+=(data.exos||[]).length;
+      const adh=data.adherence||{};const days=Object.keys(adh);
+      if(days.length>0){let done=0;days.forEach(day=>{if((adh[day]||[]).length>0)done++;});adhSum+=Math.round(done/days.length*100);adhCount++;}
+    });
+    document.getElementById('stat-patients').textContent=total;
+    document.getElementById('stat-exos').textContent=totalExos;
+    document.getElementById('stat-adh').textContent=adhCount>0?Math.round(adhSum/adhCount)+'%':'\u2014';
+  }catch(e){['stat-patients','stat-exos','stat-adh'].forEach(id=>{document.getElementById(id).textContent='\u2014';});}
+}
+
+// ── INIT ──
+onAuthStateChanged(auth,async user=>{
+  document.getElementById('loading').style.display='none';
+  if(user&&!user.isAnonymous){
+    // Kiné connecté → charger profil et afficher dashboard
+    try{
+      const snap=await getDoc(doc(db,'therapists',user.uid));
+      if(snap.exists()){
+        S.therapist={uid:user.uid,...snap.data()};
+        await loadDash();
+      } else {
+        window.location.href='auth.html';
+      }
+    }catch(e){ss('sc-splash');}
+  } else {
+    // Pas connecté → connexion anonyme puis splash
+    try{await signInAnonymously(auth);}catch(e){}
+    ss('sc-splash');
+  }
+});
+</script>
+</body>
+</html>
