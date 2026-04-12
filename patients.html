@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0F1923">
+<title>KinéScope — Patients</title>
+<style>
+:root{--bg:#0F1923;--surf:#16222E;--surf2:#1E2F40;--surf3:#243647;--tx:#E8EDF2;--tx2:#8FA3B4;--tx3:#5A7080;--acc:#2DD4BF;--acc2:#0EA5E9;--acc3:#F59E0B;--red:#F87171;--green:#34D399;--brd:#243647;--r:12px;--rs:8px;--font:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;--safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--font);overflow:hidden;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;}
+.screen.active{opacity:1;pointer-events:all;}
+#sc-choix{background:var(--bg);align-items:center;justify-content:center;}
+.choix-wrap{display:flex;flex-direction:column;align-items:center;gap:24px;padding:32px 24px;width:100%;max-width:340px;}
+.choix-logo{width:72px;height:72px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:20px;display:flex;align-items:center;justify-content:center;}
+.choix-title{font-size:26px;font-weight:800;letter-spacing:-.5px;}
+.choix-sub{font-size:14px;color:var(--tx2);text-align:center;}
+.choix-cards{display:flex;flex-direction:column;gap:12px;width:100%;}
+.choix-card{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:border-color .15s,transform .1s;}
+.choix-card:active{border-color:var(--acc);transform:scale(.97);}
+.choix-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.choix-info{flex:1;}.choix-name{font-size:16px;font-weight:700;}.choix-desc{font-size:12px;color:var(--tx2);margin-top:2px;}
+.choix-arr{color:var(--tx3);font-size:20px;}
+#sc-pin,#sc-pin-pat,#sc-pin-ddn{background:var(--bg);align-items:center;justify-content:center;}
+.pin-wrap{display:flex;flex-direction:column;align-items:center;gap:18px;padding:24px;width:100%;max-width:320px;}
+.pin-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:16px;display:flex;align-items:center;justify-content:center;}
+.pin-title{font-size:22px;font-weight:700;}.pin-sub{font-size:14px;color:var(--tx2);text-align:center;max-width:280px;}
+.pin-dots{display:flex;gap:14px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--tx3);transition:all .15s;}
+.pin-dot.filled{background:var(--acc);border-color:var(--acc);}.pin-dot.error{background:var(--red);border-color:var(--red);}
+.pinpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:260px;}
+.pinkey{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);height:60px;font-size:22px;font-weight:600;color:var(--tx);font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .08s,transform .08s;}
+.pinkey.del{font-size:16px;color:var(--tx2);}.pinkey.empty{background:transparent;border-color:transparent;pointer-events:none;}
+.pin-hint{font-size:12px;color:var(--tx3);text-align:center;max-width:260px;}
+.pin-ddn-inp{width:100%;background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--rs);padding:14px;font-size:18px;color:var(--tx);font-family:var(--font);outline:none;-webkit-appearance:none;text-align:center;color-scheme:dark;}
+.pin-ddn-inp:focus{border-color:var(--acc);}
+.pin-back-btn{background:none;border:none;color:var(--tx2);font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;padding:10px 16px;}
+.pin-home-link{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);font-size:14px;font-weight:600;color:var(--tx2);text-decoration:none;}
+.hdr{padding:calc(var(--safe-t) + 14px) 16px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--brd);flex-shrink:0;background:var(--bg);}
+.hdr-back{width:36px;height:36px;background:var(--surf2);border:none;border-radius:50%;color:var(--tx);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hdr-title{font-size:18px;font-weight:700;flex:1;}
+.hdr-btn{background:var(--acc);color:#fff;border:none;border-radius:var(--rs);padding:8px 14px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;transition:transform .1s;}
+.hdr-btn:active{transform:scale(.94);}
+.hdr-btn2{background:var(--surf2);color:var(--tx2);border:1.5px solid var(--brd);border-radius:var(--rs);padding:8px 12px;font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;}
+#sc-list{background:var(--bg);}
+.list-body{flex:1;overflow-y:auto;padding:12px 16px calc(var(--safe-b) + 80px);}
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-inp{width:100%;background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:11px 16px 11px 40px;font-size:15px;color:var(--tx);font-family:var(--font);outline:none;-webkit-appearance:none;}
+.search-inp::placeholder{color:var(--tx3);}
+.sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);pointer-events:none;}
+.pat-card{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:8px;transition:border-color .15s,transform .1s;}
+.pat-card:active{border-color:var(--acc);transform:scale(.98);}
+.av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#fff;flex-shrink:0;}
+.pat-info{flex:1;min-width:0;}.pat-name{font-size:15px;font-weight:600;}
+.pat-meta{font-size:12px;color:var(--tx2);margin-top:3px;}
+.pbadge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:var(--surf3);color:var(--tx2);flex-shrink:0;}
+.pbadge.on{background:rgba(45,212,191,.15);color:var(--acc);}
+.empty-st{text-align:center;padding:60px 24px;color:var(--tx2);}
+.fab{position:fixed;bottom:calc(var(--safe-b) + 24px);right:20px;width:56px;height:56px;background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;border-radius:50%;color:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(45,212,191,.4);transition:transform .1s;}
+.fab:active{transform:scale(.9);}
+#sc-dos{background:var(--bg);}
+.dos-body{flex:1;overflow-y:auto;padding:14px 16px calc(var(--safe-b) + 20px);}
+.hero{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;}
+.hero-av{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0;}
+.hero-name{font-size:20px;font-weight:700;}.hero-sub{font-size:13px;color:var(--tx2);margin-top:3px;}
+.pin-badge{background:var(--surf3);border-radius:8px;padding:5px 12px;font-size:16px;font-weight:700;letter-spacing:4px;color:var(--acc);margin-top:8px;display:inline-block;}
+.tabs{display:flex;border-bottom:1px solid var(--brd);flex-shrink:0;}
+.tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:12px 6px;font-size:13px;font-weight:600;color:var(--tx2);font-family:var(--font);cursor:pointer;transition:all .15s;}
+.tab.on{color:var(--acc);border-bottom-color:var(--acc);}
+.adh-card{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:14px;margin-bottom:14px;}
+.adh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.adh-pct{font-size:28px;font-weight:700;color:var(--acc);}
+.adh-bar{height:8px;background:var(--surf3);border-radius:4px;overflow:hidden;margin-bottom:12px;}
+.adh-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:4px;transition:width .4s;}
+.wdots{display:flex;gap:5px;}
+.wd{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px;border-radius:8px;}
+.wd-d{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;}
+.wd-n{font-size:12px;font-weight:600;color:var(--tx2);}
+.wd-dot{width:8px;height:8px;border-radius:50%;background:var(--surf3);}
+.wd.today{background:var(--surf2);}.wd.done .wd-dot{background:var(--green);}.wd.partial .wd-dot{background:var(--acc3);}.wd.noday{opacity:.35;}
+.sec-hdr{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin:18px 0 10px;}
+.add-exo-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,rgba(45,212,191,.18),rgba(14,165,233,.12));border:1.5px solid rgba(45,212,191,.45);border-radius:var(--r);padding:15px;font-size:15px;font-weight:700;color:var(--acc);font-family:var(--font);cursor:pointer;margin:14px 0 6px;transition:transform .1s;}
+.add-exo-btn:active{transform:scale(.97);}
+.pex{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:8px;overflow:hidden;}
+.pex-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.pex-bar{width:4px;min-height:36px;border-radius:2px;flex-shrink:0;}
+.pex-info{flex:1;}.pex-name{font-size:14px;font-weight:600;}.pex-meta{font-size:11px;color:var(--tx2);margin-top:2px;}
+.pex-del{width:30px;height:30px;background:rgba(248,113,113,.1);border:none;border-radius:8px;color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.pex-body{padding:0 14px 14px;border-top:1px solid var(--brd);display:none;}
+.pex.open .pex-body{display:block;}
+.days-label{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-top:12px;margin-bottom:8px;}
+.days-row{display:flex;gap:7px;flex-wrap:wrap;}
+.day-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--brd);background:var(--surf2);font-size:12px;font-weight:700;color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:var(--font);}
+.day-btn.on{background:var(--acc);border-color:var(--acc);color:#fff;}
+.bil-entry{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:10px;overflow:hidden;}
+.bil-entry-hdr{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.bil-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.bil-info{flex:1;}.bil-type{font-size:15px;font-weight:700;}.bil-date-lbl{font-size:12px;color:var(--tx2);margin-top:2px;}
+.bil-scores-preview{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+.score-chip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--surf3);color:var(--tx2);}
+.score-chip.good{background:rgba(52,211,153,.15);color:var(--green);}
+.score-chip.warn{background:rgba(245,158,11,.15);color:var(--acc3);}
+.score-chip.bad{background:rgba(248,113,113,.15);color:var(--red);}
+.bil-entry-body{padding:0 16px 14px;border-top:1px solid var(--brd);display:none;}
+.bil-entry.open .bil-entry-body{display:block;}
+.bil-arr{color:var(--tx3);font-size:12px;transition:transform .2s;flex-shrink:0;}
+.bil-entry.open .bil-arr{transform:rotate(180deg);}
+.retester-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1.5px solid var(--acc);border-radius:var(--rs);padding:9px 14px;font-size:13px;font-weight:700;color:var(--acc);font-family:var(--font);cursor:pointer;margin-top:12px;}
+.evol-card{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:14px;margin-bottom:14px;}
+.evol-title{font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+.evol-line{display:flex;align-items:flex-end;gap:6px;height:80px;}
+.evol-point-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;height:100%;justify-content:flex-end;}
+.evol-bar-inner{width:100%;border-radius:4px 4px 0 0;min-height:4px;}
+.evol-val{font-size:10px;font-weight:700;color:var(--tx);}
+.evol-date{font-size:9px;color:var(--tx3);text-align:center;}
+.evol-axis{border-top:1px solid var(--brd);padding-top:8px;font-size:10px;color:var(--tx3);display:flex;justify-content:space-between;}
+.retour-card{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:14px;margin-bottom:10px;}
+.retour-date{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.ret-exo{padding:10px 0;border-bottom:1px solid var(--brd);}
+.ret-exo:last-child{border-bottom:none;padding-bottom:0;}
+.ret-name{font-size:13px;font-weight:600;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.done-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;}
+.done-badge.yes{background:rgba(52,211,153,.15);color:var(--green);}
+.done-badge.no{background:rgba(248,113,113,.15);color:var(--red);}
+.ret-stars{color:var(--acc3);font-size:13px;margin-bottom:3px;}
+.ret-cmt{font-size:12px;color:var(--tx2);font-style:italic;}
+#sc-banque{background:var(--bg);}
+.ban-body{flex:1;overflow-y:auto;padding:12px 16px calc(var(--safe-b) + 80px);}
+.frow{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:8px;scrollbar-width:none;}
+.frow::-webkit-scrollbar{display:none;}
+.fchip{flex-shrink:0;background:var(--surf2);border:1.5px solid var(--brd);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.fchip.on{background:rgba(45,212,191,.15);border-color:var(--acc);color:var(--acc);}
+.fchip.mat.on{background:rgba(245,158,11,.15);border-color:var(--acc3);color:var(--acc3);}
+.exo-c{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:8px;overflow:hidden;transition:border-color .15s;}
+.exo-c.sel{border-color:var(--acc);}
+.exo-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.exo-nw{flex:1;}.exo-n{font-size:14px;font-weight:600;}.exo-r{font-size:11px;color:var(--tx2);}
+.exo-chk{width:28px;height:28px;border-radius:50%;border:2px solid var(--brd);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;cursor:pointer;}
+.exo-chk.on{background:var(--acc);border-color:var(--acc);}
+.exo-bd{padding:0 14px 14px;border-top:1px solid var(--brd);display:none;}
+.exo-c.open .exo-bd{display:block;}
+.exo-desc{font-size:13px;color:var(--tx2);margin:10px 0 6px;line-height:1.5;}
+.exo-proto{font-size:12px;font-weight:600;color:var(--acc2);background:rgba(14,165,233,.1);border-radius:6px;padding:6px 10px;}
+.mat-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.mat-tag{font-size:11px;background:rgba(245,158,11,.1);color:var(--acc3);border-radius:20px;padding:3px 8px;font-weight:600;}
+.note-f{width:100%;background:var(--surf3);border:1.5px solid var(--brd);border-radius:var(--rs);padding:8px 10px;font-size:13px;color:var(--tx);font-family:var(--font);margin-top:8px;resize:none;min-height:52px;outline:none;}
+.ban-footer{position:fixed;bottom:0;left:0;right:0;padding:12px 16px calc(var(--safe-b) + 12px);background:var(--bg);border-top:1px solid var(--brd);display:flex;align-items:center;gap:12px;}
+.sel-info{font-size:13px;color:var(--tx2);flex:1;}.sel-info strong{color:var(--tx);}
+.btn-asgn{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:var(--rs);padding:12px 20px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;transition:transform .1s;}
+.btn-asgn:not(:disabled):active{transform:scale(.96);}
+.btn-asgn:disabled{opacity:.35;pointer-events:none;}
+#sc-pat{background:var(--bg);}
+.pat-body{flex:1;overflow-y:auto;padding:14px 16px calc(var(--safe-b) + 20px);}
+.today-ban{background:linear-gradient(135deg,rgba(45,212,191,.15),rgba(14,165,233,.1));border:1.5px solid rgba(45,212,191,.3);border-radius:var(--r);padding:16px;margin-bottom:16px;}
+.tod-lbl{font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.tod-ttl{font-size:18px;font-weight:700;margin-bottom:12px;}
+.wtrack{display:flex;gap:5px;}
+.dpill{flex:1;border-radius:10px;padding:8px 3px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border:1.5px solid transparent;transition:all .15s;}
+.dpill .dp-d{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;}
+.dpill .dp-n{font-size:13px;font-weight:700;}
+.dpill .dp-dot{width:7px;height:7px;border-radius:50%;background:var(--surf3);}
+.dpill.today{border-color:var(--acc2);background:rgba(14,165,233,.1);}
+.dpill.done .dp-dot{background:var(--green);}.dpill.partial .dp-dot{background:var(--acc3);}
+.dpill.sel{background:var(--surf2);}.dpill.noday{opacity:.4;}
+.epc{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);margin-bottom:10px;overflow:hidden;transition:border-color .2s;}
+.epc.done-c{border-color:rgba(52,211,153,.4);}
+.epc-hdr{padding:14px;display:flex;align-items:center;gap:12px;}
+.echk{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--brd);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .2s;}
+.echk.on{background:var(--green);border-color:var(--green);}
+.echk svg{opacity:0;transition:opacity .15s;}.echk.on svg{opacity:1;}
+.ep-name{flex:1;font-size:15px;font-weight:600;line-height:1.3;}
+.ep-exp{color:var(--tx3);font-size:12px;transition:transform .2s;}
+.epc.open .ep-exp{transform:rotate(180deg);}
+.epc-body{padding:0 14px 14px;border-top:1px solid var(--brd);display:none;}
+.epc.open .epc-body{display:block;}
+.ep-desc{font-size:13px;color:var(--tx2);margin:10px 0 8px;line-height:1.5;}
+.ep-proto{font-size:12px;font-weight:700;color:var(--acc2);margin-bottom:8px;}
+.ep-note-k{font-size:12px;color:var(--acc3);font-style:italic;background:rgba(245,158,11,.08);border-radius:6px;padding:6px 10px;margin-bottom:10px;}
+.res-wrap{margin-top:12px;}
+.res-lbl{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.stars-inp{display:flex;gap:6px;margin-bottom:10px;}
+.star-b{font-size:24px;cursor:pointer;opacity:.25;transition:opacity .15s,transform .1s;background:none;border:none;padding:0;line-height:1;}
+.star-b.on{opacity:1;}.star-b:active{transform:scale(1.3);}
+.cmt-f{width:100%;background:var(--surf3);border:1.5px solid var(--brd);border-radius:var(--rs);padding:9px 12px;font-size:13px;color:var(--tx);font-family:var(--font);resize:none;min-height:60px;outline:none;}
+.cmt-f:focus{border-color:var(--acc);}
+.save-res-btn{width:100%;background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--rs);padding:11px;font-size:13px;font-weight:600;color:var(--tx2);font-family:var(--font);cursor:pointer;margin-top:8px;transition:all .15s;}
+.save-res-btn:active{border-color:var(--acc);color:var(--acc);}
+.noday-msg{text-align:center;padding:40px 20px;color:var(--tx2);}
+.noday-msg .big{font-size:48px;margin-bottom:12px;}
+.no-prog{text-align:center;padding:60px 24px;color:var(--tx2);}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s;}
+.ov.open{opacity:1;pointer-events:all;}
+.sheet{background:var(--surf);border-radius:20px 20px 0 0;padding:0 0 calc(var(--safe-b) + 16px);width:100%;max-height:90vh;overflow-y:auto;transform:translateY(100%);transition:transform .25s;}
+.ov.open .sheet{transform:translateY(0);}
+.drag{width:40px;height:4px;background:var(--brd);border-radius:2px;margin:12px auto 16px;}
+.sh-title{font-size:18px;font-weight:700;padding:0 20px 14px;border-bottom:1px solid var(--brd);}
+.sh-body{padding:16px 20px;}
+.fl{font-size:12px;font-weight:700;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;display:block;}
+.fi{width:100%;background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--rs);padding:12px 14px;font-size:16px;color:var(--tx);font-family:var(--font);outline:none;-webkit-appearance:none;margin-bottom:14px;color-scheme:dark;}
+.fi:focus{border-color:var(--acc);}
+.fi-row{display:flex;gap:8px;margin-bottom:14px;}.fi-row .fi{margin-bottom:0;}
+.btn-row{display:flex;gap:10px;margin-top:4px;}
+.btn-p{flex:1;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:var(--rs);padding:14px;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer;transition:transform .1s;}
+.btn-p:active{transform:scale(.96);}
+.btn-s{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--rs);padding:14px 18px;font-size:15px;font-weight:600;color:var(--tx2);font-family:var(--font);cursor:pointer;}
+.btypes{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btype{background:var(--surf2);border:1.5px solid var(--brd);border-radius:var(--r);padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all .15s;}
+.btype:active{border-color:var(--acc);}
+.btype-dot{width:12px;height:12px;border-radius:50%;}
+.btype-lbl{font-size:13px;font-weight:600;text-align:center;}
+.btn-full{width:100%;background:var(--surf2);border:1.5px dashed var(--brd);border-radius:var(--r);padding:14px;font-size:14px;font-weight:600;color:var(--tx2);font-family:var(--font);cursor:pointer;margin-top:4px;}
+.danger-btn{width:100%;background:rgba(248,113,113,.1);border:1.5px solid var(--red);border-radius:var(--r);padding:13px;font-size:13px;font-weight:600;color:var(--red);font-family:var(--font);cursor:pointer;margin-top:10px;}
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px;}
+.spin{width:40px;height:40px;border:3px solid var(--surf3);border-top-color:var(--acc);border-radius:50%;animation:sp .8s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:calc(var(--safe-b) + 90px);left:50%;transform:translateX(-50%) translateY(10px);background:var(--surf3);color:var(--tx);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;transition:all .25s;z-index:999;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.tc-renforcement{background:#3B82F6;}.tc-etirement{background:#8B5CF6;}.tc-proprioception{background:#10B981;}
+.tc-mobilisation{background:#F59E0B;}.tc-antalgique{background:#EF4444;}.tc-aerobie{background:#06B6D4;}
+.tc-education{background:#6B7280;}.tc-neurodynamique{background:#EC4899;}.tc-massage{background:#84CC16;}
+.tc-plometrie{background:#F97316;}.tc-fonctionnel{background:#A78BFA;}.tc-autre{background:#6B7280;}
+.submit-prog-btn{width:100%;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:var(--r);padding:15px;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(45,212,191,.3);transition:transform .1s;}
+.submit-prog-btn:active{transform:scale(.96);}
+.submit-prog-btn.sent{background:linear-gradient(135deg,#34D399,#059669);}
+.submit-session-btn{width:100%;background:linear-gradient(135deg,var(--green),var(--acc));color:#fff;border:none;border-radius:var(--r);padding:16px;font-size:16px;font-weight:700;font-family:var(--font);cursor:pointer;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(52,211,153,.4);transition:transform .1s;}
+.submit-session-btn:active{transform:scale(.96);}
+.timer-w{background:var(--surf3);border-radius:var(--rs);padding:14px;margin-bottom:12px;}
+.timer-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.timer-phase{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx3);}
+.timer-phase.work{color:var(--green);}.timer-phase.rest{color:var(--acc3);}
+.timer-d{font-size:40px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--acc);text-align:center;letter-spacing:3px;margin-bottom:4px;}
+.timer-d.running{color:var(--green);}.timer-d.resting{color:var(--acc3);}.timer-d.done{color:var(--acc3);}
+.timer-series{font-size:12px;color:var(--tx2);text-align:center;margin-bottom:10px;min-height:16px;}
+.timer-bar-wrap{height:4px;background:var(--surf2);border-radius:2px;margin-bottom:12px;overflow:hidden;}
+.timer-bar{height:100%;border-radius:2px;transition:width .9s linear;background:var(--green);}
+.timer-bar.rest{background:var(--acc3);}
+.timer-btns{display:flex;gap:8px;}
+.tbtn{flex:1;border:none;border-radius:var(--rs);padding:11px 8px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;transition:transform .1s;}
+.tbtn:active{transform:scale(.95);}
+.tbtn.start{background:var(--green);color:#fff;}.tbtn.pause{background:var(--acc3);color:#fff;}
+.tbtn.rst{background:var(--surf2);color:var(--tx2);border:1.5px solid var(--brd);flex:0 0 44px;}
+/* ── Tap feedback multiplateforme ── */
+@keyframes tapFlash{0%{opacity:1}40%{opacity:.55}100%{opacity:1}}
+@keyframes tapPop{0%{transform:scale(1)}40%{transform:scale(.91)}100%{transform:scale(1)}}
+.tap-flash{animation:tapFlash .18s ease-out;}
+.pinkey:active,.pinkey.tapped{background:var(--acc)!important;color:#fff!important;border-color:var(--acc)!important;transform:scale(.88)!important;transition:transform .08s,background .08s!important;}
+.hdr-btn:active,.hdr-btn.tapped{transform:scale(.90)!important;box-shadow:0 1px 4px rgba(45,212,191,.15)!important;}
+.hdr-btn2:active,.hdr-btn2.tapped{transform:scale(.90)!important;background:var(--surf3)!important;}
+.hdr-back:active,.hdr-back.tapped{transform:scale(.88)!important;background:var(--surf3)!important;}
+.btn-p:active,.btn-p.tapped{transform:scale(.94)!important;box-shadow:0 1px 5px rgba(45,212,191,.2)!important;}
+.btn-s:active,.btn-s.tapped{transform:scale(.94)!important;background:var(--surf3)!important;}
+.tbtn:active,.tbtn.tapped{transform:scale(.90)!important;filter:brightness(.85)!important;}
+.star-b:active,.star-b.tapped{transform:scale(1.35)!important;transition:transform .1s!important;}
+.save-res-btn:active,.save-res-btn.tapped{border-color:var(--acc)!important;color:var(--acc)!important;background:rgba(45,212,191,.08)!important;}
+.submit-prog-btn:active,.submit-prog-btn.tapped{transform:scale(.97)!important;box-shadow:0 2px 8px rgba(45,212,191,.15)!important;}
+.submit-session-btn:active,.submit-session-btn.tapped{transform:scale(.97)!important;}
+.btn-asgn:active,.btn-asgn.tapped{transform:scale(.94)!important;}
+.echk:active,.echk.tapped{transform:scale(.84)!important;}
+.pat-card:active,.pat-card.tapped{border-color:var(--acc)!important;background:var(--surf2)!important;}
+.pex-del:active,.pex-del.tapped{transform:scale(.88)!important;background:rgba(248,113,113,.25)!important;}
+.day-btn:active,.day-btn.tapped{transform:scale(.88)!important;background:var(--acc)!important;border-color:var(--acc)!important;color:#fff!important;}
+.fchip:active,.fchip.tapped{transform:scale(.94)!important;}
+.dpill:active,.dpill.tapped{transform:scale(.92)!important;}
+.add-exo-btn:active,.add-exo-btn.tapped{transform:scale(.97)!important;box-shadow:0 2px 10px rgba(45,212,191,.25)!important;}
+
+</style>
+</head>
+<body>
+<div id="loading"><div class="spin"></div><p style="color:var(--tx2);font-size:14px">Chargement...</p></div>
+
+
+
+<!-- PIN KINE -->
+<div class="screen" id="sc-pin">
+  <div class="pin-wrap">
+    <div class="pin-logo"><svg viewBox="0 0 32 32" fill="none"><path d="M16 4C16 4 6 10 6 18a10 10 0 0020 0C26 10 16 4 16 4z" fill="white" fill-opacity=".9"/><path d="M16 11v8M12 15h8" stroke="#0F1923" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div class="pin-title" id="pt">Espace kiné</div>
+    <div class="pin-sub" id="ps">Entrez votre code à 4 chiffres</div>
+    <div class="pin-dots" id="pd"><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div></div>
+    <div class="pinpad">
+      <button class="pinkey" onclick="pk(1)">1</button><button class="pinkey" onclick="pk(2)">2</button><button class="pinkey" onclick="pk(3)">3</button>
+      <button class="pinkey" onclick="pk(4)">4</button><button class="pinkey" onclick="pk(5)">5</button><button class="pinkey" onclick="pk(6)">6</button>
+      <button class="pinkey" onclick="pk(7)">7</button><button class="pinkey" onclick="pk(8)">8</button><button class="pinkey" onclick="pk(9)">9</button>
+      <button class="pinkey empty"></button><button class="pinkey" onclick="pk(0)">0</button><button class="pinkey del" onclick="pdel()">&#9003;</button>
+    </div>
+    <div class="pin-hint" id="ph" style="display:none">Premier lancement — définissez votre code à 4 chiffres</div>
+    <button class="pin-back-btn" onclick="window.location.href='index.html'">&#8592; Retour</button>
+  </div>
+</div>
+
+
+
+
+
+<!-- LISTE PATIENTS -->
+<div class="screen" id="sc-list">
+  <div class="hdr">
+    <button class="hdr-back" onclick="goHome()" style="font-size:18px">&#127968;</button>
+    <div class="hdr-title">Mes patients</div>
+    <button class="hdr-btn2" onclick="deconnect()" style="margin-right:6px">&#9099;</button>
+    <button class="hdr-btn" onclick="openNP()">+ Patient</button>
+  </div>
+  <div class="list-body">
+    <div class="search-wrap">
+      <svg class="sico" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#5A7080" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#5A7080" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input class="search-inp" id="si" type="search" placeholder="Rechercher un patient..." oninput="renderList()">
+    </div>
+    <div id="empty-st" class="empty-st" style="display:none"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" style="opacity:.25;display:block;margin:0 auto 16px"><circle cx="32" cy="24" r="14" stroke="#8FA3B4" stroke-width="2"/><path d="M8 56c0-13.255 10.745-24 24-24s24 10.745 24 24" stroke="#8FA3B4" stroke-width="2"/></svg><p>Aucun patient.<br>Ajoutez votre premier patient.</p></div>
+    <div id="plist"></div>
+  </div>
+  <button class="fab" onclick="openNP()">+</button>
+</div>
+
+<!-- DOSSIER -->
+<div class="screen" id="sc-dos">
+  <div class="hdr">
+    <button class="hdr-back" onclick="ss('sc-list','back')">&#8592;</button>
+    <div class="hdr-title" id="dos-n">Dossier</div>
+    <button class="hdr-btn" onclick="openNB()">+ Bilan</button>
+  </div>
+  <div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+    <div class="tabs">
+      <button class="tab on" onclick="swTab('prog',this)">Programme</button>
+      <button class="tab" onclick="swTab('ret',this)">Retours</button>
+      <button class="tab" onclick="swTab('bil',this)">Bilans &amp; Scores</button>
+    </div>
+    <div class="dos-body" id="dos-body"></div>
+  </div>
+</div>
+
+<!-- BANQUE -->
+<div class="screen" id="sc-banque">
+  <div class="hdr">
+    <button class="hdr-back" onclick="ss('sc-dos','back')">&#8592;</button>
+    <div class="hdr-title">Banque d'exercices</div>
+  </div>
+  <div class="ban-body">
+    <div class="search-wrap">
+      <svg class="sico" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#5A7080" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#5A7080" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input class="search-inp" id="bsi" type="search" placeholder="Rechercher..." oninput="fBan()">
+    </div>
+    <div class="frow" id="fr"></div><div class="frow" id="ft"></div><div class="frow" id="fm"></div>
+    <div id="exol"></div><div style="height:80px"></div>
+  </div>
+  <div class="ban-footer">
+    <div class="sel-info"><strong id="seln">0</strong> sélectionné(s)</div>
+    <button class="btn-asgn" id="btn-asgn" onclick="assignExos()" disabled>Assigner &#8594;</button>
+  </div>
+</div>
+
+<!-- DETAIL BILAN -->
+<div class="screen" id="sc-bd">
+  <div class="hdr">
+    <button class="hdr-back" onclick="ss('sc-dos','back')">&#8592;</button>
+    <div class="hdr-title" id="bd-t">Bilan</div>
+  </div>
+  <div id="bd-b" style="flex:1;overflow-y:auto;padding:14px 16px calc(var(--safe-b) + 20px)"></div>
+</div>
+
+<!-- VUE PATIENT -->
+<div class="screen" id="sc-pat">
+  <div class="hdr">
+    <button class="hdr-back" onclick="window.location.href='index.html'">&#8592;</button>
+    <div class="hdr-title" id="pat-n">Mon programme</div>
+  </div>
+  <div class="pat-body" id="pat-body"></div>
+</div>
+
+<!-- MODAL NOUVEAU PATIENT -->
+<div class="ov" id="ov-np" onclick="cov('ov-np')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="drag"></div>
+    <div class="sh-title">Nouveau patient</div>
+    <div class="sh-body">
+      <label class="fl">Prénom</label><input class="fi" type="text" id="np-p" placeholder="Marie" autocomplete="off">
+      <label class="fl">Nom</label><input class="fi" type="text" id="np-n" placeholder="Dupont" autocomplete="off">
+      <label class="fl">Date de naissance <span style="color:var(--red)">*</span></label><input class="fi" type="date" id="np-d">
+      <label class="fl">Code patient (6 chiffres)</label>
+      <div class="fi-row">
+        <input class="fi" type="text" inputmode="numeric" id="np-pin" placeholder="ex: 452198" maxlength="6" oninput="this.value=this.value.replace(/\D/g,'').slice(0,6)">
+        <button onclick="rPin()" style="background:var(--surf3);border:1.5px solid var(--brd);border-radius:var(--rs);padding:0 14px;color:var(--tx2);font-size:12px;font-family:var(--font);cursor:pointer;white-space:nowrap;flex-shrink:0">Aléatoire</button>
+      </div>
+      <div class="btn-row"><button class="btn-p" onclick="createP()">Créer</button><button class="btn-s" onclick="cov('ov-np')">Annuler</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOUVEAU BILAN -->
+<div class="ov" id="ov-nb" onclick="cov('ov-nb')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="drag"></div>
+    <div class="sh-title">Nouveau bilan</div>
+    <div class="sh-body"><div class="btypes" id="btypes"></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import{getFirestore,collection,doc,getDoc,getDocs,setDoc,updateDoc,deleteDoc,arrayUnion}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+import{getAuth,onAuthStateChanged,signInAnonymously}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+const FB={apiKey:"AIzaSyBxb76bIaud6w8iE4dZL2x_XGaUeDDImMc",authDomain:"kinescope-9df37.firebaseapp.com",projectId:"kinescope-9df37",storageBucket:"kinescope-9df37.firebasestorage.app",messagingSenderId:"279167842820",appId:"1:279167842820:web:86e0bf2f726fbaee531351"};
+const app=initializeApp(FB);
+const db=getFirestore(app);
+const auth=getAuth(app);
+const pCol=()=>{if(!S.uid)throw new Error('uid');return collection(db,'therapists',S.uid,'patients');};
+const pDoc=id=>{if(!S.uid)throw new Error('uid');return doc(db,'therapists',S.uid,'patients',id);};
+
+const BANQUE=[{"id":"lombaire_pos_ant","r":"lombaire","ph":"ant","n":"Position antalgique de décharge","m":["coussin"],"t":"antalgique","d":"Décubitus dorsal, genoux fléchis à 90° sur coussin. Lombaires relâchées. Respiration abdominale lente.","p":"20 min matin et soir. Maintenir jusqu","j":"EVA","pg":"Décharge → récupération passive → mobilisation active"},{"id":"lombaire_resp","r":"lombaire","ph":"ant","n":"Respiration diaphragmatique & cohérence cardiaque","m":[],"t":"éducation","d":"Inspirer 4 sec (ventre se gonfle), expirer 6 sec. Cohérence cardiaque : 5 sec / 5 sec pendant 5 min.","p":"5 min matin et soir. À utiliser lors des pics douloureux.","j":"Yellow flags ou douleur intense — régulation du tonus para-vertébral et du SNA. 6 cycles/min module la douleur chronique.","pg":""},{"id":"lombaire_automassage_pv","r":"lombaire","ph":"ant","n":"Auto-massage para-vertébraux — Rouleau","m":["foam roller"],"t":"massage","d":"Décubitus dorsal, rouleau transversal sous le dos. Rouler lentement de T12 à L5, légèrement de côté pour cibler les para-vertébraux.","p":"2–3 min de roulement lent. 1 fois/jour avant les exercices.","j":"Contracture para-vertébrale détectée — réduction de la tension musculaire et amélioration de la vascularisation locale.","pg":""},{"id":"lombaire_procubitus","r":"lombaire","ph":"mob","n":"Procubitus → Extension McKenzie","m":[],"t":"mobilisation","d":"Décubitus ventral. Phase 1 : DV passif 2–3 min. Phase 2 : Sphinx (coudes). Phase 3 : extension sur mains tendues.","p":"10 répétitions × 3 séries. 2 fois/jour espacées de 4h.","j":"Tableau McKenzie","pg":"DV passif → Sphinx → Extension mains → Extension debout"},{"id":"lombaire_ext_dbt","r":"lombaire","ph":"mob","n":"Extension lombaire debout","m":[],"t":"antalgique","d":"Debout, mains dans le creux lombaire. Extension vers l","p":"10 répétitions systématiquement après 30–45 min assis.","j":"Direction préférentielle extension — transfert vie quotidienne après chaque station assise prolongée.","pg":""},{"id":"lombaire_neuro_sci","r":"lombaire","ph":"mob","n":"Neurodynamique — Nerf sciatique","m":[],"t":"neurodynamique","d":"Décubitus dorsal. Fléchir hanche à 70–80°. Étendre genou progressivement. Jamais de douleur vive.","p":"10–15 oscillations × 3 séries. 1 fois/jour après J5.","j":"Radiculopathie sciatique","pg":"Pompage → Tensioning → Slump neurodynamique assis"},{"id":"lombaire_neuro_cru","r":"lombaire","ph":"mob","n":"Neurodynamique — Nerf crural","m":[],"t":"neurodynamique","d":"Décubitus latéral côté non douloureux. Hanche tendue, flexion progressive du genou.","p":"10 oscillations × 3 séries. Dans la zone de confort.","j":"Radiculopathie crurale","pg":""},{"id":"lombaire_stretch_ischio","r":"lombaire","ph":"mob","n":"Étirement ischio-jambiers","m":[],"t":"étirement","d":"Décubitus dorsal. Lever une jambe tendue. Angle maximal sans douleur radiculaire. Maintenir 30 sec.","p":"3 répétitions × 30 sec chaque jambe. 2 fois/jour.","j":"Tension des ischio-jambiers fréquemment associée aux lombalgies — réduction de la tension postérieure.","pg":"Sans dorsiflexion → avec dorsiflexion → avec sangle"},{"id":"lombaire_flex_canal","r":"lombaire","ph":"mob","n":"Flexion lombaire répétée — Canal étroit","m":[],"t":"mobilisation","d":"Décubitus dorsal. Ramener les deux genoux vers la poitrine. Maintenir en expiration.","p":"10 répétitions × 3 séries. Maintenir 5–10 sec en flexion.","j":"Sténose canalaire probable","pg":"Flexion simple → rotation genoux → balancement pelvien"},{"id":"lombaire_asi_mob","r":"lombaire","ph":"mob","n":"Auto-mobilisation sacro-iliaque","m":[],"t":"mobilisation","d":"Décubitus dorsal. Ramener un genou vers la poitrine en rotation interne puis externe. Alterner.","p":"10 répétitions chaque sens × 2 séries. Matin et soir.","j":"Dysfonction sacro-iliaque probable","pg":""},{"id":"lombaire_stretch_psoas","r":"lombaire","ph":"mob","n":"Étirement psoas-iliaque","m":[],"t":"étirement","d":"Fente basse : genou arrière au sol, bassin basculé en rétroversion. Avancer le bassin vers l","p":"3 répétitions × 30 sec chaque côté. 2 fois/jour.","j":"Rétraction du psoas fréquente en lombalgie chronique — augmente la lordose et la compression discale postérieure.","pg":"Fente statique → fente avec rotation controlatérale → fente sur coussin"},{"id":"lombaire_stretch_piriforme","r":"lombaire","ph":"mob","n":"Étirement piriforme","m":[],"t":"étirement","d":"Décubitus dorsal. Pied du côté testé posé sur le genou opposé (figure 4). Tirer le genou opposé vers la poitrine jusqu","p":"3 répétitions × 30 sec chaque côté. 2 fois/jour.","j":"Contracture du piriforme fréquente dans les lombalgies et dysfonctions ASI — peut irriter le nerf sciatique (pseudo-sciatique).","pg":"Décubitus → assis en figure 4 → étirement debout contre mur"},{"id":"lombaire_hollowing","r":"lombaire","ph":"ren","n":"Activation du transverse (Hollowing)","m":[],"t":"renforcement","d":"Décubitus dorsal ou 4 pattes. Rentrer légèrement le nombril sans bloquer la respiration. Contraction légère maintenue.","p":"Maintenir 10 sec × 10 rép × 3 séries. 2 fois/jour.","j":"Exercice fondamental — indiqué dans toutes les lombalgies. Premier stabilisateur du rachis lombaire.","pg":"Décubitus → 4 pattes → debout → pendant la marche"},{"id":"lombaire_dead_bug","r":"lombaire","ph":"ren","n":"Dead Bug — Stabilisation lombaire","m":[],"t":"renforcement","d":"Décubitus dorsal. Genoux et hanches à 90°. Bras au plafond. Activer transverse. Abaisser bras droit + jambe gauche simultanément.","p":"8 répétitions × 3 séries chaque côté. Expirer à l","j":"Coordination tronc/membres en décharge — stabilisation profonde sans charge rachidienne.","pg":"Jambe seule → bras + jambe → élastique en résistance"},{"id":"lombaire_bird_dog","r":"lombaire","ph":"ren","n":"Bird-Dog — Contrôle moteur","m":[],"t":"renforcement","d":"À 4 pattes, dos plat. Étendre bras droit + jambe gauche. Bassin horizontal. Tenir 3–5 sec.","p":"10 répétitions × 3 séries chaque diagonale.","j":"Renforcement multifides et contrôle moteur profond — indiqué dans toutes les lombalgies.","pg":"Jambe seule → diagonale → coude/genou sous le ventre → élastique"},{"id":"lombaire_pont_fessier","r":"lombaire","ph":"ren","n":"Pont fessier (Hip Bridge)","m":[],"t":"renforcement","d":"Décubitus dorsal, genoux fléchis à 90°. Activer transverse. Décoller le bassin vertèbre par vertèbre. Tenir 3 sec.","p":"12 répétitions × 3 séries. Descente lente en 3 sec.","j":"Renforcement chaîne postérieure + stabilisateurs lombaires (EVA ≤6).","pg":"Bilatéral → unipodale → unipodale avec élastique"},{"id":"lombaire_planche","r":"lombaire","ph":"ren","n":"Gainage antérieur — Planche","m":[],"t":"renforcement","d":"Appui sur avant-bras et orteils. Corps aligné. Transverse activé. Respiration libre. Pas de cambre lombaire.","p":"20 à 45 sec × 3 séries selon tolérance.","j":"Renforcement global de la ceinture abdominale (EVA ≤5, pas de radiculopathie sévère).","pg":"Genoux → orteils → soulèvement d"},{"id":"lombaire_planche_lat","r":"lombaire","ph":"ren","n":"Gainage latéral — Side Plank","m":[],"t":"renforcement","d":"Décubitus latéral, appui sur avant-bras et genou. Lever les hanches en alignement épaule-hanche-genou.","p":"20–30 sec × 3 séries chaque côté.","j":"Obliques et carré des lombes — stabilisateurs frontaux du rachis.","pg":"Genoux → orteils → abduction de jambe simultanée"},{"id":"lombaire_abduction_elas","r":"lombaire","ph":"ren","n":"Abduction de hanche — Moyen fessier","m":["élastique"],"t":"renforcement","d":"Debout, élastique autour des chevilles. Élever latéralement la jambe tendue à 30–40°. Descente excentrique lente.","p":"15 répétitions × 3 séries chaque côté.","j":"Renforcement du moyen fessier — stabilisateur frontal du bassin, souvent déficitaire dans les lombalgies.","pg":"Avec appui → sans appui → avec déstabilisation"},{"id":"lombaire_clamshell","r":"lombaire","ph":"ren","n":"Clamshell — Rotateurs externes hanche","m":["élastique"],"t":"renforcement","d":"Décubitus latéral, hanches et genoux fléchis à 45°. Élastique autour des genoux. Ouvrir le genou supérieur comme un coquillage — maintenir 2 sec.","p":"15 répétitions × 3 séries chaque côté. Descente lente en 3 sec.","j":"Renforcement des rotateurs externes et abducteurs de hanche en décharge — déficit fréquent en lombalgie et dysfonction ASI.","pg":"Sans élastique → avec élastique → clamshell dynamique debout"},{"id":"lombaire_back_ext","r":"lombaire","ph":"ren","n":"Renforcement érecteurs — Back Extension","m":[],"t":"renforcement","d":"Décubitus ventral, bras le long du corps. Décoller légèrement la tête, les épaules et le thorax du sol — maintenir 3–5 sec. Ne pas cambrer excessivement.","p":"10 répétitions × 3 séries.","j":"Renforcement des érecteurs du rachis et des multifides — muscles extenseurs lombaires souvent inhibés dans la lombalgie chronique (EVA ≤5).","pg":"Soulèvement partiel → Superman (bras + jambes) → Superman avec élastique"},{"id":"lombaire_proprio","r":"lombaire","ph":"ren","n":"Équilibre unipodal — Proprioception lombaire","m":[],"t":"proprioception","d":"Debout sur un pied. Yeux ouverts 30 sec. Puis yeux fermés 20 sec. Comparer les deux côtés.","p":"3 × 30 sec chaque pied. 2 fois/jour.","j":"Déficit proprioceptif ou lombalgie chronique — contrôle moteur lombaire par voie ascendante.","pg":"Sol stable YO → sol stable YF → coussin proprioceptif → mouvements de bras"},{"id":"lombaire_velo","r":"lombaire","ph":"fon","n":"Vélo stationnaire / Aquagym","m":[],"t":"aérobie","d":"Vélo stationnaire légèrement penché en avant. Résistance modérée. Durée progressive.","p":"Débuter 10 min × 3 fois/semaine. +5 min par semaine.","j":"Canal lombaire étroit","pg":"Durée → résistance → fréquence"},{"id":"lombaire_ecole_dos","r":"lombaire","ph":"fon","n":"École du dos — Gestes et postures","m":[],"t":"éducation","d":"Apprentissage : se pencher (flexion genoux), porter (objet proche), se lever d","p":"Travail intégré dans chaque séance. Pratique au domicile.","j":"Indiqué dans toutes les lombalgies — prévention des récidives par modification des comportements posturaux.","pg":""},{"id":"lombaire_marche","r":"lombaire","ph":"fon","n":"Reprise progressive de la marche","m":[],"t":"aérobie","d":"Marche à rythme confortable, terrain plat, chaussures absorbantes. Démarrage progressif.","p":"Semaine 1 : 15 min/jour. +5 min par semaine. Objectif : 45 min, 5×/semaine.","j":"La marche est le premier traitement de la lombalgie commune (contre-indiquée si canal étroit sévère).","pg":""},{"id":"lombaire_mob_matin","r":"lombaire","ph":"fon","n":"Mobilisations matinales anti-raideur (SPA)","m":[],"t":"mobilisation","d":"Avant de se lever : rotations en décubitus, flexions/extensions douces. Puis debout : pendules du tronc.","p":"10 min chaque matin avant tout autre activité. À maintenir à vie.","j":"Profil SPA/inflammatoire","pg":""},{"id":"lombaire_edu","r":"lombaire","ph":"fon","n":"Éducation neurobiologique de la douleur","m":[],"t":"éducation","d":"Expliquer les mécanismes de la douleur : système nerveux sensibilisé, non équivalent à dommage tissulaire.","p":"1–2 séances dédiées. Support visuel recommandé.","j":"Yellow flags","pg":"Neuroscience → quotas d"},{"id":"epaule_pendule","r":"epaule","ph":"ant","n":"Pendule de Codman — Décoaptation passive antalgique","m":[],"t":"mobilisation","d":"Debout penché en avant, bras pendant librement. Petits cercles passifs par le mouvement du corps (pas d","p":"3 × 1 min de cercles. 2 fois/jour.","j":"EVA","pg":"Cercles petits → cercles grands → léger poids (0,5 kg)"},{"id":"epaule_autoRE","r":"epaule","ph":"mob","n":"Auto-étirement en rotation externe","m":[],"t":"étirement","d":"Décubitus dorsal, coude fléchi à 90° au corps. Laisser le bras aller en RE par gravité (gravity stretch) ou aide légère de l","p":"3 × 45 sec. Progresser l","j":"Rotation externe limitée ou capsulite","pg":"Gravity stretch → aide main controlatérale → bâton"},{"id":"epaule_sleeper","r":"epaule","ph":"mob","n":"Sleeper Stretch — Capsule postérieure (GIRD)","m":[],"t":"étirement","d":"Décubitus latéral sur le côté atteint, épaule à 90° de flexion, coude fléchi à 90°. L","p":"3 × 30 sec. 1 fois/jour. Idéalement après l","j":"GIRD présent ou overhead","pg":"Gravity → aide controlatérale → durée progressive"},{"id":"epaule_crossbody_stretch","r":"epaule","ph":"mob","n":"Cross-Body Stretch — Capsule postérieure","m":[],"t":"étirement","d":"Debout ou assis. Amener le bras atteint en adduction horizontale devant soi. L","p":"3 × 30 sec. 1 fois/jour.","j":"Alternative au Sleeper Stretch si décubitus latéral inconfortable — même cible : capsule postérieure.","pg":""},{"id":"epaule_mobCap","r":"epaule","ph":"mob","n":"Mobilisations passives douces — Capsulite rétractile","m":[],"t":"mobilisation","d":"Décubitus dorsal. Mobilisations passives lentes en RE, ABD, RI dans la zone strictement indolore. Progresser par paliers hebdomadaires de 5°.","p":"10 répétitions chaque direction × 2 séries. Quotidien si possible.","j":"Capsulite probable","pg":"Amplitude minimale → progressif par paliers → travail actif aidé"},{"id":"epaule_re_elas","r":"epaule","ph":"ren","n":"Renforcement Rotation Externe — Élastique (excentrique)","m":["élastique"],"t":"renforcement","d":"Debout, coude fléchi à 90° au corps, serviette entre le coude et le thorax. Rotation externe contre élastique. Phase excentrique prioritaire (retour en 3 sec).","p":"3 × 15 répétitions. Excentrique 3 sec. 2 fois/semaine.","j":"Conflit ou coiffe","pg":"Isométrique → concentrique → excentrique → plan de la scapula"},{"id":"epaule_fullcan_prog","r":"epaule","ph":"ren","n":"Full Can progressif — Sus-épineux plan scapulaire","m":["élastique"],"t":"renforcement","d":"Bras à 90° d","p":"3 × 12–15 répétitions. Commencer en dessous de l","j":"Conflit ou tendinopathie coiffe","pg":"Sans résistance → élastique léger → élastique moyen → amplitude complète"},{"id":"epaule_ri_elas","r":"epaule","ph":"ren","n":"Renforcement Rotation Interne — Sous-scapulaire","m":["élastique"],"t":"renforcement","d":"Même position que la RE mais direction inverse (RI contre élastique). Coude au corps, serviette maintenue.","p":"3 × 15 répétitions. Résistance légère.","j":"Atteinte sous-scapulaire probable — renforcement progressif de la rotation interne en respectant le seuil douloureux.","pg":"Isométrique → concentrique léger → excentrique → progressif"},{"id":"epaule_trap_inf","r":"epaule","ph":"ren","n":"Renforcement Trapèze Inférieur — Prone Y","m":[],"t":"renforcement","d":"Décubitus ventral. Bras en Y (135° d","p":"3 × 12 répétitions. Tenir 2 sec en haut. Mouvement lent et contrôlé.","j":"Dyskinésie scapulaire ou conflit","pg":"Sans charge → léger poids (0,5 kg) → élastique"},{"id":"epaule_serratus","r":"epaule","ph":"ren","n":"Serratus Anterior — Push-up Plus","m":[],"t":"renforcement","d":"Position de planche. En fin d","p":"3 × 12 répétitions. La protraction finale est la partie cruciale.","j":"Dyskinésie scapulaire","pg":"Genoux → orteils → bande élastique → surface instable"},{"id":"epaule_retraction","r":"epaule","ph":"ren","n":"Rétraction scapulaire active — Correction posturale","m":[],"t":"renforcement","d":"Debout ou assis. Rentrer le menton légèrement. Ramener les omoplates vers l","p":"20 répétitions × 3 séries. À intégrer dans la journée (bureau, conduite…).","j":"Dyskinésie ou conflit — la rétraction scapulaire corrige l","pg":"Statique → avec ouverture des bras → avec élastique"},{"id":"epaule_centrage","r":"epaule","ph":"ren","n":"Co-contraction et centrage actif — Tête humérale","m":["élastique"],"t":"renforcement","d":"Debout, bras légèrement écarté. Contracter simultanément tous les muscles de l","p":"Maintenir 10 sec × 10 répétitions × 3 séries. 2 fois/jour.","j":"Instabilité","pg":"Isométrique → petits arcs → amplitudes progressives"},{"id":"epaule_proprio_epaule","r":"epaule","ph":"ren","n":"Proprioception épaule — Plan instable","m":["swiss ball"],"t":"proprioception","d":"Appui sur ballon contre un mur (mains tendues). Petits cercles lents, le ballon roule. Progresser vers appui au sol.","p":"3 × 30 sec. 2 fois/semaine.","j":"Instabilité ou conflit — la proprioception est toujours déficitaire après une pathologie d","pg":"Mur → plan incliné → sol → surface instable → un bras"},{"id":"epaule_chaine_ferm","r":"epaule","ph":"ren","n":"Chaîne fermée — Wall Press diagonal","m":[],"t":"renforcement","d":"Debout face au mur, mains à hauteur d","p":"3 × 20 mouvements. 3 fois/semaine.","j":"Instabilité ou coiffe — la chaîne fermée coactive toute la musculature stabilisatrice simultanément.","pg":"Mur vertical → plan incliné → table → sol → surface instable"},{"id":"epaule_posture","r":"epaule","ph":"ren","n":"Éducation posturale & ergonomie","m":[],"t":"éducation","d":"Réglage du poste de travail : écran à hauteur des yeux, coudes à 90°, épaules détendues. Auto-corrections toutes les 30 min.","p":"Travail intégré dans chaque séance. Réglage du poste recommandé.","j":"Conflit ou dyskinésie — la scapula en antépulsion réduit l","pg":""},{"id":"epaule_retour_sport","r":"epaule","ph":"fon","n":"Programme de reprise sportive progressive — 4 étapes","m":[],"t":"retour sport","d":"Étape 1 : gestes analytiques sous-maximaux. Étape 2 : gestes globaux à 50%. Étape 3 : spécifiques à 80%. Étape 4 : retour complet.","p":"1 étape par semaine selon tolérance. Réévaluation clinique entre chaque étape.","j":"Sport overhead ou contact — reprise structurée en 4 étapes pour éviter la récidive. QuickDASH <25/100 avant reprise complète.","pg":"Analytique → global → spécifique sport → compétition"},{"id":"epaule_retour_lancer","r":"epaule","ph":"fon","n":"Protocole de retour au lancer — Sport overhead","m":[],"t":"retour sport","d":"Phase 1 : lancer doux distance courte (10m). Phase 2 : augmentation distance. Phase 3 : vitesse progressive. Phase 4 : intensité compétition.","p":"2 séances/semaine. Progresser si indolore à chaque phase.","j":"Sportif overhead avec geste d","pg":"10m → 20m → 30m → vitesse progressive → compétition"},{"id":"genou_iso_quad","r":"genou","ph":"ant","n":"Isométrie quadriceps","m":[],"t":"renforcement","d":"Décubitus dorsal, genou en extension complète. Appuyer le creux poplité contre le sol en contractant le quadriceps. Sentir la rotule remonter. Maintenir la contraction.","p":"45 sec × 5 rép. 3 fois/jour. Repos 2 min entre rép.","j":"","pg":"Isométrie → actif libre → élastique en extension"},{"id":"genou_slr","r":"genou","ph":"ant","n":"SLR — Straight Leg Raise","m":[],"t":"neurodynamique","d":"Décubitus dorsal, genou atteint en extension, l","p":"3 × 15 rép. 2 fois/jour.","j":"","pg":"Sans résistance → chevillère lestée 1 kg → 2 kg"},{"id":"genou_pompes_cheville","r":"genou","ph":"ant","n":"Pompes de cheville","m":[],"t":"mobilisation","d":"Décubitus dorsal. Effectuer des flexions/extensions de cheville en alternance, amplitude maximale. Rythme régulier.","p":"20 rép × 3. Toutes les heures en phase post-op J0–J3.","j":"","pg":"Bilatéral → alterné → avec résistance élastique"},{"id":"genou_iso_fessiers","r":"genou","ph":"ant","n":"Isométrie fessiers","m":[],"t":"renforcement","d":"Décubitus dorsal, genoux légèrement fléchis. Contracter les deux fessiers simultanément. Tenir 10 sec.","p":"10 sec × 10 rép. 3 fois/jour.","j":"","pg":"Isométrie → pont fessier bilatéral → unipodale"},{"id":"genou_flex_active","r":"genou","ph":"mob","n":"Flexion active-aidée (glissement talon)","m":["sangle"],"t":"mobilisation","d":"Décubitus dorsal. Glisser le talon vers les fesses en aidant avec une sangle si nécessaire. Aller jusqu","p":"10 rép × 3 séries. 2 fois/jour.","j":"","pg":"Actif-aidé → actif libre → actif résisté"},{"id":"genou_velo_ergo","r":"genou","ph":"mob","n":"Vélo ergomètre sans résistance","m":["vélo"],"t":"aérobie","d":"Position selle haute. Pédaler en douceur sans résistance. Augmenter progressivement l","p":"15 min en continu. Selle haute les premières séances (amplitude réduite). 5 fois/semaine.","j":"","pg":""},{"id":"genou_etirement_quad","r":"genou","ph":"mob","n":"Étirement quadriceps debout","m":[],"t":"étirement","d":"Debout, appui sur un mur. Saisir la cheville du côté atteint, ramener le talon vers la fesse. Maintenir le genou dans l","p":"3 × 30 sec chaque côté. 2 fois/jour.","j":"","pg":"Statique debout → statique DD → avec résistance élastique"},{"id":"genou_etirement_ij","r":"genou","ph":"mob","n":"Étirement ischio-jambiers","m":[],"t":"étirement","d":"Décubitus dorsal. Jambe atteinte tendue, soulever en maintenant le genou en extension. Ou position assise jambe tendue sur un appui.","p":"3 × 30 sec chaque côté. 1 fois/jour.","j":"","pg":"Décubitus dorsal passif → assis actif → debout"},{"id":"genou_etirement_bit","r":"genou","ph":"mob","n":"Étirement BIT (cross-body)","m":[],"t":"étirement","d":"Debout, appui sur un mur côté sain. Croiser le pied atteint derrière le sain. Incliner le tronc vers le côté sain en poussant la hanche atteinte vers l","p":"3 × 30 sec chaque côté. 2 fois/jour.","j":"","pg":"Statique simple → avec rotation tronc → foam roller face latérale cuisse"},{"id":"genou_foam_roller","r":"genou","ph":"mob","n":"Foam roller face latérale cuisse","m":["foam roller"],"t":"massage","d":"Décubitus latéral sur le foam roller, face latérale de la cuisse. Rouler lentement de la hanche vers le genou (arrêter 3 cm avant l","p":"2 min chaque côté. Avant les étirements. 5 fois/semaine.","j":"","pg":"Poids corporel partiel → poids total → avec jambe en flexion"},{"id":"genou_squat_mur","r":"genou","ph":"ren","n":"Squat isométrique au mur (0–60°)","m":[],"t":"renforcement","d":"Dos au mur, pieds à 30 cm, écartés largeur de bassin. Descendre lentement jusqu","p":"15 rép × 3 séries. Repos 90 sec.","j":"","pg":"40° → 60° → lestage cheville → squat libre → squat unipodale"},{"id":"genou_pont_fessier","r":"genou","ph":"ren","n":"Pont fessier bilatéral → unipodale","m":[],"t":"renforcement","d":"Décubitus dorsal, genoux à 90°, pieds à plat. Contracter les fessiers puis décoller le bassin jusqu","p":"12 rép × 3 séries. Descente en 3 sec. 2 fois/jour.","j":"","pg":"Bilatéral → unipodale → pied sur step → avec élastique"},{"id":"genou_declin_squat","r":"genou","ph":"ren","n":"Squat décliné unipodale","m":["step"],"t":"renforcement","d":"Appui monopodal sur plan incliné 25°. Descente lente en 3 sec jusqu","p":"3 × 15 rép chaque jambe. 2 fois/jour. EVA ≤3/10 acceptable pendant l","j":"","pg":""},{"id":"genou_vmo_renf","r":"genou","ph":"ren","n":"Mini-squat VMO (20–30°)","m":[],"t":"renforcement","d":"Debout, pied atteint en légère rotation externe (10–15°). Mini-squat à 20–30° de flexion. Descente lente 3 sec. Contrôler que le genou reste dans l","p":"3 × 15 rép. 2 fois/jour.","j":"","pg":"20° → 30° → 45° → lestage → step-up"},{"id":"genou_step_down","r":"genou","ph":"ren","n":"Step-down excentrique","m":["step"],"t":"renforcement","d":"Debout sur le step, appui monopodal côté atteint. Descendre lentement l","p":"3 × 12 rép chaque côté. Repos 90 sec.","j":"","pg":"Step 10 cm → 15 cm → 20 cm → avec lestage"},{"id":"genou_renf_fessier_moyen","r":"genou","ph":"ren","n":"Abduction hanche (moyen fessier)","m":[],"t":"renforcement","d":"Décubitus latéral, jambe inférieure légèrement fléchie, jambe supérieure tendue. Élever à 30–40°, pied en légère dorsiflexion. Descente lente 3 sec.","p":"3 × 15 rép chaque côté. 2 fois/jour.","j":"","pg":""},{"id":"genou_proprio_monopodal","r":"genou","ph":"ren","n":"Équilibre monopodal progressif","m":["plateau proprio","coussin instable"],"t":"proprioception","d":"Appui monopodal côté atteint. Phases : YO sol stable 30 sec → YF sol stable 20 sec → YO coussin proprio 30 sec → YF coussin 20 sec.","p":"3 × 30 sec chaque niveau. 2 fois/jour. Progression par palier uniquement si critère atteint.","j":"","pg":""},{"id":"genou_fente_laterale","r":"genou","ph":"ren","n":"Fente latérale (side lunge)","m":[],"t":"renforcement","d":"Debout, pieds écartés 2× largeur d","p":"3 × 10 rép chaque côté. Contrôle genou sur orteil.","j":"","pg":"Amplitude réduite → amplitude complète → lestage → dynamique"},{"id":"genou_escaliers","r":"genou","ph":"fon","n":"Montée/descente escaliers contrôlée","m":["step"],"t":"renforcement","d":"Montée pas à pas (pied fort d","p":"3 × 10 allers-retours. Progresser en vitesse et en suppression de la rampe.","j":"","pg":"Rampe → sans rampe → une marche sur deux → augmenter vitesse"},{"id":"genou_marche_progressive","r":"genou","ph":"fon","n":"Marche progressive chronométrée","m":[],"t":"aérobie","d":"Marche sur terrain plat. Démarrer 10 min. Augmenter de 5 min chaque semaine si EVA <3/10 après l","p":"Séances quotidiennes. Objectif 30 min continus en 4–6 semaines.","j":"","pg":"10 min → 20 min → 30 min → terrain varié → côtes"},{"id":"genou_course_progressive","r":"genou","ph":"fon","n":"Course à pied progressive","m":[],"t":"aérobie","d":"Alternance marche/course sur surface plane. Départ : 30 sec course / 90 sec marche × 10 répétitions.","p":"3 séances/semaine. Augmenter le ratio course/marche progressivement sur 6–8 semaines.","j":"","pg":""},{"id":"genou_single_hop","r":"genou","ph":"fon","n":"Single hop for distance (LSI)","m":[],"t":"pliométrie","d":"Appui monopodal, saut horizontal maximal, réception contrôlée sur le même pied. Maintenir l","p":"3 essais chaque côté. Mesurer la distance. Calculer LSI = (atteint/sain) × 100.","j":"","pg":"Sauts sur place → saut horizontal → triple hop → saut latéral croisé → carioca"},{"id":"genou_carioca","r":"genou","ph":"fon","n":"Carioca (pas chassés croisés)","m":[],"t":"pliométrie","d":"Déplacement latéral en croisant les pieds (devant puis derrière). Regard vers l","p":"3 × 10 m aller-retour. Départ lent → vitesse progressive.","j":"","pg":"Lent → modéré → rapide → changement de direction → avec ballon"},{"id":"hanche_cryo","r":"hanche","ph":"ant","n":"Cryothérapie locale","m":["glace"],"t":"antalgique","d":"Glace enveloppée dans un tissu (jamais directement sur la peau) appliquée sur la zone douloureuse. Décubitus confortable.","p":"15–20 min × 3–4 fois/jour en phase aiguë. Après chaque séance de kiné.","j":"EVA élevée → la cryothérapie réduit l’inflammation locale et l’hyperalgésie périphérique.","pg":""},{"id":"hanche_tens","r":"hanche","ph":"ant","n":"TENS antalgique — Hanche","m":["TENS"],"t":"antalgique","d":"Électrodes placées autour de la zone douloureuse (inguinale ou trochantérienne). Fréquence 80–100 Hz mode continu.","p":"20–30 min par séance. 1 fois/jour en phase aiguë. Intensité : picotement sans contraction musculaire.","j":"EVA élevée → neurostimulation transcutanée : gate control + libération d’endogènes (niveau A).","pg":""},{"id":"hanche_thermotherapie","r":"hanche","ph":"ant","n":"Thermothérapie pré-mobilisation","m":["bouillotte"],"t":"mobilisation","d":"Bouillotte ou coussin chauffant sur la hanche 15 min avant la séance de mobilisation.","p":"15 min avant chaque séance. Ne pas utiliser en phase inflammatoire aiguë.","j":"Coxarthrose ou GTPS → la chaleur réduit la viscosité du liquide synovial et augmente l’extensibilité des tissus mous avant les exercices.","pg":""},{"id":"hanche_iso_abd","r":"hanche","ph":"ant","n":"Isométrie abducteurs (protocole King)","m":[],"t":"renforcement","d":"Décubitus dorsal, jambe tendue. Appuyer la face externe de la cheville contre le bord de table ou un mur. Contraction ABD isométrique maximale soutenue.","p":"5 × 45 secondes. Repos 2 min entre chaque. Quotidien, matin et soir.","j":"GTPS phase aiguë → antalgie immédiate (inhibition corticale) + charge tendineuse sans compression. Étape 1 obligatoire.","pg":"Isométrique → isotonique lent → excentrique → pliométrique"},{"id":"hanche_traction","r":"hanche","ph":"mob","n":"Traction axiale douce","m":[],"t":"mobilisation","d":"Décubitus dorsal. Le kiné saisit la cheville. Traction progressive et douce dans l’axe du membre inférieur. Maintien 5 secondes, relâchement progressif.","p":"10 tractions × 3 séries. 3 fois/semaine.","j":"Coxarthrose / FAI → décoaptation articulaire, réduction de la compression intra-articulaire, amélioration de la mobilité.","pg":"Statique → oscillatoire → mobilisation pendant la traction"},{"id":"hanche_flex_genou_poitrine","r":"hanche","ph":"mob","n":"Flexion genou-poitrine","m":[],"t":"mobilisation","d":"Décubitus dorsal. Ramener un genou vers la poitrine avec les deux mains. Maintenir 5 secondes. Revenir lentement. Altérner les deux côtés.","p":"10 répétitions × 3 séries. Matin et soir.","j":"Coxarthrose / FAI → gain progressif de flexion de hanche dans l’amplitude indolore, entretien de la mobilité articulaire.","pg":"Passif aidé → actif libre → avec résistance douce"},{"id":"hanche_mob_reri","r":"hanche","ph":"mob","n":"Mobilisation RE/RI en décharge","m":[],"t":"mobilisation","d":"Décubitus dorsal, hanche et genou fléchis à 90°. Oscillations lentes de RI et RE dans l’amplitude disponible. Progresser jusqu’à la résistance.","p":"3 × 10 oscillations lentes. 2 fois/jour.","j":"Limitation de la rotation interne (coxarthrose, FAI) → gain d’amplitude en décharge, sans compression articulaire.","pg":"Oscillatoire passif → actif aidé → actif libre → maintenu en fin d’amplitude"},{"id":"hanche_stretch_psoas","r":"hanche","ph":"mob","n":"Étirement psoas-iliaque (Thomas thérapeutique)","m":["table"],"t":"étirement","d":"Décubitus dorsal, fesses au bord de table. Ramener les deux genoux sur la poitrine pour effacer la lordose, puis laisser descendre lentement la jambe à étirer vers le sol. Maintenir.","p":"3 × 30 secondes chaque côté. 2 fois/jour.","j":"Rétraction psoas-iliaque → fréquente en coxarthrose et FAI, entretient le flexum de hanche et le conflit antérieur.","pg":"Passif en décharge → actif en décharge → debout en fente avant"},{"id":"hanche_stretch_ober","r":"hanche","ph":"mob","n":"Étirement bandelette ilio-tibiale (Ober)","m":[],"t":"étirement","d":"Décubitus latéral, côté sain au-dessus. Abduire et étendre la hanche supérieure, genou à 90°. Laisser descendre la jambe par gravité en adduction. Maintenir.","p":"3 × 30 secondes. 2 fois/jour.","j":"GTPS / douleur latérale → rétraction BIT comprime la région trochantérienne. L’étirement réduit cette compression.","pg":"Passif par gravité → actif aidé → avec lest"},{"id":"hanche_stretch_piri","r":"hanche","ph":"mob","n":"Étirement piriforme — décubitus","m":[],"t":"étirement","d":"Décubitus dorsal. Croiser la jambe symptomatique (cheville sur genou opposé). Attirer le genou sain vers la poitrine avec les deux mains. Maintenir.","p":"3 × 30 secondes chaque côté. 2 fois/jour.","j":"Syndrome du piriforme → relâchement musculaire progressif, réduction de la compression du nerf sciatique.","pg":"Passif → actif → PNF contracté-relâché"},{"id":"hanche_auto_traction","r":"hanche","ph":"mob","n":"Auto-traction en suspension","m":["barre"],"t":"mobilisation","d":"Suspendu à une barre fixe (barre de traction), jambes fléchies. Le poids du corps décoaptate les hanches doucement. Ne pas se laisser tomber brutalement.","p":"3 × 20–30 secondes. 2 fois/jour.","j":"Coxarthrose avancée / raideur importante → décoaptation passive par le poids du corps, gain d’amplitude global.","pg":"Suspension statique → oscillations douces → rotations en suspension"},{"id":"hanche_iso_gf","r":"hanche","ph":"ren","n":"Isométrie grand fessier (phase aiguë / post-op)","m":[],"t":"renforcement","d":"Décubitus dorsal, jambes tendues. Contracter les deux fessiers simultanément fort et maintenir. Relâcher progressivement.","p":"3 × 20 contractions de 5 secondes. Quotidien dès J1 post-op.","j":"Post-op PTH ou phase aiguë → activation précoce du grand fessier sans mouvement. Prévention de l’amyotrophie dès J1.","pg":"Isométrique → pont bilatéral → pont unilatéral"},{"id":"hanche_clam","r":"hanche","ph":"ren","n":"Clam — Abducteurs / Rotateurs externes","m":["élastique"],"t":"renforcement","d":"Décubitus latéral, hanches à 60°, genoux fléchis. Ouvrir le genou du dessus (coquille) en gardant les pieds joints. Phase retour contrôlée 3 secondes.","p":"3 × 15 répétitions chaque côté. 4 fois/semaine.","j":"Exercice fondamental du moyen fessier et des rotateurs externes en décharge. Preuve niveau A pour GTPS et FAI.","pg":"Sans résistance → élastique léger → fort → tempo excentrique 3 s"},{"id":"hanche_clam_avance","r":"hanche","ph":"ren","n":"Coquille debout (clam avancé)","m":["élastique"],"t":"renforcement","d":"Debout, légèrement fléchi, élastique autour des genoux. Abduire et roter en externe la jambe testée sans incliner le bassin. Maintenir 2 secondes.","p":"3 × 12 répétitions chaque côté. 4 fois/semaine.","j":"Progression du clam → recrutement du moyen fessier en position fonctionnelle debout contre gravité.","pg":"Debout statique → avec charge → surface instable"},{"id":"hanche_pont","r":"hanche","ph":"ren","n":"Pont fessier bilatéral","m":[],"t":"renforcement","d":"Décubitus dorsal, genoux fléchis à 90°, pieds à plat. Pousser sur les pieds pour soulever le bassin en alignement épaules-hanches-genoux. Maintenir 2 secondes en haut.","p":"3 × 12 répétitions. 4 fois/semaine.","j":"Grand fessier + ischio-jambiers en chaîne fermée. Exercice de référence pour le renforcement de l’extenseur de hanche.","pg":"Bilatéral → unilatéral → surface instable → avec élastique aux genoux"},{"id":"hanche_pont_unilateral","r":"hanche","ph":"ren","n":"Pont fessier unilatéral","m":[],"t":"renforcement","d":"Décubitus dorsal, un pied à plat, l’autre jambe tendue en l’air. Monter le bassin sur un seul pied. Maintenir le bassin horizontal.","p":"3 × 10 répétitions chaque côté. 3 fois/semaine.","j":"Progression du pont bilatéral → double la charge sur le grand fessier et recrute les stabilisateurs du bassin.","pg":"Unilatéral simple → pied sur surface élevée → avec poids → instable"},{"id":"hanche_hip_thrust","r":"hanche","ph":"ren","n":"Hip Thrust — Grand fessier charge","m":["barre"],"t":"renforcement","d":"Dos appuyé contre un banc (omoplate au bord), barre ou poids sur les hanches protégés par un coussin, pieds à plat. Pousser les hanches vers le haut jusqu’à l’horizontale. Maintenir 1 seconde.","p":"3 × 10–12 répétitions. 2–3 fois/semaine.","j":"Grand fessier → exercice roi de l’extension de hanche. Charge maximale en chaîne fermée. Preuve niveau A pour renforcement fessier.","pg":"Corps seul → avec poids → unilatéral → pause isométrique en haut"},{"id":"hanche_excentrique","r":"hanche","ph":"ren","n":"Excentrique abducteurs (protocole Alfredson adapté)","m":[],"t":"renforcement","d":"Décubitus latéral. Soulever la jambe en ABD (concentrique rapide). Redescendre très lentement en 3–4 secondes (phase excentrique). Contrôler le mouvement.","p":"3 × 15 répétitions. Progression sur 8 semaines.","j":"Protocole de charge tendineuse progressive → remodele le tendon du moyen fessier. Preuve niveau B pour GTPS.","pg":"Décubitus latéral → debout avec poids → machine abducteurs"},{"id":"hanche_abd_debout","r":"hanche","ph":"ren","n":"Abduction debout avec élastique","m":["élastique"],"t":"renforcement","d":"Debout, élastique autour des chevilles. Écarter la jambe en ABD pure sans incliner le bassin. Maintenir 2 secondes. Revenir contrôlé.","p":"3 × 15 répétitions chaque jambe. 4 fois/semaine.","j":"Moyen fessier en position fonctionnelle debout avec charge. Phase 3 GTPS, FAI, coxarthrose.","pg":"Élastique léger → fort → avec poids à la cheville → machine"},{"id":"hanche_re_elastique","r":"hanche","ph":"ren","n":"Rotateurs externes debout élastique","m":["élastique"],"t":"renforcement","d":"Debout, genou fléchi à 90°, élastique autour de la cheville. Rotation externe de la jambe contre l’élastique. Maintenir 2 secondes. Revenir lentement.","p":"3 × 12 répétitions chaque côté. 3 fois/semaine.","j":"Pelvi-trochantériens (piriforme, jumeaux, obturateurs) → équilibre rotateurs. Déficit de RE fréquent en coxarthrose et FAI.","pg":"Élastique léger → fort → début de course → fin de course"},{"id":"hanche_psoas_decharge","r":"hanche","ph":"ren","n":"Renforcement psoas en décharge (45°)","m":[],"t":"renforcement","d":"Décubitus dorsal. Flexion active hanche à 45° (genou fléchi), maintenir 5 secondes, relâcher lentement. Ne pas dépasser 60° si FAI.","p":"3 × 12 répétitions. 3 fois/semaine.","j":"Déficit des fléchisseurs de hanche fréquent en FAI et post-op → rééducation du psoas sans compression du labrum.","pg":"Isolé en décharge → avec poids à la cheville → machine"},{"id":"hanche_adducteurs","r":"hanche","ph":"ren","n":"Renforcement adducteurs (ballon ou élastique)","m":["swiss ball"],"t":"renforcement","d":"Décubitus dorsal ou assis. Ballon entre les genoux. Compression isométrique maximale maintenue 5 secondes. Ou élastique en ADD contrôlée.","p":"3 × 15 contractions. 3 fois/semaine.","j":"Déséquilibre ABD/ADD fréquent → les adducteurs stabilisent la tête fémorale et participent au contrôle frontal en FAI.","pg":"Isométrique → isotonique en décharge → debout avec élastique"},{"id":"hanche_dead_bug","r":"hanche","ph":"ren","n":"Dead Bug — Stabilisation lombo-pelvienne","m":[],"t":"renforcement","d":"Décubitus dorsal. Hanches et genoux à 90° en l’air. Étendre alternativement un bras et la jambe opposée en maintenant le dos plat. Revenir contrôlé.","p":"3 × 8 répétitions chaque côté. 3 fois/semaine.","j":"Insuffisance des coapteurs → le dead bug recrute le transverse, le psoas et le grand fessier simultanément. Fondamental en FAI.","pg":"Bras seul → jambe seule → bras + jambe opposée → avec résistance"},{"id":"hanche_step_lateral_ela","r":"hanche","ph":"ren","n":"Step latéral avec élastique","m":["élastique"],"t":"renforcement","d":"Debout, élastique autour des chevilles. Pas latéraux contrôlés, genoux légèrement fléchis. Maintenir la tension élastique à chaque pas.","p":"3 × 10 mètres aller-retour. 3 fois/semaine.","j":"Moyen fessier fonctionnel en plan frontal → contrôle du valgus dynamique, stabilité latérale hanche.","pg":"Élastique léger → fort → en déclive → avec charges"},{"id":"hanche_squat_mono","r":"hanche","ph":"ren","n":"Squat monopodal progressif","m":[],"t":"renforcement","d":"Debout sur un pied. Fléchir le genou à 30–40°. Contrôler le bassin (pas d’affaissement). Revenir lentement.","p":"3 × 10 répétitions chaque jambe. 3 fois/semaine.","j":"Chaîne fermée complète → recrute simultanément grand fessier, moyen fessier et quadriceps. Exercice fonctionnel de référence.","pg":"Squat partiel → complet → avec charge → surface instable → yeux fermés"},{"id":"hanche_fente","r":"hanche","ph":"ren","n":"Fente avant contrôlée","m":[],"t":"renforcement","d":"Debout. Grand pas en avant, descendre le genou arrière vers le sol sans toucher. Genou avant aligné sur le pied. Remonter en poussant sur le pied avant.","p":"3 × 10 répétitions chaque jambe. 3 fois/semaine.","j":"Chaîne complète unilatérale → grand fessier + quadriceps + psoas en allongement. Préparation fonctionnelle à la marche et aux escaliers.","pg":"Fente statique → marchée → avec haltères → lestée"},{"id":"hanche_leg_press","r":"hanche","ph":"ren","n":"Leg Press — Chaîne fermée avec charge","m":[],"t":"renforcement","d":"Machine leg press, pieds à hauteur des hanches. Fléchir jusqu’à 90° (ou limite de confort). Pousser en extension complète sans verrouiller les genoux.","p":"3 × 12 répétitions. 2–3 fois/semaine.","j":"Coxarthrose / GTPS / FAI → renforcement quadriceps + grand fessier avec charge maîtrisée. Alternative au squat si douleur à la mise en charge libre.","pg":"Charge légère bilatéral → bilatéral lesté → unilatéral"},{"id":"hanche_escaliers","r":"hanche","ph":"fon","n":"Escaliers thérapeutiques","m":["step"],"t":"renforcement","d":"Monter une marche à la fois (jambe forte en premier pour la montée). Descendre lentement en contrôlant l’excentrique. Observer le contrôle du bassin.","p":"3 × 10 montées/descentes. 3 fois/semaine.","j":"Montée/descente → recrutement grand fessier + contrôle Trendelenburg. Équivalent fonctionnel du squat monopodal, indispensable pour le retour domicile.","pg":"Avec rampe → sans rampe → pas altérnés → avec charge"},{"id":"hanche_proprio","r":"hanche","ph":"fon","n":"Proprioception monopodal","m":["coussin instable"],"t":"proprioception","d":"Appui monopodal sur mousse ou coussin instable. Maintenir l’équilibre 30 secondes. Progresser avec yeux fermés ou mouvements de bras.","p":"3 × 30 secondes chaque jambe. Quotidien.","j":"Déficit proprioceptif fréquent en coxarthrose et post-PTH → rééducation de l’équilibre et du contrôle neuromusculaire.","pg":"Surface stable → mousse → plateau instable → yeux fermés → avec mouvements"},{"id":"hanche_velo","r":"hanche","ph":"fon","n":"Vélo en selle haute (sport porté)","m":["vélo"],"t":"aérobie","d":"Selle réglée haute (genou presque tendu en bas du pédalage). Rythme confortable, résistance faible initialement. Augmenter progressivement.","p":"3×/semaine. Débuter 15–20 min. +5 min/semaine jusqu’à 45 min.","j":"Coxarthrose → sport porté idéal : entretient la mobilité en flexion, cardiovasculaire, sans compression axiale douloureuse.","pg":"Vélo stationnaire → vélo extérieur plat → côtes légères"},{"id":"hanche_aquagym","r":"hanche","ph":"fon","n":"Aquagym / Natation","m":[],"t":"aérobie","d":"Marche dans l’eau, mouvements de hanche (ABD, flexion, RE). Natation dos ou crawl. Brasse déconseillée si FAI (trop de flexion-ABD-RE forcée).","p":"2–3 fois/semaine. 30–45 min de session.","j":"Coxarthrose → l’eau réduit le poids apparent de 80%. Mobilisation complète sans compression articulaire douloureuse.","pg":"Marche dans eau → exercices debout → natation → aquabike"},{"id":"hanche_nordic","r":"hanche","ph":"fon","n":"Marche nordique","m":[],"t":"aérobie","d":"Bâtons nordic walking (longueur = 68% de la taille). Rythme confortable. Démarrer terrain plat, augmenter progressivement la distance.","p":"3×/semaine. Débuter 20 min. +10 min/semaine.","j":"Coxarthrose → les bâtons réduisent la mise en charge sur la hanche de 25%. Maintient l’activité physique sans aggraver.","pg":"Terrain plat → vallonné → durée croissante"},{"id":"hanche_retour_sport","r":"hanche","ph":"fon","n":"Protocole retour au sport — 4 étapes","m":[],"t":"retour sport","d":"Étape 1 (50%) : marche rapide, vélo. Étape 2 (75%) : jogging léger, natation. Étape 3 (90%) : course, changements de direction lents. Étape 4 (100%) : sport complet avec contact.","p":"2 semaines par étape minimum. Passage si EVA ≤2 pendant et après l’effort.","j":"FAI / pathologie sportive → reprise progressive et structurée pour éviter les rechutes. Indispensable pour les sportifs.","pg":"Étape 1 → 2 → 3 → 4"},{"id":"cervical_r_traction_cervicale___ch","r":"cervical","ph":"ant","n":"Rétraction cervicale — Chin Tuck","m":[],"t":"antalgique","d":"Assis, dos droit. Rentrer le menton sans fléchir la tête : glissement horizontal postérieur pur. Tenir 5 sec, relâcher. Sensation de « double menton ».","p":"3 \\u00d7 10 rép. — 2\\u00d7/jour","j":"Correction de la translation antérieure de tête. Mobilise C5-C7 en décompression. Geste de base du protocole McKenzie cervical — indiqué dès la phase aiguë.","pg":""},{"id":"cervical_mobilisations_actives_cer","r":"cervical","ph":"ant","n":"Mobilisations actives cervicales en amplitude libre","m":[],"t":"mobilisation","d":"Flexion, extension, rotations G/D, inclinaisons G/D. Amplitude indolore uniquement. Vitesse lente, contrôlée. Arrêt si douleur irradiante.","p":"5 mouvements \\u00d7 10 rép. — 2\\u00d7/jour","j":"Maintien des amplitudes articulaires et réduction de la raideur réflexe. Evidence grade A pour la mobilisation précoce (Blanpied 2017 — CPG Cervical).","pg":""},{"id":"cervical_automobilisation_en_distr","r":"cervical","ph":"ant","n":"Automobilisation en distraction axiale","m":[],"t":"mobilisation","d":"Assis, mains croisées sur le sommet du crâne. Pousser doucement vers le haut, nuque décontractée. Tenir 30 sec. Si soulagement irradiation : poursuivre.","p":"3 \\u00d7 30 sec — 2\\u00d7/jour","j":"Reproduit l\\u2019effet antalgique du test de distraction (Wainner 2003). Réduit la pression intra-discale et foraminale. Prioritaire si Wainner \\u22653/4.","pg":""},{"id":"cervical_direction_pr_f_rentielle_","r":"cervical","ph":"ant","n":"Direction préférentielle en extension (si centralisation)","m":[],"t":"antalgique","d":"Extension cervicale douce depuis le chin tuck. Si la douleur se centralise (irradiation diminue), continuer la direction. Si aggravation, stopper immédiatement.","p":"3 \\u00d7 10 rép. — 3\\u00d7/jour","j":"Centralisation = facteur pronostique favorable (McKenzie — Donelson 2012). La centralisation en extension est le pattern le plus fréquent en cervicalgie discogène.","pg":""},{"id":"cervical_thermoth_rapie___cryoth_r","r":"cervical","ph":"ant","n":"Thermothérapie / cryothérapie cervicale","m":[],"t":"antalgique","d":"Chaleur humide sur nuque et trapèzes si douleur chronique/raideur. Froid si phase aiguë inflammatoire ou post-traumatique. Jamais directement sur la peau.","p":"15-20 min — selon tolérance","j":"Chaleur : réduction du spasme musculaire et amélioration de l\\u2019extensibilité. Froid : réduction de l\\u2019inflammation locale. Adjuvant, non suffisant seul.","pg":""},{"id":"cervical__ducation_post_traumatiqu","r":"cervical","ph":"ant","n":"Éducation post-traumatique (WAD)","m":[],"t":"éducation","d":"Expliquer le pronostic favorable du WAD I-II (85% récupération). Dédramatiser. Encourager la mobilisation précoce. Décourager le port prolongé de minerve.","p":"1 session de 20 min + fiche écrite","j":"Le modèle biopsychosocial est central dans le WAD. La peur-évitement est le principal facteur de chronicisation (Sterling 2010). L\\u2019éducation réduit ce risque.","pg":""},{"id":"cervical_craniocervical_flexion_te","r":"cervical","ph":"mob","n":"Craniocervical Flexion Test — activation DNF","m":["coussin instable"],"t":"mobilisation","d":"Décubitus dorsal, nuque sur rouleau souple (ou biofeedback 22 mmHg). Progresser de 22 à 30 mmHg par paliers de 2 mmHg. Tenir 10 sec. NE PAS activer SCM ni scalènes (palpation de contrôle).","p":"5 niveaux \\u00d7 10 rép. — Jull 2008","j":"Jull 2008 : les fléchisseurs profonds cervicaux sont systématiquement déficitaires dans toutes les cervicalgies chroniques. Activation sélective = prérequis à tout renforcement.","pg":""},{"id":"cervical_renforcement_isom_trique_","r":"cervical","ph":"mob","n":"Renforcement isométrique cervical multidirectionnel","m":[],"t":"renforcement","d":"Assis, position neutre. Main sur front : résistance à la flexion. Main sur occiput : extension. Mains sur tempes : inclinaisons. Pousser contre résistance fixe (pas de mouvement). Intensité sous-maximale.","p":"6 directions \\u00d7 10 sec \\u00d7 5 rép. — 3\\u00d7/semaine","j":"Renforcement sans contrainte articulaire dynamique. Adapté dès la phase subaiguë. Améliore l\\u2019endurance cervicale — facteur protecteur démontré (O\\u2019Leary 2007).","pg":""},{"id":"cervical_renforcement_scapulaire__","r":"cervical","ph":"mob","n":"Renforcement scapulaire — Prone Y et Prone T","m":[],"t":"renforcement","d":"Décubitus ventral sur table, bras le long du corps. Prone Y : bras en élévation à 135° (Y), pouces vers le haut. Prone T : bras en abduction à 90° (T). Rétraction scapulaire avant le mouvement.","p":"3 \\u00d7 15 rép. — 3\\u00d7/semaine","j":"La faiblesse du trapèze inférieur et du serratus augmente la charge sur les muscles cervicaux superficiels. Lien biomécanique cervico-scapulaire démontré (Cools 2014).","pg":""},{"id":"cervical_exercices_de_stabilisatio","r":"cervical","ph":"mob","n":"Exercices de stabilisation du regard — VOR","m":[],"t":"mobilisation","d":"Fixer une cible à 1 m. Bouger la tête en rotation puis flexion-extension, la cible restant parfaitement nette. Progresser en vitesse (lent → rapide). Variante : cible en mouvement.","p":"3 \\u00d7 1 min — 2\\u00d7/jour","j":"Réentraîne le réflexe vestibulo-oculaire et la coordination oculo-cervicale. Indiqué en WAD, vertiges cervicogènes, et cervicalgie chronique (Treleaven 2011).","pg":""},{"id":"cervical_proprioception_cervicale_","r":"cervical","ph":"mob","n":"Proprioception cervicale — retour à la position neutre","m":[],"t":"proprioception","d":"Yeux fermés. Mémoriser la position neutre (marque frontale au laser ou simple ressenti). Bouger dans différentes directions, revenir exactement à la position initiale. Évaluer l\\u2019erreur.","p":"3 séries \\u00d7 10 rép. — 2\\u00d7/jour","j":"Rééduque le schéma de repositionnement cervical (Joint Position Error). Déficit démontré dans toutes les cervicalgies chroniques (Revel 1994 — Treleaven 2006).","pg":""},{"id":"cervical_neurodynamique___ultt_a_p","r":"cervical","ph":"mob","n":"Neurodynamique — ULTT A progressif","m":[],"t":"neurodynamique","d":"Décubitus. Dépression scapulaire + abduction épaule 90° + supination + extension coude + extension poignet + inclinaison cervicale controlatérale. Mobilisation oscillatoire douce en fin de course indolore. NE PAS dépasser le seuil P1.","p":"3 \\u00d7 10 rép. — 2\\u00d7/semaine","j":"Mobilisation du nerf médian et des racines C6-C7. Réduit la sensibilisation centrale et la mécano-sensibilité nerveuse (Nee 2012). Uniquement si Wainner positif sans déficit moteur sévère.","pg":""},{"id":"cervical_mobilisations_passives_th","r":"cervical","ph":"mob","n":"Mobilisations passives thoraciques (manipulation/SNAG)","m":[],"t":"mobilisation","d":"Mobilisation en flexion/extension des segments T1-T4 (technique de choix du thérapeute : PPIVMS, thrust doux, SNAG selon Mulligan). Réévaluation immédiate de la rotation cervicale.","p":"3-5 séries — en séance","j":"La mobilisation thoracique améliore significativement les ROM cervicaux et réduit la douleur — CPG Cervical (Cleland 2007 — Blanpied 2017). Effet immédiat mesurable.","pg":""},{"id":"cervical_renforcement_cervical_en_","r":"cervical","ph":"ren","n":"Renforcement cervical en chaîne cinétique — exercices cervicaux progressifs","m":["élastique"],"t":"renforcement","d":"Partir de la position isométrique (phase 2), progresser vers des mouvements contre résistance élastique (Theraband). Flexion, extension, rotations. Amplitude complète indolore. Augmenter la résistance toutes les 2 semaines.","p":"3 \\u00d7 12 rép. — 3\\u00d7/semaine","j":"La progression de la charge est le stimulus principal de l\\u2019hypertrophie et de l\\u2019endurance musculaire. Reduce les récidives à long terme (Griffiths 2009).","pg":""},{"id":"cervical_gainage_cervico_thoraciqu","r":"cervical","ph":"ren","n":"Gainage cervico-thoracique — Planche et variantes","m":[],"t":"renforcement","d":"Planche avant sur les coudes, maintien de la position neutre rachidienne. Progresser : planche latérale, bird-dog (quadrupédie bras/jambe opposés), superman. Nuque en position neutre (ni en flexion ni en hyperextension).","p":"3 \\u00d7 30-60 sec — 3\\u00d7/semaine","j":"Renforcement global de la chaîne postérieure sans contrainte cervicale spécifique. Réduit la charge répétitive sur les segments cervicaux (O\\u2019Leary 2007).","pg":""},{"id":"cervical_exercices_de_r_sistance_a","r":"cervical","ph":"ren","n":"Exercices de résistance aérobie — marche nordique ou vélo","m":[],"t":"aérobie","d":"Marche nordique (bâtons) : maintien postural naturel, décharge relative du rachis cervical. Ou vélo stationnaire en position droite (pas de vélo courbé). Intensité modérée (conversation possible).","p":"30 min — 3\\u00d7/semaine","j":"L\\u2019activité aérobie modérée est un antalgique central démontré (Naugle 2012). Réduit la sensibilisation centrale dans les douleurs cervicales chroniques. Recommandé en first-line (Blanpied 2017).","pg":""},{"id":"cervical_renforcement_des_r_tracte","r":"cervical","ph":"ren","n":"Renforcement des rétracteurs de nuque — capital extensors","m":[],"t":"renforcement","d":"Décubitus dorsal, genoux fléchis. Chin tuck puis appui de la nuque sur la table (rétraction + légère extension haute). Tenir 10 sec. Progresser avec une légère élévation de la tête (lift). Ne pas décoller complètement la tête.","p":"3 \\u00d7 15 rép. — 3\\u00d7/semaine","j":"Contre-programme à la posture en flexion antérieure chronique. Renforce les extenseurs occipitaux et les muscles sous-occipitaux. Spécifique au travailleur sur écran (Côté 2009).","pg":""},{"id":"cervical_coordination_cervico_scap","r":"cervical","ph":"ren","n":"Coordination cervico-scapulaire — W exercise","m":[],"t":"renforcement","d":"Debout, dos contre mur. Coudes à 90°, avant-bras verticaux, poignets plaqués au mur. Faire glisser les bras vers le haut (W → Y). Maintenir la nuque neutre et les omoplates rétractées. Sans décoller lombaires ni nuque.","p":"3 \\u00d7 15 rép. — 3\\u00d7/semaine","j":"Active simultanément les rotateurs externes d\\u2019épaule, le trapèze moyen/inférieur et les stabilisateurs cervicaux profonds. Exercice d\\u2019intégration cervico-scapulaire (Cagnie 2014).","pg":""},{"id":"cervical__ducation_ergonomique_au_","r":"cervical","ph":"fon","n":"Éducation ergonomique au poste de travail","m":[],"t":"éducation","d":"Réglage écran : hauteur des yeux au tiers supérieur de l\\u2019écran, distance bras tendu. Siège : pieds à plat, hanches à 90°, lombaires soutenus. Micro-pauses actives toutes les 45 min (chin tuck + rotations).","p":"1 session de 30 min + fiche écrite","j":"Le travail sur écran est le principal facteur de risque de cervicalgie professionnelle (Côté 2009). L\\u2019ergonomie réduit l\\u2019incidence et les récidives.","pg":""},{"id":"cervical_gestion_du_stress_et_rela","r":"cervical","ph":"fon","n":"Gestion du stress et relaxation musculaire progressive","m":[],"t":"éducation","d":"Relaxation de Jacobson : contracter/relâcher groupes musculaires progressivement (pieds → nuque). Ou cohérence cardiaque 5 min 3\\u00d7/jour. Intégrer dans la routine quotidienne.","p":"15 min/jour","j":"Les facteurs psychosociaux (catastrophisme, kinésiophobie) sont les principaux prédicteurs de chronicisation cervicale (Linton 2000). La relaxation réduit le tonus sympathique et la tension musculaire","pg":""},{"id":"cervical_programme_de_maintien___d","r":"cervical","ph":"fon","n":"Programme de maintien à domicile — autonomisation","m":[],"t":"éducation","d":"Routine quotidienne : chin tuck 2\\u00d7/jour (2 min), mobilisations actives 5 directions (3 min), VOR 2 min, renforcement isométrique 3 min. Fiche patient illustrée remise.","p":"10-15 min/jour — à vie","j":"L\\u2019autonomisation est le facteur pronostique le plus robuste dans la cervicalgie chronique. Les patients qui maintiennent un programme domicile ont 60% moins de récidives à 1 an (Griffiths 2009).","pg":""},{"id":"cervical_attention___my_lopathie_s","r":"cervical","ph":"fon","n":"ATTENTION — Myélopathie suspectée","m":[],"t":"éducation","d":"En cas de myélopathie confirmée : éviter toute manipulation cervicale, éviter les exercices en extension forcée, prioriser la stabilisation douce et l\\u2019éducation. Orienter neurochirurgie si signes de compression médullaire.","p":"Avis neurologique avant tout renforcement intensif","j":"La myélopathie cervicale est une contre-indication relative au renforcement cervical intensif. La kinésithérapie reste indiquée pour le maintien fonctionnel et la prévention des chutes.","pg":""},{"id":"poignet_cryoth_u00e9rapie_locale","r":"poignet","ph":"ant","n":"Cryoth\\u00e9rapie locale","m":[],"t":"antalgique","d":"Application de glace envelopp\\u00e9e dans un linge humide sur la zone douloureuse. Protection cutan\\u00e9e obligatoire. Coude ou poignet en position de confort.","p":"15 min \\u00d7 3-4/jour","j":"R\\u00e9duction de la r\\u00e9action inflammatoire locale et de l\\u2019\\u0153d\\u00e8me. Indiqu\\u00e9 en phase aigu\\u00eb et post-traumatique.","pg":""},{"id":"poignet_orth_se_nocturne_poignet_","r":"poignet","ph":"ant","n":"Orthèse nocturne poignet neutre (SCC)","m":[],"t":"antalgique","d":"Orthèse thermoformée maintenant le poignet en position neutre (0-10° extension). Port nocturne systématique. Éviter la position en flexion/extension extrême.","p":"Chaque nuit — 4 à 12 semaines","j":"Réduit la pression intra-canalaire et prévient la compression nocturne du nerf médian. Traitement conservateur de référence SCC (Gelberman 1988 — CPG AAOS 2016). MCID PRWE : 14 pts.","pg":""},{"id":"poignet_mobilisations_de_glisse_d","r":"poignet","ph":"ant","n":"Mobilisations de glisse du nerf médian","m":[],"t":"neurodynamique","d":"Assis. Position 1 : coude fléchi, poignet neutre, doigts fléchis. Position 2 : coude en extension progressive + extension poignet + doigts. Mouvement lent et oscillatoire. Arrêt si paresthésies intenses.","p":"10 rép. \\u00d7 2 — 2\\u00d7/jour","j":"Améliore la mobilité du nerf médian dans le canal carpien. Réduit l\\u2019adhérence périneurale et la sensibilisation (Tal-Akabi 2000). À distinguer de la tension nerveuse franche.","pg":""},{"id":"poignet_orth_se_pouce___immobilis","r":"poignet","ph":"ant","n":"Orthèse pouce — immobilisation 1er compartiment","m":[],"t":"mobilisation","d":"Orthèse courte immobilisant le pouce (CMC et MCP), poignet libre. Porter en continu sauf hygiène. Éviter les mouvements d\\u2019abduction-extension du pouce contre résistance.","p":"3 à 6 semaines — en continu","j":"Repos relatif du 1er compartiment extensorien (APL et EPB). Traitement conservateur de première intention — taux de succès 50-80% si < 6 mois d\\u2019évolution (De Quervain 1895 — Ilyas 2007).","pg":""},{"id":"poignet_cryoth_rapie_stylo_de_rad","r":"poignet","ph":"ant","n":"Cryothérapie styloïde radiale","m":[],"t":"antalgique","d":"Glace sur la styloïde radiale après les activités. Massage froid avec glaçon (1 min). Protection cutanée.","p":"15 min \\u00d7 3/jour","j":"Réduction de la ténosynovite. Antalgie locale complémentaire à l\\u2019immobilisation.","pg":""},{"id":"poignet_orth_se_radio_ulnaire_dis","r":"poignet","ph":"ant","n":"Orthèse radio-ulnaire distale — TFCC","m":[],"t":"antalgique","d":"Orthèse courte stabilisant l\\u2019articulation radio-ulnaire distale, poignet en légère déviation radiale. Autoriser la flexion-extension modérée. Éviter les mouvements de prono-supination en charge.","p":"4 à 8 semaines selon gravité","j":"Stabilisation de la RUD et protection du TFCC en phase aiguë. Nécessaire avant tout renforcement (Lindau 2000). Réévaluation à 4-6 semaines.","pg":""},{"id":"poignet_urgence___fracture_du_sca","r":"poignet","ph":"ant","n":"URGENCE — Fracture du scaphoïde : protocole immobilisation","m":[],"t":"mobilisation","d":"Immobiliser en attelle plâtrée ou résine pouce-avant-bras. Orientation aux urgences pour radio (incidence scaphoïdienne) ou IRM si radio négative. NE PAS mobiliser sans confirmation radiologique.","p":"Immédiatement — orientation médicale","j":"La fracture du scaphoïde est sous-diagnostiquée aux urgences (20-30% des radios négatives). IRM = gold standard précoce. Retard de diagnostic = pseudarthrose (Grover 1996).","pg":""},{"id":"poignet_mobilisations_actives_poi","r":"poignet","ph":"mob","n":"Mobilisations actives poignet en amplitude libre","m":[],"t":"mobilisation","d":"Flexion, extension, déviation radiale, déviation ulnaire, circumduction. Amplitude indolore. Coude en appui. Lent et contrôlé. Arrêt si douleur > EVA 3/10.","p":"5 mouvements \\u00d7 10 rép. — 2\\u00d7/jour","j":"Maintien des amplitudes articulaires et prévention de la raideur post-immobilisation. Mobilisation précoce = meilleur pronostic fonctionnel (PRWE).","pg":""},{"id":"poignet_prono_supination_active_p","r":"poignet","ph":"mob","n":"Prono-supination active progressive","m":[],"t":"mobilisation","d":"Assis, coude fléchi à 90° contre le corps, avant-bras en appui. Rotation paume-ciel puis paume-sol. Amplitude complète indolore. Progresser vers résistance légère (marteau, cuillère).","p":"3 \\u00d7 15 rép. — 2\\u00d7/jour","j":"Récupération de la prono-supination — fonction clé du membre supérieur. Déficit > 30° impacte significativement les AVQ (DASH).","pg":""},{"id":"poignet_exercices_de_tendon_glidi","r":"poignet","ph":"mob","n":"Exercices de tendon gliding (SCC)","m":[],"t":"mobilisation","d":"5 positions progressives : main droite → crochet (PIP fléchis) → poing plat (MCP fléchis) → poing fermé → poing serré. Chaque position tenue 5 sec. Doux et lent.","p":"5 positions \\u00d7 10 rép. — 3\\u00d7/jour","j":"Favorise la glisse différentielle des tendons fléchisseurs dans le canal carpien, réduisant la pression sur le nerf médian (Totten 1994). Complète la neurodynamique.","pg":""},{"id":"poignet__tirement_progressif_1er_","r":"poignet","ph":"mob","n":"Étirement progressif 1er compartiment","m":[],"t":"étirement","d":"Poignet en déviation ulnaire douce + flexion du pouce dans la paume (comme Eichhoff mais passif et doux). Tension sans douleur aiguë. Uniquement après régression de la phase inflammatoire.","p":"3 \\u00d7 30 sec — 2\\u00d7/jour (phase subaiguë)","j":"Améliore l\\u2019extensibilité tendineuse du 1er compartiment et réduit la tension au repos. À débuter uniquement après 3-4 semaines d\\u2019immobilisation et régression de la douleur.","pg":""},{"id":"poignet_mobilisations_radio_ulnai","r":"poignet","ph":"mob","n":"Mobilisations radio-ulnaires distales — glissement dorsal/palmaire","m":[],"t":"mobilisation","d":"Patient assis, avant-bras fixé. Mobilisation passive de la tête ulnaire en glissement dorsal puis palmaire (technique de choix du thérapeute). Amplitude progressivement augmentée. Ne pas dépasser EVA 3/10.","p":"3 \\u00d7 10 rép. — en séance","j":"Récupération de la mobilité radio-ulnaire distale après lésion TFCC. Précède tout travail en charge.","pg":""},{"id":"poignet_mobilisations_trap_zo_m_t","r":"poignet","ph":"mob","n":"Mobilisations trapézo-métacarpiennes en traction","m":[],"t":"mobilisation","d":"Traction axiale douce du 1er métacarpien dans l\\u2019axe, pouce en légère abduction. Tenir 30 sec. Glissements latéraux en fin de traction. Effet antalgique recherché.","p":"3 \\u00d7 10 rép. — en séance","j":"La traction articulaire réduit la compression et améliore la nutrition du cartilage. Complément à la prise en charge conservatrice de la rhizarthrose (Sonne-Holm 2007).","pg":""},{"id":"poignet_renforcement_thenar___opp","r":"poignet","ph":"ren","n":"Renforcement thenar — opposition progressive","m":["élastique"],"t":"renforcement","d":"Opposition du pouce contre chaque doigt avec résistance croissante (élastique mince). Progresser vers la pince fine avec poids. Si atrophie thénar sévère : electrostimulation en complément.","p":"3 \\u00d7 15 rép. — 3\\u00d7/semaine","j":"Rééducation du court abducteur du pouce (branche thénarienne du nerf médian). Indiqué si atrophie thénar ou déficit d\\u2019opposition (SCC avancé). Complète le traitement conservateur ou post-chirurgi","pg":""},{"id":"poignet_renforcement_excentrique_","r":"poignet","ph":"ren","n":"Renforcement excentrique APL/EPB — De Quervain","m":["élastique"],"t":"renforcement","d":"Élastique en abduction du pouce. Phase concentrique assistée par la main contro-latérale. Phase excentrique lente (3 sec de retour) réalisée par le côté atteint seul. EVA autorisé ≤ 5/10 pendant l\\u2019effort.","p":"3 \\u00d7 15 rép. — 5\\u00d7/semaine — 8 semaines","j":"Programme excentrique — stimule la synthèse de collagène de type 1. Efficacité démontrée dans les tendinopathies en charge (Alfredson 1998 — extrapolé au 1er compartiment).","pg":""},{"id":"poignet_renforcement_fonctionnel_","r":"poignet","ph":"ren","n":"Renforcement fonctionnel prise pouce-index","m":[],"t":"renforcement","d":"Pince papier entre pouce et index avec résistance croissante (papier → livre → pince-linge → pinces). Progresser en force de résistance toutes les 2 semaines. EVA ≤ 3/10.","p":"3 \\u00d7 20 rép. — 3\\u00d7/semaine","j":"Récupération de la force de pince — fonction essentielle impactée par le De Quervain. Objectif retour activités professionnelles (QuickDASH < 20 pts).","pg":""},{"id":"poignet_stabilisation_active_rud_","r":"poignet","ph":"ren","n":"Stabilisation active RUD — co-contraction","m":[],"t":"renforcement","d":"Coude fléchi, avant-bras en position neutre. Alterner contractions isométriques pronation/supination sans mouvement (co-contraction). Progresser vers prono-supination contre résistance légère (marteau vertical).","p":"3 \\u00d7 15 rép. — 3\\u00d7/semaine","j":"Renforcement des pronateurs/supinateurs qui stabilisent dynamiquement la RUD. Compensation musculaire d\\u2019une lésion TFCC partielle (Lindau 2000).","pg":""},{"id":"poignet_prono_supination_r_sist_e","r":"poignet","ph":"ren","n":"Prono-supination résistée progressive","m":[],"t":"renforcement","d":"Marteau tenu à l\\u2019extrémité (bras de levier). Prono-supination lente et contrôlée en amplitude complète. Progresser vers marteau plus lourd. EVA ≤ 3/10.","p":"3 \\u00d7 15 rép. — 3\\u00d7/semaine","j":"Réentraîne la stabilité dynamique de la RUD sous charge progressive. Précède le retour fonctionnel.","pg":""},{"id":"poignet_renforcement_isom_trique_","r":"poignet","ph":"ren","n":"Renforcement isométrique opposition pouce — rhizarthrose","m":[],"t":"renforcement","d":"Pince isométrique pouce contre chaque doigt (pas de mouvement). Main stabilisée. Intensité sous-maximale. NE PAS réaliser de mouvements de circumduction ou de grind actif.","p":"6 directions \\u00d7 10 sec \\u00d7 5 rép. — 3\\u00d7/semaine","j":"Renforcement sans compression articulaire. Adapté aux stades I-II de rhizarthrose. Maintient la force de pince sans aggraver les lésions cartilagineuses.","pg":""},{"id":"poignet_orth_se_thermoform_e_tm__","r":"poignet","ph":"ren","n":"Orthèse thermoformée TM — port activité","m":[],"t":"antalgique","d":"Orthèse courte moulée maintenant le 1er rayon en légère abduction et opposition. Port lors des activités en charge (cuisine, jardinage, outil). Retrait pour exercices de mobilité.","p":"Port lors des activités douloureuses","j":"Protection de l\\u2019articulation trapézo-métacarpienne en charge. Réduit la douleur et améliore la fonction (DASH) à court terme (Becker 2019). Traitement conservateur de référence stades II-III.","pg":""},{"id":"poignet_renforcement_global_grip_","r":"poignet","ph":"ren","n":"Renforcement global grip — préhension progressive","m":["élastique"],"t":"renforcement","d":"Balle antistress → extenseur de doigts élastique → hand gripper progressif. Progresser en résistance toutes les 2 semaines. Mesurer la force de grip (dynamomètre) comme indicateur.","p":"3 \\u00d7 20 rép. — 3\\u00d7/semaine","j":"La force de grip est le principal indicateur fonctionnel du membre supérieur. Objectif de retour : grip symétrique LSI ≥ 85% (DASH < 20 pts, PRWE < 30 pts).","pg":""},{"id":"poignet_proprioception_poignet___","r":"poignet","ph":"ren","n":"Proprioception poignet — repositionnement actif","m":[],"t":"proprioception","d":"Yeux fermés, mémoriser la position neutre du poignet. Déplacer en flexion-extension puis revenir exactement à la position initiale. Progresser en vitesse et en charge. Évaluer l\\u2019erreur de repositionnement.","p":"3 \\u00d7 10 rép. — 2\\u00d7/jour","j":"Rééducation proprioceptive du poignet après instabilité scapho-lunaire. Améliore le contrôle neuro-musculaire et réduit le risque de nouvelle entorse (Safran 2001).","pg":""},{"id":"poignet_travail_progressif_des_av","r":"poignet","ph":"fon","n":"Travail progressif des AVQ — simulation activités","m":[],"t":"fonctionnel","d":"Progression graduée : ouvrir/fermer robinet → couper légumes → soulever objet 500g → soulever 2kg → activités professionnelles. PRWE < 30 pts = objectif retour travail bureau. PRWE < 20 pts = travail manuel.","p":"3\\u00d7/semaine — progression guidée par PRWE","j":"Réentraînement fonctionnel progressif. Le PRWE est le score de référence pour le suivi (MCID = 14 pts). Retour travail bureau visé à 6-8 semaines, travail manuel 10-12 semaines.","pg":""},{"id":"poignet_programme_retour_sport___","r":"poignet","ph":"fon","n":"Programme retour sport — poignet/main","m":[],"t":"retour sport","d":"Phase sport : 1) Gestes techniques sans charge → 2) Gestes avec charge réduite (50%) → 3) Charge complète sans match → 4) Reprise compétition. Critère de passage : EVA ≤ 2/10 en charge + grip ≥ 85% contro-latéral.","p":"6 à 12 semaines post phase 3","j":"Retour progressif et sécurisé au sport. Critères objectifs évitent les récidives. Valgus stress négatif exigé avant retour aux sports de lancer (Kibler 1995).","pg":""},{"id":"poignet__ducation_et_pr_vention_r","r":"poignet","ph":"fon","n":"Éducation et prévention récidive","m":[],"t":"éducation","d":"Travail sur écran : souris verticale, repose-poignet en position neutre. Clavier bas. Éviter la flexion prolongée (SCC). Échauffement avant activité répétitive. Micro-pauses toutes les 45 min.","p":"1 session 20 min + fiche écrite","j":"Les facteurs ergonomiques sont les principaux déterminants de la chronicisation et de la récidive des pathologies du poignet en milieu professionnel (Côté 2009).","pg":""},{"id":"poignet_crit_res_de_sortie_et_mci","r":"poignet","ph":"fon","n":"Critères de sortie et MCID","m":[],"t":"éducation","d":"PRWE < 25 pts (retour activité), PRWE < 15 pts (asymptomatique). QuickDASH < 20 pts. Grip LSI ≥ 85%. EVA ≤ 2/10 en charge. ROM symétrique (flex/ext ≥ 80% contro-latéral).","p":"\\u00c9valuation à 8-12 semaines","j":"PRWE MCID = 14 pts (MacDermid 2000). QuickDASH MCID = 8 pts (Beaton 2005). Critères objectifs de reprise — évitent les décisions subjectives.","pg":""},{"id":"cheville_rice___price","r":"cheville","ph":"ant","n":"RICE / PRICE","m":[],"t":"antalgique","d":"Repos relatif · Glace 15-20 min · Compression (bandage) · Élévation membre","p":"3-5× par jour","j":"","pg":""},{"id":"cheville_mobilisation_cheville_en_","r":"cheville","ph":"ant","n":"Mobilisation cheville en décharge (ABC)","m":[],"t":"mobilisation","d":"Assis ou allongé. Tracer les lettres de l","p":"3× 5 min / jour","j":"","pg":""},{"id":"cheville_pompe_tibiale__flexion_ex","r":"cheville","ph":"fon","n":"Pompe tibiale (flexion-extension active)","m":[],"t":"mobilisation","d":"Assis, membre surélevé. Flexion-extension active de la cheville : dorsiflexion maximale → flexion plantaire maximale. Lent et contrôlé.","p":"3× 20 répétitions / jour","j":"","pg":""},{"id":"cheville_b_renger_f_raud__proprioc","r":"cheville","ph":"ren","n":"Bérenger-Féraud (proprioception en décharge)","m":["plateau proprio"],"t":"proprioception","d":"Assis sur chaise. Pied sur plateau proprioceptif (ou coussin) posé au sol. Rotations lentes du plateau dans toutes les directions en gardant le pied en contact.","p":"3× 2 min / côté","j":"","pg":""},{"id":"cheville__tirement_manuel_gastrocn","r":"cheville","ph":"fon","n":"Étirement manuel gastrocnémien","m":[],"t":"étirement","d":"Debout face à un mur, mains en appui. Pied atteint en arrière, genou tendu, talon au sol. Avancer les hanches vers le mur jusqu","p":"3× 30 sec / côté — 2×/jour","j":"","pg":""},{"id":"cheville__tirement_sol_aire__genou","r":"cheville","ph":"fon","n":"Étirement soléaire (genou fléchi)","m":[],"t":"étirement","d":"Même position que précédent mais genou arrière légèrement fléchi (30-40°). Avancer hanches vers le mur.","p":"3× 30 sec / côté — 2×/jour","j":"","pg":""},{"id":"cheville_auto_mobilisation_dorsifl","r":"cheville","ph":"mob","n":"Auto-mobilisation dorsiflexion (knee to wall)","m":[],"t":"mobilisation","d":"Debout, pied à 10 cm du mur, genou fléchi vers le mur en gardant le talon au sol. Mesurer la distance pied-mur sans décollement du talon.","p":"3× 10 répétitions / côté","j":"","pg":""},{"id":"cheville__tirement_fascia_plantair","r":"cheville","ph":"fon","n":"Étirement fascia plantaire (self-stretch)","m":[],"t":"étirement","d":"Assis, croiser la cheville sur le genou opposé. Saisir les orteils et les tirer en dorsiflexion jusqu","p":"3× 30 sec — matin au réveil + 2 séances","j":"","pg":""},{"id":"cheville_mobilisation_sous_talienn","r":"cheville","ph":"mob","n":"Mobilisation sous-talienne (glissement calcanéen)","m":[],"t":"mobilisation","d":"Assis, saisir le calcanéum des deux mains, effectuer des glissements latéraux doux (varus-valgus passif assisté). Amplitude indolore.","p":"3× 10 répétitions douces","j":"","pg":""},{"id":"cheville__l_vation_talons_bipodale","r":"cheville","ph":"ant","n":"Élévation talons bipodale (calf raises)","m":[],"t":"renforcement","d":"Debout, mains légèrement en appui pour l","p":"3× 15 répétitions — tempo 3-1-3","j":"","pg":""},{"id":"cheville__l_vation_talons_unipodal","r":"cheville","ph":"fon","n":"Élévation talons unipodale excentrique (protocole HSR)","m":["step"],"t":"renforcement","d":"Step ou sol. Montée sur deux pieds, descente lente (3-4 sec) sur un seul pied. Progresser vers montée ET descente sur un pied. Utiliser un sac lorsque le poids du corps devient insuffisant.","p":"3× 15 répétitions — 3 séries — 3×/semaine","j":"","pg":""},{"id":"cheville_renforcement_tibial_ant_r","r":"cheville","ph":"ren","n":"Renforcement tibial antérieur (résistance élastique)","m":["élastique"],"t":"renforcement","d":"Assis ou debout. Élastique fixé à un pied de table (bas). Dorsiflexion active contre résistance, retour contrôlé.","p":"3× 15 répétitions — 3×/semaine","j":"","pg":""},{"id":"cheville_renforcement_fibulaires__","r":"cheville","ph":"ren","n":"Renforcement fibulaires (éversion résistée)","m":["élastique"],"t":"renforcement","d":"Assis, cheville en légère inversion. Élastique autour du milieu du pied. Éversion active contre résistance jusqu","p":"3× 15 répétitions — 3×/semaine","j":"","pg":""},{"id":"cheville_renforcement_inverseurs__","r":"cheville","ph":"ren","n":"Renforcement inverseurs (tibial postérieur)","m":["élastique"],"t":"renforcement","d":"Assis. Élastique autour du milieu du pied. Inversion active contre résistance, retour contrôlé.","p":"3× 12 répétitions","j":"","pg":""},{"id":"cheville_relev__de_vo_te__short_fo","r":"cheville","ph":"ren","n":"Relevé de voûte (short foot exercise)","m":[],"t":"renforcement","d":"Debout, pieds à plat. Contracter les muscles intrinsèques plantaires pour \"raccourcir\" le pied sans fléchir les orteils : soulever la voûte en rapprochant la tête du 1er métatarse du talon.","p":"3× 20 répétitions / côté","j":"","pg":""},{"id":"cheville__quilibre_unipodal_statiq","r":"cheville","ph":"ren","n":"Équilibre unipodal statique (yeux ouverts)","m":[],"t":"proprioception","d":"Debout sur pied atteint, mains sur les hanches. Maintenir l","p":"3× 30 secondes / côté","j":"","pg":""},{"id":"cheville__quilibre_unipodal_sur_su","r":"cheville","ph":"ren","n":"Équilibre unipodal sur surface instable","m":["plateau proprio"],"t":"proprioception","d":"Debout sur plateau proprioceptif ou coussin de mousse. Maintenir l","p":"3× 30 secondes / côté","j":"","pg":""},{"id":"cheville_exercice__toile__star_exc","r":"cheville","ph":"fon","n":"Exercice étoile (Star Excursion simplifié)","m":["coussin instable"],"t":"proprioception","d":"Debout sur pied atteint. Atteindre au maximum avec le pied libre dans les 8 directions (étoile dessinée au sol). Revenir sans poser le pied.","p":"3× 8 directions / côté","j":"","pg":""},{"id":"cheville_marche_sur_terrain_irr_gu","r":"cheville","ph":"ren","n":"Marche sur terrain irrégulier","m":[],"t":"aérobie","d":"Marche sur terrain varié : herbe, gravier, sol inégal. Vitesse normale, aucune aide à la marche si possible.","p":"15-20 min / séance — 3×/semaine","j":"","pg":""},{"id":"cheville_course_en_ligne_droite_pr","r":"cheville","ph":"fon","n":"Course en ligne droite progressive","m":[],"t":"aérobie","d":"Semaine 1-2 : marche rapide alternée course (1 min marche / 1 min course). Semaine 3-4 : course continue 10-15 min à allure modérée. Semaine 5-6 : augmentation volume. Semaine 7-8 : allure cible.","p":"Programme 8 semaines — voir protocole","j":"","pg":""},{"id":"cheville_sauts_bilat_raux__squat_j","r":"cheville","ph":"fon","n":"Sauts bilatéraux (squat jump)","m":[],"t":"renforcement","d":"Squat léger, saut vertical, réception contrôlée sur deux pieds. Genou aligné sur le pied à la réception. Amortissement progressif (orteils → talon).","p":"3× 10 répétitions — 3×/semaine","j":"","pg":""},{"id":"cheville_single_leg_hop_progressif","r":"cheville","ph":"fon","n":"Single Leg Hop progressif (LSI)","m":[],"t":"pliométrie","d":"Saut unipodal maximal vers l","p":"3× 3 sauts / côté — mesure distances","j":"","pg":""},{"id":"cheville_changements_de_direction_","r":"cheville","ph":"fon","n":"Changements de direction progressifs","m":[],"t":"pliométrie","d":"Parcours en 8, cônes à 5m. Commencer lentement (50% vitesse), progresser vers vitesse maximale. Introduire les pivots, les décélérations brusques.","p":"3× 5 répétitions par direction","j":"","pg":""},{"id":"cheville_reprise_sport_sp_cifique_","r":"cheville","ph":"fon","n":"Reprise sport spécifique encadrée","m":[],"t":"retour sport","d":"Semaine 1 : entraînement partiel (50%), sans adversaire. Semaine 2 : entraînement complet sans match. Semaine 3 : match retour. Utiliser une orthèse de cheville pour les 2-3 premières semaines de compétition.","p":"Selon activité — 2-4 semaines de transition","j":"","pg":""},{"id":"cheville_hsr___mont_e_bipodale__de","r":"cheville","ph":"fon","n":"HSR — Montée bipodale, descente bipodale chargée","m":["step"],"t":"renforcement","d":"Sur step ou sol : montée sur deux pieds (2-3 sec), descente sur deux pieds lentement (3-4 sec). Tempo 3-1-3. Poids du corps.","p":"3× 15 répétitions — 3×/semaine (alternées avec repos)","j":"","pg":""},{"id":"cheville_hsr___charge_maximale_uni","r":"cheville","ph":"fon","n":"HSR — Charge maximale unipodale (phase avancée)","m":["step"],"t":"proprioception","d":"Sur step : montée ET descente sur pied atteint uniquement. Charge maximale dans la limite EVA ≤4 pendant et ≤5 le lendemain. Sac lesté, gilet leste ou machine à mollets.","p":"3× 10 répétitions — 3×/semaine — charge max","j":"","pg":""},{"id":"cheville__tirement_sol_aire_post_s","r":"cheville","ph":"mob","n":"Étirement soléaire post-séance HSR","m":[],"t":"étirement","d":"Après chaque séance de calf raises : étirement soléaire genou fléchi contre un mur. Maintien 45 sec. Ne pas étirer agressivement en phase de douleur aiguë.","p":"3× 45 sec après chaque séance HSR","j":"","pg":""},{"id":"coude_cryo","r":"coude","ph":"ant","n":"Cryothérapie coude","m":["glace/froid"],"t":"antalgique","d":"Application froid sur la zone douloureuse, coude en confort.","p":"15 min x 3-4/j. Protection cutanée.","j":"Antalgie locale — réduction de la réaction inflammatoire en phase aiguë.","pg":""},{"id":"coude_mob_douce","r":"coude","ph":"ant","n":"Mobilisation douce flexion-extension","m":["TENS"],"t":"mobilisation","d":"Flexion-extension passive du coude dans les amplitudes indolores.","p":"10 rép lentes x 3. Stopper si EVA > 3/10.","j":"Maintien de la mobilité articulaire en phase antalgique. Prévention de la raideur secondaire.","pg":""},{"id":"coude_pron_sup_passif","r":"coude","ph":"ant","n":"Prono-supination passive","m":[],"t":"mobilisation","d":"Avant-bras en déclive, rotation douce en pronation et supination dans les amplitudes confortables.","p":"10 rép x 3. Amplitude progressivement augmentée.","j":"Maintien de la mobilité radio-ulnaire en phase aiguë. Prévient les adhérences.","pg":""},{"id":"coude_iso_extenseurs","r":"coude","ph":"ant","n":"Isométrie extenseurs poignet (antalgie)","m":["TENS"],"t":"renforcement","d":"Contraction isométrique des extenseurs du poignet à haute charge, sans mouvement articulaire.","p":"Contraction 45 sec x 3 séries. 2/j.","j":"Isométrique à haute charge — effet antalgie immédiate démontré dans l'épicondylalgie latérale (Vicenzino 2007). EVA ≤ 4/10 pendant la contraction.","pg":""},{"id":"coude_iso_biceps","r":"coude","ph":"ant","n":"Isométrie biceps","m":[],"t":"renforcement","d":"Contraction isométrique du biceps, coude à 90°. Main contre table ou cuisse.","p":"5 sec contraction · 5 sec repos · 10 rép x 3. EVA ≤ 3/10.","j":"Maintien du tonus musculaire sans charge tendineuse. Indiqué en phase aiguë ou post-op biceps distal.","pg":""},{"id":"coude_etirement_ecrb","r":"coude","ph":"mob","n":"Étirement ECRB (Mill stretch)","m":["TENS"],"t":"étirement","d":"Coude en extension, avant-bras en pronation, flexion passive du poignet + déviation ulnaire. Maintenir.","p":"3 x 45 sec. Tension sans douleur aiguë. 2/j.","j":"Étirement spécifique de l'ECRB — composante essentielle du traitement conservateur de l'épicondylalgie latérale (Vicenzino 2003).","pg":""},{"id":"coude_etirement_fcr","r":"coude","ph":"mob","n":"Étirement fléchisseurs du poignet","m":["TENS"],"t":"étirement","d":"Coude en extension, avant-bras en supination, extension passive du poignet par la main controlatérale.","p":"3 x 45 sec. Maintenir sans douleur aiguë.","j":"Étirement des fléchisseurs — indiqué dans l'épicondylalgie médiale. Réduit la tension sur l'épitrochlée.","pg":""},{"id":"coude_foam_avant_bras","r":"coude","ph":"mob","n":"Foam roller avant-bras","m":["foam roller"],"t":"massage","d":"Massage lent de l'avant-bras (face dorsale puis ventrale) en appui sur le foam roller. Pression progressive.","p":"2 min par face x 2/j.","j":"Libération myofasciale des avant-bras. Améliore la compliance tissulaire et complète les étirements.","pg":""},{"id":"coude_mob_neuro_ulnaire","r":"coude","ph":"mob","n":"Mobilisation neurodynamique nerf ulnaire","m":["TENS"],"t":"neurodynamique","d":"Dépression scapulaire + abduction épaule 90° + extension coude progressive + supination + extension poignet. Oscillations douces.","p":"10 oscillations x 3. Légère tension sans paresthésies intenses. 1/j.","j":"Mobilisation du nerf ulnaire — réduit l'adhérence périneurale et améliore la glisse nerveuse (Coppieters 2007). Indiqué dans la neuropathie ulnaire au canal cubital.","pg":""},{"id":"coude_pron_sup_actif","r":"coude","ph":"mob","n":"Prono-supination active contre pesanteur","m":["marteau/levier"],"t":"mobilisation","d":"Avant-bras en appui, marteau tenu à la main. Prono-supination lente et contrôlée.","p":"3 x 15 rép. Progression de 200 g à 500 g.","j":"Réentraîne le biceps en supinateur sans charge excessive. Indiqué phase intermédiaire post-tendinopathie bicipitale.","pg":""},{"id":"coude_mob_mulligan","r":"coude","ph":"mob","n":"Mobilisation latérale Mulligan (Lateral Glide)","m":["sangle"],"t":"mobilisation","d":"Glissement latéral du radius sur l'humérus par l'examinateur, puis réalisation du test de Cozen en position mobilisée.","p":"6 x 10 rép en mobilisation + mouvement test.","j":"Technique Mulligan démontrée efficace dans l'épicondylalgie latérale — amélioration immédiate douleur et force de préhension (Vicenzino 2003, Bisset 2006).","pg":""},{"id":"coude_excentrique_ext","r":"coude","ph":"ren","n":"Excentriques extenseurs poignet (Tyler protocol)","m":["haltères","TENS"],"t":"renforcement","d":"Position de départ : poignet en extension (côté sain lève). Descente lente en flexion (côté atteint travaille en excentrique). Retour passif.","p":"3 x 15 rép. Charge progressée. 7/7j pendant 8 semaines.","j":"Gold standard rééducation épicondylalgie latérale — Tyler Twist protocol (Tyler 2010). EVA autorisé ≤ 5/10 pendant l'exercice.","pg":""},{"id":"coude_excentrique_flex","r":"coude","ph":"ren","n":"Excentriques fléchisseurs poignet","m":["haltères","TENS"],"t":"renforcement","d":"Position de départ : poignet en flexion maximale. Descente lente en extension (excentrique).","p":"3 x 15 rép. 5/7j pendant 8 semaines.","j":"Équivalent excentrique pour l'épicondylalgie médiale. Stimule la synthèse de collagène ténoïde.","pg":""},{"id":"coude_grip_isotonique","r":"coude","ph":"ren","n":"Renforcement isotonique progressif grip","m":["balle/dynamomètre"],"t":"renforcement","d":"Compression progressive de la balle ou du dynamomètre, maintien 3 sec, relâchement contrôlé.","p":"3 x 15 rép. 3/7j. Progression hebdomadaire.","j":"Renforcement global de la prise — améliore l'endurance et la proprioception de la chaîne distale.","pg":""},{"id":"coude_bicep_curl","r":"coude","ph":"ren","n":"Biceps curl concentrique-excentrique","m":["haltères"],"t":"renforcement","d":"Flexion du coude avec charge légère. Phase excentrique lente (3 sec de descente).","p":"3 x 12 rép. Charge départ 1 kg. Progression +0.5 kg/semaine. EVA ≤ 4/10.","j":"Réentraînement progressif du biceps brachial — indiqué post-tendinopathie distale ou post-opératoire.","pg":""},{"id":"coude_supination_resist","r":"coude","ph":"ren","n":"Supination résistée progressive","m":["élastique","haltères"],"t":"renforcement","d":"Avant-bras en pronation, rotation en supination contre résistance (haltère vertical ou élastique).","p":"3 x 12 rép. Progression charge selon tolérance.","j":"Renforcement spécifique de la fonction supinatrice du biceps — indiqué après tendinopathie distale ou reprise post-chirurgicale.","pg":""},{"id":"coude_renf_stab_medial","r":"coude","ph":"ren","n":"Renforcement stabilisateurs médiaux (valgus)","m":["élastique"],"t":"renforcement","d":"Résistance en valgus sur l'avant-bras, patient maintient le coude centré. Progression vers résistances dynamiques.","p":"3 x 12 rép. Progression résistance. Indiqué instabilité LCU.","j":"Renforcement de la musculature protectrice du LCU (fléchisseurs-pronateurs). Améliore la stabilité dynamique médiale.","pg":""},{"id":"coude_prono_sup_resist","r":"coude","ph":"ren","n":"Prono-supination résistée progressive","m":["marteau/levier"],"t":"renforcement","d":"Avant-bras en appui, marteau tenu à extrémité (bras de levier maximal). Prono-supination lente en amplitude complète.","p":"3 x 15 rép. Progression vers marteau plus lourd ou prise plus distale.","j":"Renforcement de toute la chaîne de rotation de l'avant-bras. Indiqué épicondylalgie (lat/méd), tunnel radial et reprise fonctionnelle globale.","pg":""},{"id":"coude_pompes_inclinees","r":"coude","ph":"ren","n":"Pompes inclinées (chaîne cinétique)","m":[],"t":"renforcement","d":"Pompes contre mur ou table inclinée. Coudes proches du corps, descente contrôlée.","p":"3 x 10 rép. Progression vers appui sol selon tolérance.","j":"Réintégration de la chaîne cinétique proximale-distale. La stabilité scapulaire influence la charge sur les tendons latéraux et médiaux (Kibler 1995).","pg":""},{"id":"coude_grip_fonctionnel","r":"coude","ph":"fon","n":"Travail progressif prise fonctionnelle","m":[],"t":"fonctionnel","d":"Manipulation progressive d'objets de la vie quotidienne — ouvrir bocaux, utiliser outils, soulever charges légères puis lourdes.","p":"Progression graduée selon PRTEE. Objectif : PRTEE < 30 pts pour reprise travail manuel.","j":"Réentraînement fonctionnel — finalité du programme. MCID PRTEE : 11 pts. Retour travail si EVA ≤ 3/10 en charge.","pg":""},{"id":"coude_lancer_progressif","r":"coude","ph":"fon","n":"Programme retour aux lancers / frappe","m":["balle/dynamomètre","matériel sport"],"t":"fonctionnel","d":"Progression : distance réduite → amplitude réduite → charge complète. Programme sur 6-8 semaines.","p":"1/7j en alternance avec repos. Stopper si EVA > 3/10.","j":"Spécifique sportifs (tennis, golf, lancers). Sécurité ligamentaire (LCU) prime — test valgus négatif avant reprise.","pg":""},{"id":"coude_integration_chaine","r":"coude","ph":"fon","n":"Intégration chaîne épaule-coude-poignet","m":["élastique","haltères","TENS"],"t":"fonctionnel","d":"Exercices combinés épaule + coude : rotation externe épaule + extension coude résistée, ou diagonales PNF D2.","p":"3 x 12 rép. Fréquence 3/7j.","j":"Un déficit de rotation externe d'épaule augmente la charge sur le LCU en lancer (Kibler 1995). Toujours intégrer la scapula dans la rééducation avancée.","pg":""},{"id":"coude_endurance_circuit","r":"coude","ph":"fon","n":"Circuit endurance musculaire membre supérieur","m":["élastique","haltères","TENS"],"t":"aérobie","d":"Circuit : extensions poignet + flexions poignet + prono-supination + biceps curl. 45 sec travail / 15 sec repos x 4 tours.","p":"3/7j. Progression intensité et nombre de tours.","j":"Endurance musculaire spécifique MS — facteur prédictif du retour aux activités professionnelles et sportives.","pg":""},{"id":"coude_proprio_ms","r":"coude","ph":"fon","n":"Proprioception membre supérieur","m":["plateau proprio","coussin instable"],"t":"proprioception","d":"Appui ouvert MS sur surface instable en quadrupédie ou mains sur table. Transferts de poids progressifs.","p":"3 x 30 sec. Progression vers appui unilatéral.","j":"Réentraînement proprioceptif du coude — indiqué après instabilité ligamentaire et post-chirurgical (Lephart 1997).","pg":""},{"id":"coude_retour_criteres","r":"coude","ph":"fon","n":"Critères retour sport / travail","m":[],"t":"fonctionnel","d":"Évaluation critères de sortie : grip symétrique LSI ≥ 90%, PRTEE < 25 pts, QuickDASH < 20 pts, EVA ≤ 2/10 en charge.","p":"Évaluation à 8-12 semaines selon pathologie.","j":"Critères fonctionnels validés. LSI grip ≥ 90% (Bisset 2011). PRTEE < 25 pts = résultat acceptable (Rompe 2007). QuickDASH MCID : 8 pts.","pg":""},{"id":"lombaire_squat_barre","r":"lombaire","ph":"ren","n":"Squat barre basse — Chaîne postérieure","m":["barre"],"t":"renforcement","d":"Barre posée sur les trapèzes, pieds largeur épaules. Descente contrôlée jusqu'à 90° de flexion genou, dos droit, regard horizontal.","p":"4×8 répétitions — charge progressive — 3×/semaine","j":"Renforcement global chaîne postérieure — fessiers, ischio-jambiers, érecteurs. Indiqué en phase fonctionnelle lombaire.","pg":"Goblet squat → squat barre → squat Bulgarian split"},{"id":"lombaire_rdl_halteres","r":"lombaire","ph":"ren","n":"Romanian Deadlift — Ischio-jambiers","m":["haltères"],"t":"renforcement","d":"Debout, haltères en pronation le long des cuisses. Charnière hanches (hip hinge), dos plat, descente jusqu'à mi-tibia. Retour en contractant les fessiers.","p":"3×12 répétitions — 3×/semaine","j":"Renforcement excentrique des ischio-jambiers et chaîne postérieure. Réduit le risque de lombalgie récidivante (McGill 2015).","pg":"Bilatéral → unilatéral → barre"},{"id":"lombaire_swiss_ball_bridge","r":"lombaire","ph":"ren","n":"Pont fessier sur swiss ball","m":["swiss ball"],"t":"renforcement","d":"Décubitus dorsal, talons posés sur le swiss ball. Extension de hanches en maintenant le bassin aligné. Contrôle de l'instabilité du ballon.","p":"3×15 répétitions — 3×/semaine","j":"Augmente le recrutement des stabilisateurs lombaires par rapport au pont classique (Marshall 2005). Progression naturelle du pont fessier.","pg":"Bilatéral → unilatéral → avec flexion de genou"},{"id":"lombaire_bosu_proprioception","r":"lombaire","ph":"ren","n":"Équilibre BOSU — Stabilisation lombaire","m":["BOSU"],"t":"proprioception","d":"Debout sur le côté plat du BOSU (face bombée vers le bas) ou sur la face bombée. Maintenir l'équilibre en position neutre lombaire 30 secondes.","p":"3×30 secondes — 3×/semaine","j":"Stimule les mécanorécepteurs articulaires et musculaires lombaires. Améliore le contrôle neuromusculaire postural (Vera-Garcia 2000).","pg":"Face bombée dessus → face plate dessus → yeux fermés → squat sur BOSU"},{"id":"lombaire_gainage_haltere","r":"lombaire","ph":"ren","n":"Gainage avec tirage haltère — Renegade Row","m":["haltères"],"t":"renforcement","d":"Position planche sur deux haltères hexagonaux. Tirer alternativement un haltère vers la hanche en maintenant le gainage. Bassin stable.","p":"3×8 répétitions par côté — 3×/semaine","j":"Intègre gainage anti-rotation et renforcement dorsal. Charge fonctionnelle élevée sur les stabilisateurs lombaires (McGill 2010).","pg":"Planche statique → renegade row léger → charge progressive"},{"id":"epaule_face_pull_elastique","r":"epaule","ph":"ren","n":"Face Pull — Rotateurs externes et trapèze","m":["élastique"],"t":"renforcement","d":"Élastique fixé à hauteur des yeux. Tirer vers le visage, coudes à 90° en abduction, paumes vers le bas en fin de course. Rétraction scapulaire simultanée.","p":"3×15 répétitions — 4×/semaine","j":"Renforcement spécifique rotateurs externes et trapèze moyen/inférieur. Contre-balance la dominance des rotateurs internes (Cools 2007).","pg":"Élastique léger → résistance progressive → combiné avec W-Y-T"},{"id":"epaule_ohp_halteres","r":"epaule","ph":"fon","n":"Développé militaire haltères — Force overhead","m":["haltères"],"t":"renforcement","d":"Assis ou debout, haltères à hauteur des épaules. Pousser verticalement jusqu'à extension complète. Descente contrôlée. Gainage actif.","p":"3×10 répétitions — charge progressive — 2×/semaine","j":"Retour aux activités overhead. Prérequis: flexion épaule passive >170°, QuickDASH <25. Renforcement fonctionnel complet.","pg":"Haltères assis → debout → barre → unilateral"},{"id":"epaule_bosu_push","r":"epaule","ph":"ren","n":"Pompes sur BOSU — Stabilisation dynamique","m":["BOSU"],"t":"renforcement","d":"Mains sur la face bombée du BOSU, corps en planche. Pompe complète en maintenant la stabilité scapulaire. Serratus anterior++.","p":"3×10 répétitions — 3×/semaine","j":"Augmente le recrutement du serratus anterior et des stabilisateurs scapulaires par rapport aux pompes classiques (Lehman 2008).","pg":"Genoux → pompe complète → avec rotation trunk"},{"id":"epaule_cable_row","r":"epaule","ph":"ren","n":"Tirage horizontal — Renforcement rhomboïdes","m":["élastique"],"t":"renforcement","d":"Élastique fixé à hauteur du sternum. Tirer les coudes en arrière en rétractant les omoplates. Maintenir 2 secondes en fin de course.","p":"3×15 répétitions — 3×/semaine","j":"Renforcement rhomboïdes et trapèze moyen — correcteurs de la posture en antépulsion. Indiqué dans le syndrome de conflit (Cools 2007).","pg":"Élastique léger → résistance progressive → unipodal pour intégration"},{"id":"epaule_swiss_ball_rollout","r":"epaule","ph":"ren","n":"Swiss Ball Rollout — Stabilité scapulaire","m":["swiss ball"],"t":"renforcement","d":"Agenouillé, avant-bras sur le swiss ball. Rouler le ballon vers l'avant en maintenant la position neutre scapulaire. Retour contrôlé.","p":"3×10 répétitions — 3×/semaine","j":"Active le serratus anterior et les stabilisateurs scapulaires dans une chaîne fermée progressive. Moins contraignant que les pompes.","pg":"Amplitude courte → amplitude complète → sur les mains"},{"id":"genou_leg_press","r":"genou","ph":"ren","n":"Leg Press — Renforcement quadriceps charge","m":["barre"],"t":"renforcement","d":"En l'absence de machine : squat avec barre guidée. Amplitude 0-90°. Dos plat contre dossier. Poussée bilatérale concentrique-excentrique.","p":"4×10 répétitions — charge progressive — 3×/semaine","j":"Renforcement quadriceps en chaîne fermée. Prérequis LSI avant reprise sport. Progression vers charge unipodale.","pg":"Bilatéral → asymétrique → unilatéral → charge maximale"},{"id":"genou_bosu_squat","r":"genou","ph":"ren","n":"Squat sur BOSU — Proprioception avancée","m":["BOSU"],"t":"proprioception","d":"Debout sur la face bombée du BOSU. Squat contrôlé jusqu'à 60° de flexion, genou aligné sur le pied, regard horizontal. Retour lent.","p":"3×12 répétitions — 3×/semaine","j":"Proprioception avancée genou en charge. Améliore le contrôle neuromusculaire et prépare au retour au sport (Myer 2006).","pg":"Bilatéral → unilatéral → yeux fermés → avec perturbation"},{"id":"genou_haltere_lunge","r":"genou","ph":"fon","n":"Fente avant avec haltères — Fonctionnel","m":["haltères"],"t":"renforcement","d":"Haltères dans les mains, fente avant alternée. Genou avant aligné sur le pied, genou arrière à 2 cm du sol. Torse vertical.","p":"3×12 répétitions par jambe — 3×/semaine","j":"Renforcement fonctionnel quadriceps et fessiers en chaîne fermée. Prépare aux activités de la vie quotidienne et au sport.","pg":"Fente statique → fente marchée → fente avec haltères → fente bulgare"},{"id":"genou_swiss_ball_curl","r":"genou","ph":"ren","n":"Swiss Ball Leg Curl — Ischio-jambiers","m":["swiss ball"],"t":"renforcement","d":"Décubitus dorsal, talons sur le swiss ball. Pont fessier puis flexion des genoux pour ramener le ballon vers les fesses. Excentrique contrôlé.","p":"3×12 répétitions — 3×/semaine","j":"Renforcement ischio-jambiers en chaîne fermée avec composante excentrique. Moins contraignant que le Nordic Curl. Indiqué en phase intermédiaire LCA.","pg":"Bilatéral → unilatéral → amplitude progressive"},{"id":"genou_elastique_terminal","r":"genou","ph":"ren","n":"Terminal Knee Extension — VMO élastique","m":["élastique"],"t":"renforcement","d":"Élastique fixé derrière le genou, debout. Extension terminale du genou (0-30°) contre résistance. Focus sur le vaste médial.","p":"3×20 répétitions — 3×/semaine","j":"Renforcement spécifique du VMO en fin d'extension. Réduit le mauvais tracking patellaire. Indiqué dans le syndrome fémoro-patellaire (Powers 2003).","pg":"Élastique léger → résistance progressive → combiné avec squat"},{"id":"hanche_hip_thrust_barre","r":"hanche","ph":"ren","n":"Hip Thrust barre — Grand fessier charge","m":["barre"],"t":"renforcement","d":"Épaules appuyées sur un banc, barre sur le bassin (coussin de protection). Extension de hanche explosive jusqu'à position horizontale. Descente excentrique lente.","p":"4×10 répétitions — charge progressive — 3×/semaine","j":"Exercice roi du renforcement du grand fessier. Activation maximale gluteus maximus (Contreras 2011). Indiqué GTPS phase fonctionnelle et coxarthrose.","pg":"Sans charge → haltère → barre légère → charge maximale"},{"id":"hanche_bosu_unipodal","r":"hanche","ph":"ren","n":"Équilibre unipodal sur BOSU — Hanche","m":["BOSU"],"t":"proprioception","d":"Debout sur la face bombée du BOSU sur un pied. Maintenir 30 secondes en contrôlant le Trendelenburg. Regard fixe devant.","p":"3×30 secondes par côté — 3×/semaine","j":"Proprioception avancée hanche et stabilisation lombopelvienne. Simule les phases d'appui unipodal de la marche et de la course.","pg":"Face bombée → face plate dessus → yeux fermés → avec mouvement bras"},{"id":"hanche_haltere_squat_bulgare","r":"hanche","ph":"fon","n":"Squat Bulgare haltères — Unilatéral","m":["haltères"],"t":"renforcement","d":"Pied arrière posé sur un banc, haltères dans les mains. Descente contrôlée du genou avant jusqu'à 90°. Remontée en poussant sur le talon.","p":"3×10 par jambe — 3×/semaine","j":"Renforcement unilatéral intense fessiers et quadriceps. Corrige les asymétries et prépare au retour au sport (Speirs 2016).","pg":"Poids du corps → haltères légers → charge progressive"},{"id":"hanche_elastique_abduction_debout","r":"hanche","ph":"ren","n":"Abduction debout résistée — Moyen fessier","m":["élastique"],"t":"renforcement","d":"Debout, élastique autour des chevilles ou des genoux. Abduction latérale de la jambe à 30-45°. Descente lente excentrique. Tronc stable.","p":"3×15 répétitions par côté — 3×/semaine","j":"Renforcement spécifique moyen fessier en charge. Correction du Trendelenburg dynamique. Indiqué coxarthrose et GTPS (Distefano 2009).","pg":"Clamshell → abduction latérale → debout élastique → marche latérale élastique"},{"id":"cervical_haltere_shrug","r":"cervical","ph":"ren","n":"Haussements d'épaules — Trapèze supérieur","m":["haltères"],"t":"renforcement","d":"Haltères dans les mains, bras tendus. Hausser les épaules vers les oreilles, maintenir 2 secondes, descendre lentement. Tête droite.","p":"3×15 répétitions — 2×/semaine","j":"Renforcement trapèze supérieur et élévateurs de la scapula. Indiqué en phase fonctionnelle cervicalgie chronique après correction posturale.","pg":"Sans charge → haltères légers → charge progressive"},{"id":"cervical_elastique_retraction","r":"cervical","ph":"ren","n":"Rétraction cervicale avec résistance élastique","m":["élastique"],"t":"renforcement","d":"Élastique fixé à hauteur des yeux dans le dos de la tête. Rétraction cervicale pure (chin tuck) contre résistance progressive. Maintenir 5 secondes.","p":"3×10 répétitions — 2×/semaine","j":"Renforcement des fléchisseurs cervicaux profonds avec charge externe. Progression naturelle du chin tuck isométrique (Jull 2008).","pg":"Isométrique → élastique léger → résistance progressive"},{"id":"cervical_swiss_ball_extension","r":"cervical","ph":"ren","n":"Extension cervicale sur swiss ball","m":["swiss ball"],"t":"renforcement","d":"Assis sur le swiss ball, dos droit. Extension douce de la nuque dans l'amplitude confortable, retour lent en flexion. Pas de rotation. Contrôle total.","p":"3×10 répétitions lentes — 2×/semaine","j":"Renforcement des extenseurs cervicaux profonds en décharge partielle. Réduit le stress articulaire par rapport aux exercices debout.","pg":"Amplitude limitée → amplitude complète → avec légère résistance manuelle"},{"id":"cheville_bosu_equilibre","r":"cheville","ph":"ren","n":"Équilibre dynamique sur BOSU — Cheville","m":["BOSU"],"t":"proprioception","d":"Debout sur la face bombée du BOSU sur un pied. Maintenir 30 secondes. Progresser avec mouvements des bras ou yeux fermés.","p":"3×30 secondes par côté — 3×/semaine","j":"Proprioception avancée cheville en mise en charge complète. Réduit le risque de récidive d'entorse (McGuine 2006).","pg":"Face bombée → face plate dessus → yeux fermés → avec perturbations"},{"id":"cheville_elastique_inversion","r":"cheville","ph":"ren","n":"Inversion résistée — Tibial postérieur","m":["élastique"],"t":"renforcement","d":"Assis, élastique autour du milieu du pied. Inversion active contre résistance jusqu'en position neutre. Retour excentrique lent.","p":"3×15 répétitions — 3×/semaine","j":"Renforcement tibial postérieur — stabilisateur médial de la cheville. Indiqué pied plat et instabilité médiale chronique.","pg":"Élastique léger → résistance progressive → debout en unipodal"},{"id":"cheville_saut_bosu","r":"cheville","ph":"fon","n":"Réception de saut sur BOSU — Retour sport","m":["BOSU"],"t":"pliométrie","d":"Saut depuis le sol, réception contrôlée sur la face bombée du BOSU sur deux pieds. Amortissement progressif. Genou aligné sur le pied.","p":"3×8 répétitions — 2×/semaine","j":"Préparation au retour au sport — contrôle neuromusculaire en réception sur surface instable. Prérequis: FAAM Sport>75%.","pg":"Réception bipodale → unipodale → saut latéral → saut multidirectionnel"},{"id":"cheville_haltere_calf_raise","r":"cheville","ph":"ren","n":"Calf Raise chargé — Triceps sural","m":["haltères"],"t":"renforcement","d":"Debout sur le bord d'une marche, haltères dans les mains. Montée sur pointes de pieds lente, descente excentrique sous le niveau du step. Amplitude complète.","p":"4×12 répétitions — charge progressive — 3×/semaine","j":"Renforcement HSR du triceps sural avec charge externe. Surcharge progressive pour tendinopathie achilléenne (Beyer 2015, RCT).","pg":"Bilatéral sans charge → bilatéral chargé → unilatéral"},{"id":"coude_wrist_roller","r":"coude","ph":"ren","n":"Wrist Roller — Avant-bras complet","m":["barre"],"t":"renforcement","d":"Barre courte avec corde et poids suspendu. Enrouler et dérouler la corde alternativement en flexion/extension de poignet. Coudes à 90°.","p":"3 séries complètes (enrouler + dérouler) — 3×/semaine","j":"Renforcement endurance avant-bras extenseurs et fléchisseurs. Indiqué phase fonctionnelle épicondylalgie latérale et médiale.","pg":"Poids léger → charge progressive → vitesse progressive"},{"id":"coude_haltere_curl","r":"coude","ph":"ren","n":"Biceps Curl haltère — Renforcement concentrique","m":["haltères"],"t":"renforcement","d":"Assis ou debout, haltère dans la main. Flexion du coude de 0 à 130°, supination en fin de course. Descente excentrique lente (3 secondes).","p":"3×12 répétitions — charge progressive — 3×/semaine","j":"Renforcement biceps en concentrique-excentrique. Indiqué phase intermédiaire tendinopathie bicipitale distale.","pg":"Concentrique seul → excentrique accentué → charge progressive"},{"id":"coude_elastique_triceps","r":"coude","ph":"ren","n":"Extension triceps — Élastique poulie haute","m":["élastique"],"t":"renforcement","d":"Élastique fixé en hauteur. Extension du coude de 90° à 0°, bras le long du corps. Maintenir 2 secondes, retour contrôlé.","p":"3×15 répétitions — 3×/semaine","j":"Renforcement triceps en chaîne ouverte. Complément fonctionnel pour les activités de poussée et les sports de raquette.","pg":"Élastique léger → résistance progressive → unipodal pour intégration"},{"id":"poignet_haltere_flexion","r":"poignet","ph":"ren","n":"Flexion poignet haltère — Fléchisseurs","m":["haltères"],"t":"renforcement","d":"Avant-bras posé sur une table, main dans le vide tenant un haltère léger. Flexion active du poignet, extension excentrique contrôlée.","p":"3×15 répétitions — 3×/semaine","j":"Renforcement progressif des fléchisseurs du poignet. Indiqué épicondylalgie médiale et instabilité carpienne.","pg":"Sans charge → haltère léger → charge progressive → prise neutre"},{"id":"poignet_haltere_extension","r":"poignet","ph":"ren","n":"Extension poignet haltère — Extenseurs","m":["haltères"],"t":"renforcement","d":"Avant-bras posé sur une table, paume vers le bas, haltère en main. Extension active du poignet, descente excentrique lente (Tyler protocol).","p":"3×15 répétitions — 7j/7 pendant 8 semaines","j":"Protocole Tyler Twist adapté. Renforcement excentrique ECRB. Gold standard épicondylalgie latérale (Tyler 2010).","pg":"Sans charge → haltère léger → charge progressive → avec forearm rotation"},{"id":"poignet_balle_grip","r":"poignet","ph":"ren","n":"Renforcement grip — Balle de préhension","m":["balle/dynamomètre"],"t":"renforcement","d":"Balle de préhension souple ou dynamomètre. Compressions répétées à force sous-maximale (60-70% max). Relâchement lent.","p":"3×20 compressions — 3×/semaine","j":"Renforcement endurance des fléchisseurs digitaux et des intrinsèques de la main. Indiqué syndrome canal carpien et épicondylalgies.","pg":"Balle souple → résistance progressive → prise par doigts → pince"},{"id":"poignet_swiss_ball_pushup","r":"poignet","ph":"fon","n":"Pompes sur swiss ball — Stabilisation poignet","m":["swiss ball"],"t":"renforcement","d":"Mains sur le swiss ball, corps en planche. Pompe partielle avec contrôle de l'instabilité. Poignet en position neutre ou légère extension.","p":"3×10 répétitions — 3×/semaine","j":"Renforcement proprioceptif du poignet en charge progressive. Prépare aux activités manuelles et aux sports de raquette.","pg":"Genoux → corps entier → avec rotation trunk"}];
+
+const DAYS={0:'Di',1:'Lu',2:'Ma',3:'Me',4:'Je',5:'Ve',6:'Sa'};
+const DAYF=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const MONTHS=['jan','fév','mar','avr','mai','jun','jul','août','sep','oct','nov','déc'];
+const BREGS=[...new Set(BANQUE.map(e=>e.r))].sort();
+const BTYPS=[...new Set(BANQUE.map(e=>e.t))].sort();
+const BCFG=[
+  {id:'lombaire',label:'Lombaire',color:'#177A5A',file:'bilan-lombaire-v2.html',scores:['ODI','STarT']},
+  {id:'epaule',label:'Épaule',color:'#1A6FA8',file:'bilan-epaule-v3.html',scores:['DASH','PSFS']},
+  {id:'genou',label:'Genou',color:'#C4621D',file:'bilan-genou-v3.html',scores:['KOOS','PSFS']},
+  {id:'hanche',label:'Hanche',color:'#8B4A6B',file:'bilan-hanche-v2.html',scores:['HOOS','PSFS']},
+  {id:'cheville',label:'Cheville/Pied',color:'#8B2635',file:'bilan-cheville-v1.html',scores:['FAAM','PSFS']},
+  {id:'cervical',label:'Cervical',color:'#2563EB',file:'bilan-cervical-v2.html',scores:['NDI','PSFS']},
+  {id:'coude',label:'Coude',color:'#7C3AED',file:'bilan-coude-v2.html',scores:['DASH','PSFS']},
+  {id:'poignet',label:'Poignet',color:'#0F766E',file:'bilan-poignet-v2.html',scores:['DASH','PSFS']},
+];
+
+const S={uid:null,kinePin:'',pinBuf:'',isSetup:false,ppBuf:'',ppPinFound:null,patients:{},curId:null,curPat:null,curTab:'prog',viewDay:'',fR:'',fT:'',fM:'',selExos:{},timers:{}};
+const tDS=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
+const av=p=>((p.prenom||'').charAt(0)+(p.nom||'').charAt(0)).toUpperCase();
+const tc=t=>'tc-'+(t||'autre').toLowerCase().replace(/[^a-z]/g,'');
+const fmtT=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+
+window.deconnect=()=>{S.pinBuf='';S.kinePin='';if(S.uid)localStorage.removeItem('ks-pin-'+S.uid);udots('pd','');window.location.href='index.html';};
+window.goHome=()=>{window.location.href='index.html';};
+window.udots=(cid,buf,err=false)=>{document.querySelectorAll('#'+cid+' .pin-dot').forEach((d,i)=>{d.classList.toggle('filled',i<buf.length);d.classList.toggle('error',err);});};
+window.pk=d=>{
+  if(S.pinBuf.length>=4)return;
+  S.pinBuf+=String(d);udots('pd',S.pinBuf);
+  if(S.pinBuf.length===4)setTimeout(()=>{
+    if(S.isSetup){S.kinePin=S.pinBuf;localStorage.setItem('ks-pin-'+S.uid,S.kinePin);if(S.uid)updateDoc(doc(db,'therapists',S.uid),{pin:S.kinePin}).catch(()=>{});S.pinBuf='';S.isSetup=false;document.getElementById('ph').style.display='none';udots('pd','');loadList();}
+    else if(S.pinBuf===S.kinePin){S.pinBuf='';udots('pd','');loadList();}
+    else{udots('pd',S.pinBuf,true);setTimeout(()=>{S.pinBuf='';udots('pd','');},600);}
+  },100);
+};
+window.pdel=()=>{S.pinBuf=S.pinBuf.slice(0,-1);udots('pd',S.pinBuf);};
+async function loadList(){
+  if(!S.uid)return;
+  const snap=await getDocs(pCol());
+  S.patients={};
+  snap.forEach(d=>{S.patients[d.id]=d.data();});
+  // Resync patients_index : garantit que tous les patients ont une entrée
+  await Promise.all(Object.entries(S.patients).map(([id,p])=>{
+    if(!p.pin)return;
+    return setDoc(doc(db,'patients_index',p.pin),{uid_kine:S.uid,patient_id:id,ddn:p.ddn||''},{merge:true}).catch(()=>{});
+  }));
+  renderList();ss('sc-list');
+}
+window.renderList=()=>{
+  const q=(document.getElementById('si').value||'').toLowerCase();
+  const ids=Object.keys(S.patients).filter(id=>{const p=S.patients[id];return!q||(p.prenom+' '+p.nom).toLowerCase().includes(q);});
+  const el=document.getElementById('plist');document.getElementById('empty-st').style.display=ids.length?'none':'block';el.innerHTML='';
+  ids.sort((a,b)=>(S.patients[a].nom||'').localeCompare(S.patients[b].nom||'')).forEach(id=>{
+    const p=S.patients[id];const nb=(p.exos||[]).length;const adh=calcAdh(p);
+    const d=document.createElement('div');d.className='pat-card';
+    d.innerHTML=`<div class="av">${av(p)}</div><div class="pat-info"><div class="pat-name">${p.prenom||''} ${p.nom||''}</div><div class="pat-meta">${nb} exo(s) \xb7 ${adh>=0?adh+'% adh\xe9rence':'\u2014'}</div></div><div class="pbadge${nb>0?' on':''}"> ${p.pin}</div>`;
+    d.onclick=()=>openDos(id);el.appendChild(d);
+  });
+};
+window.openNP=()=>document.getElementById('ov-np').classList.add('open');
+window.rPin=()=>{document.getElementById('np-pin').value=String(Math.floor(100000+Math.random()*900000));};
+window.createP=async()=>{
+  const prenom=(document.getElementById('np-p').value||'').trim();
+  const nom=(document.getElementById('np-n').value||'').trim();
+  const ddn=document.getElementById('np-d').value||'';
+  const pin=(document.getElementById('np-pin').value||'').trim();
+  if(!prenom||!nom){showToast('Pr\xe9nom et nom requis');return;}
+  if(!/^\d{6}$/.test(pin)){showToast('Code: 6 chiffres');return;}
+  if(!ddn){showToast('Date de naissance requise');return;}
+  if(Object.values(S.patients).some(p=>p.pin===pin)){showToast('Code d\xe9j\xe0 utilis\xe9');return;}
+  const id='p'+Date.now();
+  const data={prenom,nom,ddn,pin,exos:[],adherence:{},retours:{},bilans:[],createdAt:new Date().toISOString()};
+  await setDoc(pDoc(id),data);
+  // Enregistrer dans l'index global pour accès patient direct
+  await setDoc(doc(db,'patients_index',pin),{uid_kine:S.uid,patient_id:id,ddn}).catch(()=>{});S.patients[id]=data;cov('ov-np');renderList();openDos(id);showToast('Patient cr\xe9\xe9 \u2713');
+};
+function openDos(id){
+  S.curId=id;S.curTab='prog';
+  document.getElementById('dos-n').textContent=(S.patients[id].prenom||'')+' '+(S.patients[id].nom||'');
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===0));
+  renderTab();ss('sc-dos');
+}
+window.swTab=(tab,el)=>{S.curTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');renderTab();};
+function renderTab(){const p=S.patients[S.curId];if(!p)return;const el=document.getElementById('dos-body');el.innerHTML='';if(S.curTab==='prog')tabProg(p,el);else if(S.curTab==='ret')tabRet(p,el);else tabBil(p,el);}
+function tabProg(p,el){
+  const age=p.ddn?Math.floor((Date.now()-new Date(p.ddn))/(365.25*24*3600*1000))+' ans':'Patient';
+  const adh=calcAdh(p);const ddnFmt=p.ddn?new Date(p.ddn+'T12:00:00').toLocaleDateString('fr-FR'):'';
+  el.innerHTML=`<div class="hero"><div class="hero-av">${av(p)}</div><div style="flex:1"><div class="hero-name">${p.prenom||''} ${p.nom||''}</div><div class="hero-sub">${age}${ddnFmt?' \xb7 '+ddnFmt:''}</div><div class="pin-badge">${p.pin}</div></div></div>`;
+  el.insertAdjacentHTML('beforeend',`<div class="adh-card"><div class="adh-top"><div><div class="adh-pct">${adh>=0?adh+'%':'\u2014'}</div><div style="font-size:12px;color:var(--tx2)">Adh\xe9rence \xb7 7 derniers jours</div></div><div style="text-align:right"><div style="font-size:13px;font-weight:600">${(p.exos||[]).length} exercice(s)</div></div></div><div class="adh-bar"><div class="adh-fill" style="width:${Math.max(0,adh)}%"></div></div><div class="wdots" id="wdots"></div></div>`);
+  renderWdots('wdots',p);
+  const sh=document.createElement('div');sh.className='sec-hdr';sh.textContent='Programme domicile';el.appendChild(sh);
+  const addBtn=document.createElement('button');addBtn.className='add-exo-btn';
+  addBtn.innerHTML='<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M9 5.5v7M5.5 9h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Ajouter des exercices';
+  addBtn.onclick=openBan;el.appendChild(addBtn);
+  const pw=document.createElement('div');pw.id='pw';el.appendChild(pw);renderPexos(p,pw);
+  const sbtn=document.createElement('button');sbtn.className='submit-prog-btn';sbtn.id='submit-prog-btn';
+  sbtn.innerHTML=p.progValidated?'\u2705 Programme envoy\xe9 au patient':'\u2713 Valider et envoyer le programme';
+  if(p.progValidated)sbtn.classList.add('sent');sbtn.onclick=submitProg;el.appendChild(sbtn);
+  const db2=document.createElement('button');db2.className='danger-btn';db2.textContent='Supprimer ce patient';db2.onclick=delPat;el.appendChild(db2);
+  el.insertAdjacentHTML('beforeend','<div style="height:20px"></div>');
+}
+function renderPexos(p,wrap){
+  wrap.innerHTML='';const exos=p.exos||[];
+  if(!exos.length){wrap.innerHTML='<div style="color:var(--tx2);font-size:13px;text-align:center;padding:16px">Aucun exercice assign\xe9.</div>';return;}
+  exos.forEach((ex,idx)=>{
+    const data=BANQUE.find(b=>b.id===ex.id);if(!data)return;
+    const days=ex.days||[];const dl=days.length?days.map(d=>DAYS[d]).join(' '):'Aucun jour';
+    const card=document.createElement('div');card.className='pex';card.id='pex-'+idx;
+    card.innerHTML=`<div class="pex-hdr" onclick="tPex(${idx})"><div class="pex-bar ${tc(data.t)}"></div><div class="pex-info"><div class="pex-name">${data.n}</div><div class="pex-meta">${cap(data.r)} \xb7 ${dl}</div></div><button class="pex-del" onclick="event.stopPropagation();remExo(${idx})">\u2715</button></div><div class="pex-body"><div class="days-label">Jours de pratique</div><div class="days-row">${[1,2,3,4,5,6,0].map(d=>`<button class="day-btn${days.includes(d)?' on':''}" onclick="togDay(${idx},${d},this)">${DAYS[d]}</button>`).join('')}</div>${ex.note?`<div style="font-size:12px;color:var(--acc3);margin-top:10px;font-style:italic">${ex.note}</div>`:''}</div>`;
+    wrap.appendChild(card);
+  });
+}
+window.tPex=idx=>document.getElementById('pex-'+idx)?.classList.toggle('open');
+window.togDay=async(idx,day,btn)=>{
+  const p=S.patients[S.curId];if(!p)return;const ex=p.exos[idx];if(!ex)return;
+  if(!ex.days)ex.days=[];const i=ex.days.indexOf(day);
+  if(i>=0)ex.days.splice(i,1);else ex.days.push(day);
+  btn.classList.toggle('on',ex.days.includes(day));await updateDoc(pDoc(S.curId),{exos:p.exos});
+};
+window.remExo=async idx=>{const p=S.patients[S.curId];p.exos.splice(idx,1);await updateDoc(pDoc(S.curId),{exos:p.exos});renderTab();showToast('Exercice retir\xe9');};
+function tabBil(p,el){
+  const bils=p.bilans||[];const byType={};
+  bils.forEach(b=>{if(!byType[b.type])byType[b.type]=[];byType[b.type].push(b);});
+  Object.entries(byType).forEach(([type,list])=>{
+    if(list.length<2)return;const cfg=BCFG.find(c=>c.id===type);if(!cfg)return;
+    (cfg.scores||[]).forEach(sk=>{
+      const pts=list.filter(b=>b.scores&&b.scores[sk]!=null).map(b=>({date:b.date,val:b.scores[sk]})).sort((a,b2)=>a.date.localeCompare(b2.date));
+      if(pts.length<2)return;
+      const maxV=Math.max(...pts.map(x=>x.val),100);
+      const card=document.createElement('div');card.className='evol-card';
+      const bars=pts.map(pt=>{
+        const h=Math.round((pt.val/maxV)*56);const color=pt.val>60?'var(--red)':pt.val>30?'var(--acc3)':'var(--green)';
+        const d=new Date(pt.date+'T12:00:00');
+        return`<div class="evol-point-wrap"><div class="evol-val">${pt.val}${sk==='ODI'||sk==='NDI'?'%':''}</div><div class="evol-bar-inner" style="height:${h}px;background:${color};"></div><div class="evol-date">${d.getDate()} ${MONTHS[d.getMonth()]}</div></div>`;
+      }).join('');
+      card.innerHTML=`<div class="evol-title">&#128200; Evolution ${sk} \u2014 ${cfg.label}</div><div class="evol-line">${bars}</div><div class="evol-axis"><span>Moins sévère \u2193</span><span>\u2191 Plus sévère</span></div>`;
+      el.appendChild(card);
+    });
+  });
+  if(!bils.length){el.insertAdjacentHTML('beforeend','<div style="color:var(--tx2);text-align:center;padding:40px">Aucun bilan enregistr\xe9.</div>');}
+  else{
+    const sh=document.createElement('div');sh.className='sec-hdr';sh.textContent='Historique';el.appendChild(sh);
+    [...bils].reverse().forEach(b=>{
+      const cfg=BCFG.find(c=>c.id===b.type)||{color:'#5A7080',label:b.type,scores:[]};
+      const date=b.date?new Date(b.date).toLocaleDateString('fr-FR'):'\u2014';
+      const entry=document.createElement('div');entry.className='bil-entry';
+      const chips=(cfg.scores||[]).filter(sk=>b.scores&&b.scores[sk]!=null).map(sk=>{
+        const v=b.scores[sk];const cls=v>60?'bad':v>30?'warn':'good';
+        return`<span class="score-chip ${cls}">${sk} ${v}${sk==='ODI'||sk==='NDI'?'%':''}</span>`;
+      }).join('');
+      entry.innerHTML=`<div class="bil-entry-hdr" onclick="this.closest('.bil-entry').classList.toggle('open')"><div class="bil-dot" style="background:${cfg.color}"></div><div class="bil-info"><div class="bil-type">${cfg.label}</div><div class="bil-date-lbl">${date}</div>${chips?`<div class="bil-scores-preview">${chips}</div>`:''}</div><div class="bil-arr">&#9662;</div></div><div class="bil-entry-body">${b.cr_court?`<div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:12px">${b.cr_court}</div>`:''}<button class="retester-btn" onclick="retesterBilan('${b.type}')">&#8635; Retester</button></div>`;
+      el.appendChild(entry);
+    });
+  }
+  const bn=document.createElement('button');bn.className='btn-full';bn.innerHTML='+ Nouveau bilan';bn.onclick=openNB;el.appendChild(bn);
+  el.insertAdjacentHTML('beforeend','<div style="height:20px"></div>');
+}
+window.retesterBilan=type=>{
+  const cfg=BCFG.find(c=>c.id===type);if(!cfg)return;
+  sessionStorage.setItem('ks-bp',S.curId);sessionStorage.setItem('ks-uid',S.uid||'');
+  window.location.href=cfg.file+'?patientId='+S.curId+'&uid='+encodeURIComponent(S.uid||'');
+};
+function tabRet(p,el){
+  const ret=p.retours||{};const dates=Object.keys(ret).sort().reverse();
+  if(!dates.length){el.innerHTML='<div style="color:var(--tx2);text-align:center;padding:60px 24px">Aucun retour patient.</div>';return;}
+  dates.forEach(ds=>{
+    const dr=ret[ds];if(!dr||!Object.keys(dr).length)return;
+    const d=new Date(ds+'T12:00:00');
+    const card=document.createElement('div');card.className='retour-card';
+    card.innerHTML=`<div class="retour-date">${DAYF[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}</div>`;
+    Object.entries(dr).forEach(([eid,r])=>{
+      const data=BANQUE.find(b=>b.id===eid);const name=data?data.n:eid;
+      const stars=r.note?'\u2b50'.repeat(r.note)+'\u2606'.repeat(5-r.note):'';
+      card.innerHTML+=`<div class="ret-exo"><div class="ret-name">${name} <span class="done-badge ${r.done?'yes':'no'}">${r.done?'Fait':'Non fait'}</span></div>${stars?`<div class="ret-stars">${stars}</div>`:''} ${r.comment?`<div class="ret-cmt">"${r.comment}"</div>`:''}</div>`;
+    });
+    el.appendChild(card);
+  });
+}
+window.openNB=()=>{
+  const g=document.getElementById('btypes');g.innerHTML='';
+  BCFG.forEach(cfg=>{
+    const b=document.createElement('div');b.className='btype';
+    b.innerHTML=`<div class="btype-dot" style="background:${cfg.color}"></div><div class="btype-lbl">${cfg.label}</div>`;
+    b.onclick=()=>{cov('ov-nb');sessionStorage.setItem('ks-bp',S.curId);sessionStorage.setItem('ks-uid',S.uid||'');window.location.href=cfg.file+'?patientId='+S.curId+'&uid='+encodeURIComponent(S.uid||'');};
+    g.appendChild(b);
+  });
+  document.getElementById('ov-nb').classList.add('open');
+};
+window.submitProg=async()=>{
+  const p=S.patients[S.curId];if(!p)return;const nb=(p.exos||[]).length;
+  if(!nb){showToast('Aucun exercice');return;}
+  await updateDoc(pDoc(S.curId),{progValidated:new Date().toISOString()});
+  S.patients[S.curId].progValidated=new Date().toISOString();
+  const btn=document.getElementById('submit-prog-btn');
+  if(btn){btn.classList.add('sent');btn.innerHTML='\u2705 Programme envoy\xe9 au patient';}
+  showToast('Programme valid\xe9 \u2713');
+};
+window.delPat=async()=>{
+  const p=S.patients[S.curId];
+  if(!confirm('Supprimer '+(p.prenom||'')+' '+(p.nom||'')+' ?'))return;
+  await deleteDoc(pDoc(S.curId));
+  // Supprimer aussi dans patients_index
+  if(p.pin)await deleteDoc(doc(db,'patients_index',p.pin)).catch(()=>{});
+  delete S.patients[S.curId];ss('sc-list');renderList();showToast('Patient supprim\xe9');
+};
+function calcAdh(p){
+  const exos=p.exos||[];if(!exos.length)return-1;const adh=p.adherence||{};const now=new Date();let total=0,done=0;
+  for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(now.getDate()-i);const dow=d.getDay();const ds=tDS(d);const presc=exos.filter(ex=>(ex.days||[]).includes(dow));if(!presc.length)continue;total+=presc.length;done+=presc.filter(ex=>(adh[ds]||[]).includes(ex.id)).length;}
+  return total>0?Math.round(done/total*100):0;
+}
+function renderWdots(cid,p){
+  const adh=p.adherence||{};const exos=p.exos||[];const now=new Date();
+  const wrap=document.getElementById(cid);if(!wrap)return;wrap.innerHTML='';
+  for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(now.getDate()-i);const ds=tDS(d);const dow=d.getDay();const presc=exos.filter(ex=>(ex.days||[]).includes(dow));const done=(adh[ds]||[]).length;const status=!presc.length?'noday':done===0?'':(done>=presc.length?'done':'partial');const isT=ds===tDS(now);const el=document.createElement('div');el.className='wd'+(status?' '+status:'')+(isT?' today':'');el.innerHTML=`<div class="wd-d">${DAYS[d.getDay()]}</div><div class="wd-n">${d.getDate()}</div><div class="wd-dot"></div>`;wrap.appendChild(el);}
+}
+window.openBan=()=>{S.selExos={};S.fR='';S.fT='';S.fM='';initBan();ss('sc-banque');};
+function initBan(){
+  const ms={};BANQUE.forEach(e=>(e.m||[]).forEach(m=>ms[m]=true));const mats=Object.keys(ms).sort();
+  document.getElementById('fr').innerHTML=`<div class="fchip on" onclick="setF('r','',this)">Toutes</div>`+BREGS.map(r=>`<div class="fchip" onclick="setF('r','${r}',this)">${cap(r)}</div>`).join('');
+  document.getElementById('ft').innerHTML=`<div class="fchip on" onclick="setF('t','',this)">Tous</div>`+BTYPS.map(t=>`<div class="fchip" onclick="setF('t','${t}',this)">${cap(t)}</div>`).join('');
+  document.getElementById('fm').innerHTML=`<div class="fchip mat on" onclick="setF('m','',this)">Tout mat.</div><div class="fchip mat" onclick="setF('m','__none__',this)">Sans mat.</div>`+mats.map(m=>`<div class="fchip mat" onclick="setF('m',${JSON.stringify(m)},this)">${m}</div>`).join('');
+  document.getElementById('bsi').value='';updSel();fBan();
+}
+window.setF=(k,v,el)=>{S['f'+k.toUpperCase()]=v;const cid=k==='r'?'fr':k==='t'?'ft':'fm';document.querySelectorAll('#'+cid+' .fchip').forEach(c=>c.classList.remove('on'));el.classList.add('on');fBan();};
+window.fBan=()=>{
+  const q=(document.getElementById('bsi').value||'').toLowerCase();
+  const p=S.patients[S.curId];const asgn=(p&&p.exos||[]).map(e=>e.id);
+  const f=BANQUE.filter(e=>{if(S.fR&&e.r!==S.fR)return false;if(S.fT&&e.t!==S.fT)return false;if(S.fM==='__none__'&&(e.m||[]).length>0)return false;if(S.fM&&S.fM!=='__none__'&&!(e.m||[]).includes(S.fM))return false;if(q&&!e.n.toLowerCase().includes(q)&&!(e.d||'').toLowerCase().includes(q))return false;return true;});
+  const el=document.getElementById('exol');el.innerHTML='';
+  if(!f.length){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--tx2)">Aucun exercice trouv\xe9</div>';return;}
+  f.forEach(e=>{
+    const isSel=!!S.selExos[e.id];const isA=asgn.includes(e.id);
+    const mats=(e.m||[]).map(m=>`<span class="mat-tag">${m}</span>`).join('');
+    const card=document.createElement('div');card.className='exo-c'+(isSel?' sel':'');card.id='ec-'+e.id;
+    card.innerHTML=`<div class="exo-hdr" onclick="tC('${e.id}')"><div class="tdot ${tc(e.t)}"></div><div class="exo-nw"><div class="exo-n">${e.n}${isA?' <span style="color:var(--acc);font-size:11px">\u2713</span>':''}</div><div class="exo-r">${cap(e.r)} \xb7 ${cap(e.t)}</div></div><div class="exo-chk${isSel?' on':''}" onclick="event.stopPropagation();tS('${e.id}')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="exo-bd">${e.d?`<div class="exo-desc">${e.d}</div>`:''} ${e.p?`<div class="exo-proto">&#9203; ${e.p}</div>`:''} ${mats?`<div class="mat-tags">${mats}</div>`:''}<textarea class="note-f" placeholder="Note pour ce patient..." id="nt-${e.id}" onchange="sN('${e.id}')"></textarea></div>`;
+    el.appendChild(card);
+    if(S.selExos[e.id]){const ta=document.getElementById('nt-'+e.id);if(ta)ta.value=S.selExos[e.id].note||'';}
+  });
+};
+window.tC=id=>document.getElementById('ec-'+id)?.classList.toggle('open');
+window.tS=id=>{if(S.selExos[id])delete S.selExos[id];else S.selExos[id]={note:''};const c=document.getElementById('ec-'+id);if(c){c.classList.toggle('sel',!!S.selExos[id]);c.querySelector('.exo-chk')?.classList.toggle('on',!!S.selExos[id]);}updSel();};
+window.sN=id=>{const ta=document.getElementById('nt-'+id);if(S.selExos[id]&&ta)S.selExos[id].note=ta.value;};
+function updSel(){const n=Object.keys(S.selExos).length;document.getElementById('seln').textContent=n;document.getElementById('btn-asgn').disabled=n===0;}
+window.assignExos=async()=>{
+  const p=S.patients[S.curId];if(!p)return;let added=0;
+  Object.keys(S.selExos).forEach(id=>{if(!(p.exos||[]).some(e=>e.id===id)){p.exos.push({id,note:S.selExos[id].note||'',days:[]});added++;}});
+  await updateDoc(pDoc(S.curId),{exos:p.exos});S.selExos={};
+  showToast(added+' exercice(s) ajout\xe9(s) \u2713');ss('sc-dos');renderTab();
+};
+window.showToast=msg=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);};
+window.cov=id=>document.getElementById(id).classList.remove('open');
+window.ss=(id,dir)=>{
+  const screens=document.querySelectorAll('.screen');const cur=[...screens].find(s=>s.classList.contains('active'));const nxt=document.getElementById(id);
+  if(!nxt||cur===nxt)return;const forward=dir!=='back';
+  if(cur){cur.style.transition='opacity .22s ease,transform .25s cubic-bezier(.4,0,.2,1)';cur.style.transform=forward?'translateX(-30%)':'translateX(100%)';cur.style.opacity='0';setTimeout(()=>{cur.classList.remove('active');cur.style.transform='';cur.style.opacity='';cur.style.transition='';},250);}
+  nxt.classList.add('active');nxt.style.transition='none';nxt.style.transform=forward?'translateX(60%)':'translateX(-20%)';nxt.style.opacity='0';
+  requestAnimationFrame(()=>{requestAnimationFrame(()=>{nxt.style.transition='opacity .25s ease,transform .28s cubic-bezier(.4,0,.2,1)';nxt.style.transform='translateX(0)';nxt.style.opacity='1';setTimeout(()=>{nxt.style.transform='';nxt.style.opacity='';nxt.style.transition='';},300);});});
+  if(navigator.vibrate)navigator.vibrate(6);
+};
+const hideLoad=()=>document.getElementById('loading').style.display='none';
+function renderPat(){
+  const p=S.curPat;if(!p)return;
+  document.getElementById('pat-n').textContent=(p.prenom||'')+' ';
+  const body=document.getElementById('pat-body');body.innerHTML='';
+  const exos=p.exos||[];
+  if(!exos.length){body.innerHTML='<div class="no-prog"><p style="font-size:15px">Aucun programme assigné.<br>Contactez votre kiné.</p></div>';return;}
+  const now=new Date();const dow=now.getDay();const todDS=tDS(now);
+  const todExos=exos.filter(ex=>(ex.days||[]).includes(dow));
+  const ban=document.createElement('div');ban.className='today-ban';
+  ban.innerHTML=`<div class="tod-lbl">Aujourd'hui · ${DAYF[dow]} ${now.getDate()} ${MONTHS[now.getMonth()]}</div><div class="tod-ttl">${todExos.length?todExos.length+' exercice(s) au programme':'Pas de s\u00e9ance aujourd\u2019hui \uD83C\uDF89'}</div>`;
+  const wt=document.createElement('div');wt.className='wtrack';
+  for(let i=6;i>=0;i--){
+    const d=new Date(now);d.setDate(now.getDate()-i);const ds=tDS(d);const dd=d.getDay();
+    const presc=exos.filter(ex=>(ex.days||[]).includes(dd));
+    const da=(p.adherence&&p.adherence[ds])||[];
+    const done=presc.filter(ex=>da.includes(ex.id)).length;
+    const status=!presc.length?'noday':done===0?'':(done>=presc.length?'done':'partial');
+    const isT=ds===todDS;const pill=document.createElement('div');
+    pill.className='dpill'+(status?' '+status:'')+(isT?' today':'')+(ds===S.viewDay?' sel':'');
+    pill.innerHTML=`<div class="dp-d">${DAYS[dd]}</div><div class="dp-n">${d.getDate()}</div><div class="dp-dot"></div>`;
+    pill.onclick=(ds2=>()=>{S.viewDay=ds2;renderPat();})(ds);
+    wt.appendChild(pill);
+  }
+  ban.appendChild(wt);body.appendChild(ban);
+  const selDs=S.viewDay;const selDow=new Date(selDs+'T12:00:00').getDay();
+  const selExos=exos.filter(ex=>(ex.days||[]).includes(selDow));
+  const adh=(p.adherence&&p.adherence[selDs])||[];
+  if(!selExos.length){body.insertAdjacentHTML('beforeend','<div class="noday-msg"><div class="big">🌿</div><p>Pas d\'exercice prévu ce jour.<br>Profitez du repos !</p></div>');return;}
+  selExos.forEach(ex=>{
+    const data=BANQUE.find(b=>b.id===ex.id);if(!data)return;
+    const isDone=adh.includes(ex.id);
+    const ret=(p.retours&&p.retours[selDs]&&p.retours[selDs][ex.id])||{};
+    const tSec=0;// timer géré par renderTimerWidget
+    const card=document.createElement('div');card.className='epc'+(isDone?' done-c':'');card.id='pc-'+ex.id;
+    card.innerHTML=`<div class="epc-hdr"><div class="echk${isDone?' on':''}" id="chk-${ex.id}" onclick="togDone('${ex.id}')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="ep-name">${data.n}</div><div class="ep-exp">▾</div></div><div class="epc-body">${data.d?`<div class="ep-desc">${data.d}</div>`:''} ${data.p?`<div class="ep-proto">⏱ ${data.p}</div>`:''} ${ex.note?`<div class="ep-note-k">📝 ${ex.note}</div>`:''} ${renderTimerWidget(ex.id,data.p)}<div class="res-wrap"><div class="res-lbl">Votre ressenti</div><div class="stars-inp" id="si-${ex.id}">${[1,2,3,4,5].map(n=>`<button class="star-b${(ret.note||0)>=n?' on':''}" onclick="setStar('${ex.id}',${n})">⭐</button>`).join('')}</div><textarea class="cmt-f" id="cf-${ex.id}" placeholder="Comment s'est passé cet exercice ?">${ret.comment||''}</textarea><button class="save-res-btn" onclick="saveRes('${ex.id}')">Enregistrer le ressenti</button></div></div>`;
+    card.querySelector('.epc-hdr').addEventListener('click',function(e){if(e.target.closest('.echk'))return;card.classList.toggle('open');});
+    body.appendChild(card);
+    // timer initialisé dans renderTimerWidget
+  });
+  const submitBtn=document.createElement('button');submitBtn.className='submit-session-btn';submitBtn.id='submit-session-btn';
+  submitBtn.innerHTML='<span style="font-size:20px">\uD83C\uDFC1</span> Terminer et soumettre ma s\u00e9ance';
+  submitBtn.onclick=submitSession;body.appendChild(submitBtn);
+  const spacer2=document.createElement('div');spacer2.style.height='30px';body.appendChild(spacer2);
+}
+
+window.togDone=async exoId=>{
+  const p=S.curPat;if(!p)return;
+  if(!p.adherence)p.adherence={};if(!p.adherence[S.viewDay])p.adherence[S.viewDay]=[];
+  const arr=p.adherence[S.viewDay];const i=arr.indexOf(exoId);
+  if(i>=0)arr.splice(i,1);else arr.push(exoId);
+  await updateDoc(pDoc(p.id),{['adherence.'+S.viewDay]:arr});
+  if(S.patients[p.id]){if(!S.patients[p.id].adherence)S.patients[p.id].adherence={};S.patients[p.id].adherence[S.viewDay]=arr;}
+  const chk=document.getElementById('chk-'+exoId);const card=document.getElementById('pc-'+exoId);
+  const isDone=arr.includes(exoId);
+  if(chk)chk.classList.toggle('on',isDone);if(card)card.classList.toggle('done-c',isDone);
+  showToast(isDone?'✓ Exercice validé !':'Exercice décoché');
+};
+
+window.setStar=(eid,n)=>{const p=S.curPat;if(!p)return;if(!p.retours)p.retours={};if(!p.retours[S.viewDay])p.retours[S.viewDay]={};if(!p.retours[S.viewDay][eid])p.retours[S.viewDay][eid]={};p.retours[S.viewDay][eid].note=n;document.querySelectorAll('#si-'+eid+' .star-b').forEach((b,i)=>b.classList.toggle('on',i<n));};
+window.saveRes=async eid=>{
+  const p=S.curPat;if(!p)return;
+  if(!p.retours)p.retours={};if(!p.retours[S.viewDay])p.retours[S.viewDay]={};if(!p.retours[S.viewDay][eid])p.retours[S.viewDay][eid]={};
+  const r=p.retours[S.viewDay][eid];
+  r.done=(p.adherence&&p.adherence[S.viewDay]||[]).includes(eid);
+  r.comment=document.getElementById('cf-'+eid)?.value||'';
+  await updateDoc(pDoc(p.id),{['retours.'+S.viewDay+'.'+eid]:r});
+  if(S.patients[p.id]){if(!S.patients[p.id].retours)S.patients[p.id].retours={};if(!S.patients[p.id].retours[S.viewDay])S.patients[p.id].retours[S.viewDay]={};S.patients[p.id].retours[S.viewDay][eid]=r;}
+  showToast('Ressenti enregistré ✓');
+};
+
+// ── renderTimerWidget ──
+function renderTimerWidget(id,proto){
+  let work=0,rest=0,sets=1;
+  if(proto){
+    const p=proto.toLowerCase();
+    const secM=p.match(/(\d+)\s*(?:à\s*\d+\s*)?sec/);if(secM)work=parseInt(secM[1]);
+    const minM=p.match(/(\d+)\s*min/);if(minM&&!work)work=parseInt(minM[1])*60;
+    const serM=p.match(/[×x*]\s*(\d+)\s*s[eé]r/);if(serM)sets=parseInt(serM[1]);
+    const restM=p.match(/repos\s*(\d+)\s*sec/);if(restM)rest=parseInt(restM[1]);
+  }
+  if(!work)return '';
+  S.timers[id]={cfg:{work,rest,sets},phase:'work',curSet:1,rem:work,run:false,iv:null};
+  const serTxt=sets>1?'Série 1 / '+sets:'';
+  const btnId='tbtn-'+id;
+  const rstFn="tRst('"+id+"')";
+  const togFn="tTog('"+id+"')";
+  return [
+    '<div class="timer-w" id="tw-'+id+'">',
+    '<div class="timer-top"><span class="timer-phase work" id="tp-'+id+'">TRAVAIL</span></div>',
+    '<div class="timer-d" id="td-'+id+'">'+fmtT(work)+'</div>',
+    '<div class="timer-series" id="ts-'+id+'">'+serTxt+'</div>',
+    '<div class="timer-bar-wrap"><div class="timer-bar" id="tbar-'+id+'" style="width:100%"></div></div>',
+    '<div class="timer-btns">',
+    '<button class="tbtn start" id="'+btnId+'" onclick="'+togFn+'">▶ Démarrer</button>',
+    '<button class="tbtn rst" onclick="'+rstFn+'">↺</button>',
+    '</div></div>'
+  ].join('');
+}
+
+window.tTog=id=>{
+  const t=S.timers[id];if(!t)return;
+  const disp=document.getElementById('td-'+id);const btn=document.getElementById('tbtn-'+id);
+  const phase=document.getElementById('tp-'+id);const bar=document.getElementById('tbar-'+id);const ser=document.getElementById('ts-'+id);
+  if(t.run){clearInterval(t.iv);t.run=false;if(btn){btn.textContent='\u25b6 Reprendre';btn.className='tbtn start';}return;}
+  if(t.phase==='done'){tRst(id);return;}
+  const cfg=t.cfg;const TW=cfg.work;const TR=cfg.rest||0;const sets=cfg.sets||1;
+  t.run=true;if(btn){btn.textContent='\u23f8 Pause';btn.className='tbtn pause';}
+  playSound('start');if(navigator.vibrate)navigator.vibrate(40);
+  const nxtPhase=()=>{
+    if(t.phase==='work'){
+      if(t.curSet>=sets){
+        t.phase='done';t.run=false;
+        if(disp){disp.textContent='\u2713 Termin\u00e9 !';disp.className='timer-d done';}
+        if(btn){btn.textContent='\u21ba Rejouer';btn.className='tbtn rst';}
+        if(phase){phase.textContent='TERMIN\u00c9';phase.className='timer-phase';}
+        if(bar)bar.style.width='0%';if(ser)ser.textContent='';
+        playSound('done');if(navigator.vibrate)navigator.vibrate([100,50,100,50,300]);
+        showToast('Exercice termin\u00e9 ! \u2713');
+      } else if(TR>0){
+        t.phase='rest';t.rem=TR;
+        if(phase){phase.textContent='REPOS';phase.className='timer-phase rest';}
+        if(disp){disp.textContent=fmtT(TR);disp.className='timer-d resting';}
+        if(bar){bar.style.width='100%';bar.className='timer-bar rest';}
+        playSound('rest');if(navigator.vibrate)navigator.vibrate([30,30,30]);t.run=true;if(btn){btn.textContent='\u23f8 Pause';btn.className='tbtn pause';}
+        t.iv=setInterval(tick,1000);
+      } else {
+        t.curSet++;t.phase='work';t.rem=TW;
+        if(phase){phase.textContent='TRAVAIL';phase.className='timer-phase work';}
+        if(disp){disp.textContent=fmtT(TW);disp.className='timer-d running';}
+        if(bar){bar.style.width='100%';bar.className='timer-bar';}
+        if(ser)ser.textContent='S\u00e9rie '+t.curSet+' / '+sets;
+        playSound('start');t.run=true;if(btn){btn.textContent='\u23f8 Pause';btn.className='tbtn pause';}
+        t.iv=setInterval(tick,1000);
+      }
+    } else {
+      t.curSet++;t.phase='work';t.rem=TW;
+      if(phase){phase.textContent='TRAVAIL';phase.className='timer-phase work';}
+      if(disp){disp.textContent=fmtT(TW);disp.className='timer-d running';}
+      if(bar){bar.style.width='100%';bar.className='timer-bar';}
+      if(ser)ser.textContent='S\u00e9rie '+t.curSet+' / '+sets;
+      playSound('start');t.run=true;if(btn){btn.textContent='\u23f8 Pause';btn.className='tbtn pause';}
+      t.iv=setInterval(tick,1000);
+    }
+  };
+  const tick=()=>{
+    t.rem--;
+    const tot=t.phase==='work'?TW:TR;
+    const pct=Math.max(0,t.rem/tot*100);
+    if(disp)disp.textContent=fmtT(t.rem);
+    if(bar)bar.style.width=pct+'%';
+    if(t.rem<=0){clearInterval(t.iv);t.run=false;nxtPhase();}
+  };
+  t.iv=setInterval(tick,1000);
+};
+
+window.tRst=id=>{
+  const t=S.timers[id];if(!t)return;
+  clearInterval(t.iv);t.run=false;const cfg=t.cfg;
+  t.phase='work';t.curSet=1;t.rem=cfg.work;
+  const disp=document.getElementById('td-'+id);const btn=document.getElementById('tbtn-'+id);
+  const phase=document.getElementById('tp-'+id);const bar=document.getElementById('tbar-'+id);const ser=document.getElementById('ts-'+id);
+  if(disp){disp.textContent=fmtT(cfg.work);disp.className='timer-d';}
+  if(btn){btn.textContent='\u25b6 D\u00e9marrer';btn.className='tbtn start';}
+  if(phase){phase.textContent='TRAVAIL';phase.className='timer-phase work';}
+  if(bar){bar.style.width='100%';bar.className='timer-bar';}
+  if(ser)ser.textContent=cfg.sets>1?'S\u00e9rie 1 / '+cfg.sets:'';
+};
+
+
+// ── Tap feedback universel (iOS + Android + PC) ──
+(function(){
+  const CLASSES=['.pinkey','.hdr-btn','.hdr-btn2','.hdr-back','.btn-p','.btn-s','.tbtn','.star-b','.save-res-btn','.submit-prog-btn','.submit-session-btn','.btn-asgn','.echk','.pat-card','.pex-del','.day-btn','.fchip','.dpill','.add-exo-btn','.btn-full','.danger-btn'];
+  const DURATION=180;
+  function addTap(el){
+    if(el._tapDone)return;el._tapDone=true;
+    el.addEventListener('touchstart',function(){
+      this.classList.add('tapped');
+      if(navigator.vibrate)navigator.vibrate(8);
+    },{passive:true});
+    el.addEventListener('touchend',function(){
+      setTimeout(()=>this.classList.remove('tapped'),DURATION);
+    },{passive:true});
+    el.addEventListener('touchcancel',function(){this.classList.remove('tapped');},{passive:true});
+  }
+  function scan(){
+    CLASSES.forEach(sel=>document.querySelectorAll(sel).forEach(addTap));
+  }
+  // Observer pour éléments générés dynamiquement
+  const obs=new MutationObserver(scan);
+  obs.observe(document.body,{childList:true,subtree:true});
+  document.addEventListener('DOMContentLoaded',scan);
+  setTimeout(scan,500);
+  setTimeout(scan,1500);
+})();
+
+// ── INIT ──
+const _params=new URLSearchParams(window.location.search);
+const _uidParam=_params.get('uid');
+const _modeParam=_params.get('mode');
+const _pidParam=_params.get('pid');
+if(_uidParam)S.uid=_uidParam;
+
+if(_modeParam==='patient'&&_pidParam&&_uidParam){
+  (async()=>{
+    try{
+      const patDoc=await getDoc(doc(db,'therapists',_uidParam,'patients',_pidParam));
+      if(patDoc.exists()){S.curPat={id:_pidParam,uid_kine:_uidParam,...patDoc.data()};S.viewDay=tDS(new Date());hideLoad();renderPat();ss('sc-pat');}
+      else{hideLoad();window.location.href='index.html';}
+    }catch(e){hideLoad();window.location.href='index.html';}
+  })();
+} else if(_uidParam){
+  onAuthStateChanged(auth,async user=>{
+    if(user){
+      S.uid=user.uid;
+      const kpin=localStorage.getItem('ks-pin-'+S.uid);
+      if(kpin){S.kinePin=kpin;}
+      else{try{const d=await getDoc(doc(db,'therapists',S.uid));if(d.exists()&&d.data().pin){S.kinePin=d.data().pin;localStorage.setItem('ks-pin-'+S.uid,S.kinePin);}}catch(e){}}
+      const retPat=_params.get('patientId')||sessionStorage.getItem('ks-bp');
+      if(retPat){await loadList();if(S.patients[retPat])openDos(retPat);sessionStorage.removeItem('ks-bp');}
+      else{hideLoad();if(S.kinePin){await loadList();}else{ss('sc-pin');}}
+    } else {hideLoad();window.location.href='index.html';}
+  });
+} else {
+  hideLoad();window.location.href='index.html';
+}
+</script>
+</body>
+</html>
